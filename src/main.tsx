@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import "./index.css";
-import { QueryProvider } from "@/app/providers/query-provider";
+import { QueryProvider } from "@/providers/query-provider";
 import { routes } from "@/routes";
 
 const router = createBrowserRouter(routes);
