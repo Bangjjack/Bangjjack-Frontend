@@ -1,0 +1,122 @@
+---
+description: Bangjjack frontend — folder structure, boundaries, and data flow (Vite + React Router)
+alwaysApply: true
+---
+
+# Architecture
+
+**Stack:** Vite, React 19, React Router v7 (`createBrowserRouter`). Not Next.js — no `app/` router or Server Actions. Shared conventions and the full stack table live in **[CURSOR.md](../../CURSOR.md)**.
+
+## Folder Structure
+
+```
+src/
+  main.tsx                      # createRoot, RouterProvider, global CSS import
+  index.css                     # Design tokens (@theme), @utility (typo-*), layout-figma-frame
+  vite-env.d.ts
+
+  routes/
+    index.tsx                   # RouteObject[], root layout (AppLayout + Outlet), path table
+
+  pages/                        # Route-level screens (one default export per file)
+    MainPage.tsx
+    DesignSystemPage.tsx
+    …
+
+  features/                     # Domain features (primary place for feature-specific code)
+    {feature}/                  # e.g. board, auth, mypage, home
+      components/               # UI used only inside this feature
+      hooks/                    # Feature hooks (optional)
+      …                         # types, constants local to feature — only if small; else use src/types
+      index.ts                  # Barrel: what pages/other features may import
+
+  components/
+    ui/                         # Design-system / shadcn-style shared UI (CVA + cn)
+      index.ts
+      …
+    layout/                     # Shared chrome: Header, Footer, shells (optional)
+
+  lib/
+    api/                        # HTTP client + shared API helpers (axios target per CURSOR.md)
+      client.ts
+    cn.ts
+    schemas/                    # Shared Zod (etc.) — optional
+
+  stores/                       # Zustand global client state
+  hooks/                        # Cross-feature React hooks (optional)
+  types/                        # Cross-feature TypeScript types (optional)
+  constants/                    # App-wide constants (optional)
+
+  assets/
+    icons/
+      index.ts                  # Barrel for SVG (SVGR) exports (recommended)
+      …
+
+  providers/                    # App-level providers (e.g. QueryClientProvider)
+```
+
+Path alias **`@/`** → `src/` (Vite + TypeScript).
+
+## Core Rules
+
+### Component placement
+
+| What | Where |
+|------|--------|
+| Feature-specific UI, hooks, small local modules | `features/{feature}/` (usually `components/` + `hooks/` under it) |
+| Shared across multiple features | `components/ui/` |
+| Cross-page layout chrome (header, footer, nav shell) | `components/layout/` |
+
+Do **not** add parallel `components/board/`, `components/auth/`, etc. — that belongs under **`features/board/`**, **`features/auth/`**, etc.
+
+### `index.ts` barrel re-exports
+
+| Area | Barrel |
+|------|--------|
+| `components/ui/` | Required |
+| `features/{feature}/` | Required for the public surface the rest of the app imports |
+| `assets/icons/` | Recommended |
+
+**No barrel required** for `routes/`, `pages/`, or most of `lib/**` unless you introduce a package-style submodule.
+
+```ts
+// Good
+import { Button } from "@/components/ui";
+import { BoardList } from "@/features/board";
+import { LogoIcon } from "@/assets/icons";
+
+// Bad (once barrels exist)
+import { Button } from "@/components/ui/button";
+import { BoardList } from "@/features/board/components/BoardList";
+```
+
+### Data flow
+
+| Concern | Tool / place |
+|---------|----------------|
+| Server state (fetch, cache, mutations) | TanStack Query + API helpers in `lib/api/` (feature code calls them or thin wrappers in `features/*/`) |
+| Global client UI state | Zustand (`stores/`) |
+| Local UI state | `useState` / `useReducer` in the component |
+
+All browser HTTP should go through **one client style** (target: **axios**). Avoid ad-hoc `fetch` in pages; align with [CURSOR.md](../../CURSOR.md).
+
+### Layout shell (mobile)
+
+- `#root`: **`--width-app-shell` (430px)**; main column: **`layout-figma-frame`** / **`--width-figma-frame` (370px)** — `src/index.css`, [CURSOR.md](../../CURSOR.md).
+- App-wide route layout: **`routes/index.tsx`** (`AppLayout` + `Outlet`).
+
+### Admin (optional)
+
+Admin root wrapper may set **`data-admin`** on its outer element when admin-only typography/tokens depend on it.
+
+### Route organization (convention)
+
+Use **path prefixes** and **nested `RouteObject`s** + layout `element`s:
+
+| Intent | Typical approach |
+|--------|------------------|
+| Authenticated-only | Parent route + guard/loader + nested `children` |
+| Public (landing, auth) | Sibling routes or branch under `/` |
+| Main shell (header) | Layout route + `Outlet` for child paths |
+
+Register routes in **`src/routes/index.tsx`**; page modules live under **`src/pages/`** and compose **`@/features/*`** + shared **`@/components/*`**.
