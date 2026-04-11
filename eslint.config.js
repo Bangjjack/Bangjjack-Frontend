@@ -24,6 +24,10 @@ export default defineConfig(
         ...globals.browser,
       },
     },
+    ignorePatterns: [
+      ".cursor/",
+      "CURSOR.md"
+    ]
   },
   eslintConfigPrettier,
 );

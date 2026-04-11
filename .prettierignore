@@ -1,3 +1,7 @@
 dist
 node_modules
 coverage
+.cursor/
+CURSOR.md
+*.mdc
+*.md
