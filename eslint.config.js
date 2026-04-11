@@ -7,6 +7,9 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import globals from "globals";
 
 export default defineConfig(
+  {
+    ignores: [".cursor/**", "CURSOR.md"],
+  },
   js.configs.recommended,
   tseslint.configs.recommended,
   {
@@ -24,10 +27,6 @@ export default defineConfig(
         ...globals.browser,
       },
     },
-    ignorePatterns: [
-      ".cursor/",
-      "CURSOR.md"
-    ]
   },
   eslintConfigPrettier,
 );
