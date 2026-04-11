@@ -1,0 +1,118 @@
+---
+description: TypeScript, imports, naming, and Tailwind conventions for this repo
+alwaysApply: true
+---
+
+# Code Style
+
+Vite + React 19 + React Router. No Next.js App Router. React Compiler, `ref`, and package manager rules: **[CURSOR.md](../../CURSOR.md)**.
+
+## TypeScript
+
+### `type` vs `interface`
+
+- **Props, object shapes** that may be extended → **`interface`**
+- **Unions, mapped/utility types, aliases** → **`type`**
+
+```ts
+// Good
+interface ButtonProps extends React.ComponentProps<"button"> {
+  variant?: "primary" | "secondary";
+}
+
+type Status = "DRAFT" | "PUBLISHED";
+
+// Bad — Props as a loose type alias when an interface would do
+type ButtonProps = { variant?: string };
+```
+
+### Type-only imports
+
+Use **`import type`** for type-only symbols when applicable (**`verbatimModuleSyntax`** is on in `tsconfig.base.json`).
+
+### Exports
+
+- Prefer **named exports** for shared UI, feature modules, hooks, and utilities.
+- **`src/pages/*.tsx`**: **default export** is allowed and matches the current route pattern (`routes/index.tsx` imports page components).
+- Avoid default exports elsewhere unless there is a strong reason (e.g. a single-function module). New **`components/ui`**, **`features/*`**, and **`lib/*`** code should use named exports.
+
+```ts
+// components/ui/Button.tsx — prefer
+export { Button, buttonVariants, type ButtonProps };
+
+// pages/HomePage.tsx — OK
+export default function HomePage() {
+  /* ... */
+}
+```
+
+## Imports
+
+### Path alias
+
+Use the **`@/`** alias for everything under `src/`. Avoid deep relative imports (`../..`) for app code.
+
+```ts
+// Good
+import { cn } from "@/lib/cn";
+import { Button } from "@/components/ui";
+
+// Bad
+import { cn } from "../../lib/cn";
+```
+
+### Order (logical)
+
+Prettier does not enforce import groups in this repo. Suggested order:
+
+1. `react`, `react-dom`, `react-router` (and other externals)
+2. **Blank line**
+3. **Internal** `@/...`
+4. **`import type`** blocks may stay last or immediately after value imports from the same module — keep consistent within a file.
+
+Run **`pnpm format`** before PRs.
+
+## Naming
+
+| Item | Rule | Example |
+|------|------|---------|
+| React component | PascalCase | `Button`, `BoardList` |
+| Hook | camelCase, `use` prefix | `useAuthStore` (store), `useMediaQuery` |
+| Utility | camelCase | `cn`, `formatDate` |
+| Constant | UPPER_SNAKE_CASE | `MAX_FILE_SIZE` |
+| Type / interface | PascalCase | `ButtonProps`, `AuthState` |
+| SVG as component (SVGR) | PascalCase + `Icon` suffix | `ArrowRightIcon` |
+| Zustand store hook | `use{Name}Store` | `useAuthStore` (see `src/stores/authStore.ts`) |
+
+## File naming
+
+| Kind | Rule | Example |
+|------|------|---------|
+| Component | PascalCase `.tsx` | `Button.tsx`, `BoardList.tsx` |
+| Page (route screen) | PascalCase `.tsx` + default export OK | `MainPage.tsx` |
+| Hook | camelCase `.ts` | `useMediaQuery.ts` |
+| Store | camelCase `.ts` | `authStore.ts` |
+| Utility / lib | camelCase `.ts` | `cn.ts` |
+| Route config | camelCase `.tsx` / `.ts` | `index.tsx` under `routes/` |
+
+Feature code lives under **`src/features/{feature}/`**; shared UI under **`src/components/ui/`** — see **[architecture.mdc](./architecture.mdc)**.
+
+## Tailwind CSS
+
+- Merge classes with **`cn()`** from **`@/lib/cn`** (Tailwind merge + `clsx`). Avoid string templates for conditional classes when `cn` can express it.
+
+```tsx
+// Good
+<div className={cn("text-text-normal", isActive && "bg-brand-primary-light", className)} />
+
+// Avoid when cn is clearer
+<div className={`text-text-normal ${isActive ? "bg-brand-primary-light" : ""}`} />
+```
+
+- **`prettier-plugin-tailwindcss` is not installed** — class order is not auto-sorted. Keep groups readable (layout → spacing → typography → colors → state) or add the plugin later if the team wants enforced order.
+
+## Related
+
+- **`forwardRef`**: do not use (React 19) — [CURSOR.md](../../CURSOR.md)
+- **`useMemo` / `useCallback` / `React.memo`**: default skip — React Compiler — [CURSOR.md](../../CURSOR.md)
+- **Package manager**: `pnpm` only — [CURSOR.md](../../CURSOR.md)
