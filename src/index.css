@@ -1,4 +1,349 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@plugin "@tailwindcss/typography";
+
+@font-face {
+  font-family: "Pretendard Variable";
+  font-weight: 45 920;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/PretendardVariable.woff2") format("woff2-variations");
+}
+
+@theme {
+  /* ── Font ── */
+  --font-pretendard: "Pretendard Variable", sans-serif;
+
+  /* ── Brand ── */
+  --color-brand-primary: #ff9026;
+  --color-brand-primary-light: #fff4e9;
+  --color-brand-primary-dark: #ef7a0d;
+  --color-brand-secondary: #5ad8cc;
+  --color-brand-secondary-light: #e6faf8;
+  --color-brand-secondary-dark: #3bb5aa;
+
+  /* ── Button ── */
+  --color-button-primary: #ff9026;
+  --color-button-primary-pressed: #ef7a0d;
+  --color-button-primary-ghost: #fff0e0;
+  --color-button-disabled: #d6d8d9;
+  --color-button-neutral-ghost: #f0f0f0;
+  --color-button-neutral: #444444;
+  --color-button-neutral-pressed: #1a1a1a;
+
+  /* ── Text ── */
+  --color-text-normal: #444444;
+  --color-text-strong: #1a1a1a;
+  --color-text-alternative: #666666;
+  --color-text-disabled: #b0b0b0;
+  --color-text-placeholder: #a1a1a1;
+  --color-text-caption: #8a8a8a;
+  --color-text-label: #2b2b2b;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-secondary: #ffffff;
+  --color-text-on-success: #2a305c;
+  --color-text-primary-normal: #ef7a0d;
+  --color-text-primary-strong: #b56214;
+  --color-text-primary-alternative: #ff9026;
+  --color-text-primary-disabled: #ffd9a8;
+  --color-text-secondary-normal: #3bb5aa;
+  --color-text-secondary-strong: #28847c;
+  --color-text-secondary-alternative: #5ad8cc;
+
+  /* ── Icon ── */
+  --color-icon-normal: #666666;
+  --color-icon-strong: #1a1a1a;
+  --color-icon-alternative: #8a8a8a;
+  --color-icon-disabled: #bfbfbf;
+  --color-icon-on-primary: #ffffff;
+  --color-icon-on-secondary: #ffffff;
+  --color-icon-primary-normal: #ff9026;
+  --color-icon-primary-strong: #b56214;
+  --color-icon-primary-alternative: #ff9026;
+  --color-icon-primary-disabled: #ffd9a8;
+
+  /* ── State ── */
+  --color-state-success: #6c7bd4;
+  --color-state-success-light: #eceef9;
+  --color-state-success-strong: #4a549e;
+  --color-state-caution: #ffb830;
+  --color-state-error: #ff4242;
+  --color-state-error-light: #ffeded;
+  --color-state-error-strong: #cc3333;
+  --color-state-error-2: #ff6b6b;
+
+  /* ── Background ── */
+  --color-bg-primary: #f7f7f7;
+  --color-bg-secondary: #ffffff;
+  --color-bg-input: #ececec;
+  --color-bg-elevated: #ffffff;
+  --color-bg-skeleton: #e8e8e8;
+  --color-bg-overlay: rgba(0 0 0 / 0.4);
+
+  /* ── Border ── */
+  --color-border-normal: #e0e0e0;
+  --color-border-strong: #d4d4d4;
+  --color-border-alternative: #e8e8e8;
+  --color-border-disabled: #f0f0f0;
+  --color-border-focus-primary: #ff9026;
+  --color-border-focus-error: #ff4242;
+
+  /* ── Neutral ── */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-150: #f0f0f0;
+  --color-neutral-200: #e8e8e8;
+  --color-neutral-250: #e0e0e0;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-350: #bfbfbf;
+  --color-neutral-400: #a1a1a1;
+  --color-neutral-500: #8a8a8a;
+  --color-neutral-600: #666666;
+  --color-neutral-700: #444444;
+  --color-neutral-800: #2b2b2b;
+  --color-neutral-900: #1a1a1a;
+  --color-neutral-black: #000000;
+  --color-neutral-white: #ffffff;
+
+  /* ── Radius ── */
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 25px;
+
+  /* ── Font weight ── */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ── Spacing (p-*, m-*, w-*, h-*, gap-*) ── */
+  --spacing-0: 0px;
+  --spacing-100: 4px;
+  --spacing-200: 8px;
+  --spacing-300: 12px;
+  --spacing-400: 16px;
+  --spacing-450: 18px;
+  --spacing-500: 20px;
+  --spacing-600: 24px;
+  --spacing-700: 32px;
+  --spacing-800: 40px;
+}
+
+:root {
+  --letter-spacing: -0.005em;
+
+  --heading1-size: 36px;
+  --heading1-line-height: 44px;
+
+  --heading2-size: 32px;
+  --heading2-line-height: 40px;
+
+  --heading3-size: 24px;
+  --heading3-line-height: 30px;
+
+  --heading4-size: 20px;
+  --heading4-line-height: 24px;
+
+  --title1-size: 18px;
+  --title1-line-height: 22px;
+
+  --title2-size: 16px;
+  --title2-line-height: 20px;
+
+  --title3-size: 14px;
+  --title3-line-height: 18px;
+
+  --title4-size: 12px;
+  --title4-line-height: 16px;
+
+  --body1-size: 16px;
+  --body1-line-height: 24px;
+
+  --body2-size: 14px;
+  --body2-line-height: 20px;
+
+  --caption1-size: 14px;
+  --caption1-line-height: 20px;
+
+  --caption2-size: 12px;
+  --caption2-line-height: 16px;
+
+  --button1-size: 16px;
+  --button1-line-height: 24px;
+
+  --button2-size: 14px;
+  --button2-line-height: 20px;
+
+  --label1-size: 12px;
+  --label1-line-height: 16px;
+
+  --label2-size: 12px;
+  --label2-line-height: 16px;
+}
+
+html {
+  color-scheme: light;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-neutral-200);
+  color: var(--color-text-normal);
+  font-family: var(--font-pretendard);
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  max-width: 430px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  background-color: var(--color-bg-primary);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.04);
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--color-border-focus-primary) !important;
+  outline-offset: 2px;
+  box-shadow: none !important;
+}
+
+@utility typo-h1 {
+  font-size: var(--heading1-size);
+  line-height: var(--heading1-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-h2 {
+  font-size: var(--heading2-size);
+  line-height: var(--heading2-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-h3 {
+  font-size: var(--heading3-size);
+  line-height: var(--heading3-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-h4 {
+  font-size: var(--heading4-size);
+  line-height: var(--heading4-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-title1 {
+  font-size: var(--title1-size);
+  line-height: var(--title1-line-height);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-title2 {
+  font-size: var(--title2-size);
+  line-height: var(--title2-line-height);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-title3 {
+  font-size: var(--title3-size);
+  line-height: var(--title3-line-height);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-title4 {
+  font-size: var(--title4-size);
+  line-height: var(--title4-line-height);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-body1 {
+  font-size: var(--body1-size);
+  line-height: var(--body1-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-body2 {
+  font-size: var(--body2-size);
+  line-height: var(--body2-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-caption1 {
+  font-size: var(--caption1-size);
+  line-height: var(--caption1-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-caption2 {
+  font-size: var(--caption2-size);
+  line-height: var(--caption2-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-button1 {
+  font-size: var(--button1-size);
+  line-height: var(--button1-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-button2 {
+  font-size: var(--button2-size);
+  line-height: var(--button2-line-height);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-label1 {
+  font-size: var(--label1-size);
+  line-height: var(--label1-line-height);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-label2 {
+  font-size: var(--label2-size);
+  line-height: var(--label2-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-400) transparent;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: transparent;
+}
