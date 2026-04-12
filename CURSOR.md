@@ -1,15 +1,16 @@
-# Bangjjack Frontend — Cursor / AI 가이드
+# Bangjjack Frontend — Cursor / AI Guide
 
-에이전트·기여자용 컨벤션 요약. **불릿·표가 규칙 본문**, 해석이 필요한 항목만 짧은 문장으로 보강한다.
+A concise convention guide for agents and contributors.  
+**Rules are primarily expressed in bullets and tables**, with brief clarifications only where needed.
 
 ---
 
-## 패키지 매니저
+## Package Manager
 
-| 규칙 |
+| Rule |
 |------|
-| **pnpm만** 사용 (`npm` / `yarn` 금지) |
-| `package.json`의 `packageManager` (`pnpm@9.12.0`) 준수 |
+| Use **pnpm only** (`npm` / `yarn` are not allowed) |
+| Follow the `packageManager` field in `package.json` (`pnpm@9.12.0`) |
 
 ```bash
 pnpm install
@@ -22,121 +23,137 @@ pnpm format
 
 ---
 
-## 기술 스택
+## Tech Stack
 
-| 영역 | 선택 |
+| Area | Choice |
 |------|------|
 | UI | React 19 + TypeScript |
-| 빌드 | Vite 8 |
-| 라우팅 | React Router v7 (`react-router`) |
-| 스타일 | Tailwind CSS v4 (`@tailwindcss/vite`), CVA |
+| Build | Vite 8 |
+| Routing | React Router v7 (`react-router`) |
+| Styling | Tailwind CSS v4 (`@tailwindcss/vite`), CVA |
 | Primitives | Radix UI (`radix-ui`) |
-| 패턴 | shadcn/ui (`components.json`, `new-york`, lucide-react) |
-| 서버 상태 | TanStack Query |
-| 클라이언트 상태 | Zustand |
-| HTTP | axios (표준). 인스턴스·인터셉터는 한 곳에서 |
-| className | `clsx` + `tailwind-merge` → `@/lib/cn.ts`의 `cn()` |
+| Patterns | shadcn/ui (`components.json`, `new-york`, lucide-react) |
+| Server State | TanStack Query |
+| Client State | Zustand |
+| Forms | React Hook Form + Zod |
+| HTTP | axios (standard). Centralized instance & interceptors |
+| className | `clsx` + `tailwind-merge` → `cn()` in `@/lib/cn.ts` |
 
-**부가:** vite-plugin-svgr · @tailwindcss/typography · tw-animate-css (`src/index.css`) · ESLint 9 flat · Prettier · typescript-eslint
+**Extras:** vite-plugin-svgr · @tailwindcss/typography · tw-animate-css (`src/index.css`) · ESLint 9 flat · Prettier · typescript-eslint
+
+---
+
+## Forms (React Hook Form + Zod)
+
+- Use **React Hook Form** for all form state management
+- Use **Zod** for schema validation
+- Integrate via `@hookform/resolvers/zod`
+- Validation logic must be **schema-based (Zod)**, not inline
+
+**Guidelines:**
+
+- Define schemas in:
+  - `src/features/{feature}/schemas/`
+- Reuse schemas between:
+  - form validation
+  - API request typing (when possible)
+- Avoid manual `useState`-based form handling
 
 ---
 
 ## React Compiler
 
-- `useMemo` / `useCallback` / `React.memo` **기본 사용 안 함**
-- **예외:** 프로파일 등으로 병목이 **확인된 경우**에만 수동 메모
+- Do **not** use `useMemo`, `useCallback`, or `React.memo` by default
+- **Exception:** Only use manual memoization when a **confirmed performance bottleneck** exists
 
-React Compiler는 `vite.config.ts`에서 Babel `reactCompilerPreset()`으로 켜져 있어, 일반적인 최적화는 컴파일러에 맡긴다.
+The React Compiler is enabled via `reactCompilerPreset()` in `vite.config.ts`.
 
 ---
 
 ## React 19 — `ref`
 
-- `forwardRef` **금지**
-- `ref`는 일반 prop으로 받는다
-- 발견 시 즉시 일반 함수 컴포넌트 + `ref` prop으로 리팩터
+- `forwardRef` is **prohibited**
+- Accept `ref` as a **regular prop**
+- If found, refactor immediately into a standard function component with a `ref` prop
 
 ---
 
-## 경로
+## Paths
 
-- `@/` → `src/` (tsconfig `paths` + Vite alias)
+- `@/` → `src/` (configured via `tsconfig` paths and Vite alias)
 
 ---
 
-## 디자인 토큰
+## Design Tokens
 
-| 항목 | 위치 |
+| Item | Location |
 |------|------|
-| 토큰·글로벌 스타일 | `src/index.css` |
-| Tailwind 확장 | `@theme` 블록 |
-| 폰트 | Pretendard Variable (`--font-pretendard`) |
+| Tokens & global styles | `src/index.css` |
+| Tailwind extensions | `@theme` block |
+| Font | Pretendard Variable (`--font-pretendard`) |
 
-- 새 색·간격: **CSS 변수 / `@theme` 우선**, 임의 hex 남발 지양
-
-### 모바일 웹앱 레이아웃 (Figma vs 셸)
-
-| 구분 | 값 |
-|------|-----|
-| 앱 셸 `#root` | `max-width: var(--width-app-shell)` → **430px** |
-| Figma 프레임 | **370px** (`--width-figma-frame`) |
-
-- 피그마는 370 기준, 실행은 최대 430 셸이므로 **페이지 본문은 `layout-figma-frame`**(또는 동일 `min(100%, 370px)` 패턴)으로 중앙 정렬·축소 대응한다.
-- **모바일 웹 전용**; 데스크톱 레이아웃은 기본 범위 밖이다.
+- Prefer CSS variables / `@theme` over arbitrary values
 
 ---
 
-## 컴포넌트
+## Components
 
-| 경로 | 역할 |
+| Path | Role |
 |------|------|
-| `src/components/ui/` | 공유 재사용 UI (shadcn 계열) |
-| `index.ts` | **배럴 re-export** → `@/components/ui`에서 통일 import |
+| `src/components/ui/` | Shared reusable UI (shadcn-based) |
+| `index.ts` | Barrel re-export |
 
-- 기능·도메인 전용: **`src/features/{기능}/`** (`components/`, `hooks/` 등). `components/` 아래에 `board/`, `auth/` 식 폴더를 두지 않는다.
-
----
-
-## shadcn · `cn`
-
-- 표준: **`src/lib/cn.ts`**
-- `components.json`이 `@/lib/utils`를 가리키면, CLI 생성 후 경로·re-export만 프로젝트에 맞출 것
+- Feature/domain-specific code:
+  - `src/features/{feature}/`
+- Do NOT create `board/`, `auth/` under global components
 
 ---
 
-## 데이터 · API
+## shadcn · cn
 
-| 용도 | 도구 |
+- Use: `src/lib/cn.ts`
+- Adjust paths if CLI generates `@/lib/utils`
+
+---
+
+## Data · API
+
+| Purpose | Tool |
 |------|------|
-| 서버 상태·캐시·로딩/에러 | TanStack Query |
-| 클라이언트 전역(UI·세션 등) | Zustand |
+| Server state | TanStack Query |
+| Client state | Zustand |
 | HTTP | axios |
-| 클라이언트 env | `VITE_` 접두사만 |
+| Env | `VITE_` prefix only |
 
-- `fetch` 래퍼·직접 호출은 남겨두지 말고 **axios + Query** 쪽으로 정리하는 방향
+- Avoid raw `fetch`
+- Standardize on axios + Query
 
 ---
 
 ## TypeScript
 
-- `tsconfig.base.json`: strict, unused 검사, `noUncheckedIndexedAccess`, `verbatimModuleSyntax` 등 유지
-- `any`·우회보다 **명시 타입·좁히기**
-- type/interface·import·명명·Tailwind: **`.cursor/rules/code-style.mdc`**
+- Keep strict settings
+- Avoid `any`
+- Prefer explicit typing and narrowing
+- Follow `.cursor/rules/code-style.mdc`
 
 ---
 
-## 품질 게이트
+## Quality Gates
 
-- `pnpm lint` · `pnpm typecheck` · `pnpm format:check` 통과
-- `eslint-plugin-react-refresh` 준수
+- Must pass:
+  - `pnpm lint`
+  - `pnpm typecheck`
+  - `pnpm format:check`
 
 ---
 
-## 체크리스트
+## Checklist
 
-1. pnpm만 썼는가?
-2. 토큰/`@theme` 우선인가?
-3. `components/ui` + 배럴 export인가?
-4. `cn()` 사용인가?
-5. 불필요한 memo / `forwardRef` 없는가?
-6. Query / Zustand / axios 역할 분리인가?
+1. pnpm only?
+2. Using tokens / `@theme`?
+3. Using `components/ui`?
+4. Using `cn()`?
+5. No unnecessary memo / forwardRef?
+6. Proper Query / Zustand / axios separation?
+7. Using React Hook Form + Zod?
