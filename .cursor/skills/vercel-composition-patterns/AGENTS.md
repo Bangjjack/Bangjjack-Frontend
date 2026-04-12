@@ -897,7 +897,7 @@ Use children when composing static structure.
 
 **Impact: MEDIUM**
 
-React 19+ only. Don't use `forwardRef`; use `use()` instead of `useContext()`.
+React 19+ only. Prefer `forwardRef`; use `use()` instead of `useContext()`.
 
 ### 4.1 React 19 API Changes
 

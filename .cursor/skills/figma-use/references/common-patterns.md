@@ -52,7 +52,10 @@ rect.cornerRadius = 8
 rect.x = maxX + 100  // offset from existing content
 rect.y = 0
 figma.currentPage.appendChild(rect)
-return { nodeId: rect.id }
+return { 
+  createdNodeIds: [rect.id],
+  mutatedNodeIds: []
+ }
 ```
 
 ## Create a Text Node
@@ -74,7 +77,10 @@ text.textAutoResize = 'WIDTH_AND_HEIGHT'
 text.x = maxX + 100
 text.y = 0
 figma.currentPage.appendChild(text)
-return { nodeId: text.id }
+return { 
+  createdNodeIds: [text.id],
+  mutatedNodeIds: []
+ }
 ```
 
 ## Create Frame with Auto-Layout
@@ -101,7 +107,10 @@ frame.cornerRadius = 8
 frame.x = maxX + 100
 frame.y = 0
 figma.currentPage.appendChild(frame)
-return { nodeId: frame.id }
+return { 
+  createdNodeIds: [frame.id],
+  mutatedNodeIds: []
+ }
 ```
 
 ## Create Variable Collection with Multiple Modes
@@ -141,7 +150,10 @@ const basePaint = { type: 'SOLID', color: { r: 0, g: 0, b: 0 } }
 const boundPaint = figma.variables.setBoundVariableForPaint(basePaint, "color", variable)
 rect.fills = [boundPaint]
 
-return { nodeId: rect.id }
+return { 
+  createdNodeIds: [rect.id],
+  mutatedNodeIds: []
+ }
 ```
 
 ## Create Component Variants with Component Properties
