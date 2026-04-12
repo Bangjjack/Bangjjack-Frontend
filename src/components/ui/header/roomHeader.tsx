@@ -8,7 +8,11 @@ function RoomHeader({
 }: RoomHeaderProps) {
   return (
     <header className={cn("px-400 pb-400 pt-9", className)} {...props}>
-      <h1 className="typo-h3 text-text-strong">방 찾기</h1>
+      <div className="flex items-center justify-center">
+        <div className="typo-title1 text-center text-text-strong">
+          방 찾기
+        </div>
+      </div>
     </header>
   );
 }

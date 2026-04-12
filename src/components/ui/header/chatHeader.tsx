@@ -8,7 +8,11 @@ function ChatHeader({
 }: ChatHeaderProps) {
   return (
     <header className={cn("px-400 pb-400 pt-9", className)} {...props}>
-      <h1 className="typo-h3 text-text-strong">채팅</h1>
+      <div className="flex items-center justify-center">
+        <h1 className="typo-title1 font-semibold text-center text-text-strong">
+          채팅
+        </h1>
+      </div>
     </header>
   );
 }
