@@ -17,7 +17,9 @@ type BottomNavButtonProps = BottomNavItem & {
 };
 
 type BottomNavProps = React.ComponentProps<"nav"> & {
+  activeIcon?: BottomNavIcon;
   items?: BottomNavItem[];
+  onActiveIconChange?: (icon: BottomNavIcon) => void;
 };
 
 const defaultItems: BottomNavItem[] = [
@@ -28,13 +30,18 @@ const defaultItems: BottomNavItem[] = [
 ];
 
 function BottomNav({
+  activeIcon,
   className,
   items = defaultItems,
+  onActiveIconChange,
   ...props
 }: BottomNavProps) {
+  const resolvedActiveIcon =
+    activeIcon ?? items.find((item) => item.isActive)?.icon ?? "home";
+
   return (
     <nav
-      aria-label="\uD558\uB2E8 \uB0B4\uBE44\uAC8C\uC774\uC158"
+      aria-label="바텀 내비게이션"
       className={cn(
         "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5",
         className,
@@ -42,7 +49,12 @@ function BottomNav({
       {...props}
     >
       {items.map((item) => (
-        <BottomNavButton key={item.label} {...item} />
+        <BottomNavButton
+          key={item.label}
+          {...item}
+          isActive={item.icon === resolvedActiveIcon}
+          onClick={() => onActiveIconChange?.(item.icon)}
+        />
       ))}
     </nav>
   );
@@ -58,7 +70,7 @@ function BottomNavButton({
 }: BottomNavButtonProps) {
   const content = (
     <>
-      <span className=" relative flex items-center justify-center">
+      <span className="relative flex items-center justify-center">
         <BottomNavIcon
           icon={icon}
           isActive={isActive}
@@ -136,4 +148,4 @@ function BottomNavIcon({
 }
 
 export { BottomNav };
-export type { BottomNavItem, BottomNavProps };
+export type { BottomNavIcon, BottomNavItem, BottomNavProps };

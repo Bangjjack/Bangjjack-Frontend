@@ -1,2 +1,12 @@
 export { BottomNav } from "./bottomNav";
-export type { BottomNavItem, BottomNavProps } from "./bottomNav";
+export type { BottomNavIcon, BottomNavItem, BottomNavProps } from "./bottomNav";
+export { ChatHeader } from "./header/chatHeader";
+export type { ChatHeaderProps } from "./header/chatHeader";
+export { HomeHeader } from "./header/homeHeader";
+export type { HomeHeaderProps } from "./header/homeHeader";
+export { BaseHeader } from "./baseHeader";
+export type { BaseHeaderProps } from "./baseHeader";
+export { MyPageHeader } from "./header/myPageHeader";
+export type { MyPageHeaderProps } from "./header/myPageHeader";
+export { RoomHeader } from "./header/roomHeader";
+export type { RoomHeaderProps } from "./header/roomHeader";
