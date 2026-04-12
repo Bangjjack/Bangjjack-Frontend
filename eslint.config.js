@@ -7,6 +7,18 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import globals from "globals";
 
 export default defineConfig(
+  {
+    ignores: [
+      "dist",
+      "node_modules",
+      "coverage",
+      ".cursor/**",
+      "CURSOR.md",
+      "*.mdc",
+      "pnpm-lock.yaml",
+      ".github",
+    ],
+  },
   js.configs.recommended,
   tseslint.configs.recommended,
   {
