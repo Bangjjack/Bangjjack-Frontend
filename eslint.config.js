@@ -8,7 +8,16 @@ import globals from "globals";
 
 export default defineConfig(
   {
-    ignores: [".cursor/**", "CURSOR.md"],
+    ignores: [
+      "dist",
+      "node_modules",
+      "coverage",
+      ".cursor/**",
+      "CURSOR.md",
+      "*.mdc",
+      "pnpm-lock.yaml",
+      ".github",
+    ],
   },
   js.configs.recommended,
   tseslint.configs.recommended,

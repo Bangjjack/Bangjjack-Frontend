@@ -4,3 +4,5 @@ coverage
 .cursor/
 CURSOR.md
 *.mdc
+pnpm-lock.yaml
+.github/
