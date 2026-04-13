@@ -49,7 +49,7 @@ function BottomNav({
     >
       {items.map((item) => (
         <BottomNavButton
-          key={item.label}
+          key={item.icon}
           {...item}
           isActive={item.icon === resolvedActiveIcon}
           onClick={() => onActiveIconChange?.(item.icon)}
