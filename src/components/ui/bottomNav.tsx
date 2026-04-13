@@ -36,8 +36,7 @@ function BottomNav({
   onActiveIconChange,
   ...props
 }: BottomNavProps) {
-  const resolvedActiveIcon =
-    activeIcon ?? items.find((item) => item.isActive)?.icon ?? "home";
+  const resolvedActiveIcon = activeIcon ?? items.find((item) => item.isActive)?.icon ?? "home";
 
   return (
     <nav
@@ -122,11 +121,7 @@ type BottomNavIconProps = {
   isActive?: boolean;
 };
 
-function BottomNavIcon({
-  className,
-  icon,
-  isActive = false,
-}: BottomNavIconProps) {
+function BottomNavIcon({ className, icon, isActive = false }: BottomNavIconProps) {
   const iconClassName = cn(
     "shrink-0",
     isActive ? "text-brand-primary" : "text-icon-alternative",

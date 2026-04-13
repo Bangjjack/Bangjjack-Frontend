@@ -13,12 +13,7 @@ const HEADER_TITLES: Partial<Record<BottomNavIcon, string>> = {
   room: "방 찾기",
 };
 
-function Header({
-  activeIcon,
-  className,
-  userName,
-  ...props
-}: HeaderProps) {
+function Header({ activeIcon, className, userName, ...props }: HeaderProps) {
   const title = HEADER_TITLES[activeIcon];
 
   return (
@@ -33,9 +28,7 @@ function Header({
       ) : title ? (
         <header className="px-400 pb-400 pt-9">
           <div className="flex items-center justify-center">
-            <h1 className="typo-title1 font-semibold text-center text-text-strong">
-              {title}
-            </h1>
+            <h1 className="typo-title1 font-semibold text-center text-text-strong">{title}</h1>
           </div>
         </header>
       ) : null}

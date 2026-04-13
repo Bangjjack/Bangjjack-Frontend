@@ -20,9 +20,7 @@ export default function MainPage() {
     <div className="flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header activeIcon={activeIcon} userName="방짝" />
       <main className="min-h-0 flex-1 overflow-hidden px-400">
-        <div className="scrollbar-none h-full overflow-y-auto">
-          {PAGE_COMPONENTS[activeIcon]}
-        </div>
+        <div className="scrollbar-none h-full overflow-y-auto">{PAGE_COMPONENTS[activeIcon]}</div>
       </main>
       <div className="p-400">
         <BottomNav activeIcon={activeIcon} onActiveIconChange={setActiveIcon} />
