@@ -1,153 +1,23 @@
 import { useState, type ReactNode } from "react";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogIcon,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogAction,
+  AlertDialogCancel,
+  Button,
+  Chip,
+  Input,
+  toast,
+  Tag,
+} from "@/components/ui";
 
-const COLOR_GROUPS = [
-  {
-    title: "Brand",
-    tokens: [
-      "brand-primary",
-      "brand-primary-light",
-      "brand-primary-dark",
-      "brand-secondary",
-      "brand-secondary-light",
-      "brand-secondary-dark",
-    ],
-  },
-  {
-    title: "Button",
-    tokens: [
-      "button-primary",
-      "button-primary-pressed",
-      "button-primary-ghost",
-      "button-disabled",
-      "button-neutral-ghost",
-      "button-neutral",
-      "button-neutral-pressed",
-    ],
-  },
-  {
-    title: "Text",
-    tokens: [
-      "text-normal",
-      "text-strong",
-      "text-alternative",
-      "text-disabled",
-      "text-placeholder",
-      "text-caption",
-      "text-label",
-      "text-on-primary",
-      "text-on-secondary",
-      "text-on-success",
-      "text-primary-normal",
-      "text-primary-strong",
-      "text-primary-alternative",
-      "text-primary-disabled",
-      "text-secondary-normal",
-      "text-secondary-strong",
-      "text-secondary-alternative",
-    ],
-  },
-  {
-    title: "Icon",
-    tokens: [
-      "icon-normal",
-      "icon-strong",
-      "icon-alternative",
-      "icon-disabled",
-      "icon-on-primary",
-      "icon-on-secondary",
-      "icon-primary-normal",
-      "icon-primary-strong",
-      "icon-primary-alternative",
-      "icon-primary-disabled",
-    ],
-  },
-  {
-    title: "State",
-    tokens: [
-      "state-success",
-      "state-success-light",
-      "state-success-strong",
-      "state-caution",
-      "state-error",
-      "state-error-light",
-      "state-error-strong",
-      "state-error-2",
-    ],
-  },
-  {
-    title: "Background",
-    tokens: ["bg-primary", "bg-secondary", "bg-input", "bg-elevated", "bg-skeleton", "bg-overlay"],
-  },
-  {
-    title: "Border",
-    tokens: [
-      "border-normal",
-      "border-strong",
-      "border-alternative",
-      "border-disabled",
-      "border-focus-primary",
-      "border-focus-error",
-    ],
-  },
-  {
-    title: "Neutral",
-    tokens: [
-      "neutral-50",
-      "neutral-100",
-      "neutral-150",
-      "neutral-200",
-      "neutral-250",
-      "neutral-300",
-      "neutral-350",
-      "neutral-400",
-      "neutral-500",
-      "neutral-600",
-      "neutral-700",
-      "neutral-800",
-      "neutral-900",
-      "neutral-black",
-      "neutral-white",
-    ],
-  },
-] as const;
-
-const TYPOGRAPHY_TOKENS = [
-  { name: "typo-h1", label: "Heading 1", meta: "36 / 44 / 700" },
-  { name: "typo-h2", label: "Heading 2", meta: "32 / 40 / 700" },
-  { name: "typo-h3", label: "Heading 3", meta: "24 / 30 / 700" },
-  { name: "typo-h4", label: "Heading 4", meta: "20 / 24 / 700" },
-  { name: "typo-title1", label: "Title 1", meta: "18 / 22 / 600" },
-  { name: "typo-title2", label: "Title 2", meta: "16 / 20 / 600" },
-  { name: "typo-title3", label: "Title 3", meta: "14 / 18 / 600" },
-  { name: "typo-title4", label: "Title 4", meta: "12 / 16 / 600" },
-  { name: "typo-body1", label: "Body 1", meta: "16 / 24 / 500" },
-  { name: "typo-body2", label: "Body 2", meta: "14 / 20 / 500" },
-  { name: "typo-caption1", label: "Caption 1", meta: "14 / 20 / 500" },
-  { name: "typo-caption2", label: "Caption 2", meta: "12 / 16 / 500" },
-  { name: "typo-button1", label: "Button 1", meta: "16 / 24 / 700" },
-  { name: "typo-button2", label: "Button 2", meta: "14 / 20 / 600" },
-  { name: "typo-label1", label: "Label 1", meta: "12 / 16 / 700" },
-  { name: "typo-label2", label: "Label 2", meta: "12 / 16 / 500" },
-] as const;
-
-const SPACING_TOKENS = [
-  { key: 0, value: "0" },
-  { key: 100, value: "4px" },
-  { key: 200, value: "8px" },
-  { key: 300, value: "12px" },
-  { key: 400, value: "16px" },
-  { key: 450, value: "18px" },
-  { key: 500, value: "20px" },
-  { key: 600, value: "24px" },
-  { key: 700, value: "32px" },
-  { key: 800, value: "40px" },
-] as const;
-
-const RADIUS_TOKENS = [
-  { name: "rounded-small", value: "8px" },
-  { name: "rounded-medium", value: "12px" },
-  { name: "rounded-large", value: "25px" },
-] as const;
+/* ── Section wrapper ── */
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -158,110 +28,197 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-function ColorSwatch({ token }: { token: string }) {
-  const cssVar = `--color-${token}`;
-  const [hex] = useState(() =>
-    getComputedStyle(document.documentElement).getPropertyValue(cssVar).trim(),
-  );
-
+function Row({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex items-center gap-300">
-      <div
-        className="size-700 shrink-0 rounded-medium border border-border-normal"
-        style={{ backgroundColor: `var(${cssVar})` }}
-      />
-      <div className="min-w-0 flex-1">
-        <p className="typo-body2 truncate text-text-strong">{token}</p>
-        <p className="typo-caption2 truncate text-text-caption">{hex || cssVar}</p>
-      </div>
+    <div className="space-y-200">
+      <p className="typo-caption1 text-text-caption">{label}</p>
+      <div className="flex flex-wrap items-center gap-200">{children}</div>
     </div>
   );
 }
 
+/* ── Page ── */
+
 export default function DesignSystemPage() {
+  const [inputValue, setInputValue] = useState("입력 완료");
+
   return (
     <div className="min-h-screen bg-bg-primary">
-      <div className="mx-auto max-w-[1024px] space-y-500 px-500 py-700">
-        <header className="space-y-200">
-          <h1 className="typo-h1 text-text-strong">Design System</h1>
+      <div className="mx-auto max-w-[430px] space-y-500 px-500 py-700">
+        <header>
+          <h1 className="typo-h2 text-text-strong">UI Components</h1>
         </header>
 
-        <Section title="Typography">
-          <div className="space-y-400">
-            {TYPOGRAPHY_TOKENS.map((t, i) => (
-              <div
-                key={t.name}
-                className={`flex flex-wrap items-baseline gap-x-400 gap-y-100 ${
-                  i < TYPOGRAPHY_TOKENS.length - 1 ? "border-b border-border-normal pb-300" : ""
-                }`}
-              >
-                <span className={`${t.name} text-text-strong`}>
-                  {t.label} — 방짝에 오신 것을 환영합니다
-                </span>
-                <span className="typo-caption2 text-text-caption">
-                  .{t.name} · {t.meta}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Font Weight">
-          <div className="space-y-200">
-            <p className="typo-body1 font-medium text-text-normal">
-              Medium (500) — 방짝에 오신 것을 환영합니다
-            </p>
-            <p className="typo-body1 font-semibold text-text-normal">
-              Semibold (600) — 방짝에 오신 것을 환영합니다
-            </p>
-            <p className="typo-body1 font-bold text-text-normal">
-              Bold (700) — 방짝에 오신 것을 환영합니다
-            </p>
-          </div>
-        </Section>
-
-        <Section title="Colors">
-          <div className="space-y-500">
-            {COLOR_GROUPS.map((group) => (
-              <div key={group.title} className="space-y-300">
-                <h3 className="typo-title1 text-text-strong">{group.title}</h3>
-                <div className="grid grid-cols-1 gap-300 sm:grid-cols-2 lg:grid-cols-3">
-                  {group.tokens.map((token) => (
-                    <ColorSwatch key={token} token={token} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Spacing">
+        {/* ── Button ── */}
+        <Section title="Button">
           <div className="space-y-300">
-            {SPACING_TOKENS.map((s) => (
-              <div key={s.key} className="flex items-center gap-400">
-                <span className="typo-caption1 w-[120px] text-text-strong">spacing-{s.key}</span>
-                <div
-                  className="h-400 bg-brand-primary"
-                  style={{ width: `var(--spacing-${s.key})` }}
-                />
-                <span className="typo-caption2 text-text-caption">{s.value}</span>
-              </div>
-            ))}
+            <Row label="variant: default">
+              <Button>기본 버튼</Button>
+            </Row>
+            <Row label="variant: ghost">
+              <Button variant="ghost">고스트 버튼</Button>
+            </Row>
+            <Row label="variant: neutral">
+              <Button variant="neutral">뉴트럴 버튼</Button>
+            </Row>
+            <Row label="variant: black">
+              <Button variant="black">블랙 버튼</Button>
+            </Row>
+            <Row label="variant: black-ghost">
+              <Button variant="black-ghost">블랙 고스트 버튼</Button>
+            </Row>
+            <Row label="disabled">
+              <Button disabled>비활성 버튼</Button>
+            </Row>
+            <Row label="size: sm">
+              <Button size="sm" className="">
+                작은 버튼
+              </Button>
+              <Button size="sm" variant="ghost" className="">
+                작은 고스트
+              </Button>
+            </Row>
           </div>
         </Section>
 
-        <Section title="Border Radius">
-          <div className="flex flex-wrap gap-500">
-            {RADIUS_TOKENS.map((r) => (
-              <div key={r.name} className="flex flex-col items-center gap-200">
-                <div
-                  className="h-[80px] w-[80px] bg-brand-primary"
-                  style={{ borderRadius: `var(--radius-${r.name.split("-")[1]})` }}
-                />
-                <span className="typo-caption1 text-text-strong">{r.name}</span>
-                <span className="typo-caption2 text-text-caption">{r.value}</span>
-              </div>
-            ))}
+        {/* ── Tag ── */}
+        <Section title="Tag">
+          <div className="flex flex-wrap gap-200">
+            <Tag>기본</Tag>
+            <Tag color="gray">회색</Tag>
+            <Tag color="mint">민트</Tag>
+            <Tag color="black">블랙</Tag>
+            <Tag color="pink">핑크</Tag>
+            <Tag color="orange">주황</Tag>
+            <Tag color="disabled">비활성</Tag>
+          </div>
+        </Section>
+
+        {/* ── Chip ── */}
+        <Section title="Chip (클릭하여 토글)">
+          <div className="space-y-300">
+            <Row label="single (기본 → 선택)">
+              <Chip>라벨</Chip>
+            </Row>
+            <Row label="multi (선택 시 체크 아이콘)">
+              <Chip variant="multi">라벨</Chip>
+              <Chip variant="multi">라벨</Chip>
+            </Row>
+            <Row label="rank (선택 시 순위 뱃지)">
+              <Chip variant="rank" rank={1}>
+                라벨
+              </Chip>
+              <Chip variant="rank" rank={2}>
+                라벨
+              </Chip>
+              <Chip variant="rank" rank={3}>
+                라벨
+              </Chip>
+            </Row>
+            <Row label="neutral (기본 → 강조)">
+              <Chip variant="neutral">라벨</Chip>
+              <Chip variant="neutral">라벨</Chip>
+            </Row>
+          </div>
+        </Section>
+
+        {/* ── Input ── */}
+        <Section title="Input">
+          <div className="space-y-300">
+            <Row label="variant: default">
+              <Input placeholder="placeholder" />
+            </Row>
+            <Row label="variant: focused">
+              <Input variant="focused" placeholder="입력 중" />
+            </Row>
+            <Row label="variant: filled (삭제 버튼)">
+              <Input
+                variant="filled"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onClear={() => setInputValue("")}
+              />
+            </Row>
+            <Row label="variant: error (에러 메시지)">
+              <Input variant="error" defaultValue="입력 완료" errorMessage="* 에러 메시지" />
+            </Row>
+            <Row label="disabled">
+              <Input disabled placeholder="입력 불가" />
+            </Row>
+          </div>
+        </Section>
+
+        {/* ── Toast ── */}
+        <Section title="Toast">
+          <div className="flex flex-wrap gap-200">
+            <Button size="sm" className="" onClick={() => toast.success("저장에 성공했어요")}>
+              Success 토스트
+            </Button>
+            <Button
+              size="sm"
+              variant="black"
+              className=""
+              onClick={() => toast.error("저장에 실패했어요")}
+            >
+              Error 토스트
+            </Button>
+            <Button
+              size="sm"
+              variant="ghost"
+              className=""
+              onClick={() => toast.matching("AI 추천순으로 정렬했어요")}
+            >
+              Matching 토스트
+            </Button>
+          </div>
+        </Section>
+
+        {/* ── AlertDialog ── */}
+        <Section title="AlertDialog">
+          <div className="space-y-300">
+            <Row label="아이콘 + 확인/취소">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" className="">
+                    다이얼로그 열기 (아이콘)
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogIcon />
+                    <AlertDialogTitle icon>알림 제목</AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <AlertDialogDescription>
+                    알림 설명 텍스트가 여기에 표시됩니다.
+                  </AlertDialogDescription>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction>확인</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </Row>
+            <Row label="텍스트만 + 확인/취소">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" variant="ghost" className="">
+                    다이얼로그 열기 (텍스트)
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>정말 삭제할까요?</AlertDialogTitle>
+                  </AlertDialogHeader>
+                  <AlertDialogDescription>
+                    삭제된 데이터는 복구할 수 없습니다.
+                  </AlertDialogDescription>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>취소</AlertDialogCancel>
+                    <AlertDialogAction>삭제</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </Row>
           </div>
         </Section>
       </div>
