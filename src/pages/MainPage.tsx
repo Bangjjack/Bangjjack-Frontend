@@ -19,10 +19,10 @@ const HEADER_CONFIG: Record<
   BottomNavIcon,
   { title?: string; variant: HeaderVariant }
 > = {
-  chat: { title: "채팅", variant: "title" },
   home: { variant: "home" },
-  mypage: { title: "마이페이지", variant: "title" },
   room: { title: "방 찾기", variant: "title" },
+  chat: { title: "채팅", variant: "backTitle" },
+  mypage: { title: "마이페이지", variant: "backTitle" },
 };
 
 export default function MainPage() {
