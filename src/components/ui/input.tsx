@@ -1,4 +1,5 @@
-import { cva, type VariantProps } from "class-variance-authority";
+import { useState } from "react";
+import { cva } from "class-variance-authority";
 import { cn } from "@/lib/cn";
 import { CircleDeleteIcon, CircleAlertIcon } from "@/assets/icons";
 
@@ -20,32 +21,74 @@ const inputVariants = cva(
   },
 );
 
-type InputProps = Omit<React.ComponentProps<"input">, "size"> &
-  VariantProps<typeof inputVariants> & {
-    errorMessage?: string;
-    onClear?: () => void;
-  };
+type InputProps = Omit<React.ComponentProps<"input">, "size"> & {
+  error?: boolean;
+  errorMessage?: string;
+  onClear?: () => void;
+};
 
-function Input({ className, variant, disabled, errorMessage, onClear, ...props }: InputProps) {
-  const resolvedVariant = disabled ? "disabled" : (variant ?? "default");
-  const showClear = resolvedVariant === "filled" && onClear;
-  const showError = resolvedVariant === "error";
+function Input({
+  className,
+  error,
+  disabled,
+  errorMessage,
+  onClear,
+  onFocus,
+  onBlur,
+  value,
+  defaultValue,
+  ...props
+}: InputProps) {
+  const [focused, setFocused] = useState(false);
+  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
+
+  const isControlled = value !== undefined;
+  const currentValue = isControlled ? value : internalValue;
+  const isFilled = String(currentValue).length > 0;
+
+  function resolveVariant() {
+    if (disabled) return "disabled" as const;
+    if (error) return "error" as const;
+    if (focused) return "focused" as const;
+    if (isFilled) return "filled" as const;
+    return "default" as const;
+  }
+
+  const variant = resolveVariant();
+  const showClear = variant === "filled" && onClear;
+  const showError = variant === "error";
 
   return (
     <div className="flex w-full flex-col">
-      <div className={cn(inputVariants({ variant: resolvedVariant }), className)}>
+      <div className={cn(inputVariants({ variant }), className)}>
         <input
           className={cn(
             "flex-1 bg-transparent outline-none placeholder:text-text-placeholder",
             disabled && "text-text-disabled placeholder:text-text-disabled",
           )}
           disabled={disabled}
+          value={isControlled ? value : internalValue}
+          onChange={(e) => {
+            if (!isControlled) setInternalValue(e.target.value);
+            props.onChange?.(e);
+          }}
+          onFocus={(e) => {
+            setFocused(true);
+            onFocus?.(e);
+          }}
+          onBlur={(e) => {
+            setFocused(false);
+            onBlur?.(e);
+          }}
           {...props}
         />
         {showClear && (
           <button
             type="button"
-            onClick={onClear}
+            onClick={() => {
+              if (!isControlled) setInternalValue("");
+              onClear?.();
+            }}
             className="ml-200 shrink-0"
             aria-label="입력 지우기"
           >

@@ -125,22 +125,16 @@ export default function DesignSystemPage() {
         {/* ── Input ── */}
         <Section title="Input">
           <div className="space-y-300">
-            <Row label="variant: default">
-              <Input placeholder="placeholder" />
-            </Row>
-            <Row label="variant: focused">
-              <Input variant="focused" placeholder="입력 중" />
-            </Row>
-            <Row label="variant: filled (삭제 버튼)">
+            <Row label="기본 (포커스·입력 시 자동 전환)">
               <Input
-                variant="filled"
+                placeholder="클릭하여 입력해보세요"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onClear={() => setInputValue("")}
               />
             </Row>
-            <Row label="variant: error (에러 메시지)">
-              <Input variant="error" defaultValue="입력 완료" errorMessage="* 에러 메시지" />
+            <Row label="error">
+              <Input error defaultValue="입력 완료" errorMessage="* 에러 메시지" />
             </Row>
             <Row label="disabled">
               <Input disabled placeholder="입력 불가" />
