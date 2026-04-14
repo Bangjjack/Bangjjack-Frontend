@@ -1,10 +1,11 @@
 import { useState } from "react";
 
-import { Header, BottomNav, type BottomNavIcon } from "@/components/ui";
+import { Header, BottomNav } from "@/components/ui";
 import ChatPage from "@/pages/ChatPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import RoomPage from "@/pages/RoomPage";
+import type { BottomNavIcon } from "@/types/bottomNav";
 
 const PAGE_COMPONENTS: Record<BottomNavIcon, React.ReactNode> = {
   chat: <ChatPage />,

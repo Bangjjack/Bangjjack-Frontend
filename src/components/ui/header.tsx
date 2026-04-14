@@ -1,6 +1,5 @@
 import { cn } from "@/lib/cn";
-
-import type { BottomNavIcon } from "./bottomNav";
+import type { BottomNavIcon } from "@/types/bottomNav";
 
 type HeaderProps = React.ComponentProps<"div"> & {
   activeIcon: BottomNavIcon;

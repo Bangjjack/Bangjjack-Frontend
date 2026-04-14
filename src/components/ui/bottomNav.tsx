@@ -3,9 +3,8 @@ import HomeIcon from "@/assets/icons/home.svg?react";
 import RoomIcon from "@/assets/icons/puzzle.svg?react";
 import UserIcon from "@/assets/icons/user.svg?react";
 import { cn } from "@/lib/cn";
+import type { BottomNavIcon } from "@/types/bottomNav";
 import { Link } from "react-router";
-
-type BottomNavIcon = "chat" | "home" | "mypage" | "room";
 
 type BottomNavItem = {
   hasBadge?: boolean;
