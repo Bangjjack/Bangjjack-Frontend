@@ -30,7 +30,7 @@ type BottomNavIconProps = {
   isActive?: boolean;
 };
 
-const defaultItems: BottomNavItem[] = [
+const DEFAULT_ITEMS: BottomNavItem[] = [
   { icon: "home", isActive: true, label: "홈" },
   { icon: "room", label: "방 찾기" },
   { hasBadge: true, icon: "chat", label: "채팅" },
@@ -40,7 +40,7 @@ const defaultItems: BottomNavItem[] = [
 function BottomNav({
   activeIcon,
   className,
-  items = defaultItems,
+  items = DEFAULT_ITEMS,
   onActiveIconChange,
   ...props
 }: BottomNavProps) {
