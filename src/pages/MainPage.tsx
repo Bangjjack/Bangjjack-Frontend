@@ -62,10 +62,7 @@ export default function MainPage() {
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
-      <main
-        className="layout-figma-frame min-h-0 flex-1 overflow-hidden px-400"
-        style={{ "--width-figma-frame": "430px" } as React.CSSProperties}
-      >
+      <main className="layout-figma-frame min-h-0 flex-1 overflow-hidden px-400">
         <div className="scrollbar-none h-full overflow-y-auto">
           <Outlet />
         </div>
