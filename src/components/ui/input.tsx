@@ -55,7 +55,7 @@ function Input({
   }
 
   const variant = resolveVariant();
-  const showClear = variant === "filled" && onClear;
+  const showClear = isFilled && onClear && !disabled && !error;
   const showError = variant === "error";
 
   return (

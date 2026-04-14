@@ -115,6 +115,7 @@ function Chip({
   return (
     <button
       type="button"
+      aria-pressed={selected}
       className={cn(chipVariants({ variant, selected }), className)}
       onClick={handleClick}
       {...props}
