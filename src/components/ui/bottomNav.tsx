@@ -44,7 +44,8 @@ function BottomNav({
   onActiveIconChange,
   ...props
 }: BottomNavProps) {
-  const resolvedActiveIcon = activeIcon ?? items.find((item) => item.isActive)?.icon ?? items[0]?.icon ?? "home";
+  const resolvedActiveIcon =
+    activeIcon ?? items.find((item) => item.isActive)?.icon ?? items[0]?.icon ?? "home";
 
   return (
     <nav
@@ -67,13 +68,7 @@ function BottomNav({
   );
 }
 
-function BottomNavButton({
-  href,
-  icon,
-  isActive = false,
-  label,
-  onClick,
-}: BottomNavButtonProps) {
+function BottomNavButton({ href, icon, isActive = false, label, onClick }: BottomNavButtonProps) {
   const content = (
     <>
       <span className="relative flex items-center justify-center">

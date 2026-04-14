@@ -15,10 +15,7 @@ const PAGE_COMPONENTS: Record<BottomNavIcon, React.ReactNode> = {
   room: <RoomPage />,
 };
 
-const HEADER_CONFIG: Record<
-  BottomNavIcon,
-  { title?: string; variant: HeaderVariant }
-> = {
+const HEADER_CONFIG: Record<BottomNavIcon, { title?: string; variant: HeaderVariant }> = {
   home: { variant: "home" },
   room: { title: "방 찾기", variant: "title" },
   chat: { title: "채팅", variant: "backTitle" },

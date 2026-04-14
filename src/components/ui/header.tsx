@@ -28,10 +28,7 @@ function Header({ className, title, userName, variant, ...props }: HeaderProps) 
               className="flex size-600 items-center justify-center text-icon-strong"
               type="button"
             >
-              <ChevronLeftIcon
-                aria-hidden="true"
-                className="size-600 [&_path]:stroke-current"
-              />
+              <ChevronLeftIcon aria-hidden="true" className="size-600 [&_path]:stroke-current" />
             </button>
             <div className="flex flex-1 items-center justify-center pr-600">
               <h1 className="typo-title1 text-center text-text-strong">{title}</h1>
@@ -46,10 +43,7 @@ function Header({ className, title, userName, variant, ...props }: HeaderProps) 
               className="flex size-600 items-center justify-center text-icon-strong"
               type="button"
             >
-              <ChevronLeftIcon
-                aria-hidden="true"
-                className="size-600 [&_path]:stroke-current"
-              />
+              <ChevronLeftIcon aria-hidden="true" className="size-600 [&_path]:stroke-current" />
             </button>
             <div className="flex flex-1 items-center justify-center">
               <h1 className="typo-title1 text-center text-text-strong">{title}</h1>
@@ -59,10 +53,7 @@ function Header({ className, title, userName, variant, ...props }: HeaderProps) 
               className="flex h-5.5 w-5.5 items-center justify-center text-icon-strong"
               type="button"
             >
-              <MoreVerticalIcon
-                aria-hidden="true"
-                className="h-5.5 w-5.5 [&_path]:fill-current"
-              />
+              <MoreVerticalIcon aria-hidden="true" className="h-5.5 w-5.5 [&_path]:fill-current" />
             </button>
           </div>
         </header>
@@ -74,10 +65,7 @@ function Header({ className, title, userName, variant, ...props }: HeaderProps) 
               className="flex size-600 items-center justify-center text-icon-strong"
               type="button"
             >
-              <ChevronLeftIcon
-                aria-hidden="true"
-                className="size-600 [&_path]:stroke-current"
-              />
+              <ChevronLeftIcon aria-hidden="true" className="size-600 [&_path]:stroke-current" />
             </button>
             <div className="flex items-center gap-2.5 pr-600">
               <ProfileIcon aria-hidden="true" className="size-9" />
