@@ -1,3 +1,9 @@
-type HeaderVariant = "home" | "title" | "chat" | "none";
+type HeaderVariant =
+  | "backProfileTitle"
+  | "backTitle"
+  | "backTitleMore"
+  | "home"
+  | "none"
+  | "title";
 
 export type { HeaderVariant };
