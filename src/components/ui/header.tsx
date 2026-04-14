@@ -27,7 +27,7 @@ function Header({ activeIcon, className, userName, ...props }: HeaderProps) {
       ) : title ? (
         <header className="px-400 pb-400 pt-9">
           <div className="flex items-center justify-center">
-            <h1 className="typo-title1 font-semibold text-center text-text-strong">{title}</h1>
+            <h1 className="typo-title1 text-center text-text-strong">{title}</h1>
           </div>
         </header>
       ) : null}
