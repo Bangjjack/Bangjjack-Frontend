@@ -44,7 +44,7 @@ function BottomNav({
   onActiveIconChange,
   ...props
 }: BottomNavProps) {
-  const resolvedActiveIcon = activeIcon ?? items.find((item) => item.isActive)?.icon ?? "home";
+  const resolvedActiveIcon = activeIcon ?? items.find((item) => item.isActive)?.icon ?? items[0]?.icon ?? "home";
 
   return (
     <nav
