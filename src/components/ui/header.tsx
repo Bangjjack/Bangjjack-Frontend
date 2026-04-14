@@ -55,20 +55,13 @@ function Header({
               onClick={onBackClick}
               type="button"
             >
-              <ChevronLeftIcon
-                aria-hidden="true"
-                className="size-600 [&_path]:stroke-current"
-              />
+              <ChevronLeftIcon aria-hidden="true" className="size-600 [&_path]:stroke-current" />
             </button>
           ) : (
             <div className="size-600 shrink-0" aria-hidden="true" />
           )}
 
-          <div
-            className={cn(
-              "flex flex-1 items-center justify-center",
-            )}
-          >
+          <div className={cn("flex flex-1 items-center justify-center")}>
             {showProfile ? (
               <div className="flex items-center gap-2.5">
                 <ProfileIcon aria-hidden="true" className="size-9 shrink-0" />
@@ -85,10 +78,7 @@ function Header({
               className="flex h-5.5 w-5.5 items-center justify-center text-icon-strong"
               type="button"
             >
-              <MoreVerticalIcon
-                aria-hidden="true"
-                className="h-5.5 w-5.5 [&_path]:fill-current"
-              />
+              <MoreVerticalIcon aria-hidden="true" className="h-5.5 w-5.5 [&_path]:fill-current" />
             </button>
           ) : (
             <div className="size-600 shrink-0" aria-hidden="true" />
