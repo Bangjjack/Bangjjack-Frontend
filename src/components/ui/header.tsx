@@ -67,7 +67,6 @@ function Header({
           <div
             className={cn(
               "flex flex-1 items-center justify-center",
-              showBack && !showMore && !showProfile ? "pr-600" : "",
             )}
           >
             {showProfile ? (
