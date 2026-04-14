@@ -1,68 +1,77 @@
-import { useState } from "react";
-
 import { BottomNav, Header } from "@/components/ui";
-import ChatPage from "@/pages/ChatPage";
-import HomePage from "@/pages/HomePage";
-import MyPage from "@/pages/MyPage";
-import RoomPage from "@/pages/RoomPage";
-import type { BottomNavIcon } from "@/types/bottomNav";
 import type { HeaderProps } from "@/components/ui";
+import type { BottomNavIcon } from "@/types/bottomNav";
+import { Outlet, useLocation, useNavigate } from "react-router";
 
-const PAGE_COMPONENTS: Record<BottomNavIcon, React.ReactNode> = {
-  chat: <ChatPage />,
-  home: <HomePage />,
-  mypage: <MyPage />,
-  room: <RoomPage />,
+type RouteConfig = {
+  header: Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">;
+  icon: BottomNavIcon;
+  path: string;
 };
 
-const HEADER_CONFIG: Record<
-  BottomNavIcon,
-  Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">
-> = {
-  chat: { showBack: true, title: "채팅", variant: "title" },
-  home: { variant: "home" },
-  mypage: { showBack: true, title: "마이페이지", variant: "title" },
-  room: { title: "방 찾기", variant: "title" },
+const ROUTE_CONFIG: Record<string, RouteConfig> = {
+  "/": {
+    header: { variant: "home" },
+    icon: "home",
+    path: "/",
+  },
+  "/chat": {
+    header: { showBack: true, title: "채팅", variant: "title" },
+    icon: "chat",
+    path: "/chat",
+  },
+  "/mypage": {
+    header: { showBack: true, title: "마이페이지", variant: "title" },
+    icon: "mypage",
+    path: "/mypage",
+  },
+  "/room": {
+    header: { title: "방 찾기", variant: "title" },
+    icon: "room",
+    path: "/room",
+  },
 };
+
+const DEFAULT_ROUTE_CONFIG: RouteConfig = {
+  header: { variant: "home" },
+  icon: "home",
+  path: "/",
+};
+
+const BOTTOM_NAV_ITEMS = Object.values(ROUTE_CONFIG).map(({ icon, path }) => ({
+  href: path,
+  icon,
+  label:
+    icon === "home" ? "홈" : icon === "room" ? "방 찾기" : icon === "chat" ? "채팅" : "MY",
+}));
 
 export default function MainPage() {
-  const [activeIcon, setActiveIcon] = useState<BottomNavIcon>("home");
-  const [, setNavigationHistory] = useState<BottomNavIcon[]>([]);
-  const headerConfig = HEADER_CONFIG[activeIcon];
+  const location = useLocation();
+  const navigate = useNavigate();
+  const routeConfig = ROUTE_CONFIG[location.pathname] ?? DEFAULT_ROUTE_CONFIG;
 
-  const handleActiveIconChange = (nextIcon: BottomNavIcon) => {
-    if (nextIcon === activeIcon) {
+  const handleBackClick = () => {
+    if (window.history.state?.idx > 0) {
+      navigate(-1);
       return;
     }
 
-    setNavigationHistory((prev) => [...prev, activeIcon]);
-    setActiveIcon(nextIcon);
-  };
-
-  const handleBackClick = () => {
-    setNavigationHistory((prev) => {
-      const previousIcon = prev.at(-1);
-
-      if (!previousIcon) {
-        return prev;
-      }
-
-      setActiveIcon(previousIcon);
-      return prev.slice(0, -1);
-    });
+    navigate("/");
   };
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-bg-primary">
-      <Header {...headerConfig} onBackClick={handleBackClick} userName="방짝" />
+      <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
       <main
         className="layout-figma-frame min-h-0 flex-1 overflow-hidden px-400"
         style={{ "--width-figma-frame": "430px" } as React.CSSProperties}
       >
-        <div className="scrollbar-none h-full overflow-y-auto">{PAGE_COMPONENTS[activeIcon]}</div>
+        <div className="scrollbar-none h-full overflow-y-auto">
+          <Outlet />
+        </div>
       </main>
       <div className="p-400">
-        <BottomNav activeIcon={activeIcon} onActiveIconChange={handleActiveIconChange} />
+        <BottomNav activeIcon={routeConfig.icon} items={BOTTOM_NAV_ITEMS} />
       </div>
     </div>
   );
