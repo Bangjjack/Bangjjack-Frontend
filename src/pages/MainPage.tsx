@@ -6,7 +6,7 @@ import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import RoomPage from "@/pages/RoomPage";
 import type { BottomNavIcon } from "@/types/bottomNav";
-import type { HeaderVariant } from "@/types/header";
+import type { HeaderProps } from "@/components/ui";
 
 const PAGE_COMPONENTS: Record<BottomNavIcon, React.ReactNode> = {
   chat: <ChatPage />,
@@ -15,16 +15,19 @@ const PAGE_COMPONENTS: Record<BottomNavIcon, React.ReactNode> = {
   room: <RoomPage />,
 };
 
-const HEADER_CONFIG: Record<BottomNavIcon, { title?: string; variant: HeaderVariant }> = {
+const HEADER_CONFIG: Record<
+  BottomNavIcon,
+  Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">
+> = {
+  chat: { showBack: true, title: "채팅", variant: "title" },
   home: { variant: "home" },
+  mypage: { showBack: true, title: "마이페이지", variant: "title" },
   room: { title: "방 찾기", variant: "title" },
-  chat: { title: "채팅", variant: "backTitle" },
-  mypage: { title: "마이페이지", variant: "backTitle" },
 };
 
 export default function MainPage() {
   const [activeIcon, setActiveIcon] = useState<BottomNavIcon>("home");
-  const [navigationHistory, setNavigationHistory] = useState<BottomNavIcon[]>([]);
+  const [, setNavigationHistory] = useState<BottomNavIcon[]>([]);
   const headerConfig = HEADER_CONFIG[activeIcon];
 
   const handleActiveIconChange = (nextIcon: BottomNavIcon) => {
@@ -51,11 +54,7 @@ export default function MainPage() {
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden bg-bg-primary">
-      <Header
-        {...headerConfig}
-        onBackClick={handleBackClick}
-        userName="방짝"
-      />
+      <Header {...headerConfig} onBackClick={handleBackClick} userName="방짝" />
       <main
         className="layout-figma-frame min-h-0 flex-1 overflow-hidden px-400"
         style={{ "--width-figma-frame": "430px" } as React.CSSProperties}
