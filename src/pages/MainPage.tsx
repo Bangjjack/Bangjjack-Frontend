@@ -38,12 +38,12 @@ const DEFAULT_ROUTE_CONFIG: RouteConfig = {
   path: "/",
 };
 
-const BOTTOM_NAV_ITEMS = Object.values(ROUTE_CONFIG).map(({ icon, path }) => ({
-  href: path,
-  icon,
-  label:
-    icon === "home" ? "홈" : icon === "room" ? "방 찾기" : icon === "chat" ? "채팅" : "MY",
-}));
+const BOTTOM_NAV_ITEMS = [
+  { href: "/", icon: "home", label: "홈" },
+  { href: "/room", icon: "room", label: "방 찾기" },
+  { href: "/chat", icon: "chat", label: "채팅" },
+  { href: "/mypage", icon: "mypage", label: "MY" },
+] satisfies Array<{ href: string; icon: BottomNavIcon; label: string }>;
 
 export default function MainPage() {
   const location = useLocation();
