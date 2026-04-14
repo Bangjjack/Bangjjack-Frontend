@@ -167,6 +167,12 @@
   --caption2-size: 12px;
   --caption2-line-height: 16px;
 
+  --caption3-size: 10px;
+  --caption3-line-height: 12px;
+
+  --caption4-size: 8px;
+  --caption4-line-height: 10px;
+
   --button1-size: 16px;
   --button1-line-height: 24px;
 
@@ -178,6 +184,9 @@
 
   --label2-size: 12px;
   --label2-line-height: 16px;
+
+  --label3-size: 10px;
+  --label3-line-height: 12px;
 }
 
 html {
@@ -208,7 +217,6 @@ a {
   touch-action: manipulation;
 }
 
-input:focus,
 select:focus {
   outline: 2px solid var(--color-border-focus-primary) !important;
   outline-offset: 2px;
@@ -299,6 +307,20 @@ select:focus {
   letter-spacing: var(--letter-spacing);
 }
 
+@utility typo-caption3 {
+  font-size: var(--caption3-size);
+  line-height: var(--caption3-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-caption4 {
+  font-size: var(--caption4-size);
+  line-height: var(--caption4-line-height);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
 @utility typo-button1 {
   font-size: var(--button1-size);
   line-height: var(--button1-line-height);
@@ -324,6 +346,13 @@ select:focus {
   font-size: var(--label2-size);
   line-height: var(--label2-line-height);
   font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing);
+}
+
+@utility typo-label3 {
+  font-size: var(--label3-size);
+  line-height: var(--label3-line-height);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: var(--letter-spacing);
 }
 
