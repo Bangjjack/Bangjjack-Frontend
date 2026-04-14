@@ -1,6 +1,7 @@
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 import { cn } from "@/lib/cn";
 import { CircleInfoIcon } from "@/assets/icons";
+import { Button } from "./button";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
@@ -93,13 +94,9 @@ function AlertDialogAction({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
   return (
-    <AlertDialogPrimitive.Action
-      className={cn(
-        "inline-flex flex-1 items-center justify-center rounded-medium bg-button-primary px-400 py-200 typo-button2 text-text-on-primary active:bg-button-primary-pressed",
-        className,
-      )}
-      {...props}
-    />
+    <AlertDialogPrimitive.Action asChild>
+      <Button size="sm" className={cn("flex-1", className)} {...props} />
+    </AlertDialogPrimitive.Action>
   );
 }
 
@@ -108,13 +105,9 @@ function AlertDialogCancel({
   ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
   return (
-    <AlertDialogPrimitive.Cancel
-      className={cn(
-        "inline-flex flex-1 items-center justify-center rounded-medium bg-button-neutral-ghost px-400 py-200 typo-button2 text-text-normal active:bg-neutral-250",
-        className,
-      )}
-      {...props}
-    />
+    <AlertDialogPrimitive.Cancel asChild>
+      <Button variant="neutral" size="sm" className={cn("flex-1", className)} {...props} />
+    </AlertDialogPrimitive.Cancel>
   );
 }
 
