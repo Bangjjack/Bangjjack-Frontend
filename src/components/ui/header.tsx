@@ -1,36 +1,29 @@
 import { cn } from "@/lib/cn";
-import type { BottomNavIcon } from "@/types/bottomNav";
+import type { HeaderVariant } from "@/types/header";
 
 type HeaderProps = React.ComponentProps<"div"> & {
-  activeIcon: BottomNavIcon;
+  title?: string;
   userName: string;
+  variant: HeaderVariant;
 };
 
-const HEADER_TITLES: Partial<Record<BottomNavIcon, string>> = {
-  chat: "채팅",
-  mypage: "마이페이지",
-  room: "방 찾기",
-};
-
-function Header({ activeIcon, className, userName, ...props }: HeaderProps) {
-  const title = HEADER_TITLES[activeIcon];
-
+function Header({ className, title, userName, variant, ...props }: HeaderProps) {
   return (
     <div className={cn(className)} {...props}>
-      {activeIcon === "home" ? (
+      {variant === "home" ? (
         <header className="px-400 pb-400 pt-9">
           <h1 className="typo-h3 text-text-strong">
             <span className="text-text-primary-alternative">{userName}</span>
             <span>{"님 안녕하세요!"}</span>
           </h1>
         </header>
-      ) : title ? (
+      ) : variant === "chat" || variant === "title" ? (
         <header className="px-400 pb-400 pt-9">
           <div className="flex items-center justify-center">
             <h1 className="typo-title1 text-center text-text-strong">{title}</h1>
           </div>
         </header>
-      ) : null}
+      ) : variant === "none" ? null : null}
     </div>
   );
 }
