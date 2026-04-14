@@ -1,5 +1,7 @@
-import { MessageCircle, House, Puzzle, UserRound } from "lucide-react";
-
+import ChatIcon from "@/assets/icons/chat.svg?react";
+import HomeIcon from "@/assets/icons/home.svg?react";
+import RoomIcon from "@/assets/icons/puzzle.svg?react";
+import UserIcon from "@/assets/icons/user.svg?react";
 import { cn } from "@/lib/cn";
 
 type BottomNavIcon = "chat" | "home" | "mypage" | "room";
@@ -22,6 +24,12 @@ type BottomNavProps = React.ComponentProps<"nav"> & {
   onActiveIconChange?: (icon: BottomNavIcon) => void;
 };
 
+type BottomNavIconProps = {
+  className?: string;
+  icon: BottomNavIcon;
+  isActive?: boolean;
+};
+
 const defaultItems: BottomNavItem[] = [
   { icon: "home", isActive: true, label: "홈" },
   { icon: "room", label: "방 찾기" },
@@ -40,7 +48,7 @@ function BottomNav({
 
   return (
     <nav
-      aria-label="바텀 내비게이션"
+      aria-label="하단 내비게이션"
       className={cn(
         "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5",
         className,
@@ -60,7 +68,6 @@ function BottomNav({
 }
 
 function BottomNavButton({
-  // hasBadge = false,
   href,
   icon,
   isActive = false,
@@ -75,10 +82,6 @@ function BottomNavButton({
           isActive={isActive}
           className={cn(icon === "home" ? "size-5.75" : "size-600")}
         />
-        {/* 추후에 새 채팅 목록 있을 때 보여줄 뱃지, 현재는 주석처리 해둠
-        {hasBadge ? (
-          <span className="absolute right-0 top-0 size-100 rounded-full bg-brand-primary" />
-        ) : null} */}
       </span>
       <span
         className={cn(
@@ -92,7 +95,7 @@ function BottomNavButton({
   );
 
   const boxClassName = cn(
-    "flex h-[61px] w-14 shrink-0 flex-col items-center justify-center gap-200 rounded-medium px-300 py-200 cursor-pointer",
+    "flex h-[61px] w-14 shrink-0 cursor-pointer flex-col items-center justify-center gap-200 rounded-medium px-300 py-200",
     isActive ? "text-brand-primary" : "text-text-caption",
   );
 
@@ -115,28 +118,38 @@ function BottomNavButton({
   );
 }
 
-type BottomNavIconProps = {
-  className?: string;
-  icon: BottomNavIcon;
-  isActive?: boolean;
-};
-
 function BottomNavIcon({ className, icon, isActive = false }: BottomNavIconProps) {
-  const iconClassName = cn(
-    "shrink-0",
-    isActive ? "text-brand-primary" : "text-icon-alternative",
-    className,
-  );
+  const colorClassName = isActive ? "text-brand-primary" : "text-icon-alternative";
 
   switch (icon) {
     case "home":
-      return <House className={iconClassName} strokeWidth={2.25} />;
+      return (
+        <HomeIcon
+          aria-hidden="true"
+          className={cn(className, colorClassName, "[&_path]:fill-current")}
+        />
+      );
     case "room":
-      return <Puzzle className={iconClassName} strokeWidth={2.25} />;
+      return (
+        <RoomIcon
+          aria-hidden="true"
+          className={cn(className, colorClassName, "[&_path]:fill-current")}
+        />
+      );
     case "chat":
-      return <MessageCircle className={iconClassName} strokeWidth={2.25} />;
+      return (
+        <ChatIcon
+          aria-hidden="true"
+          className={cn(className, colorClassName, "[&_path]:stroke-current")}
+        />
+      );
     case "mypage":
-      return <UserRound className={iconClassName} strokeWidth={2.25} />;
+      return (
+        <UserIcon
+          aria-hidden="true"
+          className={cn(className, colorClassName, "[&_path]:stroke-current")}
+        />
+      );
     default:
       return null;
   }
