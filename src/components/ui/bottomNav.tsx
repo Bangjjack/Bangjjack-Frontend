@@ -30,6 +30,13 @@ type BottomNavIconProps = {
   isActive?: boolean;
 };
 
+type BottomNavActionProps = {
+  children: React.ReactNode;
+  className: string;
+  href?: string;
+  onClick?: () => void;
+};
+
 const DEFAULT_ITEMS: BottomNavItem[] = [
   { icon: "home", isActive: true, label: "홈" },
   { icon: "room", label: "방 찾기" },
@@ -94,22 +101,28 @@ function BottomNavButton({ href, icon, isActive = false, label, onClick }: Botto
     isActive ? "text-brand-primary" : "text-text-caption",
   );
 
+  return (
+    <div className="flex items-center justify-center">
+      <BottomNavAction className={boxClassName} href={href} onClick={onClick}>
+        {content}
+      </BottomNavAction>
+    </div>
+  );
+}
+
+function BottomNavAction({ children, className, href, onClick }: BottomNavActionProps) {
   if (href) {
     return (
-      <div className="flex items-center justify-center">
-        <Link className={boxClassName} onClick={onClick} to={href}>
-          {content}
-        </Link>
-      </div>
+      <Link className={className} onClick={onClick} to={href}>
+        {children}
+      </Link>
     );
   }
 
   return (
-    <div className="flex items-center justify-center">
-      <button className={boxClassName} onClick={onClick} type="button">
-        {content}
-      </button>
-    </div>
+    <button className={className} onClick={onClick} type="button">
+      {children}
+    </button>
   );
 }
 
