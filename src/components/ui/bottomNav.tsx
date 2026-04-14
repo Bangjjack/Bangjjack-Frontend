@@ -3,6 +3,7 @@ import HomeIcon from "@/assets/icons/home.svg?react";
 import RoomIcon from "@/assets/icons/puzzle.svg?react";
 import UserIcon from "@/assets/icons/user.svg?react";
 import { cn } from "@/lib/cn";
+import { Link } from "react-router";
 
 type BottomNavIcon = "chat" | "home" | "mypage" | "room";
 
@@ -102,9 +103,9 @@ function BottomNavButton({
   if (href) {
     return (
       <div className="flex items-center justify-center">
-        <a className={boxClassName} href={href} onClick={onClick}>
+        <Link className={boxClassName} onClick={onClick} to={href}>
           {content}
-        </a>
+        </Link>
       </div>
     );
   }
