@@ -11,7 +11,7 @@ const tagVariants = cva(
         mint: "bg-brand-secondary-light text-text-secondary-normal",
         black: "bg-neutral-800 text-neutral-50",
         pink: "bg-state-error-light text-state-error-2",
-        orange: "bg-icon-primary-normal text-text-primary-disabled",
+        orange: "bg-icon-primary-normal text-text-on-primary",
         disabled: "bg-button-neutral-ghost text-text-disabled",
       },
     },

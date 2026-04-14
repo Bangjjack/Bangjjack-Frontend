@@ -49,12 +49,12 @@ function Input({ className, variant, disabled, errorMessage, onClear, ...props }
             className="ml-200 shrink-0"
             aria-label="입력 지우기"
           >
-            <CircleDeleteIcon className="size-[24px]" />
+            <CircleDeleteIcon className="size-[18px]" />
           </button>
         )}
         {showError && (
           <div className="ml-200 shrink-0">
-            <CircleAlertIcon className="size-[24px]" />
+            <CircleAlertIcon className="size-[18px]" />
           </div>
         )}
       </div>
