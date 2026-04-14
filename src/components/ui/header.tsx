@@ -6,6 +6,7 @@ import type { HeaderVariant } from "@/types/header";
 
 type HeaderProps = React.ComponentProps<"div"> & {
   onBackClick?: () => void;
+  onMoreClick?: () => void;
   showBack?: boolean;
   showMore?: boolean;
   showProfile?: boolean;
@@ -17,6 +18,7 @@ type HeaderProps = React.ComponentProps<"div"> & {
 function Header({
   className,
   onBackClick,
+  onMoreClick,
   showBack = false,
   showMore = false,
   showProfile = false,
@@ -43,6 +45,7 @@ function Header({
   }
 
   const shouldUseCompactTopPadding = showBack && showProfile;
+  const shouldShowMoreButton = showMore && Boolean(onMoreClick);
 
   return (
     <div className={cn(className)} {...props}>
@@ -72,10 +75,11 @@ function Header({
             )}
           </div>
 
-          {showMore ? (
+          {shouldShowMoreButton ? (
             <button
               aria-label="더보기"
               className="flex h-5.5 w-5.5 items-center justify-center text-icon-strong"
+              onClick={onMoreClick}
               type="button"
             >
               <MoreVerticalIcon aria-hidden="true" className="h-5.5 w-5.5 [&_path]:fill-current" />
