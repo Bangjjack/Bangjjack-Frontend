@@ -1,6 +1,6 @@
 import ChevronLeftIcon from "@/assets/icons/chevronLeft.svg?react";
 import MoreVerticalIcon from "@/assets/icons/moreVertical.svg?react";
-import ProfileIcon from "@/assets/icons/profile.svg?react";
+import { ProfileOrangeIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 import type { HeaderVariant } from "@/types/header";
 
@@ -67,7 +67,7 @@ function Header({
           <div className={cn("flex flex-1 items-center justify-center")}>
             {showProfile ? (
               <div className="flex items-center gap-2.5">
-                <ProfileIcon aria-hidden="true" className="size-9 shrink-0" />
+                <ProfileOrangeIcon aria-hidden="true" className="size-9 shrink-0" />
                 <h1 className="typo-title1 text-text-strong">{title}</h1>
               </div>
             ) : (
