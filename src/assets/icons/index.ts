@@ -3,3 +3,6 @@ export { default as CircleCheckIcon } from "./ic-circle-check.svg?react";
 export { default as CircleInfoIcon } from "./ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "./ic-circle-delete.svg?react";
 export { default as CheckIcon } from "./ic-check.svg?react";
+export { default as ProfileMintIcon } from "./ic-profile-mint.svg?react";
+export { default as ProfileOrangeIcon } from "./ic-profile-orange.svg?react";
+export { default as WriteIcon } from "./ic-write.svg?react";
