@@ -60,14 +60,14 @@ export default function MainPage() {
   };
 
   return (
-    <div className="flex h-dvh flex-col overflow-hidden bg-bg-primary">
+    <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
-      <main className="layout-figma-frame min-h-0 flex-1 overflow-hidden px-400">
-        <div className="scrollbar-none h-full overflow-y-auto">
+      <main className="min-h-0 flex-1 overflow-hidden px-400">
+        <div className="scrollbar-none h-full overflow-y-auto pb-[113px]">
           <Outlet />
         </div>
       </main>
-      <div className="p-400">
+      <div className="absolute bottom-0 left-0 right-0 z-40 p-400">
         <BottomNav activeIcon={routeConfig.icon} items={BOTTOM_NAV_ITEMS} />
       </div>
     </div>
