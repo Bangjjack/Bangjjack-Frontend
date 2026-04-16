@@ -1,6 +1,4 @@
-import ChevronLeftIcon from "@/assets/icons/chevronLeft.svg?react";
-import MoreVerticalIcon from "@/assets/icons/moreVertical.svg?react";
-import { ProfileOrangeIcon } from "@/assets/icons";
+import { ChevronLeftIcon, MoreVerticalIcon, ProfileOrangeIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 import type { HeaderVariant } from "@/types/header";
 

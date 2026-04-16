@@ -1,7 +1,4 @@
-import ChatIcon from "@/assets/icons/chat.svg?react";
-import HomeIcon from "@/assets/icons/home.svg?react";
-import RoomIcon from "@/assets/icons/puzzle.svg?react";
-import UserIcon from "@/assets/icons/user.svg?react";
+import { ChatIcon, HomeIcon, UserIcon, PuzzleIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 import type { BottomNavIcon } from "@/types/bottomNav";
 import { Link } from "react-router";
@@ -139,7 +136,7 @@ function BottomNavIcon({ className, icon, isActive = false }: BottomNavIconProps
       );
     case "room":
       return (
-        <RoomIcon
+        <PuzzleIcon
           aria-hidden="true"
           className={cn(className, colorClassName, "[&_path]:fill-current")}
         />
