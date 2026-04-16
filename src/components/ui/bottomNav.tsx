@@ -58,7 +58,7 @@ function BottomNav({
     <nav
       aria-label="하단 내비게이션"
       className={cn(
-        "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5",
+        "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5 shadow-[0px_2px_8px_rgba(0,0,0,0.08)]",
         className,
       )}
       {...props}
