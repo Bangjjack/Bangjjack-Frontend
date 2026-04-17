@@ -5,6 +5,7 @@ import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import RoomPage from "@/pages/RoomPage";
+import LoginPage from "@/pages/LoginPage";
 
 export const routes: RouteObject[] = [
   {
@@ -28,6 +29,10 @@ export const routes: RouteObject[] = [
         element: <MyPage />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
   },
   {
     path: "/design-system",
