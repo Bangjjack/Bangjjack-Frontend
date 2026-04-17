@@ -32,6 +32,12 @@ function RoommateProfileCard({
         className,
       )}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
     >
       {/* 매칭률 */}
       <p className="typo-title1 text-text-strong">
