@@ -18,14 +18,12 @@ const ONBOARDING_STEP_ORDER: readonly OnBoardingStepId[] = [
 
 const BASIC_INFO_PROGRESS_STATES: readonly ProgressState[] = [
   "active",
-  "active",
   "default",
   "default",
   "default",
 ];
 
 const SCHOOL_INFO_PROGRESS_STATES: readonly ProgressState[] = [
-  "active",
   "active",
   "active",
   "default",
@@ -36,17 +34,10 @@ const LIFESTYLE_PROGRESS_STATES: readonly ProgressState[] = [
   "active",
   "active",
   "active",
-  "active",
   "default",
 ];
 
-const PRIORITY_PROGRESS_STATES: readonly ProgressState[] = [
-  "active",
-  "active",
-  "active",
-  "active",
-  "active",
-];
+const PRIORITY_PROGRESS_STATES: readonly ProgressState[] = ["active", "active", "active", "active"];
 
 const DIGITS_ONLY_MESSAGE = "숫자만 입력해주세요.";
 
