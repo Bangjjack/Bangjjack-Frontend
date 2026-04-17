@@ -1,27 +1,8 @@
-import { DIGITS_ONLY_MESSAGE } from "./constants";
 import type { OnBoardingFormValues } from "./types";
 
-function getNumericErrorMessage(value: string) {
-  if (!value) return "";
-  return /\D/.test(value) ? DIGITS_ONLY_MESSAGE : "";
-}
-
-function getBasicInfoErrors(values: OnBoardingFormValues) {
-  return {
-    birthYear: getNumericErrorMessage(values.birthYear),
-    grade: getNumericErrorMessage(values.grade),
-  };
-}
-
 function isBasicInfoStepComplete(values: OnBoardingFormValues) {
-  const errors = getBasicInfoErrors(values);
-
   return (
-    values.birthYear.trim().length > 0 &&
-    values.grade.trim().length > 0 &&
-    values.gender !== null &&
-    !errors.birthYear &&
-    !errors.grade
+    values.birthYear.trim().length > 0 && values.grade.trim().length > 0 && values.gender !== null
   );
 }
 
@@ -53,7 +34,6 @@ function isPriorityStepComplete(selectedFactors: string[]) {
 }
 
 export {
-  getBasicInfoErrors,
   isBasicInfoStepComplete,
   isLifestyleStepComplete,
   isPriorityStepComplete,
