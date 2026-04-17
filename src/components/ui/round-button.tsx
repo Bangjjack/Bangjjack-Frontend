@@ -15,7 +15,7 @@ function RoundButton({ className, label = "룸메이트 모집하기", ...props 
       )}
       {...props}
     >
-      <WriteIcon className="size-500 shrink-0 text-icon-on-primary" />
+      <WriteIcon className="size-500 shrink-0 text-icon-on-primary" aria-hidden="true" />
       <span className="typo-button2 text-icon-on-primary">{label}</span>
     </button>
   );
