@@ -1,4 +1,4 @@
-import type { RouteObject } from "react-router";
+import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
 import ChatPage from "@/pages/ChatPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
@@ -15,6 +15,10 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
+        element: <Navigate to="/login" replace />,
+      },
+      {
+        path: "home",
         element: <HomePage />,
       },
       {
