@@ -8,10 +8,6 @@ type OnBoardingPriorityStepProps = {
   selectedFactors: string[];
 };
 
-function isPriorityStepComplete(selectedFactors: string[]) {
-  return selectedFactors.length === 3;
-}
-
 function OnBoardingPriorityStep({ onToggleFactor, selectedFactors }: OnBoardingPriorityStepProps) {
   const [animatingOption, setAnimatingOption] = useState<string | null>(null);
   const [shakingOption, setShakingOption] = useState<string | null>(null);
@@ -85,4 +81,4 @@ function OnBoardingPriorityStep({ onToggleFactor, selectedFactors }: OnBoardingP
   );
 }
 
-export { OnBoardingPriorityStep, isPriorityStepComplete };
+export { OnBoardingPriorityStep };

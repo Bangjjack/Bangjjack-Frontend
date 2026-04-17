@@ -25,7 +25,7 @@ function ProgressBar({ progressStates }: { progressStates: readonly ProgressStat
         <div
           key={`${state}-${index}`}
           className={cn(
-            "h-[3px] min-w-0 flex-1 rounded-full",
+            "h-0.75 min-w-0 flex-1 rounded-full",
             state === "active" ? "bg-brand-primary" : "bg-neutral-250",
           )}
         />

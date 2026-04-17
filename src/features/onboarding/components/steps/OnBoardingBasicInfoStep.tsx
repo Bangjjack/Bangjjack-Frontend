@@ -1,7 +1,8 @@
 import { type ChangeEvent } from "react";
 import { Button, Input } from "@/components/ui";
-import { BASIC_INFO_FIELDS, DIGITS_ONLY_MESSAGE, GENDER_OPTIONS } from "../../constants";
+import { BASIC_INFO_FIELDS, GENDER_OPTIONS } from "../../constants";
 import type { Gender, OnBoardingFormValues } from "../../types";
+import { getBasicInfoErrors } from "../../validation";
 
 type BasicInfoFieldKey = (typeof BASIC_INFO_FIELDS)[number]["key"];
 
@@ -27,30 +28,6 @@ type GenderOptionProps = {
   onClick: () => void;
 };
 
-function getNumericErrorMessage(value: string) {
-  if (!value) return "";
-  return /\D/.test(value) ? DIGITS_ONLY_MESSAGE : "";
-}
-
-function getBasicInfoErrors(values: OnBoardingFormValues) {
-  return {
-    birthYear: getNumericErrorMessage(values.birthYear),
-    grade: getNumericErrorMessage(values.grade),
-  };
-}
-
-function isBasicInfoStepComplete(values: OnBoardingFormValues) {
-  const errors = getBasicInfoErrors(values);
-
-  return (
-    values.birthYear.trim().length > 0 &&
-    values.grade.trim().length > 0 &&
-    values.gender !== null &&
-    !errors.birthYear &&
-    !errors.grade
-  );
-}
-
 function InputField({
   errorMessage,
   label,
@@ -63,7 +40,7 @@ function InputField({
   return (
     <div className="flex w-full flex-col gap-300 px-400">
       <h2 className="typo-title1 text-text-strong">{label}</h2>
-      <div className="flex items-start gap-[10px]">
+      <div className="flex items-start gap-2.5">
         <Input
           type="tel"
           value={value}
@@ -102,7 +79,7 @@ function OnBoardingBasicInfoStep({
   const errors = getBasicInfoErrors(values);
 
   return (
-    <div className="flex flex-1 flex-col gap-[35px]">
+    <div className="flex flex-1 flex-col gap-8.75">
       {BASIC_INFO_FIELDS.map((field) => (
         <InputField
           key={field.key}
@@ -133,4 +110,4 @@ function OnBoardingBasicInfoStep({
   );
 }
 
-export { OnBoardingBasicInfoStep, isBasicInfoStepComplete };
+export { OnBoardingBasicInfoStep };

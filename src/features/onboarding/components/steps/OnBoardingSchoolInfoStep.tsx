@@ -27,15 +27,6 @@ type SelectFieldProps = {
   value: string;
 };
 
-function isSchoolInfoStepComplete(values: OnBoardingFormValues) {
-  return (
-    values.campus.trim().length > 0 &&
-    values.department.trim().length > 0 &&
-    values.semesterType !== null &&
-    values.dormitory !== null
-  );
-}
-
 function SelectField({ label, onChange, options, placeholder, value }: SelectFieldProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,14 +45,14 @@ function SelectField({ label, onChange, options, placeholder, value }: SelectFie
   }, [open]);
 
   return (
-    <div ref={containerRef} className="relative flex w-full flex-col gap-[11px] px-400">
+    <div ref={containerRef} className="relative flex w-full flex-col gap-2.75 px-400">
       <h2 className="typo-title1 text-text-strong">{label}</h2>
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
-          "flex w-full items-center gap-[10px] rounded-small border-[1.5px] bg-bg-secondary px-300 py-200 text-left outline-none transition-colors cursor-pointer",
+          "flex w-full items-center gap-2.5 rounded-small border-[1.5px] bg-bg-secondary px-300 py-200 text-left outline-none transition-colors cursor-pointer",
           open ? "border-border-focus-primary" : "border-border-normal",
           "focus-visible:border-border-focus-primary",
         )}
@@ -114,7 +105,7 @@ function OnBoardingSchoolInfoStep({
   values,
 }: OnBoardingSchoolInfoStepProps) {
   return (
-    <div className="flex flex-1 flex-col gap-[35px]">
+    <div className="flex flex-1 flex-col gap-8.75">
       <SelectField
         label="캠퍼스"
         value={values.campus}
@@ -167,4 +158,4 @@ function OnBoardingSchoolInfoStep({
   );
 }
 
-export { OnBoardingSchoolInfoStep, isSchoolInfoStepComplete };
+export { OnBoardingSchoolInfoStep };

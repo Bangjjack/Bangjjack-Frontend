@@ -25,20 +25,6 @@ function toSelectedValues(value: string | null) {
   return value ? [value] : [];
 }
 
-function isLifestyleStepComplete(values: OnBoardingFormValues) {
-  return (
-    values.sleepTime !== null &&
-    values.wakeUpTime !== null &&
-    values.sleepingHabit.length > 0 &&
-    values.cleaningCycle !== null &&
-    values.dormStayDuration !== null &&
-    values.callHabit !== null &&
-    values.indoorTemperature !== null &&
-    values.noiseSensitivity !== null &&
-    values.smoking !== null
-  );
-}
-
 function ChipQuestionSection({
   helperText,
   isMulti = false,
@@ -82,7 +68,7 @@ function OnBoardingLifestyleStep({
   values,
 }: OnBoardingLifestyleStepProps) {
   return (
-    <div className="flex flex-1 flex-col gap-[35px]">
+    <div className="flex flex-1 flex-col gap-8.75">
       {LIFESTYLE_SINGLE_QUESTIONS.slice(0, 2).map((question) => (
         <ChipQuestionSection
           key={question.key}
@@ -118,4 +104,4 @@ function OnBoardingLifestyleStep({
   );
 }
 
-export { OnBoardingLifestyleStep, isLifestyleStepComplete };
+export { OnBoardingLifestyleStep };

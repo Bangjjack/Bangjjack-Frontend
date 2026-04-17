@@ -14,13 +14,16 @@ import type {
   SemesterType,
 } from "../types";
 import { OnBoardingLayout } from "./OnBoardingLayout";
-import { OnBoardingBasicInfoStep, isBasicInfoStepComplete } from "./steps/OnBoardingBasicInfoStep";
-import { OnBoardingLifestyleStep, isLifestyleStepComplete } from "./steps/OnBoardingLifestyleStep";
-import { OnBoardingPriorityStep, isPriorityStepComplete } from "./steps/OnBoardingPriorityStep";
+import { OnBoardingBasicInfoStep } from "./steps/OnBoardingBasicInfoStep";
+import { OnBoardingLifestyleStep } from "./steps/OnBoardingLifestyleStep";
+import { OnBoardingPriorityStep } from "./steps/OnBoardingPriorityStep";
+import { OnBoardingSchoolInfoStep } from "./steps/OnBoardingSchoolInfoStep";
 import {
-  OnBoardingSchoolInfoStep,
+  isBasicInfoStepComplete,
+  isLifestyleStepComplete,
+  isPriorityStepComplete,
   isSchoolInfoStepComplete,
-} from "./steps/OnBoardingSchoolInfoStep";
+} from "../validation";
 
 function renderPriorityFooter(selectedFactors: string[]) {
   if (selectedFactors.length === 0) {
