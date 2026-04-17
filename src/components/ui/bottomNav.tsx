@@ -1,7 +1,4 @@
-import ChatIcon from "@/assets/icons/chat.svg?react";
-import HomeIcon from "@/assets/icons/home.svg?react";
-import RoomIcon from "@/assets/icons/puzzle.svg?react";
-import UserIcon from "@/assets/icons/user.svg?react";
+import { ChatIcon, HomeIcon, UserIcon, PuzzleIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 import type { BottomNavIcon } from "@/types/bottomNav";
 import { Link } from "react-router";
@@ -58,7 +55,7 @@ function BottomNav({
     <nav
       aria-label="하단 내비게이션"
       className={cn(
-        "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5",
+        "flex w-full items-center justify-between overflow-hidden rounded-[30px] bg-text-strong px-400 py-2.5 shadow-[0px_2px_8px_rgba(0,0,0,0.08)]",
         className,
       )}
       {...props}
@@ -139,7 +136,7 @@ function BottomNavIcon({ className, icon, isActive = false }: BottomNavIconProps
       );
     case "room":
       return (
-        <RoomIcon
+        <PuzzleIcon
           aria-hidden="true"
           className={cn(className, colorClassName, "[&_path]:fill-current")}
         />
