@@ -12,7 +12,7 @@ alwaysApply: true
 ```
 src/
   main.tsx                      # createRoot, RouterProvider, global CSS import
-  index.css                     # Design tokens (@theme), @utility (typo-*), layout-figma-frame
+  index.css                     # Design tokens (@theme), @utility (typo-*)
   vite-env.d.ts
 
   routes/
@@ -102,7 +102,7 @@ All browser HTTP should go through **one client style** (target: **axios**). Avo
 
 ### Layout shell (mobile)
 
-- `#root`: **`--width-app-shell` (430px)**; main column: **`layout-figma-frame`** / **`--width-figma-frame` (370px)** — `src/index.css`, [CURSOR.md](../../CURSOR.md).
+- `#root`: **`--width-app-shell` (430px)**; — `src/index.css`, [CURSOR.md](../../CURSOR.md).
 - App-wide route layout: **`routes/index.tsx`** (`AppLayout` + `Outlet`).
 
 ### Admin (optional)

@@ -25,3 +25,17 @@ export type { InputProps } from "./input";
 export { Toaster, toast } from "./sonner";
 export { Tag } from "./tag";
 export type { TagProps } from "./tag";
+export { RoundButton } from "./round-button";
+export type { RoundButtonProps } from "./round-button";
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardAction,
+  CardDescription,
+  CardContent,
+} from "./card";
+export { ProfileAvatar } from "./profile-avatar";
+export type { ProfileAvatarProps } from "./profile-avatar";
+export { Avatar, AvatarFallback } from "./avatar";
