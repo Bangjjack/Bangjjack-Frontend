@@ -79,7 +79,7 @@ function SelectField({ label, onChange, options, placeholder, value }: SelectFie
       </button>
 
       {open ? (
-        <div className="absolute left-400 right-400 top-[calc(100%+8px)] z-10 flex flex-col gap-300 overflow-hidden rounded-medium bg-bg-secondary py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]">
+        <div className="animate-dropdown-panel absolute left-400 right-400 top-[calc(100%+8px)] z-10 flex flex-col gap-300 overflow-hidden rounded-medium bg-bg-secondary py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]">
           {options.map((option) => {
             const isSelected = value === option;
 
@@ -92,7 +92,9 @@ function SelectField({ label, onChange, options, placeholder, value }: SelectFie
                   setOpen(false);
                 }}
                 className={`w-full rounded-medium px-300 py-100 text-left typo-body1 cursor-pointer ${
-                  isSelected ? "font-bold text-brand-primary" : "font-medium text-text-strong"
+                  isSelected
+                    ? "font-bold text-brand-primary transition-colors hover:bg-brand-primary-light/50"
+                    : "font-medium text-text-strong transition-colors hover:bg-neutral-100"
                 }`}
               >
                 {option}

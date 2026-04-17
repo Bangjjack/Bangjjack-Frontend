@@ -10,6 +10,25 @@ type RankProps = {
   visible: boolean;
 };
 
+type CheckMarkProps = {
+  visible: boolean;
+};
+
+function CheckMark({ visible }: CheckMarkProps) {
+  return (
+    <span
+      className={cn(
+        "shrink-0 overflow-hidden transition-[max-width,opacity] duration-400 ease-[ease]",
+        visible ? "max-w-[20px] opacity-100" : "max-w-0 opacity-0",
+      )}
+    >
+      <span className="flex size-[20px] items-center justify-center overflow-hidden">
+        <CheckIcon className={cn("size-[20px] shrink-0", visible && "animate-chip-rank-pop")} />
+      </span>
+    </span>
+  );
+}
+
 function Rank({ rank, visible }: RankProps) {
   return (
     <span
@@ -133,7 +152,7 @@ function Chip({
       onClick={handleClick}
       {...props}
     >
-      {variant === "multi" && selected && <CheckIcon className="size-[20px] shrink-0" />}
+      {variant === "multi" && <CheckMark visible={selected} />}
       {variant === "rank" && <Rank rank={rank ?? 0} visible={selected && rank != null} />}
       {children}
     </button>
