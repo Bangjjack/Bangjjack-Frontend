@@ -130,7 +130,6 @@
 
 :root {
   --width-app-shell: 430px;
-  --width-figma-frame: 370px;
   --letter-spacing: -0.005em;
 
   --heading1-size: 36px;
@@ -212,11 +211,6 @@ body {
   margin-inline: auto;
   background-color: var(--color-bg-primary);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.04);
-}
-
-.layout-figma-frame {
-  width: min(100%, var(--width-figma-frame));
-  margin-inline: auto;
 }
 
 button,

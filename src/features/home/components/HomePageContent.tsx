@@ -3,6 +3,8 @@ import { RoommateProfileCard } from "./RoommateProfileCard";
 import { RecruitCard } from "./RecruitCard";
 import { useDragScroll } from "../hooks/useDragScroll";
 
+import { cn } from "@/lib/cn";
+
 // TODO: API 연동 시 제거
 const MOCK_ROOMMATES = [
   {
@@ -81,7 +83,7 @@ function HomePageContent({
   const { ref: scrollRef, handlers } = useDragScroll<HTMLDivElement>();
 
   return (
-    <div className="flex flex-col gap-600 center">
+    <div className="flex flex-col gap-600">
       <RoundButton onClick={onRecruitCreateClick} />
       {/* 추천 룸메이트 */}
       <section>
@@ -90,14 +92,14 @@ function HomePageContent({
         <div className="relative">
           <div
             ref={scrollRef}
-            className="
-        scrollbar-none
-        flex
-        gap-[12px]
-        overflow-x-auto
-        cursor-grab
-        active:cursor-grabbing
-      "
+            className={cn(
+              "scrollbar-none",
+              "flex",
+              "gap-[12px]",
+              "overflow-x-auto",
+              "cursor-grab",
+              "active:cursor-grabbing",
+            )}
             style={{
               WebkitOverflowScrolling: "touch",
               touchAction: "pan-x",
@@ -114,7 +116,7 @@ function HomePageContent({
             ))}
           </div>
 
-          {/* 👉 오른쪽 "더 있음" 힌트 */}
+          {/* 오른쪽 "더 있음" 힌트 */}
           <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-bg-primary to-transparent" />
         </div>
       </section>
@@ -125,13 +127,14 @@ function HomePageContent({
           <h2 className="typo-h4 text-text-strong">이런 방은 어때요?</h2>
           <button
             type="button"
-            className="
-    typo-button2 text-text-placeholder
-    cursor-pointer
-    transition-colors duration-150
-    hover:text-text-strong
-    active:scale-95
-  "
+            className={cn(
+              "typo-button2",
+              "text-text-placeholder",
+              "cursor-pointer",
+              "transition-colors duration-150",
+              "hover:text-text-strong",
+              "active:scale-95",
+            )}
             onClick={onMoreRecruitsClick}
           >
             모두 보기

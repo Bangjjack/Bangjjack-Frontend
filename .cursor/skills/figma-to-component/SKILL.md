@@ -85,6 +85,5 @@ If you use Radix and need **`asChild`**, use the Slot pattern in [template.md](t
 
 - [ ] Token mapping matches `index.css`
 - [ ] No hard-coded values or inline styles; tokens only
-- [ ] Content uses `layout-figma-frame` (370↔430) where appropriate
 - [ ] DOM matches Figma structure and overflow behavior (`min-w-0`, `truncate`)
 - [ ] [CURSOR.md](../../../CURSOR.md) global rules respected
