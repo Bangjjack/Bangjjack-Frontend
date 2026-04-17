@@ -1,0 +1,79 @@
+import type { ReactNode } from "react";
+import ChevronLeftIcon from "@/assets/icons/ic-chevron-left.svg?react";
+import { Button } from "@/components/ui";
+import { cn } from "@/lib/cn";
+import type { ProgressState } from "../types";
+
+type OnBoardingLayoutProps = {
+  actionDisabled: boolean;
+  actionLabel: string;
+  children: ReactNode;
+  onBack?: () => void;
+  progressStates: readonly ProgressState[];
+  title: string;
+};
+
+function ProgressBar({ progressStates }: { progressStates: readonly ProgressState[] }) {
+  return (
+    <div className="flex w-full items-center justify-center gap-100 px-400">
+      {progressStates.map((state, index) => (
+        <div
+          key={`${state}-${index}`}
+          className={cn(
+            "h-[3px] min-w-0 flex-1 rounded-full",
+            state === "active" ? "bg-brand-primary" : "bg-neutral-250",
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+function OnBoardingLayout({
+  actionDisabled,
+  actionLabel,
+  children,
+  onBack,
+  progressStates,
+  title,
+}: OnBoardingLayoutProps) {
+  return (
+    <div className="min-h-dvh bg-bg-primary">
+      <div className="mx-auto flex min-h-dvh w-full max-w-93.75 flex-col">
+        <div className="h-600 bg-neutral-50" />
+
+        <header className="flex flex-col gap-600">
+          <ProgressBar progressStates={progressStates} />
+
+          <div className="flex flex-col gap-400 px-400 py-600">
+            <div className="flex items-center gap-400">
+              <button
+                type="button"
+                onClick={onBack}
+                className="flex size-600 items-center justify-center cursor-pointer"
+                aria-label="이전으로"
+              >
+                <ChevronLeftIcon className="size-600" />
+              </button>
+              <div className="h-600 w-700" />
+            </div>
+
+            <div className="px-100">
+              <h1 className="typo-h3 whitespace-pre-line text-text-strong">{title}</h1>
+            </div>
+          </div>
+        </header>
+
+        <main className="flex flex-1 flex-col pb-800">{children}</main>
+
+        <footer className="px-400 pb-[calc(36px+env(safe-area-inset-bottom))] pt-300">
+          <Button type="submit" disabled={actionDisabled} className="w-full cursor-pointer">
+            {actionLabel}
+          </Button>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+export { OnBoardingLayout };
