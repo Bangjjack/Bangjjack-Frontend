@@ -9,6 +9,8 @@ type OnBoardingLayoutProps = {
   actionLabel: string;
   children: ReactNode;
   description?: string;
+  footerDescription?: ReactNode;
+  footerDescriptionKey?: string;
   headerActionLabel?: string;
   onBack?: () => void;
   onHeaderAction?: () => void;
@@ -37,6 +39,8 @@ function OnBoardingLayout({
   actionLabel,
   children,
   description,
+  footerDescription,
+  footerDescriptionKey,
   headerActionLabel,
   onBack,
   onHeaderAction,
@@ -83,7 +87,15 @@ function OnBoardingLayout({
 
         <main className="flex flex-1 flex-col pb-800">{children}</main>
 
-        <footer className="px-400 pb-[calc(36px+env(safe-area-inset-bottom))] pt-300">
+        <footer className="flex flex-col gap-400 px-400 pb-[calc(36px+env(safe-area-inset-bottom))] pt-300">
+          {footerDescription ? (
+            <div
+              key={footerDescriptionKey}
+              className="animate-footer-flow typo-caption2 text-text-placeholder"
+            >
+              {footerDescription}
+            </div>
+          ) : null}
           <Button type="submit" disabled={actionDisabled} className="w-full cursor-pointer">
             {actionLabel}
           </Button>

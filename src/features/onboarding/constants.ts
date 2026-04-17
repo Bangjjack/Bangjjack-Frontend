@@ -40,6 +40,14 @@ const LIFESTYLE_PROGRESS_STATES: readonly ProgressState[] = [
   "default",
 ];
 
+const PRIORITY_PROGRESS_STATES: readonly ProgressState[] = [
+  "active",
+  "active",
+  "active",
+  "active",
+  "active",
+];
+
 const DIGITS_ONLY_MESSAGE = "숫자만 입력해주세요.";
 
 const BASIC_INFO_FIELDS = [
@@ -140,6 +148,19 @@ const LIFESTYLE_MULTI_QUESTIONS: readonly LifestyleMultiQuestion[] = [
   },
 ];
 
+const PRIORITY_FACTOR_OPTIONS = [
+  "취침 시간",
+  "기상 시간",
+  "잠버릇",
+  "기숙사 체류 시간",
+  "청결 습관",
+  "실내 온도",
+  "소음 민감도",
+  "물건 공유",
+  "흡연 여부",
+  "통화 습관",
+] as const;
+
 export {
   BASIC_INFO_FIELDS,
   BASIC_INFO_PROGRESS_STATES,
@@ -152,6 +173,8 @@ export {
   LIFESTYLE_PROGRESS_STATES,
   LIFESTYLE_SINGLE_QUESTIONS,
   ONBOARDING_STEP_ORDER,
+  PRIORITY_FACTOR_OPTIONS,
+  PRIORITY_PROGRESS_STATES,
   SCHOOL_INFO_PROGRESS_STATES,
   SEMESTER_OPTIONS,
 };

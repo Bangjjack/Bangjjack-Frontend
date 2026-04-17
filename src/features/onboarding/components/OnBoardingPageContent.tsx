@@ -2,6 +2,7 @@ import { useMemo, useState, type FormEvent } from "react";
 import {
   BASIC_INFO_PROGRESS_STATES,
   LIFESTYLE_PROGRESS_STATES,
+  PRIORITY_PROGRESS_STATES,
   SCHOOL_INFO_PROGRESS_STATES,
 } from "../constants";
 import type {
@@ -15,10 +16,28 @@ import type {
 import { OnBoardingLayout } from "./OnBoardingLayout";
 import { OnBoardingBasicInfoStep, isBasicInfoStepComplete } from "./steps/OnBoardingBasicInfoStep";
 import { OnBoardingLifestyleStep, isLifestyleStepComplete } from "./steps/OnBoardingLifestyleStep";
+import { OnBoardingPriorityStep, isPriorityStepComplete } from "./steps/OnBoardingPriorityStep";
 import {
   OnBoardingSchoolInfoStep,
   isSchoolInfoStepComplete,
 } from "./steps/OnBoardingSchoolInfoStep";
+
+function renderPriorityFooter(selectedFactors: string[]) {
+  if (selectedFactors.length === 0) {
+    return "탭한 순서대로 1~3순위가 정해져요";
+  }
+
+  return (
+    <p className="typo-caption2 leading-[16px] text-text-placeholder">
+      {selectedFactors.map((factor, index) => (
+        <span key={`${factor}-${index}`}>
+          <span className="text-text-primary-alternative">{`${index + 1}. ${factor}`}</span>
+          {index < selectedFactors.length - 1 ? <span>{`  →  `}</span> : null}
+        </span>
+      ))}
+    </p>
+  );
+}
 
 function OnBoardingPageContent({
   initialValues,
@@ -38,7 +57,9 @@ function OnBoardingPageContent({
     gender: initialValues?.gender ?? null,
     grade: initialValues?.grade ?? "",
     indoorTemperature: initialValues?.indoorTemperature ?? null,
+    itemSharingPreference: initialValues?.itemSharingPreference ?? [],
     noiseSensitivity: initialValues?.noiseSensitivity ?? null,
+    priorityFactors: initialValues?.priorityFactors ?? [],
     semesterType: initialValues?.semesterType ?? null,
     sleepTime: initialValues?.sleepTime ?? null,
     sleepingHabit: initialValues?.sleepingHabit ?? [],
@@ -47,10 +68,25 @@ function OnBoardingPageContent({
   });
 
   const currentStepMeta = useMemo(() => {
+    if (currentStep === "preferences") {
+      return {
+        actionLabel: "완료하기",
+        description: "중요한 순서대로 3가지를 골라주세요",
+        footerDescription: renderPriorityFooter(formValues.priorityFactors),
+        footerDescriptionKey: `priority-${formValues.priorityFactors.join("|") || "empty"}`,
+        headerActionLabel: "건너뛰기",
+        isComplete: isPriorityStepComplete(formValues.priorityFactors),
+        progressStates: PRIORITY_PROGRESS_STATES,
+        title: "룸메이트를 고를 때\n가장 중요하게 생각하는 건?",
+      };
+    }
+
     if (currentStep === "lifestyle") {
       return {
         actionLabel: "다음으로",
         description: "룸메이트 매칭에 활용돼요",
+        footerDescription: undefined,
+        footerDescriptionKey: undefined,
         headerActionLabel: "건너뛰기",
         isComplete: isLifestyleStepComplete(formValues),
         progressStates: LIFESTYLE_PROGRESS_STATES,
@@ -62,6 +98,8 @@ function OnBoardingPageContent({
       return {
         actionLabel: "다음으로",
         description: undefined,
+        footerDescription: undefined,
+        footerDescriptionKey: undefined,
         headerActionLabel: undefined,
         isComplete: isSchoolInfoStepComplete(formValues),
         progressStates: SCHOOL_INFO_PROGRESS_STATES,
@@ -72,6 +110,8 @@ function OnBoardingPageContent({
     return {
       actionLabel: "다음으로",
       description: undefined,
+      footerDescription: undefined,
+      footerDescriptionKey: undefined,
       headerActionLabel: undefined,
       isComplete: isBasicInfoStepComplete(formValues),
       progressStates: BASIC_INFO_PROGRESS_STATES,
@@ -114,6 +154,11 @@ function OnBoardingPageContent({
   };
 
   const handleBack = () => {
+    if (currentStep === "preferences") {
+      setCurrentStep("lifestyle");
+      return;
+    }
+
     if (currentStep === "lifestyle") {
       setCurrentStep("school-info");
       return;
@@ -127,8 +172,35 @@ function OnBoardingPageContent({
     onBack?.();
   };
 
-  const handleSkipLifestyle = () => {
+  const handleSkipCurrentStep = () => {
+    if (currentStep === "lifestyle") {
+      setCurrentStep("preferences");
+      return;
+    }
+
     onNext?.(formValues);
+  };
+
+  const handleTogglePriorityFactor = (value: string) => {
+    setFormValues((prev) => {
+      const isSelected = prev.priorityFactors.includes(value);
+
+      if (isSelected) {
+        return {
+          ...prev,
+          priorityFactors: prev.priorityFactors.filter((item) => item !== value),
+        };
+      }
+
+      if (prev.priorityFactors.length >= 3) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        priorityFactors: [...prev.priorityFactors, value],
+      };
+    });
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -146,6 +218,12 @@ function OnBoardingPageContent({
       return;
     }
 
+    if (currentStep === "lifestyle") {
+      if (!currentStepMeta.isComplete) return;
+      setCurrentStep("preferences");
+      return;
+    }
+
     if (!currentStepMeta.isComplete) {
       return;
     }
@@ -159,9 +237,15 @@ function OnBoardingPageContent({
         actionDisabled={!currentStepMeta.isComplete}
         actionLabel={currentStepMeta.actionLabel}
         description={currentStepMeta.description}
+        footerDescription={currentStepMeta.footerDescription}
+        footerDescriptionKey={currentStepMeta.footerDescriptionKey}
         headerActionLabel={currentStepMeta.headerActionLabel}
         onBack={handleBack}
-        onHeaderAction={currentStep === "lifestyle" ? handleSkipLifestyle : undefined}
+        onHeaderAction={
+          currentStep === "lifestyle" || currentStep === "preferences"
+            ? handleSkipCurrentStep
+            : undefined
+        }
         progressStates={currentStepMeta.progressStates}
         title={currentStepMeta.title}
       >
@@ -187,6 +271,13 @@ function OnBoardingPageContent({
             values={formValues}
             onSingleSelectChange={handleSelectLifestyleSingle}
             onMultiSelectChange={handleToggleLifestyleMulti}
+          />
+        ) : null}
+
+        {currentStep === "preferences" ? (
+          <OnBoardingPriorityStep
+            selectedFactors={formValues.priorityFactors}
+            onToggleFactor={handleTogglePriorityFactor}
           />
         ) : null}
       </OnBoardingLayout>

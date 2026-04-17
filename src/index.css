@@ -383,3 +383,78 @@ select:focus {
   width: 0;
   height: 0;
 }
+
+@keyframes chip-fade-up {
+  from {
+    background-color: var(--color-bg-input);
+    border-color: transparent;
+    color: var(--color-text-alternative);
+  }
+
+  to {
+    background-color: var(--color-brand-primary-light);
+    border-color: var(--color-brand-primary);
+    color: var(--color-brand-primary-dark);
+  }
+}
+
+@keyframes chip-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-3px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+@keyframes chip-rank-pop {
+  0% {
+    opacity: 0;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-chip-fade-up {
+  animation: chip-fade-up 0.4s ease-out 0.12s both;
+}
+
+.animate-chip-shake {
+  animation: chip-shake 0.32s ease-in-out;
+}
+
+.animate-chip-rank-pop {
+  animation: chip-rank-pop 0.4s ease;
+}
+
+@keyframes footer-flow {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-footer-flow {
+  animation: footer-flow 0.4s ease;
+}
