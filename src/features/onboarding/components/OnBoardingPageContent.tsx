@@ -1,46 +1,10 @@
-import { useMemo, useState, type FormEvent } from "react";
-import {
-  BASIC_INFO_PROGRESS_STATES,
-  LIFESTYLE_PROGRESS_STATES,
-  PRIORITY_PROGRESS_STATES,
-  SCHOOL_INFO_PROGRESS_STATES,
-} from "../constants";
-import type {
-  LifestyleMultiFieldKey,
-  LifestyleSingleFieldKey,
-  OnBoardingFormValues,
-  OnBoardingPageContentProps,
-  OnBoardingStepId,
-  SemesterType,
-} from "../types";
+import type { OnBoardingPageContentProps } from "../types";
+import { useOnboardingFlow } from "../hooks/useOnboardingFlow";
 import { OnBoardingLayout } from "./OnBoardingLayout";
 import { OnBoardingBasicInfoStep } from "./steps/OnBoardingBasicInfoStep";
 import { OnBoardingLifestyleStep } from "./steps/OnBoardingLifestyleStep";
 import { OnBoardingPriorityStep } from "./steps/OnBoardingPriorityStep";
 import { OnBoardingSchoolInfoStep } from "./steps/OnBoardingSchoolInfoStep";
-import {
-  isBasicInfoStepComplete,
-  isLifestyleStepComplete,
-  isPriorityStepComplete,
-  isSchoolInfoStepComplete,
-} from "../validation";
-
-function renderPriorityFooter(selectedFactors: string[]) {
-  if (selectedFactors.length === 0) {
-    return "탭한 순서대로 1~3순위가 정해져요";
-  }
-
-  return (
-    <p className="typo-caption2 leading-[16px] text-text-placeholder">
-      {selectedFactors.map((factor, index) => (
-        <span key={`${factor}-${index}`}>
-          <span className="text-text-primary-alternative">{`${index + 1}. ${factor}`}</span>
-          {index < selectedFactors.length - 1 ? <span>{`  →  `}</span> : null}
-        </span>
-      ))}
-    </p>
-  );
-}
 
 function OnBoardingPageContent({
   initialValues,
@@ -48,191 +12,27 @@ function OnBoardingPageContent({
   onNext,
   userName = "OO",
 }: OnBoardingPageContentProps) {
-  const [currentStep, setCurrentStep] = useState<OnBoardingStepId>("basic-info");
-  const [formValues, setFormValues] = useState<OnBoardingFormValues>({
-    birthYear: initialValues?.birthYear ?? "",
-    campus: initialValues?.campus ?? "",
-    callHabit: initialValues?.callHabit ?? null,
-    cleaningCycle: initialValues?.cleaningCycle ?? null,
-    department: initialValues?.department ?? "",
-    dormStayDuration: initialValues?.dormStayDuration ?? null,
-    dormitory: initialValues?.dormitory ?? null,
-    gender: initialValues?.gender ?? null,
-    grade: initialValues?.grade ?? "",
-    indoorTemperature: initialValues?.indoorTemperature ?? null,
-    itemSharingPreference: initialValues?.itemSharingPreference ?? [],
-    noiseSensitivity: initialValues?.noiseSensitivity ?? null,
-    priorityFactors: initialValues?.priorityFactors ?? [],
-    semesterType: initialValues?.semesterType ?? null,
-    sleepTime: initialValues?.sleepTime ?? null,
-    sleepingHabit: initialValues?.sleepingHabit ?? [],
-    smoking: initialValues?.smoking ?? null,
-    wakeUpTime: initialValues?.wakeUpTime ?? null,
+  const {
+    currentStep,
+    currentStepMeta,
+    formValues,
+    handleBack,
+    handleChangeBasicInfoField,
+    handleChangeSchoolInfoField,
+    handleSelectDormitory,
+    handleSelectGender,
+    handleSelectLifestyleSingle,
+    handleSelectSemesterType,
+    handleSkipCurrentStep,
+    handleSubmit,
+    handleToggleLifestyleMulti,
+    handleTogglePriorityFactor,
+  } = useOnboardingFlow({
+    initialValues,
+    onBack,
+    onNext,
+    userName,
   });
-
-  const currentStepMeta = useMemo(() => {
-    if (currentStep === "preferences") {
-      return {
-        actionLabel: "완료하기",
-        description: "중요한 순서대로 3가지를 골라주세요",
-        footerDescription: renderPriorityFooter(formValues.priorityFactors),
-        footerDescriptionKey: `priority-${formValues.priorityFactors.join("|") || "empty"}`,
-        headerActionLabel: "건너뛰기",
-        isComplete: isPriorityStepComplete(formValues.priorityFactors),
-        progressStates: PRIORITY_PROGRESS_STATES,
-        title: "룸메이트를 고를 때\n가장 중요하게 생각하는 건?",
-      };
-    }
-
-    if (currentStep === "lifestyle") {
-      return {
-        actionLabel: "다음으로",
-        description: "룸메이트 매칭에 활용돼요",
-        footerDescription: undefined,
-        footerDescriptionKey: undefined,
-        headerActionLabel: "건너뛰기",
-        isComplete: isLifestyleStepComplete(formValues),
-        progressStates: LIFESTYLE_PROGRESS_STATES,
-        title: "나의 생활습관을\n알려주세요",
-      };
-    }
-
-    if (currentStep === "school-info") {
-      return {
-        actionLabel: "다음으로",
-        description: undefined,
-        footerDescription: undefined,
-        footerDescriptionKey: undefined,
-        headerActionLabel: undefined,
-        isComplete: isSchoolInfoStepComplete(formValues),
-        progressStates: SCHOOL_INFO_PROGRESS_STATES,
-        title: "학교 정보에 대해\n알려주세요",
-      };
-    }
-
-    return {
-      actionLabel: "다음으로",
-      description: undefined,
-      footerDescription: undefined,
-      footerDescriptionKey: undefined,
-      headerActionLabel: undefined,
-      isComplete: isBasicInfoStepComplete(formValues),
-      progressStates: BASIC_INFO_PROGRESS_STATES,
-      title: `${userName}님에 대해\n알려주세요`,
-    };
-  }, [currentStep, formValues, userName]);
-
-  const handleChangeBasicInfoField = (key: "birthYear" | "grade", value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleChangeSchoolInfoField = (key: "campus" | "department", value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleSelectGender = (gender: NonNullable<OnBoardingFormValues["gender"]>) => {
-    setFormValues((prev) => ({ ...prev, gender }));
-  };
-
-  const handleSelectSemesterType = (semesterType: SemesterType) => {
-    setFormValues((prev) => ({ ...prev, semesterType }));
-  };
-
-  const handleSelectDormitory = (dormitory: string) => {
-    setFormValues((prev) => ({ ...prev, dormitory }));
-  };
-
-  const handleSelectLifestyleSingle = (key: LifestyleSingleFieldKey, value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleToggleLifestyleMulti = (key: LifestyleMultiFieldKey, value: string) => {
-    setFormValues((prev) => {
-      const nextValues = prev[key].includes(value)
-        ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value];
-
-      return { ...prev, [key]: nextValues };
-    });
-  };
-
-  const handleBack = () => {
-    if (currentStep === "preferences") {
-      setCurrentStep("lifestyle");
-      return;
-    }
-
-    if (currentStep === "lifestyle") {
-      setCurrentStep("school-info");
-      return;
-    }
-
-    if (currentStep === "school-info") {
-      setCurrentStep("basic-info");
-      return;
-    }
-
-    onBack?.();
-  };
-
-  const handleSkipCurrentStep = () => {
-    if (currentStep === "lifestyle") {
-      setCurrentStep("preferences");
-      return;
-    }
-
-    onNext?.(formValues);
-  };
-
-  const handleTogglePriorityFactor = (value: string) => {
-    setFormValues((prev) => {
-      const isSelected = prev.priorityFactors.includes(value);
-
-      if (isSelected) {
-        return {
-          ...prev,
-          priorityFactors: prev.priorityFactors.filter((item) => item !== value),
-        };
-      }
-
-      if (prev.priorityFactors.length >= 3) {
-        return prev;
-      }
-
-      return {
-        ...prev,
-        priorityFactors: [...prev.priorityFactors, value],
-      };
-    });
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (currentStep === "basic-info") {
-      if (!currentStepMeta.isComplete) return;
-      setCurrentStep("school-info");
-      return;
-    }
-
-    if (currentStep === "school-info") {
-      if (!currentStepMeta.isComplete) return;
-      setCurrentStep("lifestyle");
-      return;
-    }
-
-    if (currentStep === "lifestyle") {
-      if (!currentStepMeta.isComplete) return;
-      setCurrentStep("preferences");
-      return;
-    }
-
-    if (!currentStepMeta.isComplete) {
-      return;
-    }
-
-    onNext?.(formValues);
-  };
 
   return (
     <form onSubmit={handleSubmit}>
