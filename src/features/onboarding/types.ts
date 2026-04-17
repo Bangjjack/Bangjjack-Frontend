@@ -1,5 +1,6 @@
 export type ProgressState = "active" | "default";
 export type Gender = "male" | "female";
+export type SemesterType = "semester" | "half";
 
 export type OnBoardingStepId =
   | "basic-info"
@@ -11,8 +12,12 @@ export type OnBoardingStepId =
 
 export type OnBoardingFormValues = {
   birthYear: string;
+  campus: string;
+  department: string;
+  dormitory: string | null;
   gender: Gender | null;
   grade: string;
+  semesterType: SemesterType | null;
 };
 
 export type OnBoardingPageContentProps = {

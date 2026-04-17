@@ -1,4 +1,4 @@
-import type { Gender, OnBoardingStepId, ProgressState } from "./types";
+import type { Gender, OnBoardingStepId, ProgressState, SemesterType } from "./types";
 
 const ONBOARDING_STEP_ORDER: readonly OnBoardingStepId[] = [
   "basic-info",
@@ -13,6 +13,14 @@ const BASIC_INFO_PROGRESS_STATES: readonly ProgressState[] = [
   "active",
   "active",
   "default",
+  "default",
+  "default",
+];
+
+const SCHOOL_INFO_PROGRESS_STATES: readonly ProgressState[] = [
+  "active",
+  "active",
+  "active",
   "default",
   "default",
 ];
@@ -41,10 +49,26 @@ const GENDER_OPTIONS: readonly { label: string; value: Gender }[] = [
   { label: "여성", value: "female" },
 ];
 
+const CAMPUS_OPTIONS = ["글로벌 캠퍼스", "메디컬 캠퍼스"] as const;
+
+const DEPARTMENT_OPTIONS = ["컴퓨터공학과", "경영학과", "디자인학과", "심리학과"] as const;
+
+const SEMESTER_OPTIONS: readonly { label: string; value: SemesterType }[] = [
+  { label: "학기 (16주)", value: "semester" },
+  { label: "반기 (25주)", value: "half" },
+];
+
+const DORMITORY_OPTIONS = ["1 기숙사", "2 기숙사", "3 기숙사"] as const;
+
 export {
   BASIC_INFO_FIELDS,
   BASIC_INFO_PROGRESS_STATES,
+  CAMPUS_OPTIONS,
+  DEPARTMENT_OPTIONS,
   DIGITS_ONLY_MESSAGE,
+  DORMITORY_OPTIONS,
   GENDER_OPTIONS,
   ONBOARDING_STEP_ORDER,
+  SCHOOL_INFO_PROGRESS_STATES,
+  SEMESTER_OPTIONS,
 };

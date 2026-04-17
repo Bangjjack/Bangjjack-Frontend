@@ -32,6 +32,25 @@ function getNumericErrorMessage(value: string) {
   return /\D/.test(value) ? DIGITS_ONLY_MESSAGE : "";
 }
 
+function getBasicInfoErrors(values: OnBoardingFormValues) {
+  return {
+    birthYear: getNumericErrorMessage(values.birthYear),
+    grade: getNumericErrorMessage(values.grade),
+  };
+}
+
+function isBasicInfoStepComplete(values: OnBoardingFormValues) {
+  const errors = getBasicInfoErrors(values);
+
+  return (
+    values.birthYear.trim().length > 0 &&
+    values.grade.trim().length > 0 &&
+    values.gender !== null &&
+    !errors.birthYear &&
+    !errors.grade
+  );
+}
+
 function InputField({
   errorMessage,
   label,
@@ -72,25 +91,6 @@ function GenderOption({ active, label, onClick }: GenderOptionProps) {
     >
       {label}
     </Button>
-  );
-}
-
-function getBasicInfoErrors(values: OnBoardingFormValues) {
-  return {
-    birthYear: getNumericErrorMessage(values.birthYear),
-    grade: getNumericErrorMessage(values.grade),
-  };
-}
-
-function isBasicInfoStepComplete(values: OnBoardingFormValues) {
-  const errors = getBasicInfoErrors(values);
-
-  return (
-    values.birthYear.trim().length > 0 &&
-    values.grade.trim().length > 0 &&
-    values.gender !== null &&
-    !errors.birthYear &&
-    !errors.grade
   );
 }
 
