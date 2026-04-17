@@ -8,7 +8,10 @@ type OnBoardingLayoutProps = {
   actionDisabled: boolean;
   actionLabel: string;
   children: ReactNode;
+  description?: string;
+  headerActionLabel?: string;
   onBack?: () => void;
+  onHeaderAction?: () => void;
   progressStates: readonly ProgressState[];
   title: string;
 };
@@ -33,7 +36,10 @@ function OnBoardingLayout({
   actionDisabled,
   actionLabel,
   children,
+  description,
+  headerActionLabel,
   onBack,
+  onHeaderAction,
   progressStates,
   title,
 }: OnBoardingLayoutProps) {
@@ -46,7 +52,7 @@ function OnBoardingLayout({
           <ProgressBar progressStates={progressStates} />
 
           <div className="flex flex-col gap-400 px-400 py-600">
-            <div className="flex items-center gap-400">
+            <div className="flex items-center justify-between">
               <button
                 type="button"
                 onClick={onBack}
@@ -55,11 +61,22 @@ function OnBoardingLayout({
               >
                 <ChevronLeftIcon className="size-600" />
               </button>
-              <div className="h-600 w-700" />
+              {headerActionLabel ? (
+                <button
+                  type="button"
+                  onClick={onHeaderAction}
+                  className="cursor-pointer typo-button2 text-text-primary-alternative"
+                >
+                  {headerActionLabel}
+                </button>
+              ) : (
+                <div className="h-600 w-700" />
+              )}
             </div>
 
-            <div className="px-100">
+            <div className="flex flex-col gap-200 px-100">
               <h1 className="typo-h3 whitespace-pre-line text-text-strong">{title}</h1>
+              {description ? <p className="typo-title2 text-text-caption">{description}</p> : null}
             </div>
           </div>
         </header>

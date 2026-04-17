@@ -10,14 +10,35 @@ export type OnBoardingStepId =
   | "matching"
   | "complete";
 
+export type LifestyleSingleFieldKey =
+  | "sleepTime"
+  | "wakeUpTime"
+  | "cleaningCycle"
+  | "dormStayDuration"
+  | "callHabit"
+  | "indoorTemperature"
+  | "noiseSensitivity"
+  | "smoking";
+
+export type LifestyleMultiFieldKey = "sleepingHabit";
+
 export type OnBoardingFormValues = {
   birthYear: string;
   campus: string;
+  callHabit: string | null;
+  cleaningCycle: string | null;
   department: string;
+  dormStayDuration: string | null;
   dormitory: string | null;
   gender: Gender | null;
   grade: string;
+  indoorTemperature: string | null;
+  noiseSensitivity: string | null;
   semesterType: SemesterType | null;
+  sleepTime: string | null;
+  sleepingHabit: string[];
+  smoking: string | null;
+  wakeUpTime: string | null;
 };
 
 export type OnBoardingPageContentProps = {
