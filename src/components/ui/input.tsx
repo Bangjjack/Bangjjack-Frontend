@@ -92,17 +92,17 @@ function Input({
             className="ml-200 shrink-0"
             aria-label="입력 지우기"
           >
-            <CircleDeleteIcon className="size-[18px]" />
+            <CircleDeleteIcon className="size-450" />
           </button>
         )}
         {showError && (
           <div className="ml-200 shrink-0">
-            <CircleAlertIcon className="size-[18px]" />
+            <CircleAlertIcon className="size-450" />
           </div>
         )}
       </div>
       {showError && errorMessage && (
-        <p className="mt-100 px-[6px] typo-caption2 text-state-error">{errorMessage}</p>
+        <p className="mt-100 px-1.5 typo-caption2 text-state-error">{errorMessage}</p>
       )}
     </div>
   );

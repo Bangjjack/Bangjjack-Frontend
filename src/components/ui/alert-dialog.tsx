@@ -1,7 +1,7 @@
 import { AlertDialog as AlertDialogPrimitive } from "radix-ui";
 import { cn } from "@/lib/cn";
 import { CircleInfoIcon } from "@/assets/icons";
-import { Button } from "./button";
+import { Button } from "@/components/ui/button";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger;
@@ -35,7 +35,7 @@ function AlertDialogContent({
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         className={cn(
-          "fixed left-1/2 top-1/2 z-50 w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-[20px] bg-bg-secondary px-[28px] py-[24px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          "fixed left-1/2 top-1/2 z-50 w-75 -translate-x-1/2 -translate-y-1/2 rounded-[20px] bg-bg-secondary px-7 py-[24px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
           className,
         )}
         {...props}
@@ -49,7 +49,7 @@ function AlertDialogContent({
 function AlertDialogIcon({ className }: { className?: string }) {
   return (
     <div className={cn("flex justify-center", className)}>
-      <CircleInfoIcon className="size-[56px]" />
+      <CircleInfoIcon className="size-14" />
     </div>
   );
 }

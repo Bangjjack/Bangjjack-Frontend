@@ -1,7 +1,7 @@
 import { RoundButton } from "@/components/ui";
-import { RoommateProfileCard } from "./RoommateProfileCard";
-import { RecruitCard } from "./RecruitCard";
-import { useDragScroll } from "../hooks/useDragScroll";
+import { RecruitCard } from "@/features/home/components/RecruitCard";
+import { RoommateProfileCard } from "@/features/home/components/RoommateProfileCard";
+import { useDragScroll } from "@/features/home/hooks/useDragScroll";
 
 import { cn } from "@/lib/cn";
 
@@ -87,7 +87,7 @@ function HomePageContent({
       <RoundButton onClick={onRecruitCreateClick} />
       {/* 추천 룸메이트 */}
       <section>
-        <h2 className="typo-h4 py-[10px] text-text-strong">추천 룸메이트</h2>
+        <h2 className="typo-h4 py-2.5 text-text-strong">추천 룸메이트</h2>
 
         <div className="relative">
           <div
@@ -117,13 +117,13 @@ function HomePageContent({
           </div>
 
           {/* 오른쪽 "더 있음" 힌트 */}
-          <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-bg-primary to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-bg-primary to-transparent" />
         </div>
       </section>
 
       {/* 이런 방은 어때요? */}
       <section>
-        <div className="flex items-center justify-between py-[10px]">
+        <div className="flex items-center justify-between py-2.5">
           <h2 className="typo-h4 text-text-strong">이런 방은 어때요?</h2>
           <button
             type="button"
@@ -140,7 +140,7 @@ function HomePageContent({
             모두 보기
           </button>
         </div>
-        <div className="flex flex-col gap-[10px]">
+        <div className="flex flex-col gap-2.5">
           {MOCK_RECRUITS.map((recruit) => (
             <RecruitCard
               key={recruit.id}

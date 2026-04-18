@@ -10,10 +10,10 @@ type RouteConfig = {
 };
 
 const ROUTE_CONFIG: Record<string, RouteConfig> = {
-  "/": {
+  "/home": {
     header: { variant: "home" },
     icon: "home",
-    path: "/",
+    path: "/home",
   },
   "/chat": {
     header: { showBack: true, title: "채팅", variant: "title" },
@@ -35,11 +35,11 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
 const DEFAULT_ROUTE_CONFIG: RouteConfig = {
   header: { variant: "home" },
   icon: "home",
-  path: "/",
+  path: "/home",
 };
 
 const BOTTOM_NAV_ITEMS = [
-  { href: "/", icon: "home", label: "홈" },
+  { href: "/home", icon: "home", label: "홈" },
   { href: "/room", icon: "room", label: "방 찾기" },
   { href: "/chat", icon: "chat", label: "채팅" },
   { href: "/mypage", icon: "mypage", label: "MY" },
@@ -56,14 +56,14 @@ export default function MainPage() {
       return;
     }
 
-    navigate("/");
+    navigate("/home");
   };
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
       <main className="min-h-0 flex-1 overflow-hidden px-400">
-        <div className="scrollbar-none h-full overflow-y-auto pb-[113px]">
+        <div className="scrollbar-none h-full overflow-y-auto pb-28.25">
           <Outlet />
         </div>
       </main>

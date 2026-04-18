@@ -1,10 +1,12 @@
-import type { RouteObject } from "react-router";
+import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
 import ChatPage from "@/pages/ChatPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
+import OnBoardingPage from "@/pages/OnBoardingPage";
 import RoomPage from "@/pages/RoomPage";
+import LoginPage from "@/pages/LoginPage";
 
 export const routes: RouteObject[] = [
   {
@@ -13,6 +15,10 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
+        element: <Navigate to="/login" replace />,
+      },
+      {
+        path: "home",
         element: <HomePage />,
       },
       {
@@ -28,6 +34,14 @@ export const routes: RouteObject[] = [
         element: <MyPage />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/onboarding",
+    element: <OnBoardingPage />,
   },
   {
     path: "/design-system",
