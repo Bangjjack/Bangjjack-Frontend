@@ -1,16 +1,9 @@
-export { OnBoardingPageContent } from "./OnBoardingPageContent";
-export { OnBoardingLayout } from "./OnBoardingLayout";
-export { OnBoardingBasicInfoStep } from "./steps/OnBoardingBasicInfoStep";
-export { OnBoardingLifestyleStep } from "./steps/OnBoardingLifestyleStep";
-export { OnBoardingPriorityStep } from "./steps/OnBoardingPriorityStep";
-export { OnBoardingSchoolInfoStep } from "./steps/OnBoardingSchoolInfoStep";
-export type {
-  Gender,
-  LifestyleMultiFieldKey,
-  LifestyleSingleFieldKey,
-  OnBoardingFormValues,
-  OnBoardingPageContentProps,
-  OnBoardingStepId,
-  ProgressState,
-  SemesterType,
-} from "../types";
+export { OnBoardingPageContent } from "@/features/onboarding/components/OnBoardingPageContent";
+export { OnBoardingLayout } from "@/features/onboarding/components/OnBoardingLayout";
+export { OnBoardingSkipDialog } from "@/features/onboarding/components/OnBoardingSkipDialog";
+export {
+  OnBoardingBasicInfoStep,
+  OnBoardingLifestyleStep,
+  OnBoardingPriorityStep,
+  OnBoardingSchoolInfoStep,
+} from "@/features/onboarding/components/steps";

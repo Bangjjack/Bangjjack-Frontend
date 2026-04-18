@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Chip } from "@/components/ui";
+import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import { cn } from "@/lib/cn";
-import { PRIORITY_FACTOR_OPTIONS } from "../../constants";
 
 type OnBoardingPriorityStepProps = {
   onToggleFactor: (value: string) => void;

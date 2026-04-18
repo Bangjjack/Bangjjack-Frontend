@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDownIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 
 type OnBoardingSelectFieldProps = {
@@ -61,7 +61,7 @@ function OnBoardingSelectField({
             >
               {displayValue}
             </span>
-            <ChevronDown
+            <ChevronDownIcon
               className={cn(
                 "size-600 shrink-0 text-icon-normal transition-transform",
                 open && "rotate-180",

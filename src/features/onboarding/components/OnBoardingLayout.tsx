@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import ChevronLeftIcon from "@/assets/icons/ic-chevron-left.svg?react";
+import { ChevronLeftIcon } from "@/assets/icons";
 import { Button } from "@/components/ui";
+import type { ProgressState } from "@/features/onboarding/types";
 import { cn } from "@/lib/cn";
-import type { ProgressState } from "../types";
 
 type OnBoardingLayoutProps = {
   actionDisabled: boolean;

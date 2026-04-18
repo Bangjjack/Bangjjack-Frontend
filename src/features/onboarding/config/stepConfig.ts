@@ -5,14 +5,18 @@ import {
   LIFESTYLE_PROGRESS_STATES,
   PRIORITY_PROGRESS_STATES,
   SCHOOL_INFO_PROGRESS_STATES,
-} from "../constants";
-import type { OnBoardingFormValues, OnBoardingStepId, ProgressState } from "../types";
+} from "@/features/onboarding/constants";
+import type {
+  OnBoardingFormValues,
+  OnBoardingStepId,
+  ProgressState,
+} from "@/features/onboarding/types";
 import {
   isBasicInfoStepComplete,
   isLifestyleStepComplete,
   isPriorityStepComplete,
   isSchoolInfoStepComplete,
-} from "../validation";
+} from "@/features/onboarding/validation";
 
 type ActiveOnBoardingStep = Extract<
   OnBoardingStepId,

@@ -1,7 +1,7 @@
-export { BottomNav } from "./bottomNav";
-export type { BottomNavItem, BottomNavProps } from "./bottomNav";
-export { Header } from "./header";
-export type { HeaderProps } from "./header";
+export { BottomNav } from "@/components/ui/bottomNav";
+export type { BottomNavItem, BottomNavProps } from "@/components/ui/bottomNav";
+export { Header } from "@/components/ui/header";
+export type { HeaderProps } from "@/components/ui/header";
 export type { BottomNavIcon } from "@/types/bottomNav";
 export type { HeaderVariant } from "@/types/header";
 export {
@@ -15,18 +15,18 @@ export {
   AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel,
-} from "./alert-dialog";
-export { Button } from "./button";
-export type { ButtonProps } from "./button";
-export { Chip } from "./chip";
-export type { ChipProps } from "./chip";
-export { Input } from "./input";
-export type { InputProps } from "./input";
-export { Toaster, toast } from "./sonner";
-export { Tag } from "./tag";
-export type { TagProps } from "./tag";
-export { RoundButton } from "./round-button";
-export type { RoundButtonProps } from "./round-button";
+} from "@/components/ui/alert-dialog";
+export { Button } from "@/components/ui/button";
+export type { ButtonProps } from "@/components/ui/button";
+export { Chip } from "@/components/ui/chip";
+export type { ChipProps } from "@/components/ui/chip";
+export { Input } from "@/components/ui/input";
+export type { InputProps } from "@/components/ui/input";
+export { Toaster, toast } from "@/components/ui/sonner";
+export { Tag } from "@/components/ui/tag";
+export type { TagProps } from "@/components/ui/tag";
+export { RoundButton } from "@/components/ui/round-button";
+export type { RoundButtonProps } from "@/components/ui/round-button";
 export {
   Card,
   CardHeader,
@@ -35,7 +35,7 @@ export {
   CardAction,
   CardDescription,
   CardContent,
-} from "./card";
-export { ProfileAvatar } from "./profile-avatar";
-export type { ProfileAvatarProps } from "./profile-avatar";
-export { Avatar, AvatarFallback } from "./avatar";
+} from "@/components/ui/card";
+export { ProfileAvatar } from "@/components/ui/profile-avatar";
+export type { ProfileAvatarProps } from "@/components/ui/profile-avatar";
+export { Avatar, AvatarFallback } from "@/components/ui/avatar";

@@ -5,14 +5,14 @@ import {
   SKIP_STEP_MAP,
   getOnBoardingStepMeta,
   type ActiveOnBoardingStep,
-} from "../config/stepConfig";
+} from "@/features/onboarding/config/stepConfig";
 import type {
   LifestyleMultiFieldKey,
   LifestyleSingleFieldKey,
   OnBoardingFormValues,
   OnBoardingPageContentProps,
   SemesterType,
-} from "../types";
+} from "@/features/onboarding/types";
 
 function createInitialFormValues(
   initialValues?: Partial<OnBoardingFormValues>,

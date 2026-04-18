@@ -1,12 +1,14 @@
 import { useState } from "react";
-import type { OnBoardingPageContentProps } from "../types";
-import { useOnboardingFlow } from "../hooks/useOnboardingFlow";
-import { OnBoardingLayout } from "./OnBoardingLayout";
-import { OnBoardingSkipDialog } from "./OnBoardingSkipDialog";
-import { OnBoardingBasicInfoStep } from "./steps/OnBoardingBasicInfoStep";
-import { OnBoardingLifestyleStep } from "./steps/OnBoardingLifestyleStep";
-import { OnBoardingPriorityStep } from "./steps/OnBoardingPriorityStep";
-import { OnBoardingSchoolInfoStep } from "./steps/OnBoardingSchoolInfoStep";
+import { OnBoardingLayout } from "@/features/onboarding/components/OnBoardingLayout";
+import { OnBoardingSkipDialog } from "@/features/onboarding/components/OnBoardingSkipDialog";
+import {
+  OnBoardingBasicInfoStep,
+  OnBoardingLifestyleStep,
+  OnBoardingPriorityStep,
+  OnBoardingSchoolInfoStep,
+} from "@/features/onboarding/components/steps";
+import { useOnboardingFlow } from "@/features/onboarding/hooks/useOnboardingFlow";
+import type { OnBoardingPageContentProps } from "@/features/onboarding/types";
 
 function OnBoardingPageContent({
   initialValues,

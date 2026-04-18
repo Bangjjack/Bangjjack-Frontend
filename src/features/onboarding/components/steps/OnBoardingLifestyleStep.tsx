@@ -1,10 +1,13 @@
 import { Chip } from "@/components/ui";
-import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "../../constants";
+import {
+  LIFESTYLE_MULTI_QUESTIONS,
+  LIFESTYLE_SINGLE_QUESTIONS,
+} from "@/features/onboarding/constants";
 import type {
   LifestyleMultiFieldKey,
   LifestyleSingleFieldKey,
   OnBoardingFormValues,
-} from "../../types";
+} from "@/features/onboarding/types";
 
 type OnBoardingLifestyleStepProps = {
   onMultiSelectChange: (key: LifestyleMultiFieldKey, value: string) => void;

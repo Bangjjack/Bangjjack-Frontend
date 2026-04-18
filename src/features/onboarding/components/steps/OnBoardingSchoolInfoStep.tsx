@@ -1,12 +1,12 @@
 import { Button, Chip } from "@/components/ui";
+import { OnBoardingSelectField } from "@/features/onboarding/components/fields";
 import {
   CAMPUS_OPTIONS,
   DEPARTMENT_OPTIONS,
   DORMITORY_OPTIONS,
   SEMESTER_OPTIONS,
-} from "../../constants";
-import { OnBoardingSelectField } from "../fields/OnBoardingSelectField";
-import type { OnBoardingFormValues, SemesterType } from "../../types";
+} from "@/features/onboarding/constants";
+import type { OnBoardingFormValues, SemesterType } from "@/features/onboarding/types";
 
 type SchoolInfoFieldKey = "campus" | "department";
 

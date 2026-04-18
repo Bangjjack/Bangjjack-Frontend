@@ -5,7 +5,7 @@ import type {
   OnBoardingStepId,
   ProgressState,
   SemesterType,
-} from "./types";
+} from "@/features/onboarding/types";
 
 const ONBOARDING_STEP_ORDER: readonly OnBoardingStepId[] = [
   "basic-info",

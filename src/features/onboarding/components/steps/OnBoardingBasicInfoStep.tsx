@@ -1,6 +1,6 @@
 import { Button, Chip } from "@/components/ui";
+import { OnBoardingSelectField } from "@/features/onboarding/components/fields";
 import { GENDER_OPTIONS } from "@/features/onboarding/constants";
-import { OnBoardingSelectField } from "@/features/onboarding/components/fields/OnBoardingSelectField";
 import type { Gender, OnBoardingFormValues } from "@/features/onboarding/types";
 
 const GRADE_OPTIONS = ["1", "2", "3", "4", "other"] as const;

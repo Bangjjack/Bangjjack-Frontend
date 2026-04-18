@@ -54,7 +54,7 @@ function Rank({ rank, visible }: RankProps) {
 /* ── Chip ── */
 
 const chipVariants = cva(
-  "inline-flex items-center justify-center overflow-hidden rounded-[20px] px-300 py-200 typo-button2 whitespace-nowrap transition-[background-color,border-color,color,gap,padding] duration-400 ease-[ease]",
+  "inline-flex items-center justify-center rounded-[20px] px-300 py-200 typo-button2 whitespace-nowrap transition-[background-color,border-color,color,gap,padding,box-shadow] duration-400 ease-[ease] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus-primary",
   {
     variants: {
       variant: {
