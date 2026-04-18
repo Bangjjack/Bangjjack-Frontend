@@ -36,6 +36,7 @@ export default function LoginPage() {
 
           <button
             type="button"
+            onClick={() => navigate("/onboarding")}
             className="mt-[clamp(0.5rem,1.25vh,0.625rem)] w-full cursor-pointer py-100 text-center typo-button2 text-text-alternative"
           >
             회원가입으로 시작하기

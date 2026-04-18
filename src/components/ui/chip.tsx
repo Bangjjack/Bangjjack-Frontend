@@ -17,6 +17,7 @@ type CheckMarkProps = {
 function CheckMark({ visible }: CheckMarkProps) {
   return (
     <span
+      aria-hidden={!visible}
       className={cn(
         "shrink-0 overflow-hidden transition-[max-width,opacity] duration-400 ease-[ease]",
         visible ? "max-w-[20px] opacity-100" : "max-w-0 opacity-0",
@@ -32,6 +33,7 @@ function CheckMark({ visible }: CheckMarkProps) {
 function Rank({ rank, visible }: RankProps) {
   return (
     <span
+      aria-hidden={!visible}
       className={cn(
         "shrink-0 overflow-hidden transition-[max-width,opacity] duration-400 ease-[ease]",
         visible ? "max-w-[20px] opacity-100" : "max-w-0 opacity-0",

@@ -12,6 +12,7 @@ function OnBoardingPageContent({
   initialValues,
   onBack,
   onNext,
+  progressStates,
   userName = "OO",
 }: OnBoardingPageContentProps) {
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
@@ -34,6 +35,7 @@ function OnBoardingPageContent({
     initialValues,
     onBack,
     onNext,
+    progressStates,
     userName,
   });
 

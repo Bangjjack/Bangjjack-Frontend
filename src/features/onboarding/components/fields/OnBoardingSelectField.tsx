@@ -21,6 +21,7 @@ function OnBoardingSelectField({
 }: OnBoardingSelectFieldProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const displayValue = value || placeholder;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -42,6 +43,7 @@ function OnBoardingSelectField({
         <div className="relative flex-1">
           <button
             type="button"
+            aria-label={`${label}: ${displayValue}`}
             aria-expanded={open}
             onClick={() => setOpen((prev) => !prev)}
             className={cn(
@@ -57,7 +59,7 @@ function OnBoardingSelectField({
                   : "flex-1 typo-body1 text-text-placeholder"
               }
             >
-              {value || placeholder}
+              {displayValue}
             </span>
             <ChevronDown
               className={cn(

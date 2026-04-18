@@ -3,6 +3,14 @@ import { OnBoardingPageContent } from "@/features/onboarding/components";
 
 export default function OnBoardingPage() {
   const navigate = useNavigate();
+  const handleBack = () => {
+    if (window.history.state?.idx > 0) {
+      navigate(-1);
+      return;
+    }
 
-  return <OnBoardingPageContent onBack={() => navigate(-1)} onNext={() => navigate("/home")} />;
+    navigate("/home");
+  };
+
+  return <OnBoardingPageContent onBack={handleBack} onNext={() => navigate("/home")} />;
 }

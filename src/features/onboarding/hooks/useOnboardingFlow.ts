@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import {
   NEXT_STEP_MAP,
   PREVIOUS_STEP_MAP,
@@ -43,6 +43,7 @@ function useOnboardingFlow({
   initialValues,
   onBack,
   onNext,
+  progressStates,
   userName = "OO",
 }: OnBoardingPageContentProps) {
   const [currentStep, setCurrentStep] = useState<ActiveOnBoardingStep>("basic-info");
@@ -50,10 +51,11 @@ function useOnboardingFlow({
     createInitialFormValues(initialValues),
   );
 
-  const currentStepMeta = useMemo(
-    () => getOnBoardingStepMeta(currentStep, formValues, userName),
-    [currentStep, formValues, userName],
-  );
+  const defaultCurrentStepMeta = getOnBoardingStepMeta(currentStep, formValues, userName);
+  const currentStepMeta = {
+    ...defaultCurrentStepMeta,
+    progressStates: progressStates ?? defaultCurrentStepMeta.progressStates,
+  };
 
   const handleChangeBasicInfoField = (key: "birthYear" | "grade", value: string) => {
     setFormValues((prev) => ({ ...prev, [key]: value }));

@@ -1,22 +1,27 @@
-import { useMemo } from "react";
 import { Button, Chip } from "@/components/ui";
-import { GENDER_OPTIONS } from "../../constants";
-import { OnBoardingSelectField } from "../fields/OnBoardingSelectField";
-import type { Gender, OnBoardingFormValues } from "../../types";
+import { GENDER_OPTIONS } from "@/features/onboarding/constants";
+import { OnBoardingSelectField } from "@/features/onboarding/components/fields/OnBoardingSelectField";
+import type { Gender, OnBoardingFormValues } from "@/features/onboarding/types";
 
 const GRADE_OPTIONS = ["1", "2", "3", "4", "other"] as const;
+const BIRTH_YEAR_OPTIONS = createBirthYearOptions();
 
-type OnBoardingBasicInfoStepProps = {
+interface OnBoardingBasicInfoStepProps {
   onFieldChange: (key: "birthYear" | "grade", value: string) => void;
   onGenderChange: (gender: Gender) => void;
   values: OnBoardingFormValues;
-};
+}
 
-type GenderOptionProps = {
+interface GenderOptionProps {
   active: boolean;
   label: string;
   onClick: () => void;
-};
+}
+
+function createBirthYearOptions() {
+  const currentYear = new Date().getFullYear();
+  return Array.from({ length: currentYear - 1980 + 1 }, (_, index) => String(currentYear - index));
+}
 
 function GenderOption({ active, label, onClick }: GenderOptionProps) {
   return (
@@ -36,20 +41,13 @@ function OnBoardingBasicInfoStep({
   onGenderChange,
   values,
 }: OnBoardingBasicInfoStepProps) {
-  const birthYearOptions = useMemo(() => {
-    const currentYear = new Date().getFullYear();
-    return Array.from({ length: currentYear - 1980 + 1 }, (_, index) =>
-      String(currentYear - index),
-    );
-  }, []);
-
   return (
     <div className="flex flex-1 flex-col gap-8.75">
       <OnBoardingSelectField
         label="출생연도"
         value={values.birthYear}
         onChange={(value) => onFieldChange("birthYear", value)}
-        options={birthYearOptions}
+        options={BIRTH_YEAR_OPTIONS}
         placeholder="출생연도를 선택해주세요"
         suffix="년"
       />

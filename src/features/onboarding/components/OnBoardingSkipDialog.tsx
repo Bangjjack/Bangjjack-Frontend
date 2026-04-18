@@ -35,11 +35,11 @@ function OnBoardingSkipDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="mt-500 flex flex-col gap-200">
-          <AlertDialogAction className="w-full cursor-pointer" onClick={onContinue}>
-            이어서 작성하기
-          </AlertDialogAction>
-          <AlertDialogCancel className="w-full cursor-pointer" onClick={onSkip}>
+          <AlertDialogAction className="w-full cursor-pointer" onClick={onSkip}>
             그래도 건너뛸래요
+          </AlertDialogAction>
+          <AlertDialogCancel className="w-full cursor-pointer" onClick={onContinue}>
+            이어서 작성하기
           </AlertDialogCancel>
         </div>
       </AlertDialogContent>
