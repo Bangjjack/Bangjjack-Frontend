@@ -2,6 +2,7 @@ import { WaveBackgroundIcon } from "@/assets/icons";
 import { Button, Header, ProfileAvatar, Tag } from "@/components/ui";
 import { ChecklistCard } from "@/features/roommate/components/ChecklistCard";
 import { ImportanceSection } from "@/features/roommate/components/ImportanceSection";
+import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 import { useGoBack } from "@/hooks/useGoBack";
 
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
@@ -28,6 +29,7 @@ const MOCK_PROFILE = {
 
 function RoommateProfileContent() {
   const handleBackClick = useGoBack();
+  const contentRef = useFadeInOnScroll<HTMLDivElement>();
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -45,7 +47,7 @@ function RoommateProfileContent() {
         <WaveBackgroundIcon aria-hidden="true" className="w-full" preserveAspectRatio="none" />
 
         {/* Content */}
-        <div className="flex flex-col gap-300 px-400">
+        <div ref={contentRef} className="flex flex-col gap-300 px-400">
           {/* Profile avatar - overlaps wave by half */}
           <div className="-mt-[65px] flex flex-col items-start px-[14px]">
             <ProfileAvatar size={100} seed={MOCK_PROFILE.nickname.length} />
