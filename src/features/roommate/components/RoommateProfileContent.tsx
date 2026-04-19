@@ -1,5 +1,19 @@
+import { useState } from "react";
 import { WaveBackgroundIcon } from "@/assets/icons";
-import { Button, Header, ProfileAvatar, Tag } from "@/components/ui";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  Button,
+  Header,
+  ProfileAvatar,
+  Tag,
+} from "@/components/ui";
 import { ChecklistCard } from "@/features/roommate/components/ChecklistCard";
 import { ImportanceSection } from "@/features/roommate/components/ImportanceSection";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
@@ -30,6 +44,18 @@ const MOCK_PROFILE = {
 function RoommateProfileContent() {
   const handleBackClick = useGoBack();
   const contentRef = useFadeInOnScroll<HTMLDivElement>();
+  const [isMatchDialogOpen, setIsMatchDialogOpen] = useState(false);
+
+  // TODO: API 연동 시 실제 모집글 존재 여부 확인
+  const hasExistingRecruit = true;
+
+  const handleMatchClick = () => {
+    if (hasExistingRecruit) {
+      setIsMatchDialogOpen(true);
+      return;
+    }
+    // TODO: 모집글이 없을 때 매칭 로직
+  };
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -54,7 +80,7 @@ function RoommateProfileContent() {
           </div>
 
           {/* Profile info */}
-          <div className="flex flex-col gap-[6px] pt-300">
+          <div className="flex flex-col gap-[6px] pt-300 px-100">
             <h2 className="typo-title1 text-text-strong">{MOCK_PROFILE.nickname}</h2>
             <div className="flex items-center gap-[6px]">
               <span className="typo-label2 text-text-alternative">{MOCK_PROFILE.age}세</span>
@@ -64,7 +90,7 @@ function RoommateProfileContent() {
           </div>
 
           {/* Tags */}
-          <div className="flex flex-wrap gap-[6px] pb-300">
+          <div className="flex flex-wrap gap-[6px] pb-300 px-100">
             {MOCK_PROFILE.tags.map((tag) => (
               <Tag key={tag} color="black">
                 {tag}
@@ -82,11 +108,27 @@ function RoommateProfileContent() {
 
       {/* Bottom action buttons */}
       <div className="absolute bottom-0 left-0 right-0 z-40 flex gap-[10px] px-400 pb-9 pt-300">
-        <Button className="flex-1" variant="ghost">
+        <Button className="flex-1" variant="ghost" onClick={handleMatchClick}>
           매칭하기
         </Button>
         <Button className="flex-1">채팅하기</Button>
       </div>
+
+      {/* 이미 모집글이 있을 때 표시되는 모달 */}
+      <AlertDialog open={isMatchDialogOpen} onOpenChange={setIsMatchDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>이미 작성된 모집글이 있어요!</AlertDialogTitle>
+            <AlertDialogDescription>
+              채팅을 통해 {MOCK_PROFILE.nickname} 님을 <br /> 내 방에 초대할 수 있어요
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소하기</AlertDialogCancel>
+            <AlertDialogAction>채팅하기</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
