@@ -1,51 +1,44 @@
+import useEmblaCarousel from "embla-carousel-react";
 import { useRef } from "react";
 
-function useDragScroll<T extends HTMLElement = HTMLElement>() {
-  const ref = useRef<T>(null);
-  const isDragging = useRef(false);
+const DRAG_THRESHOLD = 5;
+
+function useDragScroll() {
+  const hasMoved = useRef(false);
   const startX = useRef(0);
-  const scrollLeft = useRef(0);
 
-  const onMouseDown = (e: React.MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    align: "start",
+    containScroll: "trimSnaps",
+    dragFree: true,
+    duration: 20,
+  });
 
-    isDragging.current = true;
-    startX.current = e.pageX - el.offsetLeft;
-    scrollLeft.current = el.scrollLeft;
-    el.style.cursor = "grabbing";
+  const onPointerDown = (e: React.PointerEvent) => {
+    hasMoved.current = false;
+    startX.current = e.clientX;
   };
 
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging.current) return;
-    const el = ref.current;
-    if (!el) return;
-
-    e.preventDefault();
-    const x = e.pageX - el.offsetLeft;
-    const walk = x - startX.current;
-    el.scrollLeft = scrollLeft.current - walk;
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (Math.abs(e.clientX - startX.current) > DRAG_THRESHOLD) {
+      hasMoved.current = true;
+    }
   };
 
-  const onMouseUp = () => {
-    isDragging.current = false;
-    const el = ref.current;
-    if (el) el.style.cursor = "grab";
-  };
-
-  const onMouseLeave = () => {
-    isDragging.current = false;
-    const el = ref.current;
-    if (el) el.style.cursor = "grab";
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (hasMoved.current) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   };
 
   return {
-    ref,
+    ref: emblaRef,
+    api: emblaApi,
     handlers: {
-      onMouseDown,
-      onMouseMove,
-      onMouseUp,
-      onMouseLeave,
+      onPointerDown,
+      onPointerMove,
+      onClickCapture,
     },
   };
 }
