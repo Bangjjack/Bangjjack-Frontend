@@ -1,7 +1,8 @@
 import { BottomNav, Header } from "@/components/ui";
 import type { HeaderProps } from "@/components/ui";
+import { useGoBack } from "@/hooks/useGoBack";
 import type { BottomNavIcon } from "@/types/bottomNav";
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 type RouteConfig = {
   header: Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">;
@@ -47,17 +48,8 @@ const BOTTOM_NAV_ITEMS = [
 
 export default function MainPage() {
   const location = useLocation();
-  const navigate = useNavigate();
   const routeConfig = ROUTE_CONFIG[location.pathname] ?? DEFAULT_ROUTE_CONFIG;
-
-  const handleBackClick = () => {
-    if (window.history.state?.idx > 0) {
-      navigate(-1);
-      return;
-    }
-
-    navigate("/home");
-  };
+  const handleBackClick = useGoBack();
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
