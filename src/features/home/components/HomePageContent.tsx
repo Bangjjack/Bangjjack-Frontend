@@ -1,8 +1,8 @@
 import { RoundButton } from "@/components/ui";
 import { RecruitCard } from "@/features/home/components/RecruitCard";
 import { RoommateProfileCard } from "@/features/home/components/RoommateProfileCard";
-import { useDragScroll } from "@/features/home/hooks/useDragScroll";
-import { useFadeInOnScroll } from "@/features/home/hooks/useFadeInOnScroll";
+import { useDragScroll } from "@/hooks/useDragScroll";
+import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 
 import { cn } from "@/lib/cn";
 
