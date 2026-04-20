@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { Button, ProfileAvatar, Tag } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
@@ -20,16 +22,48 @@ function ChatRoommateInviteSheet({
   onCancel,
   onConfirm,
 }: ChatRoommateInviteSheetProps) {
+  const [closeAction, setCloseAction] = useState<"cancel" | "confirm" | null>(null);
+  const isClosing = closeAction !== null;
+
+  const handleClose = (action: "cancel" | "confirm") => {
+    if (isClosing) {
+      return;
+    }
+
+    setCloseAction(action);
+  };
+
   return (
-    <div className={cn("fixed inset-0 z-30 flex items-end bg-bg-overlay", className)}>
+    <div
+      className={cn(
+        "fixed inset-0 z-30 flex items-end bg-bg-overlay",
+        isClosing ? "animate-overlay-fade-out" : "animate-overlay-fade-in",
+        className,
+      )}
+    >
       <button
         aria-label="룸메이트 요청 보내기 닫기"
         className="absolute inset-0"
-        onClick={onCancel}
+        onClick={() => handleClose("cancel")}
         type="button"
       />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500">
+      <div
+        className={cn(
+          "relative z-10 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
+          isClosing ? "animate-bottom-sheet-down" : "animate-bottom-sheet-up",
+        )}
+        onAnimationEnd={() => {
+          if (closeAction === "confirm") {
+            onConfirm();
+            return;
+          }
+
+          if (closeAction === "cancel") {
+            onCancel();
+          }
+        }}
+      >
         <div className="mx-auto h-1 w-7.5 rounded-full bg-neutral-300" />
 
         <div className="flex flex-col gap-400">
@@ -67,7 +101,7 @@ function ChatRoommateInviteSheet({
           <div className="flex gap-200">
             <Button
               className="h-9 flex-1 cursor-pointer rounded-medium"
-              onClick={onCancel}
+              onClick={() => handleClose("cancel")}
               size="sm"
               variant="neutral"
             >
@@ -75,7 +109,7 @@ function ChatRoommateInviteSheet({
             </Button>
             <Button
               className="h-9 flex-1 cursor-pointer rounded-medium"
-              onClick={onConfirm}
+              onClick={() => handleClose("confirm")}
               size="sm"
             >
               초대 보내기
