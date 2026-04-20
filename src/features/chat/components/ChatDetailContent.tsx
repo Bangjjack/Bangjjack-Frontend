@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { ProfileOrangeIcon } from "@/assets/icons";
 import { Header, type HeaderProps } from "@/components/ui";
 import { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
@@ -19,6 +21,30 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
     showProfile: true,
     title: chatDetail.nickname,
   };
+  const [draftMessage, setDraftMessage] = useState("");
+  const [messages, setMessages] = useState(chatDetail.messages);
+
+  const handleSubmitMessage = () => {
+    const nextMessage = draftMessage.trim();
+
+    if (!nextMessage) {
+      return;
+    }
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        sentAt: new Intl.DateTimeFormat("ko-KR", {
+          hour: "numeric",
+          minute: "2-digit",
+        }).format(new Date()),
+        text: nextMessage,
+        type: "outgoing",
+      },
+    ]);
+    setDraftMessage("");
+  };
 
   return (
     <div className={cn("flex min-h-dvh flex-col bg-bg-primary", className)}>
@@ -36,7 +62,7 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
           />
 
           <div className="flex flex-col gap-400">
-            {chatDetail.messages.map((message) => {
+            {messages.map((message) => {
               const isOutgoing = message.type === "outgoing";
 
               return (
@@ -70,7 +96,11 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
         </div>
       </div>
 
-      <ChatInputBar />
+      <ChatInputBar
+        onChange={setDraftMessage}
+        onSubmit={handleSubmitMessage}
+        value={draftMessage}
+      />
     </div>
   );
 }
