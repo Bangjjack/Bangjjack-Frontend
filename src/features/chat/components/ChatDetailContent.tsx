@@ -44,9 +44,7 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
                   key={message.id}
                   className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}
                 >
-                  {!isOutgoing ? (
-                    <ProfileOrangeIcon className="size-9 shrink-0 self-end" />
-                  ) : null}
+                  {!isOutgoing ? <ProfileOrangeIcon className="size-9 shrink-0 self-end" /> : null}
 
                   {!isOutgoing ? (
                     <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
