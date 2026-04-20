@@ -4,6 +4,7 @@ export { default as CircleAlertIcon } from "@/assets/icons/ic-circle-alert.svg?r
 export { default as CircleCheckIcon } from "@/assets/icons/ic-circle-check.svg?react";
 export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
+export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?react";
 export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
@@ -14,5 +15,7 @@ export { default as UserIcon } from "@/assets/icons/ic-user.svg?react";
 export { default as ChevronDownIcon } from "@/assets/icons/ic-chevron-down.svg?react";
 export { default as ChevronLeftIcon } from "@/assets/icons/ic-chevron-left.svg?react";
 export { default as PuzzleIcon } from "@/assets/icons/ic-puzzle.svg?react";
+export { default as SendIcon } from "@/assets/icons/ic-send.svg?react";
+export { default as StarIcon } from "@/assets/icons/ic-star.svg?react";
 export { default as MoreVerticalIcon } from "@/assets/icons/ic-more-vertical.svg?react";
 export { default as LogoLoginIcon } from "@/assets/icons/logo-login.svg?react";

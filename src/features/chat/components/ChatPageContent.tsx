@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 import { ChatListItem } from "@/features/chat/components/ChatListItem";
 import { CHAT_HELPER_TEXT, CHAT_PREVIEWS, CHAT_TABS } from "@/features/chat/mocks";
@@ -11,6 +12,7 @@ export type ChatPageContentProps = {
 
 function ChatPageContent({ className }: ChatPageContentProps) {
   const [activeTab, setActiveTab] = useState<ChatTab>("all");
+  const navigate = useNavigate();
 
   const filteredChats =
     activeTab === "all"
@@ -29,7 +31,7 @@ function ChatPageContent({ className }: ChatPageContentProps) {
                 key={tab.key}
                 aria-pressed={isActive}
                 className={cn(
-                  "flex flex-1 items-center justify-center border-b px-300 py-300 transition-colors cursor-pointer",
+                  "flex flex-1 cursor-pointer items-center justify-center border-b px-300 py-300 transition-colors",
                   isActive
                     ? "border-brand-primary text-text-primary-alternative"
                     : "border-border-normal text-text-disabled",
@@ -49,6 +51,7 @@ function ChatPageContent({ className }: ChatPageContentProps) {
               key={chatPreview.id}
               message={chatPreview.message}
               nickname={chatPreview.nickname}
+              onClick={() => navigate(`/chat/${chatPreview.id}`)}
               timeLabel={chatPreview.timeLabel}
               unreadCount={chatPreview.unreadCount}
             />

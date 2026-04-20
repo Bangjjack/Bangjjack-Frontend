@@ -1,6 +1,7 @@
 import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
 import ChatPage from "@/pages/ChatPage";
+import ChatDetailPage from "@/pages/ChatDetailPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
@@ -38,6 +39,10 @@ export const routes: RouteObject[] = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/chat/:chatId",
+    element: <ChatDetailPage />,
   },
   {
     path: "/onboarding",

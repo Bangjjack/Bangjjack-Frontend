@@ -1,5 +1,13 @@
 export { ChatPageContent } from "@/features/chat/components/ChatPageContent";
 export type { ChatPageContentProps } from "@/features/chat/components/ChatPageContent";
+export { ChatDetailContent } from "@/features/chat/components/ChatDetailContent";
+export type { ChatDetailContentProps } from "@/features/chat/components/ChatDetailContent";
+export { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
+export type { ChatDateBadgeProps } from "@/features/chat/components/ChatDateBadge";
+export { ChatInputBar } from "@/features/chat/components/ChatInputBar";
+export type { ChatInputBarProps } from "@/features/chat/components/ChatInputBar";
+export { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
+export type { ChatMatchCardProps } from "@/features/chat/components/ChatMatchCard";
 export { ChatListItem } from "@/features/chat/components/ChatListItem";
 export type { ChatListItemProps } from "@/features/chat/components/ChatListItem";
 export { MessageCount } from "@/features/chat/components/MessageCount";

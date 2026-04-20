@@ -8,3 +8,19 @@ export type ChatPreview = {
   type: ChatTab;
   unreadCount: number;
 };
+
+export type ChatMessage = {
+  id: number;
+  sentAt: string;
+  text: string;
+  type: "incoming" | "outgoing";
+};
+
+export type ChatDetail = {
+  dateLabel: string;
+  id: number;
+  matchRate: number;
+  messages: ChatMessage[];
+  nickname: string;
+  profileSummary: string[];
+};
