@@ -1,5 +1,5 @@
 import { ProfileAvatar } from "@/components/ui/profile-avatar";
-import { formatUnreadCount } from "@/features/chat/utils";
+import { MessageCount } from "@/features/chat/components/MessageCount";
 
 export type ChatListItemProps = {
   message: string;
@@ -27,9 +27,7 @@ function ChatListItem({ message, nickname, timeLabel, unreadCount }: ChatListIte
           <span className="typo-caption2 tracking-[-0.03125rem] text-text-disabled">
             {timeLabel}
           </span>
-          <span className="inline-flex h-5.5 min-w-5.5 items-center justify-center rounded-full bg-brand-primary px-1.5 typo-label2 text-text-on-primary">
-            {formatUnreadCount(unreadCount)}
-          </span>
+          <MessageCount count={unreadCount} />
         </div>
       </div>
     </li>
