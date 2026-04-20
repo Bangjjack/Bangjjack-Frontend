@@ -4,16 +4,25 @@ import { cn } from "@/lib/cn";
 
 export type ChatInputMenuProps = {
   className?: string;
+  isClosing?: boolean;
   onActionClick?: (action: ChatInputMenuAction) => void;
+  onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
 };
 
-function ChatInputMenu({ className, onActionClick }: ChatInputMenuProps) {
+function ChatInputMenu({
+  className,
+  isClosing = false,
+  onActionClick,
+  onAnimationEnd,
+}: ChatInputMenuProps) {
   return (
     <div
       className={cn(
         "overflow-hidden rounded-2xl border border-border-strong bg-white shadow-[0_8px_24px_rgba(0,0,0,0.08)]",
+        isClosing ? "animate-input-menu-down" : "animate-input-menu-up",
         className,
       )}
+      onAnimationEnd={onAnimationEnd}
     >
       {CHAT_INPUT_MENU_ITEMS.map((item, index) => {
         const Icon = item.icon;

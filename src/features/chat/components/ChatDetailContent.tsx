@@ -27,9 +27,11 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
   const {
     closeInputMenu,
     closeInviteSheet,
+    completeInputMenuClose,
     draftMessage,
     handleInputMenuAction,
     handleSubmitMessage,
+    inputMenuClosing,
     inputMenuOpen,
     inviteSheetOpen,
     messages,
@@ -108,7 +110,15 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
             <div className="pointer-events-none absolute inset-x-400 bottom-full z-20 mb-200">
               <ChatInputMenu
                 className="pointer-events-auto"
+                isClosing={inputMenuClosing}
                 onActionClick={handleInputMenuAction}
+                onAnimationEnd={(event) => {
+                  if (event.currentTarget !== event.target || !inputMenuClosing) {
+                    return;
+                  }
+
+                  completeInputMenuClose();
+                }}
               />
             </div>
           </>

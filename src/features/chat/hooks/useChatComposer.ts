@@ -21,15 +21,35 @@ function createOutgoingMessage(id: number, text: string): ChatMessage {
 function useChatComposer({ chatDetail }: UseChatComposerParams) {
   const [draftMessage, setDraftMessage] = useState("");
   const [inputMenuOpen, setInputMenuOpen] = useState(false);
+  const [inputMenuClosing, setInputMenuClosing] = useState(false);
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
   const [messages, setMessages] = useState(chatDetail.messages);
 
+  const openInputMenu = () => {
+    setInputMenuClosing(false);
+    setInputMenuOpen(true);
+  };
+
   const closeInputMenu = () => {
+    if (!inputMenuOpen || inputMenuClosing) {
+      return;
+    }
+
+    setInputMenuClosing(true);
+  };
+
+  const completeInputMenuClose = () => {
+    setInputMenuClosing(false);
     setInputMenuOpen(false);
   };
 
   const toggleInputMenu = () => {
-    setInputMenuOpen((prev) => !prev);
+    if (inputMenuOpen) {
+      closeInputMenu();
+      return;
+    }
+
+    openInputMenu();
   };
 
   const closeInviteSheet = () => {
@@ -49,11 +69,11 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
 
     setMessages((prev) => [...prev, createOutgoingMessage(prev.length + 1, nextMessage)]);
     setDraftMessage("");
-    closeInputMenu();
+    completeInputMenuClose();
   };
 
   const handleInputMenuAction = (action: ChatInputMenuAction) => {
-    closeInputMenu();
+    completeInputMenuClose();
 
     if (action === "invite") {
       openInviteSheet();
@@ -63,9 +83,11 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
   return {
     closeInputMenu,
     closeInviteSheet,
+    completeInputMenuClose,
     draftMessage,
     handleInputMenuAction,
     handleSubmitMessage,
+    inputMenuClosing,
     inputMenuOpen,
     inviteSheetOpen,
     messages,

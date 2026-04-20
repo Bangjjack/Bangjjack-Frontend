@@ -539,3 +539,49 @@ select:focus {
 .animate-overlay-fade-out {
   animation: overlay-fade-out 0.2s ease-in forwards;
 }
+
+@keyframes input-menu-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-input-menu-up {
+  animation: input-menu-up 0.2s ease-out;
+}
+
+@keyframes input-menu-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.animate-input-menu-down {
+  animation: input-menu-down 0.18s ease-in forwards;
+}
+
+@keyframes input-toggle-icon {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-input-toggle-icon {
+  animation: input-toggle-icon 0.2s ease-out;
+}

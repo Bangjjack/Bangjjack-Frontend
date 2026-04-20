@@ -32,7 +32,10 @@ function ChatInputBar({
           onClick={onPlusClick}
           type="button"
         >
-          <PlusButtonIcon className="size-600 [&_path]:stroke-current" />
+          <PlusButtonIcon
+            key={isMenuOpen ? "close" : "open"}
+            className="animate-input-toggle-icon size-600 [&_path]:stroke-current"
+          />
         </button>
 
         <div className="flex min-w-px flex-[1_0_0] items-center overflow-hidden rounded-full bg-bg-input p-2.5">

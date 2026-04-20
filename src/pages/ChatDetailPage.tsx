@@ -21,5 +21,11 @@ export default function ChatDetailPage() {
     return null;
   }
 
-  return <ChatDetailContent chatDetail={chatDetail} onBack={() => navigate("/chat")} />;
+  return (
+    <ChatDetailContent
+      key={chatDetail.id}
+      chatDetail={chatDetail}
+      onBack={() => navigate("/chat")}
+    />
+  );
 }
