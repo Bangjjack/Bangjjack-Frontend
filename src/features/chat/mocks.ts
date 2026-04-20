@@ -11,7 +11,7 @@ export const CHAT_PREVIEWS: ChatPreview[] = [
     nickname: "옥수수 수염차",
     message: "최근 채팅 내용",
     timeLabel: "방금",
-    unreadCount: 99,
+    unreadCount: 101,
     type: "all",
   },
   {
