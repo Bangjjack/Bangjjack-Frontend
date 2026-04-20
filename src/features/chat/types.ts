@@ -11,12 +11,20 @@ export type ChatPreview = {
   unreadCount: number;
 };
 
-export type ChatMessage = {
+export type ChatTextMessage = {
   id: number;
   sentAt: string;
   text: string;
   type: "incoming" | "outgoing";
 };
+
+export type ChatRoommateRequestMessage = {
+  id: number;
+  requesterName: string;
+  type: "roommate_request";
+};
+
+export type ChatMessage = ChatTextMessage | ChatRoommateRequestMessage;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 

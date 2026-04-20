@@ -6,6 +6,7 @@ import { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
 import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
 import { ChatRoommateInviteSheet } from "@/features/chat/components/ChatRoommateInviteSheet";
+import { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoommateRequestMessage";
 import { useChatComposer } from "@/features/chat/hooks/useChatComposer";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
@@ -64,6 +65,15 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
 
           <div className="flex flex-col gap-400">
             {messages.map((message) => {
+              if (message.type === "roommate_request") {
+                return (
+                  <div key={message.id} className="flex w-full items-end gap-200">
+                    <ProfileOrangeIcon className="size-9 shrink-0 self-end" />
+                    <ChatRoommateRequestMessage requesterName={message.requesterName} />
+                  </div>
+                );
+              }
+
               const isOutgoing = message.type === "outgoing";
 
               return (

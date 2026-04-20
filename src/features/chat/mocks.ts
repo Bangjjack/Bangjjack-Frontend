@@ -8,7 +8,7 @@ export const CHAT_TABS: Array<{ key: ChatTab; label: string }> = [
 export const CHAT_PREVIEWS: ChatPreview[] = [
   {
     id: 1,
-    nickname: "무구정광대다라니경",
+    nickname: "직지심체요절",
     message: "최근 채팅 내용",
     timeLabel: "방금",
     unreadCount: 101,
@@ -16,7 +16,7 @@ export const CHAT_PREVIEWS: ChatPreview[] = [
   },
   {
     id: 2,
-    nickname: "현실도 피자",
+    nickname: "현실도피자",
     message: "최근 채팅 내용",
     timeLabel: "오전 10:02",
     unreadCount: 3,
@@ -54,36 +54,36 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
       {
         id: 1,
         sentAt: "오전 9:30",
-        text: "안녕하세요! 매칭률이 높게 나와서 연락드렸어요",
+        text: "안녕하세요. 매칭률이 높게 나와서 연락드렸어요.",
         type: "outgoing",
       },
       {
         id: 2,
         sentAt: "오전 9:31",
-        text: "안녕하세요! 저도 방짝에서 룸메이트 찾고 있어요:)",
+        text: "안녕하세요! 저도 방짝에서 룸메이트 찾고 있었어요 :)",
         type: "incoming",
       },
       {
         id: 3,
         sentAt: "오전 9:32",
-        text: "네 저도 비흡연이고 취침은 12시쯤이에요!",
+        text: "저는 비흡연이고 취침 시간은 12시쯤이에요.",
         type: "outgoing",
       },
       {
         id: 4,
         sentAt: "오전 9:32",
-        text: "잘 맞을 것 같은데 룸메이트 어때요?",
+        text: "저도 생활 패턴이 비슷한 룸메이트를 찾고 있었어요.",
         type: "outgoing",
       },
       {
         id: 5,
         sentAt: "오전 9:32",
-        text: "넵 좋아요!",
+        text: "좋아요!",
         type: "incoming",
       },
     ],
-    nickname: "무구정광대다라니경",
-    profileSummary: ["학기 16주", "3 기숙사", "3인 1실"],
+    nickname: "직지심체요절",
+    profileSummary: ["학기 16주", "3기숙사", "3인 1실"],
     startSource: "ai_recommendation",
   },
   2: {
@@ -97,7 +97,7 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
       {
         id: 1,
         sentAt: "오전 10:02",
-        text: "안녕하세요! 프로필 보고 먼저 연락드렸어요.",
+        text: "안녕하세요. 프로필 보고 먼저 연락드렸어요.",
         type: "outgoing",
       },
       {
@@ -107,8 +107,8 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
         type: "incoming",
       },
     ],
-    nickname: "현실도 피자",
-    profileSummary: ["학기 8주", "2 기숙사", "2인 1실"],
+    nickname: "현실도피자",
+    profileSummary: ["학기 8주", "2기숙사", "2인 1실"],
     recruitTitle: "글캠 기숙사 2인실 룸메 구해요!",
     startSource: "recruit_post",
   },
@@ -122,13 +122,12 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
     messages: [
       {
         id: 1,
-        sentAt: "어제",
-        text: "룸메이트 요청이 도착했어요.",
-        type: "incoming",
+        requesterName: "감자",
+        type: "roommate_request",
       },
     ],
     nickname: "감자",
-    profileSummary: ["학기 12주", "1 기숙사", "2인 1실"],
+    profileSummary: ["학기 12주", "1기숙사", "2인 1실"],
     startSource: "ai_recommendation",
   },
   4: {
@@ -142,12 +141,12 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
       {
         id: 1,
         sentAt: "2026-04-10",
-        text: "안녕하세요! 대화 나눠보고 싶어요.",
+        text: "안녕하세요. 모집글 보고 연락드려요.",
         type: "incoming",
       },
     ],
     nickname: "고구마",
-    profileSummary: ["학기 4주", "3 기숙사", "3인 1실"],
+    profileSummary: ["학기 4주", "3기숙사", "3인 1실"],
     recruitTitle: "메인홀 기숙사 룸메 매칭해요",
     startSource: "recruit_post",
   },
