@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { ProfileOrangeIcon } from "@/assets/icons";
 import { Header, type HeaderProps } from "@/components/ui";
 import { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
@@ -7,6 +5,8 @@ import { ChatInputBar } from "@/features/chat/components/ChatInputBar";
 import { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
 import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
+import { ChatRoommateInviteSheet } from "@/features/chat/components/ChatRoommateInviteSheet";
+import { useChatComposer } from "@/features/chat/hooks/useChatComposer";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
@@ -23,32 +23,19 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
     showProfile: true,
     title: chatDetail.nickname,
   };
-  const [draftMessage, setDraftMessage] = useState("");
-  const [inputMenuOpen, setInputMenuOpen] = useState(false);
-  const [messages, setMessages] = useState(chatDetail.messages);
 
-  const handleSubmitMessage = () => {
-    const nextMessage = draftMessage.trim();
-
-    if (!nextMessage) {
-      return;
-    }
-
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        sentAt: new Intl.DateTimeFormat("ko-KR", {
-          hour: "numeric",
-          minute: "2-digit",
-        }).format(new Date()),
-        text: nextMessage,
-        type: "outgoing",
-      },
-    ]);
-    setDraftMessage("");
-    setInputMenuOpen(false);
-  };
+  const {
+    closeInputMenu,
+    closeInviteSheet,
+    draftMessage,
+    handleInputMenuAction,
+    handleSubmitMessage,
+    inputMenuOpen,
+    inviteSheetOpen,
+    messages,
+    setDraftMessage,
+    toggleInputMenu,
+  } = useChatComposer({ chatDetail });
 
   return (
     <div className={cn("relative flex min-h-dvh flex-col bg-bg-primary", className)}>
@@ -113,19 +100,15 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
           <>
             <button
               aria-label="입력 메뉴 닫기"
-              className="fixed inset-0 z-0 cursor-default"
-              onClick={() => {
-                setInputMenuOpen(false);
-              }}
+              className="fixed inset-0 z-10"
+              onClick={closeInputMenu}
               type="button"
             />
 
-            <div className="pointer-events-none absolute inset-x-400 bottom-full z-10 mb-200">
+            <div className="pointer-events-none absolute inset-x-400 bottom-full z-20 mb-200">
               <ChatInputMenu
                 className="pointer-events-auto"
-                onActionClick={() => {
-                  setInputMenuOpen(false);
-                }}
+                onActionClick={handleInputMenuAction}
               />
             </div>
           </>
@@ -134,13 +117,22 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
         <ChatInputBar
           isMenuOpen={inputMenuOpen}
           onChange={setDraftMessage}
-          onPlusClick={() => {
-            setInputMenuOpen((prev) => !prev);
-          }}
+          onPlusClick={toggleInputMenu}
           onSubmit={handleSubmitMessage}
           value={draftMessage}
         />
       </div>
+
+      {inviteSheetOpen ? (
+        <ChatRoommateInviteSheet
+          age={chatDetail.age}
+          department={chatDetail.department}
+          lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
+          nickname={chatDetail.nickname}
+          onCancel={closeInviteSheet}
+          onConfirm={closeInviteSheet}
+        />
+      ) : null}
     </div>
   );
 }

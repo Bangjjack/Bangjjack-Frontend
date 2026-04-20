@@ -1,3 +1,5 @@
+import type { ComponentType, SVGProps } from "react";
+
 export type ChatTab = "all" | "roommateRequest";
 
 export type ChatPreview = {
@@ -18,9 +20,23 @@ export type ChatMessage = {
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
+export type ChatInputMenuAction = "invite" | "photo";
+
+export type ChatInputMenuItem = {
+  description: string;
+  icon: ComponentType<SVGProps<SVGSVGElement>>;
+  iconBackgroundClassName: string;
+  iconClassName: string;
+  id: ChatInputMenuAction;
+  title: string;
+};
+
 export type ChatDetail = {
+  age?: number;
   dateLabel: string;
+  department?: string;
   id: number;
+  lifestyleTags?: string[];
   matchRate: number;
   messages: ChatMessage[];
   nickname: string;

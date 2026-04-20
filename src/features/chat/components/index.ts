@@ -7,10 +7,10 @@ export type { ChatDateBadgeProps } from "@/features/chat/components/ChatDateBadg
 export { ChatInputBar } from "@/features/chat/components/ChatInputBar";
 export type { ChatInputBarProps } from "@/features/chat/components/ChatInputBar";
 export { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
-export type {
-  ChatInputMenuAction,
-  ChatInputMenuProps,
-} from "@/features/chat/components/ChatInputMenu";
+export type { ChatInputMenuProps } from "@/features/chat/components/ChatInputMenu";
+export type { ChatInputMenuAction } from "@/features/chat/types";
+export { ChatRoommateInviteSheet } from "@/features/chat/components/ChatRoommateInviteSheet";
+export type { ChatRoommateInviteSheetProps } from "@/features/chat/components/ChatRoommateInviteSheet";
 export { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 export type { ChatMatchCardProps } from "@/features/chat/components/ChatMatchCard";
 export { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
