@@ -6,6 +6,11 @@ export { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
 export type { ChatDateBadgeProps } from "@/features/chat/components/ChatDateBadge";
 export { ChatInputBar } from "@/features/chat/components/ChatInputBar";
 export type { ChatInputBarProps } from "@/features/chat/components/ChatInputBar";
+export { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
+export type {
+  ChatInputMenuAction,
+  ChatInputMenuProps,
+} from "@/features/chat/components/ChatInputMenu";
 export { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 export type { ChatMatchCardProps } from "@/features/chat/components/ChatMatchCard";
 export { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";

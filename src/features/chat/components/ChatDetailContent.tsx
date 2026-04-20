@@ -4,6 +4,7 @@ import { ProfileOrangeIcon } from "@/assets/icons";
 import { Header, type HeaderProps } from "@/components/ui";
 import { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
 import { ChatInputBar } from "@/features/chat/components/ChatInputBar";
+import { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
 import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
 import type { ChatDetail } from "@/features/chat/types";
@@ -23,6 +24,7 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
     title: chatDetail.nickname,
   };
   const [draftMessage, setDraftMessage] = useState("");
+  const [inputMenuOpen, setInputMenuOpen] = useState(false);
   const [messages, setMessages] = useState(chatDetail.messages);
 
   const handleSubmitMessage = () => {
@@ -45,10 +47,11 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
       },
     ]);
     setDraftMessage("");
+    setInputMenuOpen(false);
   };
 
   return (
-    <div className={cn("flex min-h-dvh flex-col bg-bg-primary", className)}>
+    <div className={cn("relative flex min-h-dvh flex-col bg-bg-primary", className)}>
       <Header {...headerProps} />
 
       <div className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-400 pb-400">
@@ -105,11 +108,39 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
         </div>
       </div>
 
-      <ChatInputBar
-        onChange={setDraftMessage}
-        onSubmit={handleSubmitMessage}
-        value={draftMessage}
-      />
+      <div className="relative z-10">
+        {inputMenuOpen ? (
+          <>
+            <button
+              aria-label="입력 메뉴 닫기"
+              className="fixed inset-0 z-0 cursor-default"
+              onClick={() => {
+                setInputMenuOpen(false);
+              }}
+              type="button"
+            />
+
+            <div className="pointer-events-none absolute inset-x-400 bottom-full z-10 mb-200">
+              <ChatInputMenu
+                className="pointer-events-auto"
+                onActionClick={() => {
+                  setInputMenuOpen(false);
+                }}
+              />
+            </div>
+          </>
+        ) : null}
+
+        <ChatInputBar
+          isMenuOpen={inputMenuOpen}
+          onChange={setDraftMessage}
+          onPlusClick={() => {
+            setInputMenuOpen((prev) => !prev);
+          }}
+          onSubmit={handleSubmitMessage}
+          value={draftMessage}
+        />
+      </div>
     </div>
   );
 }

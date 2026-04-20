@@ -1,27 +1,38 @@
-import { CirclePlusIcon, SendIcon } from "@/assets/icons";
+import { CirclePlusIcon, CircleXIcon, SendIcon } from "@/assets/icons";
+import { cn } from "@/lib/cn";
 
 export type ChatInputBarProps = {
+  isMenuOpen?: boolean;
   onChange: (value: string) => void;
+  onPlusClick?: () => void;
   onSubmit: () => void;
   placeholder?: string;
   value: string;
 };
 
 function ChatInputBar({
+  isMenuOpen = false,
   onChange,
+  onPlusClick,
   onSubmit,
-  placeholder = "메세지를 입력하세요",
+  placeholder = "메시지를 입력하세요",
   value,
 }: ChatInputBarProps) {
+  const PlusButtonIcon = isMenuOpen ? CircleXIcon : CirclePlusIcon;
+
   return (
     <div className="border-t border-border-strong bg-bg-secondary px-400 py-300">
       <div className="flex items-center justify-center gap-2.5">
         <button
-          aria-label="첨부 추가"
-          className="flex size-600 shrink-0 cursor-pointer items-center justify-center text-icon-strong"
+          aria-label={isMenuOpen ? "추가 메뉴 닫기" : "추가 메뉴 열기"}
+          className={cn(
+            "flex size-600 shrink-0 cursor-pointer items-center justify-center",
+            isMenuOpen ? "text-brand-primary" : "text-icon-strong",
+          )}
+          onClick={onPlusClick}
           type="button"
         >
-          <CirclePlusIcon className="size-600 [&_path]:stroke-current" />
+          <PlusButtonIcon className="size-600 [&_path]:stroke-current" />
         </button>
 
         <div className="flex min-w-px flex-[1_0_0] items-center overflow-hidden rounded-full bg-bg-input p-2.5">

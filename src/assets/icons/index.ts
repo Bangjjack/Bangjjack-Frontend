@@ -5,6 +5,7 @@ export { default as CircleCheckIcon } from "@/assets/icons/ic-circle-check.svg?r
 export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
 export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?react";
+export { default as CircleXIcon } from "@/assets/icons/ic-circle-x.svg?react";
 export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
@@ -12,6 +13,8 @@ export { default as WriteIcon } from "@/assets/icons/ic-write.svg?react";
 export { default as ChatIcon } from "@/assets/icons/ic-chat.svg?react";
 export { default as HomeIcon } from "@/assets/icons/ic-home.svg?react";
 export { default as UserIcon } from "@/assets/icons/ic-user.svg?react";
+export { default as UsersIcon } from "@/assets/icons/ic-users.svg?react";
+export { default as ImageIcon } from "@/assets/icons/ic-image.svg?react";
 export { default as ChevronDownIcon } from "@/assets/icons/ic-chevron-down.svg?react";
 export { default as ChevronLeftIcon } from "@/assets/icons/ic-chevron-left.svg?react";
 export { default as PuzzleIcon } from "@/assets/icons/ic-puzzle.svg?react";
