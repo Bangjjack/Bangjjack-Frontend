@@ -16,6 +16,8 @@ export type ChatMessage = {
   type: "incoming" | "outgoing";
 };
 
+export type ChatStartSource = "ai_recommendation" | "recruit_post";
+
 export type ChatDetail = {
   dateLabel: string;
   id: number;
@@ -23,4 +25,6 @@ export type ChatDetail = {
   messages: ChatMessage[];
   nickname: string;
   profileSummary: string[];
+  recruitTitle?: string;
+  startSource: ChatStartSource;
 };

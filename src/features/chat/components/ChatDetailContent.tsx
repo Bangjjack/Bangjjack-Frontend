@@ -5,6 +5,7 @@ import { Header, type HeaderProps } from "@/components/ui";
 import { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
 import { ChatInputBar } from "@/features/chat/components/ChatInputBar";
 import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
+import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
@@ -56,10 +57,18 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
             <ChatDateBadge label={chatDetail.dateLabel} />
           </div>
 
-          <ChatMatchCard
-            matchRate={chatDetail.matchRate}
-            profileSummary={chatDetail.profileSummary}
-          />
+          {chatDetail.startSource === "ai_recommendation" ? (
+            <ChatMatchCard
+              matchRate={chatDetail.matchRate}
+              profileSummary={chatDetail.profileSummary}
+            />
+          ) : (
+            <ChatRecruitCard
+              matchRate={chatDetail.matchRate}
+              profileSummary={chatDetail.profileSummary}
+              recruitTitle={chatDetail.recruitTitle ?? "모집글"}
+            />
+          )}
 
           <div className="flex flex-col gap-400">
             {messages.map((message) => {
