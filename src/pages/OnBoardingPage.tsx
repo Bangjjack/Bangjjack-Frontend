@@ -1,16 +1,10 @@
 import { useNavigate } from "react-router";
 import { OnBoardingPageContent } from "@/features/onboarding/components";
+import { useGoBack } from "@/hooks/useGoBack";
 
 export default function OnBoardingPage() {
   const navigate = useNavigate();
-  const handleBack = () => {
-    if (window.history.state?.idx > 0) {
-      navigate(-1);
-      return;
-    }
-
-    navigate("/home");
-  };
+  const handleBack = useGoBack();
 
   return <OnBoardingPageContent onBack={handleBack} onNext={() => navigate("/home")} />;
 }

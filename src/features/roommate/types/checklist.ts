@@ -1,4 +1,5 @@
 type ChecklistEntry = {
+  id: string;
   isMatched?: boolean;
   label: string;
   value: string;

@@ -23,7 +23,7 @@ function ChecklistCard({ items, nickname }: ChecklistCardProps) {
         <div className="flex flex-col gap-[6px]">
           {items.map((item) => (
             <ChecklistItem
-              key={item.label}
+              key={item.id}
               isMatched={item.isMatched}
               label={item.label}
               value={item.value}

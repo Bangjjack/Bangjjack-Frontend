@@ -9,6 +9,7 @@ import { cn } from "@/lib/cn";
 // TODO: API 연동 시 제거
 const MOCK_ROOMMATES = [
   {
+    id: "roommate-1",
     nickname: "무구정광대다라니경",
     age: 20,
     department: "컴퓨터공학과",
@@ -16,6 +17,7 @@ const MOCK_ROOMMATES = [
     tags: ["얼리버드", "집순이", "비흡연"],
   },
   {
+    id: "roommate-2",
     nickname: "햄무라비법전",
     age: 21,
     department: "경영학과",
@@ -23,6 +25,7 @@ const MOCK_ROOMMATES = [
     tags: ["올빼미형", "밖순이", "비흡연"],
   },
   {
+    id: "roommate-3",
     nickname: "냠냠",
     age: 21,
     department: "경영학과",
@@ -70,7 +73,7 @@ const MOCK_RECRUITS = [
 
 type HomePageContentProps = {
   onMoreRecruitsClick?: () => void;
-  onRoommateClick?: (index: number) => void;
+  onRoommateClick?: (id: string) => void;
   onRecruitClick?: (id: number) => void;
   onRecruitCreateClick?: () => void;
 };
@@ -96,11 +99,11 @@ function HomePageContent({
           <div ref={emblaRef} className="overflow-hidden" {...handlers}>
             {/* Embla container */}
             <div className="flex gap-[12px]">
-              {MOCK_ROOMMATES.map((roommate, index) => (
+              {MOCK_ROOMMATES.map(({ id, ...roommate }) => (
                 <RoommateProfileCard
-                  key={roommate.nickname}
+                  key={id}
                   className="min-w-0 shrink-0"
-                  onClick={() => onRoommateClick?.(index)}
+                  onClick={() => onRoommateClick?.(id)}
                   {...roommate}
                 />
               ))}

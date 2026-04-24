@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 function useGoBack(fallbackPath = "/home") {
   const navigate = useNavigate();
+  const location = useLocation();
 
   return () => {
-    if (window.history.state?.idx > 0) {
+    if (location.key !== "default") {
       navigate(-1);
       return;
     }

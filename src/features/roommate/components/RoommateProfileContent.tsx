@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { WaveBackgroundIcon } from "@/assets/icons";
 import {
   AlertDialog,
@@ -14,12 +15,11 @@ import {
   ProfileAvatar,
   Tag,
 } from "@/components/ui";
-import { ChecklistCard } from "@/features/roommate/components/ChecklistCard";
-import { ImportanceSection } from "@/features/roommate/components/ImportanceSection";
+import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 import { useGoBack } from "@/hooks/useGoBack";
 
-import type { ChecklistEntry } from "@/features/roommate/types/checklist";
+import type { ChecklistEntry } from "@/features/roommate/components";
 
 // TODO: API 연동 시 제거
 const MOCK_PROFILE = {
@@ -29,15 +29,15 @@ const MOCK_PROFILE = {
   tags: ["얼리버드", "집순이", "비흡연"],
   importanceItems: ["기상 시간", "흡연 여부", "취침 시간"],
   checklist: [
-    { label: "취침 시간", value: "24~2시", isMatched: true },
-    { label: "기상 시간", value: "불규칙", isMatched: true },
-    { label: "잠버릇", value: "없음", isMatched: false },
-    { label: "청소 주기", value: "거의 안 함", isMatched: false },
-    { label: "기숙사 체류 시간", value: "대부분 기숙사 안에", isMatched: true },
-    { label: "통화 습관", value: "소곤소곤", isMatched: true },
-    { label: "실내 온도", value: "둘 다 예민", isMatched: true },
-    { label: "소음 민감도", value: "보통", isMatched: true },
-    { label: "흡연", value: "비흡연", isMatched: true },
+    { id: "sleep-time", label: "취침 시간", value: "24~2시", isMatched: true },
+    { id: "wake-time", label: "기상 시간", value: "불규칙", isMatched: true },
+    { id: "sleep-habit", label: "잠버릇", value: "없음", isMatched: false },
+    { id: "cleaning", label: "청소 주기", value: "거의 안 함", isMatched: false },
+    { id: "stay-time", label: "기숙사 체류 시간", value: "대부분 기숙사 안에", isMatched: true },
+    { id: "call-habit", label: "통화 습관", value: "소곤소곤", isMatched: true },
+    { id: "temperature", label: "실내 온도", value: "둘 다 예민", isMatched: true },
+    { id: "noise", label: "소음 민감도", value: "보통", isMatched: true },
+    { id: "smoking", label: "흡연", value: "비흡연", isMatched: true },
   ] satisfies ChecklistEntry[],
 };
 
@@ -111,7 +111,9 @@ function RoommateProfileContent() {
         <Button className="flex-1" variant="ghost" onClick={handleMatchClick}>
           매칭하기
         </Button>
-        <Button className="flex-1">채팅하기</Button>
+        <Button className="flex-1" disabled>
+          채팅하기
+        </Button>
       </div>
 
       {/* 이미 모집글이 있을 때 표시되는 모달 */}
@@ -125,7 +127,7 @@ function RoommateProfileContent() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소하기</AlertDialogCancel>
-            <AlertDialogAction>채팅하기</AlertDialogAction>
+            <AlertDialogAction disabled>채팅하기</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

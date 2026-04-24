@@ -2,7 +2,7 @@ import { cn } from "@/lib/cn";
 
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
-function ChecklistItem({ isMatched = true, label, value }: ChecklistEntry) {
+function ChecklistItem({ isMatched = true, label, value }: Omit<ChecklistEntry, "id">) {
   return (
     <div className="flex items-center justify-between overflow-hidden rounded-small bg-neutral-100 px-300 py-[6px]">
       <span className="typo-title3 text-text-normal">{label}</span>
