@@ -15,9 +15,15 @@ export type ChatDetailContentProps = {
   chatDetail: ChatDetail;
   className?: string;
   onBack: () => void;
+  onProfileClick?: () => void;
 };
 
-function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentProps) {
+function ChatDetailContent({
+  chatDetail,
+  className,
+  onBack,
+  onProfileClick,
+}: ChatDetailContentProps) {
   const headerProps: Pick<HeaderProps, "onBackClick" | "showBack" | "showProfile" | "title"> = {
     onBackClick: onBack,
     showBack: true,
@@ -53,6 +59,7 @@ function ChatDetailContent({ chatDetail, className, onBack }: ChatDetailContentP
           {chatDetail.startSource === "ai_recommendation" ? (
             <ChatMatchCard
               matchRate={chatDetail.matchRate}
+              onProfileClick={onProfileClick}
               profileSummary={chatDetail.profileSummary}
             />
           ) : (

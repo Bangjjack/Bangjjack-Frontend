@@ -3,10 +3,11 @@ import { Button } from "@/components/ui";
 
 export type ChatMatchCardProps = {
   matchRate: number;
+  onProfileClick?: () => void;
   profileSummary: string[];
 };
 
-function ChatMatchCard({ matchRate, profileSummary }: ChatMatchCardProps) {
+function ChatMatchCard({ matchRate, onProfileClick, profileSummary }: ChatMatchCardProps) {
   return (
     <section className="overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-300 py-2.5">
       <div className="flex w-full items-center justify-between">
@@ -39,7 +40,12 @@ function ChatMatchCard({ matchRate, profileSummary }: ChatMatchCardProps) {
           </div>
         </div>
 
-        <Button className="shrink-0 px-400 cursor-pointer" size="sm" variant="black">
+        <Button
+          className="shrink-0 px-400 cursor-pointer"
+          onClick={onProfileClick}
+          size="sm"
+          variant="black"
+        >
           프로필 보기
         </Button>
       </div>

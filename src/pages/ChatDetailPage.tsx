@@ -26,6 +26,7 @@ export default function ChatDetailPage() {
       key={chatDetail.id}
       chatDetail={chatDetail}
       onBack={() => navigate("/chat")}
+      onProfileClick={() => navigate(`/roommate/${chatDetail.id}`)}
     />
   );
 }
