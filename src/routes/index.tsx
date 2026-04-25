@@ -8,6 +8,7 @@ import MyPage from "@/pages/MyPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
 import RoomPage from "@/pages/RoomPage";
 import LoginPage from "@/pages/LoginPage";
+import RoommateProfilePage from "@/pages/RoommateProfilePage";
 
 export const routes: RouteObject[] = [
   {
@@ -47,6 +48,10 @@ export const routes: RouteObject[] = [
   {
     path: "/onboarding",
     element: <OnBoardingPage />,
+  },
+  {
+    path: "/roommate/:id",
+    element: <RoommateProfilePage />,
   },
   {
     path: "/design-system",

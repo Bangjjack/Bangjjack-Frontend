@@ -7,9 +7,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-button-primary text-text-on-primary active:bg-button-primary-pressed",
+        default:
+          "bg-button-primary text-text-on-primary hover:brightness-95 active:bg-button-primary-pressed",
         ghost:
-          "border-[1.5px] border-button-primary bg-button-primary-ghost text-text-primary-normal active:bg-brand-primary-light",
+          "border-[1.5px] border-button-primary bg-button-primary-ghost text-text-primary-normal hover:brightness-97 active:bg-brand-primary-light",
         neutral: "bg-button-neutral-ghost text-text-normal active:bg-neutral-250",
         black: "bg-button-neutral text-text-on-primary active:bg-button-neutral-pressed",
         "black-ghost":

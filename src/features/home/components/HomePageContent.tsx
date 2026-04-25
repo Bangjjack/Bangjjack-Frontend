@@ -1,13 +1,15 @@
 import { RoundButton } from "@/components/ui";
 import { RecruitCard } from "@/features/home/components/RecruitCard";
 import { RoommateProfileCard } from "@/features/home/components/RoommateProfileCard";
-import { useDragScroll } from "@/features/home/hooks/useDragScroll";
+import { useDragScroll } from "@/hooks/useDragScroll";
+import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 
 import { cn } from "@/lib/cn";
 
 // TODO: API 연동 시 제거
 const MOCK_ROOMMATES = [
   {
+    id: "roommate-1",
     nickname: "무구정광대다라니경",
     age: 20,
     department: "컴퓨터공학과",
@@ -15,6 +17,7 @@ const MOCK_ROOMMATES = [
     tags: ["얼리버드", "집순이", "비흡연"],
   },
   {
+    id: "roommate-2",
     nickname: "햄무라비법전",
     age: 21,
     department: "경영학과",
@@ -22,6 +25,7 @@ const MOCK_ROOMMATES = [
     tags: ["올빼미형", "밖순이", "비흡연"],
   },
   {
+    id: "roommate-3",
     nickname: "냠냠",
     age: 21,
     department: "경영학과",
@@ -69,7 +73,7 @@ const MOCK_RECRUITS = [
 
 type HomePageContentProps = {
   onMoreRecruitsClick?: () => void;
-  onRoommateClick?: (index: number) => void;
+  onRoommateClick?: (id: string) => void;
   onRecruitClick?: (id: number) => void;
   onRecruitCreateClick?: () => void;
 };
@@ -80,7 +84,8 @@ function HomePageContent({
   onRecruitClick,
   onRecruitCreateClick,
 }: HomePageContentProps) {
-  const { ref: scrollRef, handlers } = useDragScroll<HTMLDivElement>();
+  const { ref: emblaRef, handlers } = useDragScroll();
+  const recruitListRef = useFadeInOnScroll<HTMLDivElement>();
 
   return (
     <div className="flex flex-col gap-600">
@@ -90,30 +95,19 @@ function HomePageContent({
         <h2 className="typo-h4 py-2.5 text-text-strong">추천 룸메이트</h2>
 
         <div className="relative">
-          <div
-            ref={scrollRef}
-            className={cn(
-              "scrollbar-none",
-              "flex",
-              "gap-[12px]",
-              "overflow-x-auto",
-              "cursor-grab",
-              "active:cursor-grabbing",
-            )}
-            style={{
-              WebkitOverflowScrolling: "touch",
-              touchAction: "pan-x",
-            }}
-            {...handlers}
-          >
-            {MOCK_ROOMMATES.map((roommate, index) => (
-              <RoommateProfileCard
-                key={roommate.nickname}
-                className="shrink-0"
-                onClick={() => onRoommateClick?.(index)}
-                {...roommate}
-              />
-            ))}
+          {/* Embla viewport */}
+          <div ref={emblaRef} className="overflow-hidden" {...handlers}>
+            {/* Embla container */}
+            <div className="flex gap-[12px]">
+              {MOCK_ROOMMATES.map(({ id, ...roommate }) => (
+                <RoommateProfileCard
+                  key={id}
+                  className="min-w-0 shrink-0"
+                  onClick={() => onRoommateClick?.(id)}
+                  {...roommate}
+                />
+              ))}
+            </div>
           </div>
 
           {/* 오른쪽 "더 있음" 힌트 */}
@@ -140,7 +134,7 @@ function HomePageContent({
             모두 보기
           </button>
         </div>
-        <div className="flex flex-col gap-2.5">
+        <div ref={recruitListRef} className="flex flex-col gap-2.5">
           {MOCK_RECRUITS.map((recruit) => (
             <RecruitCard
               key={recruit.id}
