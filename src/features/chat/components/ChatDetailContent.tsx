@@ -15,6 +15,7 @@ export type ChatDetailContentProps = {
   chatDetail: ChatDetail;
   className?: string;
   onBack: () => void;
+  onInviteConfirm?: () => void;
   onProfileClick?: () => void;
 };
 
@@ -22,6 +23,7 @@ function ChatDetailContent({
   chatDetail,
   className,
   onBack,
+  onInviteConfirm,
   onProfileClick,
 }: ChatDetailContentProps) {
   const headerProps: Pick<HeaderProps, "onBackClick" | "showBack" | "showProfile" | "title"> = {
@@ -76,7 +78,10 @@ function ChatDetailContent({
                 return (
                   <div key={message.id} className="flex w-full items-end gap-200">
                     <ProfileOrangeIcon className="size-9 shrink-0 self-end" />
-                    <ChatRoommateRequestMessage requesterName={message.requesterName} />
+                    <ChatRoommateRequestMessage
+                      onAccept={onInviteConfirm}
+                      requesterName={message.requesterName}
+                    />
                   </div>
                 );
               }
@@ -157,7 +162,7 @@ function ChatDetailContent({
           lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
           nickname={chatDetail.nickname}
           onCancel={closeInviteSheet}
-          onConfirm={closeInviteSheet}
+          onConfirm={onInviteConfirm ?? closeInviteSheet}
         />
       ) : null}
     </div>

@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { ChatDetailContent } from "@/features/chat/components";
-import { CHAT_DETAILS } from "@/features/chat/mocks";
+import { ChatDetailContent, CHAT_DETAILS } from "@/features/chat";
 
 export default function ChatDetailPage() {
   const navigate = useNavigate();
@@ -26,6 +25,7 @@ export default function ChatDetailPage() {
       key={chatDetail.id}
       chatDetail={chatDetail}
       onBack={() => navigate("/chat")}
+      onInviteConfirm={() => navigate(`/chat/${chatDetail.id}/roommate-confirmed`)}
       onProfileClick={() => navigate(`/roommate/${chatDetail.id}`)}
     />
   );

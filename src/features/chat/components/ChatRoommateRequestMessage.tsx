@@ -55,10 +55,10 @@ function ChatRoommateRequestMessage({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-500">
-          <AlertDialogCancel className="cursor-pointer" onClick={onAccept}>
+          <AlertDialogCancel className="cursor-pointer" onClick={onReject}>
             거절하기
           </AlertDialogCancel>
-          <AlertDialogAction className="cursor-pointer" onClick={onReject}>
+          <AlertDialogAction className="cursor-pointer" onClick={onAccept}>
             수락하기
           </AlertDialogAction>
         </AlertDialogFooter>
