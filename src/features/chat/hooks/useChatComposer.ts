@@ -2,9 +2,9 @@ import { useState } from "react";
 
 import type { ChatDetail, ChatInputMenuAction, ChatMessage } from "@/features/chat/types";
 
-type UseChatComposerParams = {
+interface UseChatComposerParams {
   chatDetail: ChatDetail;
-};
+}
 
 function createOutgoingMessage(id: number, text: string): ChatMessage {
   return {
@@ -16,6 +16,18 @@ function createOutgoingMessage(id: number, text: string): ChatMessage {
     text,
     type: "outgoing",
   };
+}
+
+function createInviteMessage(id: number, recipientName: string): ChatMessage {
+  return {
+    id,
+    recipientName,
+    type: "roommate_invite",
+  };
+}
+
+function getNextMessageId(messages: ChatMessage[]) {
+  return Math.max(0, ...messages.map((message) => message.id)) + 1;
 }
 
 function useChatComposer({ chatDetail }: UseChatComposerParams) {
@@ -67,9 +79,18 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
       return;
     }
 
-    setMessages((prev) => [...prev, createOutgoingMessage(prev.length + 1, nextMessage)]);
+    setMessages((prev) => [...prev, createOutgoingMessage(getNextMessageId(prev), nextMessage)]);
     setDraftMessage("");
     completeInputMenuClose();
+  };
+
+  const handleSendInviteRequest = () => {
+    setMessages((prev) => [...prev, createInviteMessage(getNextMessageId(prev), chatDetail.nickname)]);
+    closeInviteSheet();
+  };
+
+  const handleCancelInviteRequest = (messageId: number) => {
+    setMessages((prev) => prev.filter((message) => message.id !== messageId));
   };
 
   const handleInputMenuAction = (action: ChatInputMenuAction) => {
@@ -85,7 +106,9 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
     closeInviteSheet,
     completeInputMenuClose,
     draftMessage,
+    handleCancelInviteRequest,
     handleInputMenuAction,
+    handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,

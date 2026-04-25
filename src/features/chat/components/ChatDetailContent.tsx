@@ -5,25 +5,26 @@ import { ChatInputBar } from "@/features/chat/components/ChatInputBar";
 import { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
 import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
+import { ChatRoommateInviteMessage } from "@/features/chat/components/ChatRoommateInviteMessage";
 import { ChatRoommateInviteSheet } from "@/features/chat/components/ChatRoommateInviteSheet";
 import { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoommateRequestMessage";
 import { useChatComposer } from "@/features/chat/hooks/useChatComposer";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-export type ChatDetailContentProps = {
+export interface ChatDetailContentProps {
   chatDetail: ChatDetail;
   className?: string;
   onBack: () => void;
-  onInviteConfirm?: () => void;
+  onRoommateRequestAccept?: () => void;
   onProfileClick?: () => void;
-};
+}
 
 function ChatDetailContent({
   chatDetail,
   className,
   onBack,
-  onInviteConfirm,
+  onRoommateRequestAccept,
   onProfileClick,
 }: ChatDetailContentProps) {
   const headerProps: Pick<HeaderProps, "onBackClick" | "showBack" | "showProfile" | "title"> = {
@@ -38,7 +39,9 @@ function ChatDetailContent({
     closeInviteSheet,
     completeInputMenuClose,
     draftMessage,
+    handleCancelInviteRequest,
     handleInputMenuAction,
+    handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,
@@ -79,8 +82,19 @@ function ChatDetailContent({
                   <div key={message.id} className="flex w-full items-end gap-200">
                     <ProfileOrangeIcon className="size-9 shrink-0 self-end" />
                     <ChatRoommateRequestMessage
-                      onAccept={onInviteConfirm}
+                      onAccept={onRoommateRequestAccept}
                       requesterName={message.requesterName}
+                    />
+                  </div>
+                );
+              }
+
+              if (message.type === "roommate_invite") {
+                return (
+                  <div key={message.id} className="flex w-full justify-end">
+                    <ChatRoommateInviteMessage
+                      onCancel={() => handleCancelInviteRequest(message.id)}
+                      recipientName={message.recipientName}
                     />
                   </div>
                 );
@@ -162,7 +176,7 @@ function ChatDetailContent({
           lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
           nickname={chatDetail.nickname}
           onCancel={closeInviteSheet}
-          onConfirm={onInviteConfirm ?? closeInviteSheet}
+          onConfirm={handleSendInviteRequest}
         />
       ) : null}
     </div>

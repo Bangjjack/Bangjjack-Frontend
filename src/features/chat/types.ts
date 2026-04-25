@@ -24,7 +24,13 @@ export type ChatRoommateRequestMessage = {
   type: "roommate_request";
 };
 
-export type ChatMessage = ChatTextMessage | ChatRoommateRequestMessage;
+export type ChatRoommateInviteMessage = {
+  id: number;
+  recipientName: string;
+  type: "roommate_invite";
+};
+
+export type ChatMessage = ChatTextMessage | ChatRoommateRequestMessage | ChatRoommateInviteMessage;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
