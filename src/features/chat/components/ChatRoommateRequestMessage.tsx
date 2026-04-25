@@ -51,7 +51,7 @@ function ChatRoommateRequestMessage({
           <AlertDialogIcon />
           <AlertDialogTitle>룸메이트 요청을 수락할까요?</AlertDialogTitle>
           <AlertDialogDescription className="whitespace-normal break-keep text-center">
-            수락 시 상대방에게 매칭 완료 알림이 발송됩니다
+            수락 시 룸메이트 매칭이 확정됩니다
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-500">
