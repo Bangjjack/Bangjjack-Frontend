@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-import type { ChatDetail, ChatInputMenuAction, ChatMessage } from "@/features/chat/types";
+import { toast } from "@/components/ui";
+import type {
+  ChatDetail,
+  ChatInputMenuAction,
+  ChatMessage,
+  ChatRoommateInviteMessage,
+} from "@/features/chat/types";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
@@ -28,6 +34,10 @@ function createInviteMessage(id: number, recipientName: string): ChatMessage {
 
 function getNextMessageId(messages: ChatMessage[]) {
   return Math.max(0, ...messages.map((message) => message.id)) + 1;
+}
+
+function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessage {
+  return message.type === "roommate_invite";
 }
 
 function useChatComposer({ chatDetail }: UseChatComposerParams) {
@@ -85,12 +95,25 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
   };
 
   const handleSendInviteRequest = () => {
-    setMessages((prev) => [...prev, createInviteMessage(getNextMessageId(prev), chatDetail.nickname)]);
+    setMessages((prev) => [
+      ...prev,
+      createInviteMessage(getNextMessageId(prev), chatDetail.nickname),
+    ]);
     closeInviteSheet();
+    toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
   };
 
   const handleCancelInviteRequest = (messageId: number) => {
+    const canceledInvite = messages.find(
+      (message): message is ChatRoommateInviteMessage =>
+        message.id === messageId && isInviteMessage(message),
+    );
+
     setMessages((prev) => prev.filter((message) => message.id !== messageId));
+
+    if (canceledInvite) {
+      toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
+    }
   };
 
   const handleInputMenuAction = (action: ChatInputMenuAction) => {
