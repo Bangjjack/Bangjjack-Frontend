@@ -8,21 +8,27 @@ interface MyPageAction {
   icon: ComponentType<SVGProps<SVGSVGElement>>;
   iconClassName?: string;
   label: string;
+  onClick?: () => void;
 }
 
-const MY_PAGE_ACTIONS: MyPageAction[] = [
-  { icon: SquarePen, label: "내 체크리스트" },
-  { icon: Bookmark, iconClassName: "fill-current", label: "북마크 한 글" },
-  { icon: Puzzle, label: "나의 활동" },
-];
+export interface MyPageActionCardProps {
+  onChecklistClick?: () => void;
+}
 
-function MyPageActionCard() {
+function MyPageActionCard({ onChecklistClick }: MyPageActionCardProps) {
+  const actions: MyPageAction[] = [
+    { icon: SquarePen, label: "내 체크리스트", onClick: onChecklistClick },
+    { icon: Bookmark, iconClassName: "fill-current", label: "북마크 한 글" },
+    { icon: Puzzle, label: "나의 활동" },
+  ];
+
   return (
     <Card className="inline-grid w-full grid-cols-3 grid-rows-1 items-center gap-0 self-stretch rounded-2xl border-0 bg-bg-secondary px-0 py-400 shadow-none">
-      {MY_PAGE_ACTIONS.map(({ icon: Icon, iconClassName, label }, index) => (
+      {actions.map(({ icon: Icon, iconClassName, label, onClick }, index) => (
         <button
           key={label}
           className="relative flex min-w-0 cursor-pointer flex-col items-center gap-2.5"
+          onClick={onClick}
           type="button"
         >
           {index > 0 ? (

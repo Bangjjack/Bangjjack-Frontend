@@ -26,6 +26,11 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
     icon: "mypage",
     path: "/mypage",
   },
+  "/mypage/checklist": {
+    header: { variant: "none" },
+    icon: "mypage",
+    path: "/mypage",
+  },
   "/room": {
     header: { title: "방 찾기", variant: "title" },
     icon: "room",

@@ -5,6 +5,7 @@ import { cn } from "@/lib/cn";
 
 export interface MyPageContentProps {
   className?: string;
+  onChecklistClick?: () => void;
 }
 
 const PROFILE = {
@@ -13,7 +14,7 @@ const PROFILE = {
   name: "김지수",
 };
 
-function MyPageContent({ className }: MyPageContentProps) {
+function MyPageContent({ className, onChecklistClick }: MyPageContentProps) {
   return (
     <div className={cn("flex flex-col gap-400 pt-400", className)}>
       <MyPageProfileCard
@@ -21,7 +22,7 @@ function MyPageContent({ className }: MyPageContentProps) {
         department={PROFILE.department}
         name={PROFILE.name}
       />
-      <MyPageActionCard />
+      <MyPageActionCard onChecklistClick={onChecklistClick} />
       <MyPageMenuSection />
     </div>
   );
