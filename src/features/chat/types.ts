@@ -28,7 +28,7 @@ export type ChatMessage = ChatTextMessage | ChatRoommateRequestMessage;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
-export type ChatInputMenuAction = "invite" | "photo";
+export type ChatInputMenuAction = "invite";
 
 export type ChatInputMenuItem = {
   description: string;

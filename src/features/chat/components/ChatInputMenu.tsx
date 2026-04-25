@@ -32,7 +32,7 @@ function ChatInputMenu({
             key={item.id}
             className={cn(
               "flex w-full cursor-pointer items-center gap-300 px-400 py-400 text-left",
-              index === 0 && "border-b border-border-strong",
+              index < CHAT_INPUT_MENU_ITEMS.length - 1 && "border-b border-border-strong",
             )}
             onClick={() => onActionClick?.(item.id)}
             type="button"
