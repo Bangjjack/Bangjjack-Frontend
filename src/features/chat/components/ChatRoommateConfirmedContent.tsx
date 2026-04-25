@@ -13,17 +13,17 @@ export interface ChatRoommateConfirmedContentProps {
 }
 
 const CONFETTI_DOTS = [
-  { className: "left-0 top-4.5 size-2.5 bg-[#ffc500]" },
-  { className: "left-5.5 top-12.5 size-2.5 bg-brand-primary-dark" },
-  { className: "left-10 top-8 size-2.5 bg-[#ffc500] opacity-70" },
-  { className: "left-22.5 top-2.5 size-2.5 bg-[#ffc500] opacity-80" },
-  { className: "left-30 top-10.5 size-2 bg-brand-primary-dark opacity-75" },
-  { className: "left-39.5 top-7 size-2 bg-brand-primary opacity-90" },
-  { className: "left-45 top-14 size-3 bg-[#ffc500] opacity-85" },
-  { className: "left-18 top-20 size-1.5 bg-brand-primary opacity-85" },
-  { className: "left-55 top-10 size-2 bg-brand-primary opacity-85" },
-  { className: "right-0 top-7.5 size-1.5 bg-[#ffc500] opacity-80" },
-  { className: "left-62.5 top-2.5 size-2 bg-brand-primary-dark opacity-95" },
+  { className: "left-0 top-4.5 size-2.5 bg-[#ffc500]", delay: "0ms" },
+  { className: "left-5.5 top-12.5 size-2.5 bg-brand-primary-dark", delay: "80ms" },
+  { className: "left-10 top-8 size-2.5 bg-[#ffc500] opacity-70", delay: "40ms" },
+  { className: "left-22.5 top-2.5 size-2.5 bg-[#ffc500] opacity-80", delay: "130ms" },
+  { className: "left-30 top-10.5 size-2 bg-brand-primary-dark opacity-75", delay: "70ms" },
+  { className: "left-39.5 top-7 size-2 bg-brand-primary opacity-90", delay: "160ms" },
+  { className: "left-45 top-14 size-3 bg-[#ffc500] opacity-85", delay: "110ms" },
+  { className: "left-18 top-20 size-1.5 bg-brand-primary opacity-85", delay: "210ms" },
+  { className: "left-55 top-10 size-2 bg-brand-primary opacity-85", delay: "190ms" },
+  { className: "right-0 top-7.5 size-1.5 bg-[#ffc500] opacity-80", delay: "250ms" },
+  { className: "left-62.5 top-2.5 size-2 bg-brand-primary-dark opacity-95", delay: "140ms" },
 ];
 
 function ChatRoommateConfirmedContent({
@@ -47,7 +47,11 @@ function ChatRoommateConfirmedContent({
         className="absolute left-1/2 top-23.5 h-25 w-72 -translate-x-1/2 overflow-hidden"
       >
         {CONFETTI_DOTS.map((dot, index) => (
-          <span key={index} className={cn("absolute rounded-full", dot.className)} />
+          <span
+            key={index}
+            className={cn("animate-confetti-pop absolute rounded-full", dot.className)}
+            style={{ animationDelay: dot.delay }}
+          />
         ))}
       </div>
 

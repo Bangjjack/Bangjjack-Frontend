@@ -585,3 +585,28 @@ select:focus {
 .animate-input-toggle-icon {
   animation: input-toggle-icon 0.2s ease-out;
 }
+
+@keyframes confetti-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.4);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translateY(4px) scale(1.18);
+  }
+
+  75% {
+    transform: translateY(-2px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-confetti-pop {
+  animation: confetti-pop 0.58s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
