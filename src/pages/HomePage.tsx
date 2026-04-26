@@ -9,6 +9,7 @@ export default function HomePage() {
       <HomePageContent
         onMoreRecruitsClick={() => navigate("/board")}
         onRoommateClick={(id) => navigate(`/roommate/${id}`)}
+        onRecruitClick={(id) => navigate(`/board/${id}`)}
       />
     </>
   );
