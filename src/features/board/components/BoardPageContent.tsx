@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Chip, RoundButton } from "@/components/ui";
-import { RecruitCard } from "@/features/home/components";
+import { Chip, RoundButton, toast } from "@/components/ui";
+import { RecruitCard } from "@/components/RecruitCard";
 import { AiRecommendCard } from "./AiRecommendCard";
 import { CampusSelector, CAMPUSES } from "./CampusSelector";
 
@@ -20,6 +20,7 @@ const MOCK_POSTS = [
     dormitory: "3 기숙사",
     roomType: "2인 1실",
     tags: ["비흡연"],
+    matchRate: 92,
     timeAgo: "3분 전",
   },
   {
@@ -32,6 +33,7 @@ const MOCK_POSTS = [
     dormitory: "3 기숙사",
     roomType: "2인 1실",
     tags: ["비흡연"],
+    matchRate: 78,
     timeAgo: "3분 전",
   },
   {
@@ -44,6 +46,7 @@ const MOCK_POSTS = [
     dormitory: "3 기숙사",
     roomType: "2인 1실",
     tags: ["비흡연"],
+    matchRate: 65,
     timeAgo: "3분 전",
   },
 ];
@@ -73,13 +76,25 @@ function BoardPageContent({
           <CampusSelector value={selectedCampus} onChange={setSelectedCampus} />
           <div className="scrollbar-none -mx-400 flex gap-[6px] overflow-x-auto px-400">
             <Chip
+              variant="neutral-primary"
+              selected={roomFilter === "전체"}
+              onSelectedChange={() => setRoomFilter("전체")}
+            >
+              전체
+            </Chip>
+            <Chip
               variant="neutral"
               selected={aiRecommend}
-              onSelectedChange={setAiRecommend}
+              onSelectedChange={(selected) => {
+                setAiRecommend(selected);
+                if (selected) {
+                  toast.success("AI 추천순으로 정렬했어요");
+                }
+              }}
             >
               AI 추천글
             </Chip>
-            {ROOM_FILTERS.map((filter) => (
+            {ROOM_FILTERS.filter((f) => f !== "전체").map((filter) => (
               <Chip
                 key={filter}
                 variant="neutral-primary"
@@ -106,6 +121,7 @@ function BoardPageContent({
               dormitory={post.dormitory}
               roomType={post.roomType}
               tags={post.tags}
+              matchRate={aiRecommend ? post.matchRate : undefined}
               timeAgo={post.timeAgo}
               onClick={() => onPostClick?.(post.id)}
             />
