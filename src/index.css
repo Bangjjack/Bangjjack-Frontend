@@ -255,7 +255,7 @@ select:focus {
 @utility typo-title1 {
   font-size: var(--title1-size);
   line-height: var(--title1-line-height);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing);
 }
 
