@@ -5,3 +5,4 @@ export { HabitList, type Habit } from "./HabitList";
 export { MatchAlertDialog, type MatchAlertDialogProps } from "./MatchAlertDialog";
 export { PostDetailContent } from "./PostDetailContent";
 export { RoommateList, type Member } from "./RoommateList";
+export { RoommateListContent } from "./RoommateListContent";

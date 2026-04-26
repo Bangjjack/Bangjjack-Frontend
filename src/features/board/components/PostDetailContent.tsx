@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
@@ -62,6 +62,7 @@ const MOCK_POST = {
 };
 
 function PostDetailContent() {
+  const { id } = useParams();
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -134,7 +135,10 @@ function PostDetailContent() {
           </Card>
 
           {/* Card 4 - 룸메이트 목록 */}
-          <Card className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
+          <Card
+            className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none cursor-pointer"
+            onClick={() => navigate(`/board/${id}/roommates`)}
+          >
             <div className="flex flex-col gap-100">
               <h3 className="typo-title1 text-text-strong">룸메이트 목록</h3>
               <span className="typo-caption2 text-text-caption">
