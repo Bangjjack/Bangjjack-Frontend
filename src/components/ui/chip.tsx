@@ -62,6 +62,7 @@ const chipVariants = cva(
         multi: "",
         rank: "",
         neutral: "",
+        "neutral-primary": "",
       },
       selected: {
         true: "",
@@ -109,6 +110,16 @@ const chipVariants = cva(
         variant: "neutral",
         selected: true,
         class: "border border-transparent bg-text-label text-text-on-primary",
+      },
+      {
+        variant: "neutral-primary",
+        selected: false,
+        class: "border border-border-normal bg-bg-secondary text-text-alternative",
+      },
+      {
+        variant: "neutral-primary",
+        selected: true,
+        class: "border border-brand-primary bg-brand-primary-light text-brand-primary-dark",
       },
     ],
     defaultVariants: {

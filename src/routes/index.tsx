@@ -5,7 +5,7 @@ import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
-import RoomPage from "@/pages/RoomPage";
+import BoardPage from "@/pages/BoardPage";
 import LoginPage from "@/pages/LoginPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
 
@@ -23,8 +23,8 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "room",
-        element: <RoomPage />,
+        path: "board",
+        element: <BoardPage />,
       },
       {
         path: "chat",
