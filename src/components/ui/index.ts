@@ -23,6 +23,7 @@ export type { ChipProps } from "@/components/ui/chip";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
 export { Toaster, toast } from "@/components/ui/sonner";
+export { Separator } from "@/components/ui/separator";
 export { Tag } from "@/components/ui/tag";
 export type { TagProps } from "@/components/ui/tag";
 export { RoundButton } from "@/components/ui/round-button";
@@ -39,10 +40,5 @@ export {
 export { ProfileAvatar } from "@/components/ui/profile-avatar";
 export type { ProfileAvatarProps } from "@/components/ui/profile-avatar";
 export { Avatar, AvatarFallback } from "@/components/ui/avatar";
-export {
-  Dropdown,
-  DropdownTrigger,
-  DropdownContent,
-  DropdownItem,
-} from "@/components/ui/dropdown";
+export { Dropdown, DropdownTrigger, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 export type { DropdownProps } from "@/components/ui/dropdown";
