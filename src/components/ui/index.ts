@@ -39,3 +39,10 @@ export {
 export { ProfileAvatar } from "@/components/ui/profile-avatar";
 export type { ProfileAvatarProps } from "@/components/ui/profile-avatar";
 export { Avatar, AvatarFallback } from "@/components/ui/avatar";
+export {
+  Dropdown,
+  DropdownTrigger,
+  DropdownContent,
+  DropdownItem,
+} from "@/components/ui/dropdown";
+export type { DropdownProps } from "@/components/ui/dropdown";
