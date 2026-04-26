@@ -72,8 +72,7 @@ function DropdownTrigger({
       className={cn(
         !children &&
           "flex w-full items-center gap-2.5 rounded-small border-[1.5px] bg-bg-secondary px-300 py-200 text-left outline-none transition-colors cursor-pointer",
-        !children &&
-          (open ? "border-border-focus-primary" : "border-border-normal"),
+        !children && (open ? "border-border-focus-primary" : "border-border-normal"),
         !children && "focus-visible:border-border-focus-primary",
         "cursor-pointer",
         className,
@@ -112,7 +111,7 @@ function DropdownContent({ className, children, ...props }: React.ComponentProps
     <div
       data-slot="dropdown-content"
       className={cn(
-        "animate-dropdown-panel absolute left-0 right-0 top-[calc(100%+4px)] z-10 flex max-h-72 flex-col gap-300 overflow-y-auto rounded-medium bg-bg-secondary py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]",
+        "animate-dropdown-panel absolute left-0 right-0 top-[calc(100%+4px)] z-10 flex max-h-72 flex-col gap-100 overflow-y-auto rounded-medium bg-bg-secondary px-100 py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]",
         className,
       )}
       {...props}
@@ -142,7 +141,7 @@ function DropdownItem({
         setOpen(false);
       }}
       className={cn(
-        "w-full rounded-medium px-300 py-100 text-left typo-body1 cursor-pointer transition-colors",
+        "w-full rounded-medium px-[10px] py-200 text-left typo-body1 cursor-pointer transition-colors",
         isSelected
           ? "font-bold text-brand-primary hover:bg-brand-primary-light/50"
           : "font-medium text-text-strong hover:bg-neutral-100",
