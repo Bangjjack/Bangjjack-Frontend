@@ -17,3 +17,4 @@ export { default as PuzzleIcon } from "@/assets/icons/ic-puzzle.svg?react";
 export { default as MoreVerticalIcon } from "@/assets/icons/ic-more-vertical.svg?react";
 export { default as LogoLoginIcon } from "@/assets/icons/logo-login.svg?react";
 export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.svg?react";
+export { default as ChevonRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
