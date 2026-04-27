@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { Button, ProfileAvatar } from "@/components/ui";
 import {
-  MY_ACTIVITY_ACTIVE_TAB_ID,
   MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID,
+  MY_ACTIVITY_ACTIVE_TAB_ID,
+  MY_ACTIVITY_MATCHES,
   MY_ACTIVITY_ROOM_FILTERS,
   MY_ACTIVITY_ROOMS,
   MY_ACTIVITY_TABS,
@@ -13,6 +14,7 @@ import {
 import { cn } from "@/lib/cn";
 
 import type {
+  MyActivityMatchMock,
   MyActivityRoomFilterId,
   MyActivityRoomMock,
   MyActivityTabId,
@@ -43,7 +45,7 @@ function MyActivityContent({ className }: MyActivityContentProps) {
             <button
               key={tab.id}
               className={cn(
-                "typo-title3 min-w-0 border-b py-2.5 text-center cursor-pointer",
+                "typo-title3 min-w-0 cursor-pointer border-b py-2.5 text-center",
                 isActive
                   ? "border-b-2 border-brand-primary text-brand-primary"
                   : "border-border-normal text-text-placeholder",
@@ -59,7 +61,7 @@ function MyActivityContent({ className }: MyActivityContentProps) {
 
       {activeTabId === "posts" ? <MyRecruitPostList /> : null}
       {activeTabId === "rooms" ? <MyActivityRoomList /> : null}
-      {activeTabId === "matches" ? <MyActivityMatchEmptyState /> : null}
+      {activeTabId === "matches" ? <MyActivityMatchList /> : null}
     </section>
   );
 }
@@ -110,15 +112,7 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
 
       <div className="grid grid-cols-2 gap-200">
         {post.actions.map((action) => (
-          <Button
-            key={action.id}
-            className="h-9 py-200 cursor-pointer"
-            size="sm"
-            type="button"
-            variant={getActionButtonVariant(action.tone)}
-          >
-            {action.label}
-          </Button>
+          <ActivityButton key={action.id} label={action.label} tone={action.tone} />
         ))}
       </div>
     </article>
@@ -197,15 +191,7 @@ function MyActivityRoomCard({ room }: { room: MyActivityRoomMock }) {
 
       <div className="grid grid-cols-2 gap-200">
         {room.actions.map((action) => (
-          <Button
-            key={action.id}
-            className="h-9 cursor-pointer py-200"
-            size="sm"
-            type="button"
-            variant={getActionButtonVariant(action.tone)}
-          >
-            {action.label}
-          </Button>
+          <ActivityButton key={action.id} label={action.label} tone={action.tone} />
         ))}
       </div>
     </article>
@@ -229,6 +215,58 @@ function RoomMemberList({ members }: { members: NonNullable<MyActivityRoomMock["
         </div>
       ))}
     </div>
+  );
+}
+
+function MyActivityMatchList() {
+  if (MY_ACTIVITY_MATCHES.length === 0) {
+    return <MyActivityMatchEmptyState />;
+  }
+
+  return (
+    <div className="flex flex-col gap-400">
+      <h2 className="typo-title2 text-text-normal">매칭된 룸메이트</h2>
+      <div className="flex flex-col gap-400">
+        {MY_ACTIVITY_MATCHES.map((match) => (
+          <MyActivityMatchCard key={match.id} match={match} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function MyActivityMatchCard({ match }: { match: MyActivityMatchMock }) {
+  return (
+    <article className="flex flex-col gap-2.5 rounded-2xl border border-border-normal p-400">
+      <div className="flex items-center justify-between gap-300">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <ProfileAvatar seed={match.name.length} size={40} />
+          <div className="flex min-w-0 flex-col gap-100">
+            <h3 className="typo-title4 text-text-normal">{match.name}</h3>
+            <p className="typo-label3 text-text-caption">
+              {match.age}살 · {match.department}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex shrink-0 flex-col items-end">
+          <span className="typo-title1 text-text-primary-alternative">{match.matchRate}%</span>
+          <span className="typo-label2 text-text-disabled">매칭률</span>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-2.5">
+        {match.tags.map((tag) => (
+          <ActivityTag key={tag}>{tag}</ActivityTag>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-2 gap-200">
+        {match.actions.map((action) => (
+          <ActivityButton key={action.id} label={action.label} tone={action.tone} />
+        ))}
+      </div>
+    </article>
   );
 }
 
@@ -264,6 +302,25 @@ function ActivityStat({ label, value }: { label: string; value: string }) {
       <span className="typo-label2 text-text-placeholder">{label}</span>
       <span className="typo-title3 text-text-strong">{value}</span>
     </div>
+  );
+}
+
+function ActivityButton({
+  label,
+  tone,
+}: {
+  label: string;
+  tone: MyRecruitPostActionTone;
+}) {
+  return (
+    <Button
+      className="h-9 cursor-pointer py-200"
+      size="sm"
+      type="button"
+      variant={getActionButtonVariant(tone)}
+    >
+      {label}
+    </Button>
   );
 }
 

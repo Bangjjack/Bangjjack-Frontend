@@ -5,11 +5,12 @@ import { useMemo } from "react";
 
 const PROFILE_ICONS = [ProfileMintIcon, ProfileOrangeIcon] as const;
 
-type ProfileAvatarSize = 24 | 36 | 48 | 70 | 100;
+type ProfileAvatarSize = 24 | 36 | 40 | 48 | 70 | 100;
 
 const SIZE_CLASS: Record<ProfileAvatarSize, string> = {
   24: "size-[24px]",
   36: "size-[36px]",
+  40: "size-10",
   48: "size-[48px]",
   70: "size-[70px]",
   100: "size-[100px]",

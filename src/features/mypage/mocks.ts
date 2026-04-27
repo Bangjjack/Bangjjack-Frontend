@@ -7,6 +7,16 @@ export type MyActivityRoomStatus = "joined" | "pending";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
 
+export interface MyActivityMatchMock {
+  actions: MyRecruitPostActionMock[];
+  age: number;
+  department: string;
+  id: number;
+  matchRate: number;
+  name: string;
+  tags: string[];
+}
+
 export interface MyActivityTabMock {
   id: MyActivityTabId;
   label: string;
@@ -121,6 +131,21 @@ export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
     statusLabel: "대기중",
     title: "조용한 룸메 구합니다",
     waitingMessage: "방장의 수락을 기다리고 있어요",
+  },
+];
+
+export const MY_ACTIVITY_MATCHES: MyActivityMatchMock[] = [
+  {
+    actions: [
+      { id: "profile", label: "프로필 보기", tone: "neutral" },
+      { id: "chat", label: "채팅하기", tone: "primary" },
+    ],
+    age: 23,
+    department: "컴퓨터공학과",
+    id: 1,
+    matchRate: 92,
+    name: "이나연",
+    tags: ["아침형", "조용한 편", "비흡연"],
   },
 ];
 
