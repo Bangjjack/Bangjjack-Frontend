@@ -7,6 +7,7 @@ import { cn } from "@/lib/cn";
 export interface MyPageContentProps {
   className?: string;
   onActivityClick?: () => void;
+  onBookmarkClick?: () => void;
   onChecklistClick?: () => void;
   onProfileClick?: () => void;
 }
@@ -14,6 +15,7 @@ export interface MyPageContentProps {
 function MyPageContent({
   className,
   onActivityClick,
+  onBookmarkClick,
   onChecklistClick,
   onProfileClick,
 }: MyPageContentProps) {
@@ -25,7 +27,11 @@ function MyPageContent({
         name={MY_PROFILE.name}
         onClick={onProfileClick}
       />
-      <MyPageActionCard onActivityClick={onActivityClick} onChecklistClick={onChecklistClick} />
+      <MyPageActionCard
+        onActivityClick={onActivityClick}
+        onBookmarkClick={onBookmarkClick}
+        onChecklistClick={onChecklistClick}
+      />
       <MyPageMenuSection />
     </div>
   );

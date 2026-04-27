@@ -13,13 +13,23 @@ interface MyPageAction {
 
 export interface MyPageActionCardProps {
   onActivityClick?: () => void;
+  onBookmarkClick?: () => void;
   onChecklistClick?: () => void;
 }
 
-function MyPageActionCard({ onActivityClick, onChecklistClick }: MyPageActionCardProps) {
+function MyPageActionCard({
+  onActivityClick,
+  onBookmarkClick,
+  onChecklistClick,
+}: MyPageActionCardProps) {
   const actions: MyPageAction[] = [
     { icon: SquarePen, label: "내 체크리스트", onClick: onChecklistClick },
-    { icon: Bookmark, iconClassName: "fill-current", label: "북마크한 글" },
+    {
+      icon: Bookmark,
+      iconClassName: "fill-current",
+      label: "북마크한 글",
+      onClick: onBookmarkClick,
+    },
     { icon: Puzzle, label: "나의 활동", onClick: onActivityClick },
   ];
 

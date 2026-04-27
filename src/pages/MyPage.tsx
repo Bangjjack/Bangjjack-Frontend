@@ -8,6 +8,7 @@ export default function MyPage() {
   return (
     <MyPageContent
       onActivityClick={() => navigate("/mypage/activity")}
+      onBookmarkClick={() => navigate("/mypage/bookmarks")}
       onChecklistClick={() => navigate("/mypage/checklist")}
       onProfileClick={() => navigate("/mypage/profile")}
     />

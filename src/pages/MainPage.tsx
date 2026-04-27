@@ -33,6 +33,11 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
     icon: "mypage",
     path: "/mypage",
   },
+  "/mypage/bookmarks": {
+    header: { showBack: true, title: "마이페이지", variant: "title" },
+    icon: "mypage",
+    path: "/mypage",
+  },
   "/mypage/checklist": {
     header: { variant: "none" },
     icon: "mypage",
