@@ -2,12 +2,43 @@ import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
 export type MyChecklistSelectionType = "single" | "multi";
 export type MyActivityTabId = "posts" | "rooms" | "matches";
+export type MyActivityRoomFilterId = "all" | "pending";
+export type MyActivityRoomStatus = "joined" | "pending";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
 
 export interface MyActivityTabMock {
   id: MyActivityTabId;
   label: string;
+}
+
+export interface MyActivityRoomFilterMock {
+  id: MyActivityRoomFilterId;
+  label: string;
+}
+
+export interface MyActivityRoomMemberMock {
+  id: number;
+  isHost?: boolean;
+  name: string;
+}
+
+export interface MyActivityRoomActionMock {
+  id: string;
+  label: string;
+  tone: MyRecruitPostActionTone;
+}
+
+export interface MyActivityRoomMock {
+  actions: MyActivityRoomActionMock[];
+  dormitory: string;
+  id: number;
+  members?: MyActivityRoomMemberMock[];
+  roomType: string;
+  status: MyActivityRoomStatus;
+  statusLabel: string;
+  title: string;
+  waitingMessage?: string;
 }
 
 export interface MyChecklistSectionMock {
@@ -51,6 +82,46 @@ export const MY_ACTIVITY_TABS: MyActivityTabMock[] = [
   { id: "posts", label: "내가 쓴 모집글" },
   { id: "rooms", label: "소속된 방" },
   { id: "matches", label: "1:1 매칭" },
+];
+
+export const MY_ACTIVITY_ROOM_FILTERS: MyActivityRoomFilterMock[] = [
+  { id: "all", label: "전체" },
+  { id: "pending", label: "대기중" },
+];
+
+export const MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID: MyActivityRoomFilterId = "all";
+
+export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
+  {
+    actions: [
+      { id: "detail", label: "방 상세 보기", tone: "neutral" },
+      { id: "leave", label: "방 나가기", tone: "primary" },
+    ],
+    dormitory: "1 기숙사",
+    id: 1,
+    members: [
+      { id: 1, isHost: true, name: "최다인" },
+      { id: 2, name: "김지수 (나)" },
+      { id: 3, name: "박서연" },
+    ],
+    roomType: "3인 1실",
+    status: "joined",
+    statusLabel: "3 / 3",
+    title: "컴공 4학년 룸메 구해요",
+  },
+  {
+    actions: [
+      { id: "post", label: "모집글 보기", tone: "neutral" },
+      { id: "cancel", label: "신청 취소", tone: "primary" },
+    ],
+    dormitory: "1 기숙사",
+    id: 2,
+    roomType: "3인 1실",
+    status: "pending",
+    statusLabel: "대기중",
+    title: "조용한 룸메 구합니다",
+    waitingMessage: "방장의 수락을 기다리고 있어요",
+  },
 ];
 
 export const MY_RECRUIT_POST_EMPTY_MESSAGE = [
