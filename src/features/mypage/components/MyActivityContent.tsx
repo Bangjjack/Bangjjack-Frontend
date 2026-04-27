@@ -2,6 +2,7 @@ import { Button } from "@/components/ui";
 import {
   MY_ACTIVITY_ACTIVE_TAB_ID,
   MY_ACTIVITY_TABS,
+  MY_RECRUIT_POST_EMPTY_MESSAGE,
   MY_RECRUIT_POSTS,
 } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
@@ -45,11 +46,15 @@ function MyActivityContent({ className }: MyActivityContentProps) {
         })}
       </div>
 
-      <div className="flex flex-col gap-400">
-        {MY_RECRUIT_POSTS.map((post) => (
-          <MyRecruitPostCard key={post.id} post={post} />
-        ))}
-      </div>
+      {MY_RECRUIT_POSTS.length > 0 ? (
+        <div className="flex flex-col gap-400">
+          {MY_RECRUIT_POSTS.map((post) => (
+            <MyRecruitPostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <MyRecruitPostEmptyState />
+      )}
     </section>
   );
 }
@@ -98,6 +103,16 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
         ))}
       </div>
     </article>
+  );
+}
+
+function MyRecruitPostEmptyState() {
+  return (
+    <div className="flex w-full flex-col items-center justify-center rounded-2xl p-400">
+      <p className="typo-caption1 whitespace-pre-line text-center text-text-disabled">
+        {MY_RECRUIT_POST_EMPTY_MESSAGE.join("\n")}
+      </p>
+    </div>
   );
 }
 

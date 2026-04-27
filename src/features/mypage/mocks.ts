@@ -53,6 +53,11 @@ export const MY_ACTIVITY_TABS: MyActivityTabMock[] = [
   { id: "matches", label: "1:1 매칭" },
 ];
 
+export const MY_RECRUIT_POST_EMPTY_MESSAGE = [
+  "아직 작성된 글이 없어요",
+  "먼저 내 룸메이트를 모집해봐요!",
+];
+
 export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
   {
     actions: [
