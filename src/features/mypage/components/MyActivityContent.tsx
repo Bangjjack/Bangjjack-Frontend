@@ -3,13 +3,13 @@ import {
   MY_ACTIVITY_ACTIVE_TAB_ID,
   MY_ACTIVITY_TABS,
   MY_RECRUIT_POSTS,
-} from "@/features/mypage/mocks/activity";
+} from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 
 import type {
   MyRecruitPostActionTone,
   MyRecruitPostMock,
-} from "@/features/mypage/mocks/activity";
+} from "@/features/mypage/mocks";
 import type { ButtonProps } from "@/components/ui";
 
 export interface MyActivityContentProps {
