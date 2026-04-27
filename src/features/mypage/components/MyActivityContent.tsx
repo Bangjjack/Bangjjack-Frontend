@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/cn";
 
 import type {
+  MyActivityRoomFilterId,
   MyActivityRoomMock,
   MyActivityTabId,
   MyRecruitPostActionTone,
@@ -125,11 +126,19 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
 }
 
 function MyActivityRoomList() {
+  const [activeFilterId, setActiveFilterId] = useState<MyActivityRoomFilterId>(
+    MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID,
+  );
+  const filteredRooms =
+    activeFilterId === "pending"
+      ? MY_ACTIVITY_ROOMS.filter((room) => room.status === "pending")
+      : MY_ACTIVITY_ROOMS;
+
   return (
     <div className="flex flex-col gap-400">
       <div className="flex flex-wrap gap-200">
         {MY_ACTIVITY_ROOM_FILTERS.map((filter) => {
-          const isActive = filter.id === MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID;
+          const isActive = filter.id === activeFilterId;
 
           return (
             <button
@@ -140,6 +149,7 @@ function MyActivityRoomList() {
                   ? "border border-brand-primary bg-brand-primary-light text-text-primary-normal"
                   : "bg-bg-input text-text-alternative",
               )}
+              onClick={() => setActiveFilterId(filter.id)}
               type="button"
             >
               {filter.label}
@@ -149,7 +159,7 @@ function MyActivityRoomList() {
       </div>
 
       <div className="flex flex-col gap-400">
-        {MY_ACTIVITY_ROOMS.map((room) => (
+        {filteredRooms.map((room) => (
           <MyActivityRoomCard key={room.id} room={room} />
         ))}
       </div>
