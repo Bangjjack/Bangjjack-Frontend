@@ -1,7 +1,7 @@
 export { MyPageContent } from "@/features/mypage/components/MyPageContent";
 export type { MyPageContentProps } from "@/features/mypage/components/MyPageContent";
-export { MyChecklistContent } from "@/features/mypage/components/MyChecklistContent";
-export type { MyChecklistContentProps } from "@/features/mypage/components/MyChecklistContent";
+export { MyChecklistContent } from "@/features/mypage/components/checklist/MyChecklistContent";
+export type { MyChecklistContentProps } from "@/features/mypage/components/checklist/MyChecklistContent";
 export { MyActivityContent } from "@/features/mypage/components/MyActivityContent";
 export type { MyActivityContentProps } from "@/features/mypage/components/MyActivityContent";
 export { MyProfileEditContent } from "@/features/mypage/components/MyProfileEditContent";

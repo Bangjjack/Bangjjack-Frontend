@@ -1,7 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 
 import { Button } from "@/components/ui";
-import { MyChecklistChipSection } from "@/features/mypage/components/MyChecklistChipSection";
+import { MyChecklistChipSection } from "@/features/mypage/components/checklist/MyChecklistChipSection";
 import { useMyChecklistEditor } from "@/features/mypage/hooks/useMyChecklistEditor";
 import { cn } from "@/lib/cn";
 
@@ -19,7 +19,7 @@ function MyChecklistContent({ className, onBack }: MyChecklistContentProps) {
       <header className="flex h-18.5 items-center justify-between px-400 pb-400 pt-9">
         <button
           aria-label="뒤로가기"
-          className="flex items-center gap-2.5 text-icon-strong cursor-pointer"
+          className="flex cursor-pointer items-center gap-2.5 text-icon-strong"
           onClick={onBack}
           type="button"
         >
@@ -28,7 +28,7 @@ function MyChecklistContent({ className, onBack }: MyChecklistContentProps) {
         </button>
 
         <Button
-          className="h-11 rounded-medium px-400 py-2.5 typo-button1 cursor-pointer"
+          className="h-11 cursor-pointer rounded-medium px-400 py-2.5 typo-button1"
           onClick={handleEditButtonClick}
           type="button"
           variant={isEditing ? "black" : "default"}
