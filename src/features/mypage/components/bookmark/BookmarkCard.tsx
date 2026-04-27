@@ -1,4 +1,6 @@
-import { BookmarkFillIcon } from "@/assets/icons";
+import { useState } from "react";
+
+import { BookmarkFillIcon, BookmarkIcon } from "@/assets/icons";
 import { BookmarkPostStatusBadge } from "@/features/mypage/components/bookmark/BookmarkPostStatusBadge";
 import { cn } from "@/lib/cn";
 
@@ -10,6 +12,9 @@ type BookmarkCardProps = {
 };
 
 function BookmarkCard({ className, post }: BookmarkCardProps) {
+  const [isBookmarked, setIsBookmarked] = useState(true);
+  const BookmarkToggleIcon = isBookmarked ? BookmarkFillIcon : BookmarkIcon;
+
   return (
     <article
       className={cn(
@@ -30,7 +35,14 @@ function BookmarkCard({ className, post }: BookmarkCardProps) {
 
       <div className="flex shrink-0 items-center justify-end gap-2.5">
         <BookmarkPostStatusBadge status={post.status} statusLabel={post.statusLabel} />
-        <BookmarkFillIcon aria-hidden="true" className="size-6 shrink-0 text-brand-primary cursor-pointer" />
+        <button
+          aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
+          className="flex size-6 shrink-0 cursor-pointer items-center justify-center text-brand-primary"
+          onClick={() => setIsBookmarked((current) => !current)}
+          type="button"
+        >
+          <BookmarkToggleIcon aria-hidden="true" className="size-6" />
+        </button>
       </div>
     </article>
   );

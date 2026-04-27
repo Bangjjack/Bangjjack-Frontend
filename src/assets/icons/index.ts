@@ -5,6 +5,7 @@ export { default as CircleCheckIcon } from "@/assets/icons/ic-circle-check.svg?r
 export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
 export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
+export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
 export { default as BookmarkFillIcon } from "@/assets/icons/ic-bookmark-fill.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
