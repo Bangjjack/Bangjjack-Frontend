@@ -1,16 +1,29 @@
 import { ChevronRight } from "lucide-react";
 
-import { Card } from "@/components/ui";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+  Card,
+  toast,
+} from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 interface MyPageMenuItem {
   danger?: boolean;
   label: string;
+  type: "logout" | "withdraw";
 }
 
 const MENU_ITEMS: MyPageMenuItem[] = [
-  { label: "로그아웃" },
-  { danger: true, label: "회원 탈퇴" },
+  { label: "로그아웃", type: "logout" },
+  { danger: true, label: "회원 탈퇴", type: "withdraw" },
 ];
 
 function MyPageMenuSection() {
@@ -20,28 +33,64 @@ function MyPageMenuSection() {
 
       <Card className="w-full gap-0 overflow-hidden rounded-2xl border-0 bg-bg-secondary p-0 py-0 shadow-none">
         {MENU_ITEMS.map((item, index) => (
-          <button
-            key={item.label}
-            className="relative flex w-full cursor-pointer items-center justify-between p-400 text-left"
-            type="button"
-          >
-            <span
-              className={cn("typo-button2", item.danger ? "text-state-error" : "text-text-normal")}
-            >
-              {item.label}
-            </span>
-            <ChevronRight aria-hidden="true" className="size-600 shrink-0 text-icon-alternative" />
-            {index < MENU_ITEMS.length - 1 ? (
-              <span
-                aria-hidden="true"
-                className="absolute bottom-0 left-400 right-400 h-px bg-border-normal"
-              />
-            ) : null}
-          </button>
+          <MyPageMenuButton key={item.label} index={index} item={item} />
         ))}
       </Card>
     </section>
   );
+}
+
+function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem }) {
+  const button = (
+    <button
+      className="relative flex w-full cursor-pointer items-center justify-between p-400 text-left"
+      type="button"
+    >
+      <span className={cn("typo-button2", item.danger ? "text-state-error" : "text-text-normal")}>
+        {item.label}
+      </span>
+      <ChevronRight aria-hidden="true" className="size-600 shrink-0 text-icon-alternative" />
+      {index < MENU_ITEMS.length - 1 ? (
+        <span
+          aria-hidden="true"
+          className="absolute bottom-0 left-400 right-400 h-px bg-border-normal"
+        />
+      ) : null}
+    </button>
+  );
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>{button}</AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>{getDialogTitle(item.type)}</AlertDialogTitle>
+          <AlertDialogDescription>{getDialogDescription(item.type)}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="cursor-pointer">취소</AlertDialogCancel>
+          <AlertDialogAction
+            className={cn("cursor-pointer", item.danger && "bg-state-error text-text-on-primary")}
+            onClick={() => {
+              if (item.type === "logout") {
+                toast.success("로그아웃되었습니다");
+              }
+            }}
+          >
+            {item.label}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+function getDialogTitle(type: MyPageMenuItem["type"]) {
+  return type === "logout" ? "방짝에서 로그아웃하시겠어요?" : "정말 탈퇴하시겠습니까?";
+}
+
+function getDialogDescription(type: MyPageMenuItem["type"]) {
+  return type === "logout" ? "다시 이용하려면 로그인이 필요해요." : "탈퇴 후에는 되돌릴 수 없어요.";
 }
 
 export { MyPageMenuSection };
