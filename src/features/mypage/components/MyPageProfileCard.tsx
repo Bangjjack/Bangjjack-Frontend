@@ -6,11 +6,25 @@ export interface MyPageProfileCardProps {
   age: number;
   department: string;
   name: string;
+  onClick?: () => void;
 }
 
-function MyPageProfileCard({ age, department, name }: MyPageProfileCardProps) {
+function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCardProps) {
   return (
-    <Card className="w-full flex-row items-center justify-between gap-0 rounded-2xl border-0 bg-bg-secondary p-400 py-400 shadow-none">
+    <Card
+      className="w-full flex-row items-center justify-between gap-0 rounded-2xl border-0 bg-bg-secondary p-400 py-400 shadow-none cursor-pointer"
+      onClick={onClick}
+      onKeyDown={(event) => {
+        if (!onClick || (event.key !== "Enter" && event.key !== " ")) {
+          return;
+        }
+
+        event.preventDefault();
+        onClick();
+      }}
+      role={onClick ? "button" : undefined}
+      tabIndex={onClick ? 0 : undefined}
+    >
       <div className="flex min-w-0 items-center gap-300">
         <ProfileAvatar seed={name.length} size={48} />
 
@@ -24,13 +38,12 @@ function MyPageProfileCard({ age, department, name }: MyPageProfileCardProps) {
         </div>
       </div>
 
-      <button
-        aria-label="프로필 상세 보기"
-        className="flex size-600 shrink-0 cursor-pointer items-center justify-center text-icon-alternative"
-        type="button"
+      <div
+        aria-hidden="true"
+        className="flex size-600 shrink-0 items-center justify-center text-icon-alternative"
       >
         <ChevronRight aria-hidden="true" className="size-600 stroke-2" />
-      </button>
+      </div>
     </Card>
   );
 }

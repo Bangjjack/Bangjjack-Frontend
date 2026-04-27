@@ -8,6 +8,8 @@ type RouteConfig = {
   header: Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">;
   icon: BottomNavIcon;
   path: string;
+  fullBleed?: boolean;
+  showBottomNav?: boolean;
 };
 
 const ROUTE_CONFIG: Record<string, RouteConfig> = {
@@ -30,6 +32,13 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
     header: { variant: "none" },
     icon: "mypage",
     path: "/mypage",
+  },
+  "/mypage/profile": {
+    fullBleed: true,
+    header: { variant: "none" },
+    icon: "mypage",
+    path: "/mypage",
+    showBottomNav: false,
   },
   "/room": {
     header: { title: "방 찾기", variant: "title" },
@@ -59,14 +68,22 @@ export default function MainPage() {
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
-      <main className="min-h-0 flex-1 overflow-hidden px-400">
-        <div className="scrollbar-none h-full overflow-y-auto pb-28.25">
+      <main className={routeConfig.fullBleed ? "min-h-0 flex-1 overflow-hidden" : "min-h-0 flex-1 overflow-hidden px-400"}>
+        <div
+          className={
+            routeConfig.showBottomNav === false
+              ? "scrollbar-none h-full overflow-y-auto"
+              : "scrollbar-none h-full overflow-y-auto pb-28.25"
+          }
+        >
           <Outlet />
         </div>
       </main>
-      <div className="absolute bottom-0 left-0 right-0 z-40 p-400">
-        <BottomNav activeIcon={routeConfig.icon} items={BOTTOM_NAV_ITEMS} />
-      </div>
+      {routeConfig.showBottomNav === false ? null : (
+        <div className="absolute bottom-0 left-0 right-0 z-40 p-400">
+          <BottomNav activeIcon={routeConfig.icon} items={BOTTOM_NAV_ITEMS} />
+        </div>
+      )}
     </div>
   );
 }

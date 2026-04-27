@@ -5,5 +5,10 @@ import { MyPageContent } from "@/features/mypage";
 export default function MyPage() {
   const navigate = useNavigate();
 
-  return <MyPageContent onChecklistClick={() => navigate("/mypage/checklist")} />;
+  return (
+    <MyPageContent
+      onChecklistClick={() => navigate("/mypage/checklist")}
+      onProfileClick={() => navigate("/mypage/profile")}
+    />
+  );
 }

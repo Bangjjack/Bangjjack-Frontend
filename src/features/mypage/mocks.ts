@@ -1,3 +1,5 @@
+import type { ChecklistEntry } from "@/features/roommate/types/checklist";
+
 export type MyChecklistSelectionType = "single" | "multi";
 
 export interface MyChecklistSectionMock {
@@ -10,6 +12,25 @@ export interface MyChecklistSectionMock {
 }
 
 export const MY_CHECKLIST_LAST_UPDATED = "2026.03.25";
+
+export const MY_PROFILE = {
+  age: 20,
+  department: "컴퓨터공학과",
+  name: "무구정광대다라니경",
+  tags: ["얼리버드", "집순이", "비흡연"],
+};
+
+export const MY_PROFILE_IMPORTANCE_ITEMS = ["기상 시간", "흡연 여부", "취침 시간"];
+
+export const MY_PROFILE_CHECKLIST = [
+  { id: "sleep-time", label: "취침 시간", value: "24~2시", isMatched: true },
+  { id: "wake-up-time", label: "기상 시간", value: "불규칙", isMatched: true },
+  { id: "cleaning-cycle", label: "청소 주기", value: "주 1~2회", isMatched: false },
+  { id: "sleeping-habit", label: "잠버릇", value: "없음", isMatched: false },
+  { id: "call-habit", label: "통화 습관", value: "소곤소곤", isMatched: true },
+  { id: "sleep-time-repeat-1", label: "취침 시간", value: "24~2시", isMatched: true },
+  { id: "sleep-time-repeat-2", label: "취침 시간", value: "24~2시", isMatched: true },
+] satisfies ChecklistEntry[];
 
 export const MY_CHECKLIST_SECTIONS: MyChecklistSectionMock[] = [
   {

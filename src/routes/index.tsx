@@ -5,6 +5,7 @@ import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import MyChecklistPage from "@/pages/MyChecklistPage";
+import MyProfileEditPage from "@/pages/MyProfileEditPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
 import RoomPage from "@/pages/RoomPage";
 import LoginPage from "@/pages/LoginPage";
@@ -38,6 +39,10 @@ export const routes: RouteObject[] = [
       {
         path: "mypage/checklist",
         element: <MyChecklistPage />,
+      },
+      {
+        path: "mypage/profile",
+        element: <MyProfileEditPage />,
       },
     ],
   },
