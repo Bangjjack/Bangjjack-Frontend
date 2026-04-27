@@ -6,10 +6,7 @@ export interface ChatRoommateInviteMessageProps {
   recipientName: string;
 }
 
-function ChatRoommateInviteMessage({
-  onCancel,
-  recipientName,
-}: ChatRoommateInviteMessageProps) {
+function ChatRoommateInviteMessage({ onCancel, recipientName }: ChatRoommateInviteMessageProps) {
   return (
     <div className="flex max-w-56.25 flex-col justify-center gap-300 overflow-hidden rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl border border-brand-primary bg-bg-secondary px-600 py-400">
       <div className="flex items-center gap-100 overflow-hidden">

@@ -62,9 +62,7 @@ function ChatRoommateConfirmedContent({
 
         <div className="flex flex-col items-center gap-2.5 text-center">
           <h1 className="typo-h4 text-neutral-black">룸메이트 확정!</h1>
-          <p className="typo-caption1 text-text-alternative">
-            {nickname}님과 룸메이트가 되었어요
-          </p>
+          <p className="typo-caption1 text-text-alternative">{nickname}님과 룸메이트가 되었어요</p>
         </div>
 
         <Card className="w-full flex-row items-center justify-between gap-0 rounded-2xl border-border-normal bg-bg-secondary p-400 py-400 shadow-none">
