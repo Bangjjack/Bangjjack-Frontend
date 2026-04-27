@@ -12,14 +12,15 @@ interface MyPageAction {
 }
 
 export interface MyPageActionCardProps {
+  onActivityClick?: () => void;
   onChecklistClick?: () => void;
 }
 
-function MyPageActionCard({ onChecklistClick }: MyPageActionCardProps) {
+function MyPageActionCard({ onActivityClick, onChecklistClick }: MyPageActionCardProps) {
   const actions: MyPageAction[] = [
     { icon: SquarePen, label: "내 체크리스트", onClick: onChecklistClick },
-    { icon: Bookmark, iconClassName: "fill-current", label: "북마크 한 글" },
-    { icon: Puzzle, label: "나의 활동" },
+    { icon: Bookmark, iconClassName: "fill-current", label: "북마크한 글" },
+    { icon: Puzzle, label: "나의 활동", onClick: onActivityClick },
   ];
 
   return (

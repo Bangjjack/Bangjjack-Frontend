@@ -4,6 +4,8 @@ export { MyPageActionCard } from "@/features/mypage/components/MyPageActionCard"
 export type { MyPageActionCardProps } from "@/features/mypage/components/MyPageActionCard";
 export { MyChecklistContent } from "@/features/mypage/components/MyChecklistContent";
 export type { MyChecklistContentProps } from "@/features/mypage/components/MyChecklistContent";
+export { MyActivityContent } from "@/features/mypage/components/MyActivityContent";
+export type { MyActivityContentProps } from "@/features/mypage/components/MyActivityContent";
 export { MyChecklistChipSection } from "@/features/mypage/components/MyChecklistChipSection";
 export type { MyChecklistChipSectionProps } from "@/features/mypage/components/MyChecklistChipSection";
 export { MyProfileEditContent } from "@/features/mypage/components/MyProfileEditContent";

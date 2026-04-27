@@ -28,6 +28,11 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
     icon: "mypage",
     path: "/mypage",
   },
+  "/mypage/activity": {
+    header: { showBack: true, title: "나의 활동", variant: "title" },
+    icon: "mypage",
+    path: "/mypage",
+  },
   "/mypage/checklist": {
     header: { variant: "none" },
     icon: "mypage",

@@ -2,6 +2,8 @@ export { MyPageContent } from "@/features/mypage/components/MyPageContent";
 export type { MyPageContentProps } from "@/features/mypage/components/MyPageContent";
 export { MyChecklistContent } from "@/features/mypage/components/MyChecklistContent";
 export type { MyChecklistContentProps } from "@/features/mypage/components/MyChecklistContent";
+export { MyActivityContent } from "@/features/mypage/components/MyActivityContent";
+export type { MyActivityContentProps } from "@/features/mypage/components/MyActivityContent";
 export { MyProfileEditContent } from "@/features/mypage/components/MyProfileEditContent";
 export type { MyProfileEditContentProps } from "@/features/mypage/components/MyProfileEditContent";
 export { MY_CHECKLIST_LAST_UPDATED, MY_CHECKLIST_SECTIONS } from "@/features/mypage/mocks";

@@ -6,11 +6,17 @@ import { cn } from "@/lib/cn";
 
 export interface MyPageContentProps {
   className?: string;
+  onActivityClick?: () => void;
   onChecklistClick?: () => void;
   onProfileClick?: () => void;
 }
 
-function MyPageContent({ className, onChecklistClick, onProfileClick }: MyPageContentProps) {
+function MyPageContent({
+  className,
+  onActivityClick,
+  onChecklistClick,
+  onProfileClick,
+}: MyPageContentProps) {
   return (
     <div className={cn("flex flex-col gap-400 pt-400", className)}>
       <MyPageProfileCard
@@ -19,7 +25,7 @@ function MyPageContent({ className, onChecklistClick, onProfileClick }: MyPageCo
         name={MY_PROFILE.name}
         onClick={onProfileClick}
       />
-      <MyPageActionCard onChecklistClick={onChecklistClick} />
+      <MyPageActionCard onActivityClick={onActivityClick} onChecklistClick={onChecklistClick} />
       <MyPageMenuSection />
     </div>
   );
