@@ -20,7 +20,7 @@ function MyActivityContent({ className }: MyActivityContentProps) {
   return (
     <section
       className={cn(
-        "flex flex-col gap-400 overflow-hidden rounded-5 border border-border-normal bg-bg-secondary p-400",
+        "flex flex-col gap-400 overflow-hidden rounded-[20px] border border-border-normal bg-bg-secondary p-400",
         className,
       )}
     >
@@ -32,7 +32,7 @@ function MyActivityContent({ className }: MyActivityContentProps) {
             <button
               key={tab.id}
               className={cn(
-                "typo-title3 min-w-0 border-b py-2.5 text-center",
+                "typo-title3 min-w-0 border-b py-2.5 text-center cursor-pointer",
                 isActive
                   ? "border-b-2 border-brand-primary text-brand-primary"
                   : "border-border-normal text-text-placeholder",
@@ -56,7 +56,7 @@ function MyActivityContent({ className }: MyActivityContentProps) {
 
 function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
   return (
-    <article className="flex flex-col gap-2.5 rounded-4 border border-border-normal p-400">
+    <article className="flex flex-col gap-2.5 rounded-2xl border border-border-normal p-400">
       <div className="flex items-start justify-between gap-300">
         <h2 className="typo-title3 min-w-0 flex-1 text-text-strong">{post.title}</h2>
         <span
@@ -88,7 +88,7 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
         {post.actions.map((action) => (
           <Button
             key={action.id}
-            className="h-9 py-200"
+            className="h-9 py-200 cursor-pointer"
             size="sm"
             type="button"
             variant={getActionButtonVariant(action.tone)}
@@ -111,7 +111,7 @@ function ActivityTag({ children }: { children: React.ReactNode }) {
 
 function ActivityStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col gap-200 rounded-4 bg-bg-primary p-2.5">
+    <div className="flex flex-col gap-200 rounded-2xl bg-bg-primary p-2.5">
       <span className="typo-label2 text-text-placeholder">{label}</span>
       <span className="typo-title3 text-text-strong">{value}</span>
     </div>
