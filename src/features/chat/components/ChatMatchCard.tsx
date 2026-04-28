@@ -1,49 +1,62 @@
 import { StarIcon } from "@/assets/icons";
 import { Button } from "@/components/ui";
+import { cn } from "@/lib/cn";
 
 export type ChatMatchCardProps = {
+  className?: string;
   matchRate: number;
   onProfileClick?: () => void;
   profileSummary: string[];
 };
 
-function ChatMatchCard({ matchRate, onProfileClick, profileSummary }: ChatMatchCardProps) {
+function ChatMatchCard({
+  className,
+  matchRate,
+  onProfileClick,
+  profileSummary,
+}: ChatMatchCardProps) {
   return (
-    <section className="overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-300 py-2.5">
-      <div className="flex w-full items-center justify-between">
-        <div className="flex min-w-px items-center gap-200">
-          <div className="flex items-center">
-            <StarIcon className="size-600 shrink-0 text-brand-primary [&_path]:stroke-current" />
+    <section
+      className={cn(
+        "w-full overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-500 py-3.5",
+        className,
+      )}
+    >
+      <div className="flex flex-col items-start justify-center gap-300">
+        <div className="flex w-full flex-col items-start gap-200">
+          <div className="flex w-full items-center justify-between gap-300">
+            <div className="flex min-w-0 items-center gap-100">
+              <span className="shrink-0 rounded-full bg-button-primary-ghost px-2.5 py-100 typo-label1 text-text-primary-alternative">
+                매칭률 {matchRate}%
+              </span>
+              <span className="min-w-0 truncate typo-label2 text-text-caption">
+                잘 맞는 룸메이트예요!
+              </span>
+            </div>
+
+            <StarIcon
+              aria-hidden="true"
+              className="size-600 shrink-0 text-brand-primary [&_path]:stroke-current"
+            />
           </div>
 
-          <div className="flex flex-col items-start justify-center gap-0.5">
-            <div className="flex flex-col items-start">
-              <p className="whitespace-nowrap text-[10px] font-medium leading-3 tracking-[-0.005px] text-text-caption">
-                나와의 매칭률{" "}
-                <span className="font-bold text-text-primary-alternative">{matchRate}%</span>{" "}
-                <span>- 잘 맞는 룸메이트예요!</span>
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center gap-1.5">
-              {profileSummary.map((item, index) => (
-                <div key={item} className="flex items-center gap-1.5">
-                  {index > 0 ? (
-                    <span aria-hidden="true" className="h-2.5 w-px bg-border-strong" />
-                  ) : null}
-                  <span className="whitespace-nowrap text-[10px] font-medium leading-3 tracking-[-0.005px] text-text-caption">
-                    {item}
-                  </span>
-                </div>
-              ))}
-            </div>
+          <div className="flex max-w-full flex-wrap items-start gap-1.5">
+            {profileSummary.map((item, index) => (
+              <span
+                key={`${item}-${index}`}
+                className="shrink-0 rounded-full bg-neutral-150 px-2.5 py-100 typo-label1 text-text-alternative"
+              >
+                {item}
+              </span>
+            ))}
           </div>
         </div>
 
         <Button
-          className="shrink-0 px-400 cursor-pointer"
+          className="w-full cursor-pointer px-400 py-200"
           onClick={onProfileClick}
           size="sm"
+          type="button"
           variant="black"
         >
           프로필 보기
