@@ -1,3 +1,6 @@
+import { useState } from "react";
+
+import { CheckIcon } from "@/assets/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,7 +14,6 @@ import {
   AlertDialogTrigger,
   Button,
 } from "@/components/ui";
-import { CheckIcon } from "@/assets/icons";
 
 export type ChatRoommateRequestMessageProps = {
   onAccept?: () => void;
@@ -24,34 +26,42 @@ function ChatRoommateRequestMessage({
   onReject,
   requesterName,
 }: ChatRoommateRequestMessageProps) {
+  const [open, setOpen] = useState(false);
+
   return (
-    <AlertDialog>
-      <div className="flex max-w-60 flex-col justify-center gap-300 overflow-hidden rounded-tl-2xl rounded-tr-2xl rounded-br-2xl border border-brand-primary bg-bg-secondary px-600 py-400">
-        <div className="flex items-center gap-100">
-          <CheckIcon className="size-3 text-brand-primary [&_path]:stroke-current" />
-          <span className="typo-title4 text-text-primary-alternative">룸메이트 요청</span>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <div className="flex w-55 flex-col items-start justify-center gap-[12px] overflow-hidden rounded-tl-2xl rounded-tr-2xl rounded-br-2xl border border-brand-primary bg-bg-secondary px-[20px] py-[16px]">
+        <div className="flex items-center gap-[4px] overflow-hidden">
+          <CheckIcon className="size-[12px] shrink-0 text-brand-primary [&_path]:stroke-current" />
+          <span className="whitespace-nowrap text-[12px] font-semibold leading-3.75 tracking-[-0.005em] text-brand-primary">
+            룸메이트 요청
+          </span>
         </div>
 
-        <div className="flex flex-col gap-100">
-          <p className="typo-title3 whitespace-pre-line text-text-strong">
-            {requesterName} 님이{"\n"}룸메이트를 제안했어요!
+        <div className="flex flex-col items-start gap-[4px] whitespace-nowrap">
+          <p className="text-[14px] font-semibold leading-[20px] tracking-normal text-text-strong">
+            {requesterName} 님이
+            <br />
+            룸메이트를 제안했어요!
           </p>
-          <p className="typo-caption2 text-text-caption">수락하면 룸메이트를 확정할 수 있어요</p>
+          <p className="text-[12px] font-medium leading-[16px] tracking-[-0.005em] text-text-caption">
+            수락하면 룸메이트를 확정할 수 있어요
+          </p>
         </div>
 
         <AlertDialogTrigger asChild>
-          <Button className="w-full cursor-pointer rounded-medium" size="sm">
+          <Button className="h-9 w-full cursor-pointer rounded-[12px] px-[16px] py-[8px]" size="sm">
             확인하기
           </Button>
         </AlertDialogTrigger>
       </div>
 
-      <AlertDialogContent>
+      <AlertDialogContent onOverlayClick={() => setOpen(false)}>
         <AlertDialogHeader>
           <AlertDialogIcon />
           <AlertDialogTitle>룸메이트 요청을 수락할까요?</AlertDialogTitle>
           <AlertDialogDescription className="whitespace-normal break-keep text-center">
-            수락 시 룸메이트 매칭이 확정됩니다
+            수락 시 룸메이트 매칭이 확정됩니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-500">

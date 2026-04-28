@@ -21,6 +21,7 @@ export type ChatTextMessage = {
 export type ChatRoommateRequestMessage = {
   id: number;
   requesterName: string;
+  sentAt?: string;
   type: "roommate_request";
 };
 

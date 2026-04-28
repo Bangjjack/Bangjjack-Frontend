@@ -58,7 +58,12 @@ function ChatRecruitCard({
           </div>
         </div>
 
-        <Button className="w-full cursor-pointer px-400 py-200" size="sm" type="button" variant="black">
+        <Button
+          className="w-full cursor-pointer px-400 py-200"
+          size="sm"
+          type="button"
+          variant="black"
+        >
           모집글 보기
         </Button>
       </div>

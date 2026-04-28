@@ -85,6 +85,11 @@ function ChatDetailContent({
                       onAccept={onRoommateRequestAccept}
                       requesterName={message.requesterName}
                     />
+                    {message.sentAt ? (
+                      <span className="shrink-0 whitespace-nowrap text-[8px] font-medium leading-3.5 tracking-[-0.005em] text-text-disabled">
+                        {message.sentAt}
+                      </span>
+                    ) : null}
                   </div>
                 );
               }

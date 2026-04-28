@@ -123,6 +123,7 @@ export const CHAT_DETAILS: Record<number, ChatDetail> = {
       {
         id: 1,
         requesterName: "감자",
+        sentAt: "오전 9:32",
         type: "roommate_request",
       },
     ],
