@@ -18,20 +18,23 @@ export type ChatTextMessage = {
   type: "incoming" | "outgoing";
 };
 
-export type ChatRoommateRequestMessage = {
+export type ChatRoommateRequestMessageData = {
   id: number;
   requesterName: string;
   sentAt?: string;
   type: "roommate_request";
 };
 
-export type ChatRoommateInviteMessage = {
+export type ChatRoommateInviteMessageData = {
   id: number;
   recipientName: string;
   type: "roommate_invite";
 };
 
-export type ChatMessage = ChatTextMessage | ChatRoommateRequestMessage | ChatRoommateInviteMessage;
+export type ChatMessage =
+  | ChatTextMessage
+  | ChatRoommateRequestMessageData
+  | ChatRoommateInviteMessageData;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 

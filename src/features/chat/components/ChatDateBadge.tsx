@@ -1,6 +1,6 @@
-export type ChatDateBadgeProps = {
+export interface ChatDateBadgeProps {
   label: string;
-};
+}
 
 function ChatDateBadge({ label }: ChatDateBadgeProps) {
   return (

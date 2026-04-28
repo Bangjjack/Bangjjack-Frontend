@@ -5,6 +5,7 @@ import type { HeaderVariant } from "@/types/header";
 type HeaderProps = React.ComponentProps<"div"> & {
   onBackClick?: () => void;
   onMoreClick?: () => void;
+  onProfileClick?: () => void;
   showBack?: boolean;
   showMore?: boolean;
   showProfile?: boolean;
@@ -17,6 +18,7 @@ function Header({
   className,
   onBackClick,
   onMoreClick,
+  onProfileClick,
   showBack = false,
   showMore = false,
   showProfile = false,
@@ -66,7 +68,18 @@ function Header({
               ) : null}
 
               <div className="flex flex-[1_0_0] items-center gap-2.5">
-                <ProfileOrangeIcon aria-hidden="true" className="size-9 shrink-0" />
+                {onProfileClick ? (
+                  <button
+                    aria-label="프로필 보기"
+                    className="shrink-0 cursor-pointer"
+                    onClick={onProfileClick}
+                    type="button"
+                  >
+                    <ProfileOrangeIcon aria-hidden="true" className="size-9" />
+                  </button>
+                ) : (
+                  <ProfileOrangeIcon aria-hidden="true" className="size-9 shrink-0" />
+                )}
                 <h1 className="typo-title1 text-text-strong">{title}</h1>
               </div>
             </div>

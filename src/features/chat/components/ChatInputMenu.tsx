@@ -1,3 +1,5 @@
+import type { AnimationEventHandler } from "react";
+
 import { CHAT_INPUT_MENU_ITEMS } from "@/features/chat/constants";
 import type { ChatInputMenuAction } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
@@ -6,7 +8,7 @@ export type ChatInputMenuProps = {
   className?: string;
   isClosing?: boolean;
   onActionClick?: (action: ChatInputMenuAction) => void;
-  onAnimationEnd?: React.AnimationEventHandler<HTMLDivElement>;
+  onAnimationEnd?: AnimationEventHandler<HTMLDivElement>;
 };
 
 function ChatInputMenu({

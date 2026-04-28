@@ -3,11 +3,11 @@ import { Button, Card, ProfileAvatar } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 export interface ChatRoommateConfirmedContentProps {
-  age?: number;
+  age: number;
   className?: string;
-  department?: string;
-  matchRate?: number;
-  nickname?: string;
+  department: string;
+  matchRate: number;
+  nickname: string;
   onContinueChat: () => void;
   onGoHome: () => void;
 }
@@ -27,11 +27,11 @@ const CONFETTI_DOTS = [
 ];
 
 function ChatRoommateConfirmedContent({
-  age = 20,
+  age,
   className,
-  department = "컴퓨터공학과",
-  matchRate = 92,
-  nickname = "박서연",
+  department,
+  matchRate,
+  nickname,
   onContinueChat,
   onGoHome,
 }: ChatRoommateConfirmedContentProps) {

@@ -49,6 +49,7 @@ function ChatPageContent({ className }: ChatPageContentProps) {
           {filteredChats.map((chatPreview) => (
             <ChatListItem
               key={chatPreview.id}
+              id={chatPreview.id}
               message={chatPreview.message}
               nickname={chatPreview.nickname}
               onClick={() => navigate(`/chat/${chatPreview.id}`)}

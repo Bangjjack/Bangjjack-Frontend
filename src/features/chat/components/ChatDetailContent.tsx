@@ -27,8 +27,12 @@ function ChatDetailContent({
   onRoommateRequestAccept,
   onProfileClick,
 }: ChatDetailContentProps) {
-  const headerProps: Pick<HeaderProps, "onBackClick" | "showBack" | "showProfile" | "title"> = {
+  const headerProps: Pick<
+    HeaderProps,
+    "onBackClick" | "onProfileClick" | "showBack" | "showProfile" | "title"
+  > = {
     onBackClick: onBack,
+    onProfileClick,
     showBack: true,
     showProfile: true,
     title: chatDetail.nickname,

@@ -1,15 +1,23 @@
 import { ProfileAvatar } from "@/components/ui/profile-avatar";
 import { MessageCount } from "@/features/chat/components/MessageCount";
 
-export type ChatListItemProps = {
+export interface ChatListItemProps {
+  id: number;
   message: string;
   nickname: string;
   onClick?: () => void;
   timeLabel: string;
   unreadCount: number;
-};
+}
 
-function ChatListItem({ message, nickname, onClick, timeLabel, unreadCount }: ChatListItemProps) {
+function ChatListItem({
+  id,
+  message,
+  nickname,
+  onClick,
+  timeLabel,
+  unreadCount,
+}: ChatListItemProps) {
   return (
     <li>
       <button
@@ -19,7 +27,7 @@ function ChatListItem({ message, nickname, onClick, timeLabel, unreadCount }: Ch
       >
         <div className="flex min-w-0 flex-1 items-center justify-between gap-400">
           <div className="flex min-w-0 items-center gap-400">
-            <ProfileAvatar seed={1} size={48} />
+            <ProfileAvatar seed={id} size={48} />
 
             <div className="min-w-0">
               <p className="truncate typo-title3 text-text-normal">{nickname}</p>

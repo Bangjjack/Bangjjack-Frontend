@@ -2,6 +2,7 @@ import { CirclePlusIcon, CircleXIcon, SendIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 
 export type ChatInputBarProps = {
+  ariaLabel?: string;
   isMenuOpen?: boolean;
   onChange: (value: string) => void;
   onPlusClick?: () => void;
@@ -11,6 +12,7 @@ export type ChatInputBarProps = {
 };
 
 function ChatInputBar({
+  ariaLabel,
   isMenuOpen = false,
   onChange,
   onPlusClick,
@@ -40,10 +42,13 @@ function ChatInputBar({
 
         <div className="flex min-w-px flex-[1_0_0] items-center overflow-hidden rounded-full bg-bg-input p-2.5">
           <input
+            aria-label={ariaLabel ?? placeholder}
             className="w-full bg-transparent typo-button2 font-medium tracking-[-0.07px] text-text-strong outline-none placeholder:text-text-placeholder"
             onChange={(event) => onChange(event.target.value)}
             onKeyDown={(event) => {
-              if (event.key === "Enter") {
+              const isComposing = event.nativeEvent.isComposing || event.keyCode === 229;
+
+              if (!isComposing && event.key === "Enter") {
                 event.preventDefault();
                 onSubmit();
               }

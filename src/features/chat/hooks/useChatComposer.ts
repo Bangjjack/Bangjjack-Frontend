@@ -5,7 +5,7 @@ import type {
   ChatDetail,
   ChatInputMenuAction,
   ChatMessage,
-  ChatRoommateInviteMessage,
+  ChatRoommateInviteMessageData,
 } from "@/features/chat/types";
 
 interface UseChatComposerParams {
@@ -36,7 +36,7 @@ function getNextMessageId(messages: ChatMessage[]) {
   return Math.max(0, ...messages.map((message) => message.id)) + 1;
 }
 
-function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessage {
+function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessageData {
   return message.type === "roommate_invite";
 }
 
@@ -105,7 +105,7 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
 
   const handleCancelInviteRequest = (messageId: number) => {
     const canceledInvite = messages.find(
-      (message): message is ChatRoommateInviteMessage =>
+      (message): message is ChatRoommateInviteMessageData =>
         message.id === messageId && isInviteMessage(message),
     );
 
