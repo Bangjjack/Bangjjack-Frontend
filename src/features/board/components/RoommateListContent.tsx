@@ -10,7 +10,7 @@ import { MatchAlertDialog } from "./MatchAlertDialog";
 import { RoommateList } from "./RoommateList";
 
 import type { Member } from "./RoommateList";
-import type { ChecklistEntry } from "@/features/roommate/types/checklist";
+import type { ChecklistEntry } from "@/features/roommate/components";
 
 // TODO: API 연동 시 제거
 const MOCK_MEMBERS: Member[] = [
