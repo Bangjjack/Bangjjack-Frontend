@@ -95,14 +95,21 @@ function Dropdown({ value, onChange, children, className }: DropdownProps) {
   );
 }
 
+type DropdownTriggerProps = Omit<
+  React.ComponentProps<"button">,
+  "role" | "aria-haspopup" | "aria-expanded" | "aria-controls" | "type"
+> & {
+  placeholder?: string;
+};
+
 function DropdownTrigger({
   placeholder = "",
   className,
   children,
+  onClick: onClickProp,
+  onKeyDown: onKeyDownProp,
   ...props
-}: React.ComponentProps<"button"> & {
-  placeholder?: string;
-}) {
+}: DropdownTriggerProps) {
   const { open, setOpen, value, listboxId, triggerRef, setActiveValue, itemValues, itemElements } =
     useDropdownContext();
   const displayValue = value || placeholder;
@@ -114,6 +121,9 @@ function DropdownTrigger({
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+    onKeyDownProp?.(event);
+    if (event.defaultPrevented) return;
+
     const values = itemValues.current;
     if (values.length === 0) return;
 
@@ -148,6 +158,12 @@ function DropdownTrigger({
     }
   }
 
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    onClickProp?.(event);
+    if (event.defaultPrevented) return;
+    setOpen(!open);
+  }
+
   const defaultTriggerClassName = !children
     ? cn(
         "flex w-full cursor-pointer items-center gap-2.5 rounded-small border-[1.5px] bg-bg-secondary px-300 py-200 text-left outline-none transition-colors",
@@ -158,6 +174,7 @@ function DropdownTrigger({
 
   return (
     <button
+      {...props}
       ref={triggerRef}
       data-slot="dropdown-trigger"
       type="button"
@@ -165,9 +182,8 @@ function DropdownTrigger({
       aria-expanded={open}
       aria-controls={open ? listboxId : undefined}
       onKeyDown={handleKeyDown}
-      onClick={() => setOpen(!open)}
+      onClick={handleClick}
       className={cn(defaultTriggerClassName, className)}
-      {...props}
     >
       {children ?? (
         <>
@@ -192,13 +208,16 @@ function DropdownTrigger({
   );
 }
 
-function DropdownContent({ className, children, ...props }: React.ComponentProps<"div">) {
+type DropdownContentProps = Omit<React.ComponentProps<"div">, "id" | "role">;
+
+function DropdownContent({ className, children, ...props }: DropdownContentProps) {
   const { open, listboxId } = useDropdownContext();
 
   if (!open) return null;
 
   return (
     <div
+      {...props}
       id={listboxId}
       role="listbox"
       data-slot="dropdown-content"
@@ -206,21 +225,27 @@ function DropdownContent({ className, children, ...props }: React.ComponentProps
         "animate-dropdown-panel absolute left-0 right-0 top-[calc(100%+4px)] z-10 flex max-h-72 flex-col gap-100 overflow-y-auto rounded-medium bg-bg-secondary px-100 py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]",
         className,
       )}
-      {...props}
     >
       {children}
     </div>
   );
 }
 
+type DropdownItemProps = Omit<
+  React.ComponentProps<"button">,
+  "role" | "aria-selected" | "tabIndex" | "type"
+> & {
+  value: string;
+};
+
 function DropdownItem({
   value,
   className,
   children,
+  onClick: onClickProp,
+  onKeyDown: onKeyDownProp,
   ...props
-}: React.ComponentProps<"button"> & {
-  value: string;
-}) {
+}: DropdownItemProps) {
   const {
     value: selectedValue,
     onSelect,
@@ -263,6 +288,9 @@ function DropdownItem({
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+    onKeyDownProp?.(event);
+    if (event.defaultPrevented) return;
+
     const values = itemValues.current;
     const currentIndex = values.indexOf(value);
 
@@ -306,8 +334,17 @@ function DropdownItem({
     }
   }
 
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    onClickProp?.(event);
+    if (event.defaultPrevented) return;
+    onSelect(value);
+    setOpen(false);
+    triggerRef.current?.focus();
+  }
+
   return (
     <button
+      {...props}
       ref={buttonRef}
       data-slot="dropdown-item"
       role="option"
@@ -315,11 +352,7 @@ function DropdownItem({
       type="button"
       tabIndex={activeValue === value ? 0 : -1}
       onKeyDown={handleKeyDown}
-      onClick={() => {
-        onSelect(value);
-        setOpen(false);
-        triggerRef.current?.focus();
-      }}
+      onClick={handleClick}
       className={cn(
         "w-full rounded-medium px-[10px] py-200 text-left typo-body1 cursor-pointer transition-colors",
         isSelected
@@ -327,7 +360,6 @@ function DropdownItem({
           : "font-medium text-text-strong hover:bg-neutral-100",
         className,
       )}
-      {...props}
     >
       {children}
     </button>
