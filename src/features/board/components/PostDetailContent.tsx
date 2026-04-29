@@ -135,16 +135,17 @@ function PostDetailContent() {
           </Card>
 
           {/* Card 4 - 룸메이트 목록 */}
-          <Card
-            className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none cursor-pointer"
-            onClick={() => navigate(`/board/${id}/roommates`)}
-          >
-            <div className="flex flex-col gap-100">
+          <Card className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
+            <button
+              type="button"
+              className="flex flex-col gap-100 text-left cursor-pointer"
+              onClick={() => navigate(`/board/${id}/roommates`)}
+            >
               <h3 className="typo-title1 text-text-strong">룸메이트 목록</h3>
               <span className="typo-caption2 text-text-caption">
                 프로필을 선택하면 체크리스트를 확인할 수 있어요
               </span>
-            </div>
+            </button>
 
             <RoommateList members={MOCK_POST.members} />
           </Card>
