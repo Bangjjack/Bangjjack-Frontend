@@ -15,11 +15,16 @@ import {
   ProfileAvatar,
   Tag,
 } from "@/components/ui";
+import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 import { useGoBack } from "@/hooks/useGoBack";
 
 import type { ChecklistEntry } from "@/features/roommate/components";
+
+type RoommateProfileContentProps = {
+  profile?: ChatDetail;
+};
 
 // TODO: API 연동 시 제거
 const MOCK_PROFILE = {
@@ -41,10 +46,18 @@ const MOCK_PROFILE = {
   ] satisfies ChecklistEntry[],
 };
 
-function RoommateProfileContent() {
+function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
   const handleBackClick = useGoBack();
   const contentRef = useFadeInOnScroll<HTMLDivElement>();
   const [isMatchDialogOpen, setIsMatchDialogOpen] = useState(false);
+  const displayProfile = {
+    ...MOCK_PROFILE,
+    age: profile?.age ?? MOCK_PROFILE.age,
+    department: profile?.department ?? MOCK_PROFILE.department,
+    nickname: profile?.nickname ?? MOCK_PROFILE.nickname,
+    tags: profile?.lifestyleTags ?? MOCK_PROFILE.tags,
+  };
+  const avatarSeed = profile?.id ?? displayProfile.nickname.length;
 
   // TODO: API 연동 시 실제 모집글 존재 여부 확인
   const hasExistingRecruit = true;
@@ -76,22 +89,22 @@ function RoommateProfileContent() {
         <div ref={contentRef} className="flex flex-col gap-300 px-400">
           {/* Profile avatar - overlaps wave by half */}
           <div className="-mt-[65px] flex flex-col items-start px-[14px]">
-            <ProfileAvatar size={100} seed={MOCK_PROFILE.nickname.length} />
+            <ProfileAvatar size={100} seed={avatarSeed} />
           </div>
 
           {/* Profile info */}
           <div className="flex flex-col gap-[6px] pt-300 px-100">
-            <h2 className="typo-title1 text-text-strong">{MOCK_PROFILE.nickname}</h2>
+            <h2 className="typo-title1 text-text-strong">{displayProfile.nickname}</h2>
             <div className="flex items-center gap-[6px]">
-              <span className="typo-label2 text-text-alternative">{MOCK_PROFILE.age}세</span>
+              <span className="typo-label2 text-text-alternative">{displayProfile.age}세</span>
               <span className="h-[12px] w-px bg-neutral-300" aria-hidden="true" />
-              <span className="typo-label2 text-text-alternative">{MOCK_PROFILE.department}</span>
+              <span className="typo-label2 text-text-alternative">{displayProfile.department}</span>
             </div>
           </div>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-[6px] pb-300 px-100">
-            {MOCK_PROFILE.tags.map((tag) => (
+            {displayProfile.tags.map((tag) => (
               <Tag key={tag} color="black">
                 {tag}
               </Tag>
@@ -102,7 +115,7 @@ function RoommateProfileContent() {
           <ImportanceSection items={MOCK_PROFILE.importanceItems} />
 
           {/* Checklist */}
-          <ChecklistCard items={MOCK_PROFILE.checklist} nickname={MOCK_PROFILE.nickname} />
+          <ChecklistCard items={displayProfile.checklist} nickname={displayProfile.nickname} />
         </div>
       </main>
 
@@ -122,7 +135,7 @@ function RoommateProfileContent() {
           <AlertDialogHeader>
             <AlertDialogTitle>이미 작성된 모집글이 있어요!</AlertDialogTitle>
             <AlertDialogDescription>
-              채팅을 통해 {MOCK_PROFILE.nickname} 님을 <br /> 내 방에 초대할 수 있어요
+              채팅을 통해 {displayProfile.nickname} 님을 <br /> 내 방에 초대할 수 있어요
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

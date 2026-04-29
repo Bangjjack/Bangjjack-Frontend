@@ -4,8 +4,6 @@ export { ChatDetailContent } from "@/features/chat/components/ChatDetailContent"
 export type { ChatDetailContentProps } from "@/features/chat/components/ChatDetailContent";
 export { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
 export type { ChatDateBadgeProps } from "@/features/chat/components/ChatDateBadge";
-export { ChatInputBar } from "@/features/chat/components/ChatInputBar";
-export type { ChatInputBarProps } from "@/features/chat/components/ChatInputBar";
 export { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
 export type { ChatInputMenuProps } from "@/features/chat/components/ChatInputMenu";
 export type { ChatInputMenuAction } from "@/features/chat/types";
@@ -19,8 +17,6 @@ export { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoomm
 export type { ChatRoommateRequestMessageProps } from "@/features/chat/components/ChatRoommateRequestMessage";
 export { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
 export type { ChatMatchCardProps } from "@/features/chat/components/ChatMatchCard";
-export { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
-export type { ChatRecruitCardProps } from "@/features/chat/components/ChatRecruitCard";
 export { ChatListItem } from "@/features/chat/components/ChatListItem";
 export type { ChatListItemProps } from "@/features/chat/components/ChatListItem";
 export { MessageCount } from "@/features/chat/components/MessageCount";

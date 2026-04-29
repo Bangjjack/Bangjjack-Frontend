@@ -1,13 +1,13 @@
 import { CheckIcon } from "@/assets/icons";
 import { Button, Card, ProfileAvatar } from "@/components/ui";
+import type { ChatUserProfile } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-export interface ChatRoommateConfirmedContentProps {
-  age: number;
+export interface ChatRoommateConfirmedContentProps extends Required<
+  Pick<ChatUserProfile, "age" | "department" | "matchRate" | "nickname">
+> {
+  avatarSeed?: number;
   className?: string;
-  department: string;
-  matchRate: number;
-  nickname: string;
   onContinueChat: () => void;
   onGoHome: () => void;
 }
@@ -28,6 +28,7 @@ const CONFETTI_DOTS = [
 
 function ChatRoommateConfirmedContent({
   age,
+  avatarSeed,
   className,
   department,
   matchRate,
@@ -67,7 +68,11 @@ function ChatRoommateConfirmedContent({
 
         <Card className="w-full flex-row items-center justify-between gap-0 rounded-2xl border-border-normal bg-bg-secondary p-400 py-400 shadow-none">
           <div className="flex min-w-0 items-center gap-2.5">
-            <ProfileAvatar className="shrink-0 border border-brand-primary" seed={1} size={70} />
+            <ProfileAvatar
+              className="shrink-0 border border-brand-primary"
+              seed={avatarSeed}
+              size={70}
+            />
 
             <div className="flex min-w-0 flex-col justify-center gap-100">
               <h2 className="typo-title2 truncate text-neutral-black">{nickname}</h2>

@@ -32,6 +32,7 @@ export default function ChatRoommateConfirmedPage() {
   return (
     <ChatRoommateConfirmedContent
       age={chatDetail.age}
+      avatarSeed={chatDetail.id}
       department={chatDetail.department}
       matchRate={chatDetail.matchRate}
       nickname={chatDetail.nickname}

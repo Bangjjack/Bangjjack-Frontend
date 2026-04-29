@@ -1,11 +1,13 @@
 import { ChevronLeftIcon, MoreVerticalIcon, ProfileOrangeIcon } from "@/assets/icons";
 import { cn } from "@/lib/cn";
 import type { HeaderVariant } from "@/types/header";
+import type { ReactNode } from "react";
 
 type HeaderProps = React.ComponentProps<"div"> & {
   onBackClick?: () => void;
   onMoreClick?: () => void;
   onProfileClick?: () => void;
+  profileElement?: ReactNode;
   showBack?: boolean;
   showMore?: boolean;
   showProfile?: boolean;
@@ -19,6 +21,7 @@ function Header({
   onBackClick,
   onMoreClick,
   onProfileClick,
+  profileElement,
   showBack = false,
   showMore = false,
   showProfile = false,
@@ -48,11 +51,15 @@ function Header({
   const shouldShowMoreButton = showMore && Boolean(onMoreClick);
 
   if (showProfile) {
+    const profileContent = profileElement ?? (
+      <ProfileOrangeIcon aria-hidden="true" className="size-9 shrink-0" />
+    );
+
     return (
       <div className={cn(className)} {...props}>
         <header className={cn("px-400 pb-400", shouldUseCompactTopPadding ? "pt-6.5" : "pt-9")}>
           <div className="flex items-center justify-between">
-            <div className="flex flex-[1_0_0] items-center gap-2.5">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5">
               {showBack ? (
                 <button
                   aria-label="뒤로가기"
@@ -75,10 +82,10 @@ function Header({
                     onClick={onProfileClick}
                     type="button"
                   >
-                    <ProfileOrangeIcon aria-hidden="true" className="size-9" />
+                    {profileContent}
                   </button>
                 ) : (
-                  <ProfileOrangeIcon aria-hidden="true" className="size-9 shrink-0" />
+                  profileContent
                 )}
                 <h1 className="typo-title1 text-text-strong">{title}</h1>
               </div>

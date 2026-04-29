@@ -5,3 +5,4 @@ export type { ChatDetailContentProps } from "@/features/chat/components/ChatDeta
 export { ChatRoommateConfirmedContent } from "@/features/chat/components/ChatRoommateConfirmedContent";
 export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/ChatRoommateConfirmedContent";
 export { CHAT_DETAILS } from "@/features/chat/mocks";
+export type { ChatUserProfile } from "@/features/chat/types";

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { ChatListItem } from "@/features/chat/components/ChatListItem";
-import { CHAT_HELPER_TEXT, CHAT_PREVIEWS, CHAT_TABS } from "@/features/chat/mocks";
+import { CHAT_DETAILS, CHAT_HELPER_TEXT, CHAT_PREVIEWS, CHAT_TABS } from "@/features/chat/mocks";
 import type { ChatTab } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
@@ -46,17 +46,21 @@ function ChatPageContent({ className }: ChatPageContentProps) {
         </div>
 
         <ul className="flex min-h-0 flex-1 flex-col">
-          {filteredChats.map((chatPreview) => (
-            <ChatListItem
-              key={chatPreview.id}
-              id={chatPreview.id}
-              message={chatPreview.message}
-              nickname={chatPreview.nickname}
-              onClick={() => navigate(`/chat/${chatPreview.id}`)}
-              timeLabel={chatPreview.timeLabel}
-              unreadCount={chatPreview.unreadCount}
-            />
-          ))}
+          {filteredChats.map((chatPreview) => {
+            const linkedProfile = CHAT_DETAILS[chatPreview.id];
+
+            return (
+              <ChatListItem
+                key={chatPreview.id}
+                id={chatPreview.id}
+                message={chatPreview.message}
+                nickname={linkedProfile?.nickname ?? chatPreview.nickname}
+                onClick={() => navigate(`/chat/${chatPreview.id}`)}
+                timeLabel={chatPreview.timeLabel}
+                unreadCount={chatPreview.unreadCount}
+              />
+            );
+          })}
         </ul>
       </section>
 

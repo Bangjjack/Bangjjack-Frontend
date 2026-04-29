@@ -1,20 +1,23 @@
 import { useState } from "react";
 
 import { Button, ProfileAvatar, Tag } from "@/components/ui";
+import type { ChatUserProfile } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-export type ChatRoommateInviteSheetProps = {
-  age?: number;
+export type ChatRoommateInviteSheetProps = Pick<
+  ChatUserProfile,
+  "age" | "department" | "nickname"
+> & {
+  avatarSeed?: number;
   className?: string;
-  department?: string;
   lifestyleTags: string[];
-  nickname: string;
   onCancel: () => void;
   onConfirm: () => void;
 };
 
 function ChatRoommateInviteSheet({
   age,
+  avatarSeed,
   className,
   department,
   lifestyleTags,
@@ -77,7 +80,7 @@ function ChatRoommateInviteSheet({
           </div>
 
           <div className="flex items-center gap-400 rounded-2xl border border-brand-primary bg-bg-secondary p-400">
-            <ProfileAvatar seed={nickname.length} size={36} />
+            <ProfileAvatar seed={avatarSeed ?? nickname.length} size={36} />
 
             <div className="min-w-0 flex-1">
               <p className="typo-title3 text-text-normal">{nickname}</p>

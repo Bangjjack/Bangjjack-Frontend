@@ -1,13 +1,12 @@
-import { ProfileOrangeIcon } from "@/assets/icons";
-import { Header, type HeaderProps } from "@/components/ui";
-import { ChatDateBadge } from "@/features/chat/components/ChatDateBadge";
-import { ChatInputBar } from "@/features/chat/components/ChatInputBar";
-import { ChatInputMenu } from "@/features/chat/components/ChatInputMenu";
-import { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
-import { ChatRecruitCard } from "@/features/chat/components/ChatRecruitCard";
-import { ChatRoommateInviteMessage } from "@/features/chat/components/ChatRoommateInviteMessage";
-import { ChatRoommateInviteSheet } from "@/features/chat/components/ChatRoommateInviteSheet";
-import { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoommateRequestMessage";
+import { ChatInputBar, Header, ProfileAvatar, type HeaderProps } from "@/components/ui";
+import {
+  ChatDateBadge,
+  ChatInputMenu,
+  ChatMatchCard,
+  ChatRoommateInviteMessage,
+  ChatRoommateInviteSheet,
+  ChatRoommateRequestMessage,
+} from "@/features/chat/components";
 import { useChatComposer } from "@/features/chat/hooks/useChatComposer";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
@@ -29,10 +28,11 @@ function ChatDetailContent({
 }: ChatDetailContentProps) {
   const headerProps: Pick<
     HeaderProps,
-    "onBackClick" | "onProfileClick" | "showBack" | "showProfile" | "title"
+    "onBackClick" | "onProfileClick" | "profileElement" | "showBack" | "showProfile" | "title"
   > = {
     onBackClick: onBack,
     onProfileClick,
+    profileElement: <ProfileAvatar seed={chatDetail.id} size={36} />,
     showBack: true,
     showProfile: true,
     title: chatDetail.nickname,
@@ -55,36 +55,33 @@ function ChatDetailContent({
     toggleInputMenu,
   } = useChatComposer({ chatDetail });
 
+  const recruitTitle =
+    chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
+
   return (
-    <div className={cn("relative flex min-h-dvh flex-col bg-bg-primary", className)}>
+    <div className={cn("relative flex h-dvh overflow-hidden flex-col bg-bg-primary", className)}>
       <Header {...headerProps} />
 
-      <div className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto px-400 pb-400">
-        <div className="flex flex-col gap-400 pb-400 pt-100">
+      <div className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-col gap-400 px-400 py-[8px]">
+          <ChatMatchCard
+            className="sticky top-200 z-10 shrink-0"
+            matchRate={chatDetail.matchRate}
+            onProfileClick={onProfileClick}
+            profileSummary={chatDetail.profileSummary}
+            recruitTitle={recruitTitle}
+          />
+
           <div className="flex justify-center">
             <ChatDateBadge label={chatDetail.dateLabel} />
           </div>
-
-          {chatDetail.startSource === "ai_recommendation" ? (
-            <ChatMatchCard
-              matchRate={chatDetail.matchRate}
-              onProfileClick={onProfileClick}
-              profileSummary={chatDetail.profileSummary}
-            />
-          ) : (
-            <ChatRecruitCard
-              matchRate={chatDetail.matchRate}
-              profileSummary={chatDetail.profileSummary}
-              recruitTitle={chatDetail.recruitTitle ?? "모집글"}
-            />
-          )}
 
           <div className="flex flex-col gap-400">
             {messages.map((message) => {
               if (message.type === "roommate_request") {
                 return (
                   <div key={message.id} className="flex w-full items-end gap-200">
-                    <ProfileOrangeIcon className="size-9 shrink-0 self-end" />
+                    <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
                     <ChatRoommateRequestMessage
                       onAccept={onRoommateRequestAccept}
                       requesterName={message.requesterName}
@@ -116,7 +113,9 @@ function ChatDetailContent({
                   key={message.id}
                   className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}
                 >
-                  {!isOutgoing ? <ProfileOrangeIcon className="size-9 shrink-0 self-end" /> : null}
+                  {!isOutgoing ? (
+                    <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
+                  ) : null}
 
                   {!isOutgoing ? (
                     <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
@@ -181,6 +180,7 @@ function ChatDetailContent({
       {inviteSheetOpen ? (
         <ChatRoommateInviteSheet
           age={chatDetail.age}
+          avatarSeed={chatDetail.id}
           department={chatDetail.department}
           lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
           nickname={chatDetail.nickname}

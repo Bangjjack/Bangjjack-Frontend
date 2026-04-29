@@ -1,12 +1,11 @@
 import { StarIcon } from "@/assets/icons";
 import { Button } from "@/components/ui";
+import type { BaseChatCardProps } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-export type ChatMatchCardProps = {
-  className?: string;
-  matchRate: number;
+export type ChatMatchCardProps = BaseChatCardProps & {
   onProfileClick?: () => void;
-  profileSummary: string[];
+  recruitTitle?: string;
 };
 
 function ChatMatchCard({
@@ -14,11 +13,14 @@ function ChatMatchCard({
   matchRate,
   onProfileClick,
   profileSummary,
+  recruitTitle,
 }: ChatMatchCardProps) {
+  const isRecruitCard = Boolean(recruitTitle);
+
   return (
     <section
       className={cn(
-        "w-full overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-500 py-3.5",
+        "box-border w-auto overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-500 py-3.5",
         className,
       )}
     >
@@ -40,26 +42,47 @@ function ChatMatchCard({
             />
           </div>
 
-          <div className="flex max-w-full flex-wrap items-start gap-1.5">
-            {profileSummary.map((item, index) => (
-              <span
-                key={`${item}-${index}`}
-                className="shrink-0 rounded-full bg-neutral-150 px-2.5 py-100 typo-label1 text-text-alternative"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
+          {isRecruitCard ? (
+            <div className="flex max-w-full flex-col items-start gap-0.5">
+              <p className="max-w-full truncate text-[14px] font-semibold leading-5 text-neutral-black">
+                {recruitTitle}
+              </p>
+
+              <div className="flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5">
+                {profileSummary.map((item, index) => (
+                  <div key={`${item}-${index}`} className="flex items-center gap-1.5">
+                    {index > 0 ? (
+                      <span aria-hidden="true" className="h-2.5 w-px bg-border-strong" />
+                    ) : null}
+                    <span className="whitespace-nowrap typo-caption3 text-text-caption">
+                      {item}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="flex max-w-full flex-wrap items-start gap-1.5">
+              {profileSummary.map((item, index) => (
+                <span
+                  key={`${item}-${index}`}
+                  className="shrink-0 rounded-full bg-neutral-150 px-2.5 py-100 typo-label1 text-text-alternative"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
 
         <Button
           className="w-full cursor-pointer px-400 py-200"
-          onClick={onProfileClick}
+          onClick={isRecruitCard ? undefined : onProfileClick}
           size="sm"
           type="button"
           variant="black"
         >
-          프로필 보기
+          {isRecruitCard ? "모집글 보기" : "프로필 보기"}
         </Button>
       </div>
     </section>

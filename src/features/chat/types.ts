@@ -11,6 +11,19 @@ export type ChatPreview = {
   unreadCount: number;
 };
 
+export type ChatUserProfile = {
+  age?: number;
+  department?: string;
+  matchRate?: number;
+  nickname: string;
+};
+
+export type BaseChatCardProps = {
+  className?: string;
+  matchRate: number;
+  profileSummary: string[];
+};
+
 export type ChatTextMessage = {
   id: number;
   sentAt: string;
@@ -49,15 +62,12 @@ export type ChatInputMenuItem = {
   title: string;
 };
 
-export type ChatDetail = {
-  age?: number;
+export type ChatDetail = ChatUserProfile & {
   dateLabel: string;
-  department?: string;
   id: number;
   lifestyleTags?: string[];
   matchRate: number;
   messages: ChatMessage[];
-  nickname: string;
   profileSummary: string[];
   recruitTitle?: string;
   startSource: ChatStartSource;
