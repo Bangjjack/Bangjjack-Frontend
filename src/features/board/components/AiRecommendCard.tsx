@@ -1,5 +1,5 @@
 import { Button, Card } from "@/components/ui";
-import { ChevonRightIcon } from "@/assets/icons";
+import { ChevronRightIcon } from "@/assets/icons";
 
 type AiRecommendCardProps = {
   onClick?: () => void;
@@ -16,7 +16,7 @@ function AiRecommendCard({ onClick }: AiRecommendCardProps) {
             onClick={onClick}
           >
             <h3 className="typo-title2 text-text-strong">AI 추천 룸메이트</h3>
-            <ChevonRightIcon className="size-600 shrink-0 text-text-strong" aria-hidden="true" />
+            <ChevronRightIcon className="size-600 shrink-0 text-text-strong" aria-hidden="true" />
           </button>
           <p className="typo-caption1 text-text-caption">나에게 맞는 룸메이트를 찾아볼 수 있어요</p>
         </div>
