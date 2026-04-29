@@ -2,10 +2,10 @@ import { Dropdown, DropdownTrigger, DropdownContent, DropdownItem } from "@/comp
 import { ChevronDownIcon } from "@/assets/icons";
 const CAMPUSES = ["글로벌 캠퍼스", "메디컬 캠퍼스"] as const;
 
-type CampusSelectorProps = {
+interface CampusSelectorProps {
   value: string;
   onChange: (value: string) => void;
-};
+}
 
 function CampusSelector({ value, onChange }: CampusSelectorProps) {
   return (
