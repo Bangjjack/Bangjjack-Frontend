@@ -26,10 +26,10 @@ const ROUTE_CONFIG: Record<string, RouteConfig> = {
     icon: "mypage",
     path: "/mypage",
   },
-  "/room": {
+  "/board": {
     header: { title: "방 찾기", variant: "title" },
     icon: "room",
-    path: "/room",
+    path: "/board",
   },
 };
 
@@ -41,7 +41,7 @@ const DEFAULT_ROUTE_CONFIG: RouteConfig = {
 
 const BOTTOM_NAV_ITEMS = [
   { href: "/home", icon: "home", label: "홈" },
-  { href: "/room", icon: "room", label: "방 찾기" },
+  { href: "/board", icon: "room", label: "방 찾기" },
   { href: "/chat", icon: "chat", label: "채팅" },
   { href: "/mypage", icon: "mypage", label: "MY" },
 ] satisfies Array<{ href: string; icon: BottomNavIcon; label: string }>;

@@ -5,8 +5,10 @@ import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
-import RoomPage from "@/pages/RoomPage";
+import BoardPage from "@/pages/BoardPage";
 import LoginPage from "@/pages/LoginPage";
+import PostDetailPage from "@/pages/PostDetailPage";
+import RoommateListPage from "@/pages/RoommateListPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
 
 export const routes: RouteObject[] = [
@@ -23,8 +25,8 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "room",
-        element: <RoomPage />,
+        path: "board",
+        element: <BoardPage />,
       },
       {
         path: "chat",
@@ -43,6 +45,14 @@ export const routes: RouteObject[] = [
   {
     path: "/onboarding",
     element: <OnBoardingPage />,
+  },
+  {
+    path: "/board/:id",
+    element: <PostDetailPage />,
+  },
+  {
+    path: "/board/:id/roommates",
+    element: <RoommateListPage />,
   },
   {
     path: "/roommate/:id",
