@@ -42,9 +42,9 @@ function RoommateListContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack();
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<Member>(MOCK_MEMBERS[0]!);
+  const [selectedMember, setSelectedMember] = useState<Member | null>(MOCK_MEMBERS[0] ?? null);
 
-  const checklist = MOCK_CHECKLISTS[selectedMember.nickname] ?? [];
+  const checklist = selectedMember ? (MOCK_CHECKLISTS[selectedMember.nickname] ?? []) : [];
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -64,14 +64,14 @@ function RoommateListContent() {
 
               <RoommateList
                 members={MOCK_MEMBERS}
-                selectedNickname={selectedMember.nickname}
+                selectedNickname={selectedMember?.nickname}
                 onMemberClick={setSelectedMember}
               />
             </div>
           </Card>
 
           {/* 체크리스트 카드 */}
-          {checklist.length > 0 && (
+          {selectedMember && checklist.length > 0 && (
             <ChecklistCard items={checklist} nickname={selectedMember.nickname} />
           )}
         </div>
