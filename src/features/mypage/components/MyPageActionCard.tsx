@@ -24,13 +24,13 @@ function MyPageActionCard({
 }: MyPageActionCardProps) {
   const actions: MyPageAction[] = [
     { icon: SquarePen, label: "내 체크리스트", onClick: onChecklistClick },
+    { icon: Puzzle, label: "나의 활동", onClick: onActivityClick },
     {
       icon: Bookmark,
       iconClassName: "fill-current",
       label: "북마크한 글",
       onClick: onBookmarkClick,
     },
-    { icon: Puzzle, label: "나의 활동", onClick: onActivityClick },
   ];
 
   return (

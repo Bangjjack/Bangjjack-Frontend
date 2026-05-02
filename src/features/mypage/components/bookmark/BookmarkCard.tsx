@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { BookmarkFillIcon, BookmarkIcon } from "@/assets/icons";
+import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { BookmarkPostStatusBadge } from "@/features/mypage/components/bookmark/BookmarkPostStatusBadge";
 import { cn } from "@/lib/cn";
 
@@ -13,7 +13,7 @@ type BookmarkCardProps = {
 
 function BookmarkCard({ className, post }: BookmarkCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(true);
-  const BookmarkToggleIcon = isBookmarked ? BookmarkFillIcon : BookmarkIcon;
+  const BookmarkToggleIcon = isBookmarked ? BookmarkFilledIcon : BookmarkIcon;
 
   return (
     <article
@@ -23,7 +23,7 @@ function BookmarkCard({ className, post }: BookmarkCardProps) {
       )}
     >
       <div className="flex min-w-0 items-center">
-        <div className="flex min-w-0 flex-col items-start justify-center gap-2.5">
+        <div className="flex min-w-0 flex-col items-start justify-center gap-[8px]">
           <h3 className="truncate text-base font-bold leading-normal text-text-normal">
             {post.title}
           </h3>

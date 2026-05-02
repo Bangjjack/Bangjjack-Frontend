@@ -8,7 +8,7 @@ export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?rea
 export { default as CircleXIcon } from "@/assets/icons/ic-circle-x.svg?react";
 export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
 export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
-export { default as BookmarkFillIcon } from "@/assets/icons/ic-bookmark-fill.svg?react";
+export { default as BookmarkFilledIcon } from "@/assets/icons/ic-bookmark-fill.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
 export { default as WriteIcon } from "@/assets/icons/ic-write.svg?react";
@@ -26,5 +26,3 @@ export { default as MoreVerticalIcon } from "@/assets/icons/ic-more-vertical.svg
 export { default as LogoLoginIcon } from "@/assets/icons/logo-login.svg?react";
 export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.svg?react";
 export { default as ChevronRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
-export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
-export { default as BookmarkFilledIcon } from "@/assets/icons/ic-bookmark-filled.svg?react";
