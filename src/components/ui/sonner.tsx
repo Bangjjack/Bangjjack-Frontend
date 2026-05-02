@@ -18,7 +18,7 @@ function Toaster() {
 
 function ToastContent({ icon, message }: { icon: React.ReactNode; message: string }) {
   return (
-    <div className="box-border flex w-[365px] max-w-[calc(100vw-32px)] items-center gap-[10px] rounded-medium bg-neutral-800/90 px-400 py-300">
+    <div className="box-border flex w-full items-center gap-[10px] rounded-medium bg-neutral-800/90 px-400 py-300">
       {icon}
       <span className="typo-button2 text-text-on-primary">{message}</span>
     </div>

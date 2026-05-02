@@ -1,0 +1,85 @@
+import { StarIcon } from "@/assets/icons";
+import { Button } from "@/components/ui";
+import type { BaseChatCardProps } from "@/features/chat/types";
+import { cn } from "@/lib/cn";
+
+export type ChatMatchCardProps = BaseChatCardProps & {
+  onProfileClick?: () => void;
+  onRecruitClick?: () => void;
+  recruitTitle?: string;
+};
+
+function ChatSchoolInfoList({ items }: { items: string[] }) {
+  return (
+    <div className="flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5">
+      {items.map((item, index) => (
+        <div key={`${item}-${index}`} className="flex items-center gap-1.5">
+          {index > 0 ? <span aria-hidden="true" className="h-2.5 w-px bg-border-strong" /> : null}
+          <span className="whitespace-nowrap typo-caption3 text-text-caption">{item}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ChatMatchCard({
+  className,
+  matchRate,
+  onProfileClick,
+  onRecruitClick,
+  profileSummary,
+  recruitTitle,
+}: ChatMatchCardProps) {
+  const isRecruitCard = Boolean(recruitTitle);
+
+  return (
+    <section
+      className={cn(
+        "box-border w-auto overflow-hidden rounded-2xl border border-border-strong bg-bg-secondary px-500 py-3.5",
+        className,
+      )}
+    >
+      <div className="flex flex-col items-start justify-center gap-300">
+        <div className="flex w-full flex-col items-start gap-200">
+          <div className="flex w-full items-center justify-between gap-300">
+            <div className="flex min-w-0 items-center gap-100">
+              <span className="shrink-0 rounded-full bg-button-primary-ghost px-2.5 py-100 typo-label1 text-text-primary-alternative">
+                매칭률 {matchRate}%
+              </span>
+              <span className="min-w-0 truncate typo-label2 text-text-caption">
+                잘 맞는 룸메이트예요!
+              </span>
+            </div>
+
+            <StarIcon
+              aria-hidden="true"
+              className="size-600 shrink-0 text-brand-primary [&_path]:stroke-current"
+            />
+          </div>
+
+          <div className="flex max-w-full flex-col items-start gap-0.5">
+            {isRecruitCard ? (
+              <p className="max-w-full truncate text-[14px] font-semibold leading-5 text-neutral-black">
+                {recruitTitle}
+              </p>
+            ) : null}
+
+            <ChatSchoolInfoList items={profileSummary} />
+          </div>
+        </div>
+
+        <Button
+          className="w-full cursor-pointer px-400 py-200"
+          onClick={isRecruitCard ? onRecruitClick : onProfileClick}
+          size="sm"
+          type="button"
+          variant="black"
+        >
+          {isRecruitCard ? "모집글 보기" : "프로필 보기"}
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+export { ChatMatchCard };

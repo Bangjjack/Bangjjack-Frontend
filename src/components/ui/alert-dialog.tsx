@@ -25,11 +25,14 @@ function AlertDialogOverlay({
   );
 }
 
-function AlertDialogContent({
-  className,
-  children,
-  ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
+type AlertDialogContentProps = React.ComponentProps<typeof AlertDialogPrimitive.Content>;
+
+/**
+ * Alert dialogs are reserved for confirmation flows that require an explicit
+ * action. Do not add overlay-click dismissal here; use a Dialog-based component
+ * instead when non-modal overlay dismissal is part of the intended interaction.
+ */
+function AlertDialogContent({ className, children, ...props }: AlertDialogContentProps) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />

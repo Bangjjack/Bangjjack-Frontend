@@ -11,8 +11,10 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   Button,
+  ChatInputBar,
   Chip,
   Input,
+  Textarea,
   toast,
   Tag,
 } from "@/components/ui";
@@ -40,11 +42,14 @@ function Row({ label, children }: { label: string; children: ReactNode }) {
 /* ── Page ── */
 
 export default function DesignSystemPage() {
+  const [textareaValue, setTextareaValue] = useState("입력 완료");
+  const [chatMessage, setChatMessage] = useState("");
+  const [chatMenuOpen, setChatMenuOpen] = useState(false);
   const [inputValue, setInputValue] = useState("입력 완료");
 
   return (
     <div className="min-h-screen bg-bg-primary">
-      <div className="mx-auto max-w-[430px] space-y-500 px-500 py-700">
+      <div className="mx-auto max-w-107.5 space-y-500 px-500 py-700">
         <header>
           <h1 className="typo-h2 text-text-strong">UI Components</h1>
         </header>
@@ -140,6 +145,34 @@ export default function DesignSystemPage() {
               <Input disabled placeholder="입력 불가" />
             </Row>
           </div>
+        </Section>
+
+        <Section title="Textarea">
+          <div className="space-y-300">
+            <Row label="default">
+              <Textarea
+                placeholder="여러 줄 텍스트를 입력하세요"
+                value={textareaValue}
+                onChange={(event) => setTextareaValue(event.target.value)}
+              />
+            </Row>
+            <Row label="error">
+              <Textarea error defaultValue="입력 완료" />
+            </Row>
+            <Row label="disabled">
+              <Textarea disabled placeholder="입력 불가" />
+            </Row>
+          </div>
+        </Section>
+
+        <Section title="ChatInputBar">
+          <ChatInputBar
+            isMenuOpen={chatMenuOpen}
+            onChange={setChatMessage}
+            onPlusClick={() => setChatMenuOpen((prev) => !prev)}
+            onSubmit={() => setChatMessage("")}
+            value={chatMessage}
+          />
         </Section>
 
         {/* ── Toast ── */}

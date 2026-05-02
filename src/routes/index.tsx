@@ -1,6 +1,8 @@
 import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
 import ChatPage from "@/pages/ChatPage";
+import ChatDetailPage from "@/pages/ChatDetailPage";
+import ChatRoommateConfirmedPage from "@/pages/ChatRoommateConfirmedPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyActivityPage from "@/pages/MyActivityPage";
@@ -9,8 +11,10 @@ import MyPage from "@/pages/MyPage";
 import MyChecklistPage from "@/pages/MyChecklistPage";
 import MyProfileEditPage from "@/pages/MyProfileEditPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
-import RoomPage from "@/pages/RoomPage";
+import BoardPage from "@/pages/BoardPage";
 import LoginPage from "@/pages/LoginPage";
+import PostDetailPage from "@/pages/PostDetailPage";
+import RoommateListPage from "@/pages/RoommateListPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
 
 export const routes: RouteObject[] = [
@@ -27,8 +31,8 @@ export const routes: RouteObject[] = [
         element: <HomePage />,
       },
       {
-        path: "room",
-        element: <RoomPage />,
+        path: "board",
+        element: <BoardPage />,
       },
       {
         path: "chat",
@@ -61,8 +65,24 @@ export const routes: RouteObject[] = [
     element: <LoginPage />,
   },
   {
+    path: "/chat/:chatId",
+    element: <ChatDetailPage />,
+  },
+  {
+    path: "/chat/:chatId/roommate-confirmed",
+    element: <ChatRoommateConfirmedPage />,
+  },
+  {
     path: "/onboarding",
     element: <OnBoardingPage />,
+  },
+  {
+    path: "/board/:id",
+    element: <PostDetailPage />,
+  },
+  {
+    path: "/board/:id/roommates",
+    element: <RoommateListPage />,
   },
   {
     path: "/roommate/:id",
