@@ -56,7 +56,7 @@ function ChatRoommateRequestMessage({
         </AlertDialogTrigger>
       </div>
 
-      <AlertDialogContent onOverlayClick={() => setOpen(false)}>
+      <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogIcon />
           <AlertDialogTitle>룸메이트 요청을 수락할까요?</AlertDialogTitle>

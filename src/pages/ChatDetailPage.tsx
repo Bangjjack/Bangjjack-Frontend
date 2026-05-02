@@ -20,12 +20,20 @@ export default function ChatDetailPage() {
     return null;
   }
 
+  const handleRecruitClick = () => {
+    if (!chatDetail.recruitPostId) {
+      return;
+    }
+
+    navigate(`/board/${chatDetail.recruitPostId}`);
+  };
+
   return (
     <ChatDetailContent
       key={chatDetail.id}
       chatDetail={chatDetail}
       onBack={() => navigate("/chat")}
-      onRecruitClick={() => navigate(`/board/${chatDetail.recruitPostId ?? chatDetail.id}`)}
+      onRecruitClick={handleRecruitClick}
       onRoommateRequestAccept={() => navigate(`/chat/${chatDetail.id}/roommate-confirmed`)}
       onProfileClick={() => navigate(`/roommate/${chatDetail.id}`)}
     />

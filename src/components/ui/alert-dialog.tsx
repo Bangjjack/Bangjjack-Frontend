@@ -25,19 +25,17 @@ function AlertDialogOverlay({
   );
 }
 
-type AlertDialogContentProps = React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
-  onOverlayClick?: React.MouseEventHandler<HTMLDivElement>;
-};
+type AlertDialogContentProps = React.ComponentProps<typeof AlertDialogPrimitive.Content>;
 
-function AlertDialogContent({
-  className,
-  children,
-  onOverlayClick,
-  ...props
-}: AlertDialogContentProps) {
+/**
+ * Alert dialogs are reserved for confirmation flows that require an explicit
+ * action. Do not add overlay-click dismissal here; use a Dialog-based component
+ * instead when non-modal overlay dismissal is part of the intended interaction.
+ */
+function AlertDialogContent({ className, children, ...props }: AlertDialogContentProps) {
   return (
     <AlertDialogPortal>
-      <AlertDialogOverlay onClick={onOverlayClick} />
+      <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         className={cn(
           "fixed left-1/2 top-1/2 z-50 w-75 -translate-x-1/2 -translate-y-1/2 rounded-[20px] bg-bg-secondary px-7 py-[24px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

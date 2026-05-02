@@ -59,7 +59,7 @@ function Header({
       <div className={cn(className)} {...props}>
         <header className={cn("px-400 pb-400", shouldUseCompactTopPadding ? "pt-6.5" : "pt-9")}>
           <div className="flex items-center justify-between">
-            <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5">
+            <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2.5">
               {showBack ? (
                 <button
                   aria-label="뒤로가기"
@@ -72,7 +72,9 @@ function Header({
                     className="size-600 [&_path]:stroke-current"
                   />
                 </button>
-              ) : null}
+              ) : (
+                <div className="size-600 shrink-0" aria-hidden="true" />
+              )}
 
               <div className="flex flex-[1_0_0] items-center gap-2.5">
                 {onProfileClick ? (

@@ -40,6 +40,14 @@ function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMes
   return message.type === "roommate_invite";
 }
 
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    "matchMedia" in window &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 function useChatComposer({ chatDetail }: UseChatComposerParams) {
   const [draftMessage, setDraftMessage] = useState("");
   const [inputMenuOpen, setInputMenuOpen] = useState(false);
@@ -52,17 +60,21 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
     setInputMenuOpen(true);
   };
 
+  const completeInputMenuClose = () => {
+    setInputMenuClosing(false);
+    setInputMenuOpen(false);
+  };
+
   const closeInputMenu = () => {
     if (!inputMenuOpen || inputMenuClosing) {
       return;
     }
 
     setInputMenuClosing(true);
-  };
 
-  const completeInputMenuClose = () => {
-    setInputMenuClosing(false);
-    setInputMenuOpen(false);
+    if (prefersReducedMotion()) {
+      completeInputMenuClose();
+    }
   };
 
   const toggleInputMenu = () => {
