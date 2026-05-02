@@ -3,10 +3,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyActivityRoomMemberMock } from "@/features/mypage/mocks";
 
-type RoommateMemberListProps = {
+interface RoommateMemberListProps {
   className?: string;
   members: MyActivityRoomMemberMock[];
-};
+}
 
 function RoommateMemberList({ className, members }: RoommateMemberListProps) {
   return (

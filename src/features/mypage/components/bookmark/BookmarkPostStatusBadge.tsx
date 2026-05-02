@@ -2,10 +2,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyBookmarkPostMock } from "../../mocks";
 
-type BookmarkPostStatusBadgeProps = {
+interface BookmarkPostStatusBadgeProps {
   status: MyBookmarkPostMock["status"];
   statusLabel: string;
-};
+}
 
 function BookmarkPostStatusBadge({ status, statusLabel }: BookmarkPostStatusBadgeProps) {
   const isClosed = status === "closed";

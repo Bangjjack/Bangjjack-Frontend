@@ -5,10 +5,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyActivityRoomMock } from "@/features/mypage/mocks";
 
-type JoinedRoomCardProps = {
+interface JoinedRoomCardProps {
   className?: string;
   room: MyActivityRoomMock;
-};
+}
 
 function JoinedRoomCard({ className, room }: JoinedRoomCardProps) {
   return (

@@ -1,10 +1,7 @@
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
-import {
-  MY_RECRUIT_POST_EMPTY_MESSAGE,
-  MY_RECRUIT_POSTS,
-} from "@/features/mypage/mocks";
+import { MY_RECRUIT_POST_EMPTY_MESSAGE, MY_RECRUIT_POSTS } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 
 import type { MyRecruitPostMock } from "@/features/mypage/mocks";

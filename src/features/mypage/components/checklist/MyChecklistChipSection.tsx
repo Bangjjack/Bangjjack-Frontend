@@ -25,7 +25,9 @@ function MyChecklistChipSection({
     <section className="flex w-full flex-col gap-300 px-400">
       <div className="flex items-center gap-300">
         <h2 className="typo-title1 text-neutral-black">{title}</h2>
-        {helperText ? <span className="typo-title4 text-text-placeholder">{helperText}</span> : null}
+        {helperText ? (
+          <span className="typo-title4 text-text-placeholder">{helperText}</span>
+        ) : null}
       </div>
 
       <div className="flex flex-wrap gap-200">

@@ -3,9 +3,9 @@ import { cn } from "@/lib/cn";
 
 import { MY_BOOKMARK_POSTS } from "../../mocks";
 
-export type MyBookmarkContentProps = {
+export interface MyBookmarkContentProps {
   className?: string;
-};
+}
 
 function MyBookmarkContent({ className }: MyBookmarkContentProps) {
   return (

@@ -200,7 +200,8 @@ export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
       { id: "edit", label: "수정하기", tone: "neutral" },
       { id: "applications", label: "신청 관리", tone: "primary" },
     ],
-    description: "깔끔한 편이고 조용한 성격입니다.\n서로 적당한 거리감 유지하면서 편하게 지낼분 찾아요",
+    description:
+      "깔끔한 편이고 조용한 성격입니다.\n서로 적당한 거리감 유지하면서 편하게 지낼분 찾아요",
     dormitory: "2기숙사",
     id: 1,
     roomType: "2인 1실",

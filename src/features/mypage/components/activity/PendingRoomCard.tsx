@@ -4,10 +4,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyActivityRoomMock } from "@/features/mypage/mocks";
 
-type PendingRoomCardProps = {
+interface PendingRoomCardProps {
   className?: string;
   room: MyActivityRoomMock;
-};
+}
 
 function PendingRoomCard({ className, room }: PendingRoomCardProps) {
   return (

@@ -6,10 +6,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyBookmarkPostMock } from "../../mocks";
 
-type BookmarkCardProps = {
+interface BookmarkCardProps {
   className?: string;
   post: MyBookmarkPostMock;
-};
+}
 
 function BookmarkCard({ className, post }: BookmarkCardProps) {
   const [isBookmarked, setIsBookmarked] = useState(true);

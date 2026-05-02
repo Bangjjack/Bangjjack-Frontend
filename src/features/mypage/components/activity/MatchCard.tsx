@@ -5,10 +5,10 @@ import { cn } from "@/lib/cn";
 
 import type { MyActivityMatchMock } from "@/features/mypage/mocks";
 
-type MatchCardProps = {
+interface MatchCardProps {
   className?: string;
   match: MyActivityMatchMock;
-};
+}
 
 function MatchCard({ className, match }: MatchCardProps) {
   return (
