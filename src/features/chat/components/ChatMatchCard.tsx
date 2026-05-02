@@ -9,6 +9,19 @@ export type ChatMatchCardProps = BaseChatCardProps & {
   recruitTitle?: string;
 };
 
+function ChatSchoolInfoList({ items }: { items: string[] }) {
+  return (
+    <div className="flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5">
+      {items.map((item, index) => (
+        <div key={`${item}-${index}`} className="flex items-center gap-1.5">
+          {index > 0 ? <span aria-hidden="true" className="h-2.5 w-px bg-border-strong" /> : null}
+          <span className="whitespace-nowrap typo-caption3 text-text-caption">{item}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ChatMatchCard({
   className,
   matchRate,
@@ -44,37 +57,15 @@ function ChatMatchCard({
             />
           </div>
 
-          {isRecruitCard ? (
-            <div className="flex max-w-full flex-col items-start gap-0.5">
+          <div className="flex max-w-full flex-col items-start gap-0.5">
+            {isRecruitCard ? (
               <p className="max-w-full truncate text-[14px] font-semibold leading-5 text-neutral-black">
                 {recruitTitle}
               </p>
+            ) : null}
 
-              <div className="flex max-w-full flex-wrap items-center gap-x-1.5 gap-y-0.5">
-                {profileSummary.map((item, index) => (
-                  <div key={`${item}-${index}`} className="flex items-center gap-1.5">
-                    {index > 0 ? (
-                      <span aria-hidden="true" className="h-2.5 w-px bg-border-strong" />
-                    ) : null}
-                    <span className="whitespace-nowrap typo-caption3 text-text-caption">
-                      {item}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
-            <div className="flex max-w-full flex-wrap items-start gap-1.5">
-              {profileSummary.map((item, index) => (
-                <span
-                  key={`${item}-${index}`}
-                  className="shrink-0 rounded-full bg-neutral-150 px-2.5 py-100 typo-label1 text-text-alternative"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
-          )}
+            <ChatSchoolInfoList items={profileSummary} />
+          </div>
         </div>
 
         <Button
