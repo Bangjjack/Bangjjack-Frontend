@@ -480,6 +480,137 @@ select:focus {
   animation: dropdown-panel 0.24s ease-out;
 }
 
+@keyframes bottom-sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-bottom-sheet-up {
+  animation: bottom-sheet-up 0.28s ease-out;
+}
+
+@keyframes bottom-sheet-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+
+.animate-bottom-sheet-down {
+  animation: bottom-sheet-down 0.24s ease-in forwards;
+}
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-overlay-fade-in {
+  animation: overlay-fade-in 0.24s ease-out;
+}
+
+@keyframes overlay-fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+.animate-overlay-fade-out {
+  animation: overlay-fade-out 0.2s ease-in forwards;
+}
+
+@keyframes input-menu-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-input-menu-up {
+  animation: input-menu-up 0.2s ease-out;
+}
+
+@keyframes input-menu-down {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.animate-input-menu-down {
+  animation: input-menu-down 0.18s ease-in forwards;
+}
+
+@keyframes input-toggle-icon {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.animate-input-toggle-icon {
+  animation: input-toggle-icon 0.2s ease-out;
+}
+
+@keyframes confetti-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.4);
+  }
+
+  55% {
+    opacity: 1;
+    transform: translateY(4px) scale(1.18);
+  }
+
+  75% {
+    transform: translateY(-2px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-confetti-pop {
+  animation: confetti-pop 0.58s cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
 /* ── Sonner toast 오버라이드 ── */
 [data-sonner-toaster] {
   left: 50% !important;

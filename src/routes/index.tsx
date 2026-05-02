@@ -1,6 +1,8 @@
 import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
 import ChatPage from "@/pages/ChatPage";
+import ChatDetailPage from "@/pages/ChatDetailPage";
+import ChatRoommateConfirmedPage from "@/pages/ChatRoommateConfirmedPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyPage from "@/pages/MyPage";
@@ -41,6 +43,14 @@ export const routes: RouteObject[] = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/chat/:chatId",
+    element: <ChatDetailPage />,
+  },
+  {
+    path: "/chat/:chatId/roommate-confirmed",
+    element: <ChatRoommateConfirmedPage />,
   },
   {
     path: "/onboarding",

@@ -18,10 +18,14 @@ export {
 } from "@/components/ui/alert-dialog";
 export { Button } from "@/components/ui/button";
 export type { ButtonProps } from "@/components/ui/button";
+export { ChatInputBar } from "@/components/ui/chat-input-bar";
+export type { ChatInputBarProps } from "@/components/ui/chat-input-bar";
 export { Chip } from "@/components/ui/chip";
 export type { ChipProps } from "@/components/ui/chip";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
+export { Textarea } from "@/components/ui/textarea";
+export type { TextareaProps } from "@/components/ui/textarea";
 export { Toaster, toast } from "@/components/ui/sonner";
 export { Separator } from "@/components/ui/separator";
 export { Tag } from "@/components/ui/tag";
