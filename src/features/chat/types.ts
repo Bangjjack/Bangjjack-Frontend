@@ -69,6 +69,7 @@ export type ChatDetail = ChatUserProfile & {
   matchRate: number;
   messages: ChatMessage[];
   profileSummary: string[];
+  recruitPostId?: number;
   recruitTitle?: string;
   startSource: ChatStartSource;
 };

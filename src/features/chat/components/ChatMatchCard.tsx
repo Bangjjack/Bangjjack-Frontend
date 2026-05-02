@@ -5,6 +5,7 @@ import { cn } from "@/lib/cn";
 
 export type ChatMatchCardProps = BaseChatCardProps & {
   onProfileClick?: () => void;
+  onRecruitClick?: () => void;
   recruitTitle?: string;
 };
 
@@ -12,6 +13,7 @@ function ChatMatchCard({
   className,
   matchRate,
   onProfileClick,
+  onRecruitClick,
   profileSummary,
   recruitTitle,
 }: ChatMatchCardProps) {
@@ -77,7 +79,7 @@ function ChatMatchCard({
 
         <Button
           className="w-full cursor-pointer px-400 py-200"
-          onClick={isRecruitCard ? undefined : onProfileClick}
+          onClick={isRecruitCard ? onRecruitClick : onProfileClick}
           size="sm"
           type="button"
           variant="black"

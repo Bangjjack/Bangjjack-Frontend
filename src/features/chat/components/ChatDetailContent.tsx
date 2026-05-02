@@ -17,6 +17,7 @@ export interface ChatDetailContentProps {
   onBack: () => void;
   onRoommateRequestAccept?: () => void;
   onProfileClick?: () => void;
+  onRecruitClick?: () => void;
 }
 
 function ChatDetailContent({
@@ -25,6 +26,7 @@ function ChatDetailContent({
   onBack,
   onRoommateRequestAccept,
   onProfileClick,
+  onRecruitClick,
 }: ChatDetailContentProps) {
   const headerProps: Pick<
     HeaderProps,
@@ -68,6 +70,7 @@ function ChatDetailContent({
             className="sticky top-200 z-10 shrink-0"
             matchRate={chatDetail.matchRate}
             onProfileClick={onProfileClick}
+            onRecruitClick={onRecruitClick}
             profileSummary={chatDetail.profileSummary}
             recruitTitle={recruitTitle}
           />

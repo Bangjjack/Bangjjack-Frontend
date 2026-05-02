@@ -25,6 +25,7 @@ export default function ChatDetailPage() {
       key={chatDetail.id}
       chatDetail={chatDetail}
       onBack={() => navigate("/chat")}
+      onRecruitClick={() => navigate(`/board/${chatDetail.recruitPostId ?? chatDetail.id}`)}
       onRoommateRequestAccept={() => navigate(`/chat/${chatDetail.id}/roommate-confirmed`)}
       onProfileClick={() => navigate(`/roommate/${chatDetail.id}`)}
     />
