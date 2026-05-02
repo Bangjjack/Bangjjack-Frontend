@@ -6,7 +6,11 @@ export default function HomePage() {
 
   return (
     <>
-      <HomePageContent onRoommateClick={(id) => navigate(`/roommate/${id}`)} />
+      <HomePageContent
+        onMoreRecruitsClick={() => navigate("/board")}
+        onRoommateClick={(id) => navigate(`/roommate/${id}`)}
+        onRecruitClick={(id) => navigate(`/board/${id}`)}
+      />
     </>
   );
 }
