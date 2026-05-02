@@ -16,7 +16,7 @@ export interface MyProfileEditContentProps {
 
 function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditContentProps) {
   return (
-    <div className={cn("relative min-h-full overflow-hidden bg-bg-primary", className)}>
+    <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
       <WaveBackgroundIcon
         aria-hidden="true"
         className="absolute left-0 -top-0.75 w-full"
@@ -30,7 +30,7 @@ function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditC
         title="프로필 편집"
       />
 
-      <main className="scrollbar-none relative z-10 flex min-h-full flex-col overflow-y-auto pb-28">
+      <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
         <div className="flex flex-col gap-300 px-400 pt-36.5">
           <div className="flex flex-col items-start px-3.5">
             <ProfileAvatar seed={MY_PROFILE.name.length} size={100} />
