@@ -9,13 +9,7 @@ type CounterInputProps = {
   onDecrement: () => void;
 };
 
-function CounterInput({
-  value,
-  min = 1,
-  max = 4,
-  onIncrement,
-  onDecrement,
-}: CounterInputProps) {
+function CounterInput({ value, min = 1, max = 4, onIncrement, onDecrement }: CounterInputProps) {
   const isMin = value <= min;
   const isMax = value >= max;
 
