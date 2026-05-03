@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogIcon,
+  AlertDialogTitle,
+  Button,
+  Card,
+  Header,
+  ProfileAvatar,
+  Separator,
+  Tag,
+} from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { useGoBack } from "@/hooks/useGoBack";
 
 import { HabitList } from "./HabitList";
@@ -59,6 +75,7 @@ const MOCK_POST = {
   ],
   matchRate: 92,
   matchDetails: "청소 빈도, 흡연 여부",
+  isMine: true, // TODO: API 연동 시 실제 판별 로직으로 교체
 };
 
 function PostDetailContent() {
@@ -66,11 +83,70 @@ function PostDetailContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isMenuOpen]);
+
+  function handleDeleteConfirm() {
+    // TODO: 삭제 API 연동
+    navigate("/board");
+  }
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       {/* Fixed header */}
-      <Header showBack title="방 찾기" onBackClick={handleBackClick} />
+      <Header
+        showBack
+        showMore={MOCK_POST.isMine}
+        title="방 찾기"
+        onBackClick={handleBackClick}
+        onMoreClick={() => setIsMenuOpen((prev) => !prev)}
+      />
+
+      {/* More menu dropdown */}
+      {isMenuOpen && (
+        <div
+          ref={menuRef}
+          className="animate-dropdown-panel absolute right-400 top-[72px] z-50 flex w-[120px] flex-col gap-100 overflow-hidden rounded-medium bg-bg-secondary px-100 py-100 shadow-[0px_8px_24px_0px_rgba(0,0,0,0.08)]"
+        >
+          <button
+            type="button"
+            className="w-full cursor-pointer rounded-medium px-[10px] py-200 text-left font-medium text-text-strong typo-body1 transition-colors hover:bg-neutral-100"
+            onClick={() => {
+              setIsMenuOpen(false);
+              navigate(`/board/${id}/edit`);
+            }}
+          >
+            수정
+          </button>
+          <button
+            type="button"
+            className={cn(
+              "w-full cursor-pointer rounded-medium px-[10px] py-200 text-left font-medium typo-body1 transition-colors",
+              "text-state-error hover:bg-neutral-100",
+            )}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsDeleteDialogOpen(true);
+            }}
+          >
+            삭제
+          </button>
+        </div>
+      )}
 
       {/* Scrollable content */}
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px]">
@@ -138,7 +214,7 @@ function PostDetailContent() {
           <Card className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
             <button
               type="button"
-              className="flex flex-col gap-100 text-left cursor-pointer"
+              className="flex cursor-pointer flex-col gap-100 text-left"
               onClick={() => navigate(`/board/${id}/roommates`)}
             >
               <h3 className="typo-title1 text-text-strong">룸메이트 목록</h3>
@@ -184,6 +260,20 @@ function PostDetailContent() {
           <Button className="flex-1">채팅하기</Button>
         </MatchAlertDialog>
       </div>
+
+      {/* 삭제 확인 다이얼로그 */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogIcon />
+            <AlertDialogTitle icon>정말 삭제하시겠어요?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm}>삭제</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
