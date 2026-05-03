@@ -1,15 +1,10 @@
 export { AiRecommendCard } from "./AiRecommendCard";
-export {
-  BasicTagList,
-  type BasicTagListProps,
-  type BasicTagCategory,
-  type TagItem,
-} from "./BasicTagList";
+export { BasicTagList, type BasicTagListProps } from "./BasicTagList";
 export { BoardPageContent, type BoardPageContentProps } from "./BoardPageContent";
 export { CampusSelector } from "./CampusSelector";
 export { CounterInput, type CounterInputProps } from "./CounterInput";
-export { HabitList, type Habit } from "./HabitList";
-export { HabitSelectList, type HabitSelectListProps, type HabitCategory } from "./HabitSelectList";
+export { HabitList } from "./HabitList";
+export { HabitSelectList, type HabitSelectListProps } from "./HabitSelectList";
 export { MatchAlertDialog, type MatchAlertDialogProps } from "./MatchAlertDialog";
 export { PostActionMenu, type PostActionMenuProps } from "./PostActionMenu";
 export { PostDetailContent } from "./PostDetailContent";

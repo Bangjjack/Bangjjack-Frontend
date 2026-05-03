@@ -9,10 +9,10 @@ import {
 } from "@/features/board/schemas/postWriteSchema";
 import { WriteCard } from "./WriteCard";
 import { CounterInput } from "./CounterInput";
+import type { BasicTagCategory, HabitCategory } from "@/features/board/types";
+
 import { BasicTagList } from "./BasicTagList";
 import { HabitSelectList } from "./HabitSelectList";
-import type { BasicTagCategory } from "./BasicTagList";
-import type { HabitCategory } from "./HabitSelectList";
 
 // TODO: API 연동 시 실제 유저 데이터로 교체
 const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [

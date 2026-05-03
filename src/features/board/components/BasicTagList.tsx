@@ -1,14 +1,5 @@
 import { Tag } from "@/components/ui";
-
-type TagItem = {
-  label: string;
-  selected: boolean;
-};
-
-type BasicTagCategory = {
-  title: string;
-  tags: TagItem[];
-};
+import type { BasicTagCategory } from "@/features/board/types";
 
 type BasicTagListProps = {
   categories: BasicTagCategory[];
@@ -34,4 +25,4 @@ function BasicTagList({ categories }: BasicTagListProps) {
 }
 
 export { BasicTagList };
-export type { BasicTagListProps, BasicTagCategory, TagItem };
+export type { BasicTagListProps };

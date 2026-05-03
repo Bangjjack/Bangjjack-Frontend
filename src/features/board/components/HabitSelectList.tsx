@@ -1,9 +1,5 @@
 import { Tag } from "@/components/ui";
-
-type HabitCategory = {
-  label: string;
-  options: readonly string[];
-};
+import type { HabitCategory } from "@/features/board/types";
 
 type HabitSelectListProps = {
   categories: readonly HabitCategory[];
@@ -31,4 +27,4 @@ function HabitSelectList({ categories, selected, onSelect }: HabitSelectListProp
 }
 
 export { HabitSelectList };
-export type { HabitSelectListProps, HabitCategory };
+export type { HabitSelectListProps };
