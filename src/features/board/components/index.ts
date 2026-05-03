@@ -12,6 +12,8 @@ export { HabitList, type Habit } from "./HabitList";
 export { HabitSelectList, type HabitSelectListProps, type HabitCategory } from "./HabitSelectList";
 export { MatchAlertDialog, type MatchAlertDialogProps } from "./MatchAlertDialog";
 export { PostDetailContent } from "./PostDetailContent";
+export { PostEditContent } from "./PostEditContent";
+export { PostFormShell, type PostFormShellProps } from "./PostFormShell";
 export { PostWriteContent } from "./PostWriteContent";
 export { RoommateList, type Member } from "./RoommateList";
 export { RoommateListContent } from "./RoommateListContent";
