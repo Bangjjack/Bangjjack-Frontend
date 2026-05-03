@@ -11,6 +11,7 @@ export { CounterInput, type CounterInputProps } from "./CounterInput";
 export { HabitList, type Habit } from "./HabitList";
 export { HabitSelectList, type HabitSelectListProps, type HabitCategory } from "./HabitSelectList";
 export { MatchAlertDialog, type MatchAlertDialogProps } from "./MatchAlertDialog";
+export { PostActionMenu, type PostActionMenuProps } from "./PostActionMenu";
 export { PostDetailContent } from "./PostDetailContent";
 export { PostEditContent } from "./PostEditContent";
 export { PostFormShell, type PostFormShellProps } from "./PostFormShell";
