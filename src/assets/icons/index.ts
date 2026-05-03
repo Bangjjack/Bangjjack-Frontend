@@ -26,3 +26,5 @@ export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.sv
 export { default as ChevronRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
 export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
 export { default as BookmarkFilledIcon } from "@/assets/icons/ic-bookmark-filled.svg?react";
+export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
+export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";
