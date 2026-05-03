@@ -120,7 +120,7 @@ function PostDetailContent() {
               <span className="typo-title2 text-text-strong">이런 점을 중요하게 생각해요</span>
               <div className="flex flex-wrap gap-[4px]">
                 {MOCK_POST.importanceTags.map((tag) => (
-                  <Tag key={tag} color="gray">
+                  <Tag key={tag} color="black">
                     {tag}
                   </Tag>
                 ))}
