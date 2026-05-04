@@ -1,7 +1,11 @@
+import { useNavigate } from "react-router";
+
 import { MatchCard } from "@/features/mypage/components/activity/MatchCard";
 import { MY_ACTIVITY_MATCHES } from "@/features/mypage/mocks";
 
 function MyActivityMatchList() {
+  const navigate = useNavigate();
+
   if (MY_ACTIVITY_MATCHES.length === 0) {
     return <MyActivityMatchEmptyState />;
   }
@@ -11,7 +15,12 @@ function MyActivityMatchList() {
       <h2 className="typo-title2 text-text-normal">매칭된 룸메이트</h2>
       <div className="flex flex-col gap-400">
         {MY_ACTIVITY_MATCHES.map((match) => (
-          <MatchCard key={match.id} match={match} />
+          <MatchCard
+            key={match.id}
+            match={match}
+            onChatClick={(matchId) => navigate(`/chat/${matchId}`)}
+            onProfileClick={(matchId) => navigate(`/roommate/${matchId}`)}
+          />
         ))}
       </div>
     </div>

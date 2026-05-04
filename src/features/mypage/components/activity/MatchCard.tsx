@@ -8,9 +8,11 @@ import type { MyActivityMatchMock } from "@/features/mypage/types";
 interface MatchCardProps {
   className?: string;
   match: MyActivityMatchMock;
+  onChatClick?: (matchId: number) => void;
+  onProfileClick?: (matchId: number) => void;
 }
 
-function MatchCard({ className, match }: MatchCardProps) {
+function MatchCard({ className, match, onChatClick, onProfileClick }: MatchCardProps) {
   return (
     <article
       className={cn(
@@ -45,7 +47,18 @@ function MatchCard({ className, match }: MatchCardProps) {
 
       <div className="grid w-full grid-cols-2 gap-200">
         {match.actions.map((action) => (
-          <ActivityButton key={action.id} label={action.label} tone={action.tone} />
+          <ActivityButton
+            key={action.id}
+            label={action.label}
+            onClick={
+              action.id === "profile"
+                ? () => onProfileClick?.(match.id)
+                : action.id === "chat"
+                  ? () => onChatClick?.(match.id)
+                  : undefined
+            }
+            tone={action.tone}
+          />
         ))}
       </div>
     </article>
