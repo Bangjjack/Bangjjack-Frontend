@@ -12,17 +12,14 @@ function MyActivityMatchList() {
 
   return (
     <div className="flex flex-col gap-400">
-      <h2 className="typo-title2 text-text-normal">매칭된 룸메이트</h2>
-      <div className="flex flex-col gap-400">
-        {MY_ACTIVITY_MATCHES.map((match) => (
-          <MatchCard
-            key={match.id}
-            match={match}
-            onChatClick={(matchId) => navigate(`/chat/${matchId}`)}
-            onProfileClick={(matchId) => navigate(`/roommate/${matchId}`)}
-          />
-        ))}
-      </div>
+      {MY_ACTIVITY_MATCHES.map((match) => (
+        <MatchCard
+          key={match.id}
+          match={match}
+          onChatClick={(matchId) => navigate(`/chat/${matchId}`)}
+          onProfileClick={(matchId) => navigate(`/roommate/${matchId}`)}
+        />
+      ))}
     </div>
   );
 }
