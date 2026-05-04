@@ -1,7 +1,16 @@
+import { useNavigate } from "react-router";
+
+import { MyPageContent } from "@/features/mypage";
+
 export default function MyPage() {
+  const navigate = useNavigate();
+
   return (
-    <div className="flex h-full items-center justify-center">
-      <div className="typo-title2 text-center text-text-strong">My Page Contents</div>
-    </div>
+    <MyPageContent
+      onActivityClick={() => navigate("/mypage/activity")}
+      onBookmarkClick={() => navigate("/mypage/bookmarks")}
+      onChecklistClick={() => navigate("/mypage/checklist")}
+      onProfileClick={() => navigate("/mypage/profile")}
+    />
   );
 }

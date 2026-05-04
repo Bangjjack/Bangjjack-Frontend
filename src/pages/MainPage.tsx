@@ -2,41 +2,67 @@ import { BottomNav, Header } from "@/components/ui";
 import type { HeaderProps } from "@/components/ui";
 import { useGoBack } from "@/hooks/useGoBack";
 import type { BottomNavIcon } from "@/types/bottomNav";
-import { Outlet, useLocation } from "react-router";
+import { matchPath, Outlet, useLocation } from "react-router";
 
 type RouteConfig = {
+  activeIcon: BottomNavIcon;
   header: Pick<HeaderProps, "showBack" | "showMore" | "showProfile" | "title" | "variant">;
-  icon: BottomNavIcon;
-  path: string;
+  fullBleed?: boolean;
+  showBottomNav?: boolean;
 };
 
-const ROUTE_CONFIG: Record<string, RouteConfig> = {
-  "/home": {
-    header: { variant: "home" },
-    icon: "home",
-    path: "/home",
-  },
-  "/chat": {
-    header: { showBack: true, title: "채팅", variant: "title" },
-    icon: "chat",
-    path: "/chat",
-  },
-  "/mypage": {
-    header: { showBack: true, title: "마이페이지", variant: "title" },
-    icon: "mypage",
-    path: "/mypage",
-  },
-  "/board": {
-    header: { title: "방 찾기", variant: "title" },
-    icon: "room",
-    path: "/board",
-  },
+type RouteConfigEntry = RouteConfig & {
+  pattern: string;
 };
+
+const ROUTE_CONFIGS: RouteConfigEntry[] = [
+  {
+    activeIcon: "home",
+    header: { variant: "home" },
+    pattern: "/home",
+  },
+  {
+    activeIcon: "chat",
+    header: { showBack: true, title: "채팅", variant: "title" },
+    pattern: "/chat",
+  },
+  {
+    activeIcon: "mypage",
+    header: { showBack: true, title: "마이페이지", variant: "title" },
+    pattern: "/mypage",
+  },
+  {
+    activeIcon: "mypage",
+    header: { showBack: true, title: "나의 활동", variant: "title" },
+    pattern: "/mypage/activity",
+  },
+  {
+    activeIcon: "mypage",
+    header: { showBack: true, title: "마이페이지", variant: "title" },
+    pattern: "/mypage/bookmarks",
+  },
+  {
+    activeIcon: "mypage",
+    header: { variant: "none" },
+    pattern: "/mypage/checklist",
+  },
+  {
+    activeIcon: "mypage",
+    fullBleed: true,
+    header: { variant: "none" },
+    pattern: "/mypage/profile",
+    showBottomNav: false,
+  },
+  {
+    activeIcon: "room",
+    header: { title: "방 찾기", variant: "title" },
+    pattern: "/board",
+  },
+];
 
 const DEFAULT_ROUTE_CONFIG: RouteConfig = {
+  activeIcon: "home",
   header: { variant: "home" },
-  icon: "home",
-  path: "/home",
 };
 
 const BOTTOM_NAV_ITEMS = [
@@ -46,22 +72,43 @@ const BOTTOM_NAV_ITEMS = [
   { href: "/mypage", icon: "mypage", label: "MY" },
 ] satisfies Array<{ href: string; icon: BottomNavIcon; label: string }>;
 
+function getRouteConfig(pathname: string) {
+  return (
+    ROUTE_CONFIGS.find(({ pattern }) => matchPath({ path: pattern, end: true }, pathname)) ??
+    DEFAULT_ROUTE_CONFIG
+  );
+}
+
 export default function MainPage() {
   const location = useLocation();
-  const routeConfig = ROUTE_CONFIG[location.pathname] ?? DEFAULT_ROUTE_CONFIG;
+  const routeConfig = getRouteConfig(location.pathname);
   const handleBackClick = useGoBack();
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
-      <main className="min-h-0 flex-1 overflow-hidden px-400">
-        <div className="scrollbar-none h-full overflow-y-auto pb-28.25">
+      <main
+        className={
+          routeConfig.fullBleed
+            ? "min-h-0 flex-1 overflow-hidden"
+            : "min-h-0 flex-1 overflow-hidden px-400"
+        }
+      >
+        <div
+          className={
+            routeConfig.showBottomNav === false
+              ? "scrollbar-none h-full overflow-y-auto"
+              : "scrollbar-none h-full overflow-y-auto pb-28.25"
+          }
+        >
           <Outlet />
         </div>
       </main>
-      <div className="absolute bottom-0 left-0 right-0 z-40 p-400">
-        <BottomNav activeIcon={routeConfig.icon} items={BOTTOM_NAV_ITEMS} />
-      </div>
+      {routeConfig.showBottomNav === false ? null : (
+        <div className="absolute bottom-0 left-0 right-0 z-40 p-400">
+          <BottomNav activeIcon={routeConfig.activeIcon} items={BOTTOM_NAV_ITEMS} />
+        </div>
+      )}
     </div>
   );
 }

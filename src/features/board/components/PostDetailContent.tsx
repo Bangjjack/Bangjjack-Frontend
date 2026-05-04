@@ -173,7 +173,7 @@ function PostDetailContent() {
           onClick={() => setIsBookmarked((prev) => !prev)}
         >
           {isBookmarked ? (
-            <BookmarkFilledIcon className="size-[30px]" />
+            <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
           ) : (
             <BookmarkIcon className="size-[30px]" />
           )}
