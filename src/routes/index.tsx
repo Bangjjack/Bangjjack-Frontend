@@ -5,7 +5,11 @@ import ChatDetailPage from "@/pages/ChatDetailPage";
 import ChatRoommateConfirmedPage from "@/pages/ChatRoommateConfirmedPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
+import MyActivityPage from "@/pages/MyActivityPage";
+import MyBookmarkPage from "@/pages/MyBookmarkPage";
 import MyPage from "@/pages/MyPage";
+import MyChecklistPage from "@/pages/MyChecklistPage";
+import MyProfileEditPage from "@/pages/MyProfileEditPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
 import BoardPage from "@/pages/BoardPage";
 import LoginPage from "@/pages/LoginPage";
@@ -37,6 +41,22 @@ export const routes: RouteObject[] = [
       {
         path: "mypage",
         element: <MyPage />,
+      },
+      {
+        path: "mypage/activity",
+        element: <MyActivityPage />,
+      },
+      {
+        path: "mypage/bookmarks",
+        element: <MyBookmarkPage />,
+      },
+      {
+        path: "mypage/checklist",
+        element: <MyChecklistPage />,
+      },
+      {
+        path: "mypage/profile",
+        element: <MyProfileEditPage />,
       },
     ],
   },
