@@ -1,13 +1,8 @@
 import { z } from "zod";
 
-export const HABIT_CATEGORY_LABELS = [
-  "방 쓰레기통 공유",
-  "분리수거",
-  "전화 통화",
-  "물건 공유",
-  "이어폰 사용",
-  "소등 시간",
-] as const;
+import { HABIT_CATEGORY_LABELS } from "@/constants";
+
+export { HABIT_CATEGORY_LABELS };
 
 export const postWriteSchema = z.object({
   title: z.string().trim().min(1, "제목을 입력해주세요").max(40, "제목은 40자 이하로 입력해주세요"),

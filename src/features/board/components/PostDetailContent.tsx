@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
+import { HABIT_CATEGORIES } from "@/constants";
 import { useGoBack } from "@/hooks/useGoBack";
 
 import { HabitList } from "./HabitList";
@@ -21,38 +22,10 @@ const MOCK_POST = {
     "깔끔한 편이고 조용한 성격입니다. 코골이 없고 잠버릇도 없어요. 새벽 1시 전에는 자는 편이라 비슷한 분이면 좋겠습니다. 청소는 일주일에 한 번 정도 하고, 환기도 자주 해요. 편하게 연락 주세요!",
   recruitTags: ["학기 (16주)", "3 기숙사", "2인 1실"],
   importanceTags: ["취침 시간", "기상 시간", "기숙사 체류 시간"],
-  habits: [
-    {
-      label: "방 쓰레기통 공유",
-      options: ["O", "X"],
-      selectedIndex: 1,
-    },
-    {
-      label: "분리수거",
-      options: ["분리수거함 공유", "각자 관리"],
-      selectedIndex: 0,
-    },
-    {
-      label: "전화 통화",
-      options: ["밖에서만", "짧은 통화는 가능", "무관"],
-      selectedIndex: 0,
-    },
-    {
-      label: "물건 공유",
-      options: ["각자 사용", "허락 받고 빌리기", "무관"],
-      selectedIndex: 0,
-    },
-    {
-      label: "이어폰 사용",
-      options: ["O", "X"],
-      selectedIndex: 0,
-    },
-    {
-      label: "소등 시간",
-      options: ["23시 이전", "23~24시", "00~01시", "01~02시", "03시 이후", "무관"],
-      selectedIndex: 0,
-    },
-  ],
+  habits: HABIT_CATEGORIES.map((category, idx) => ({
+    ...category,
+    selectedIndex: idx === 0 ? 1 : 0,
+  })),
   members: [
     { nickname: "무구정광대다라니경", seed: 1, isHost: true },
     { nickname: "햄무라비법전", seed: 2 },
@@ -85,7 +58,7 @@ function PostDetailContent() {
       <PostActionMenu postId={id!} isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(false)} />
 
       {/* Scrollable content */}
-      <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px]">
+      <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
         <div className="flex flex-col gap-300 px-400">
           {/* Card 1 - 상단 정보 */}
           <Card className="gap-0 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">

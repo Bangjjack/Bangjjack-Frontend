@@ -1,24 +1,32 @@
 import { useNavigate } from "react-router";
 
 import { useGoBack } from "@/hooks/useGoBack";
+import { PostFormShell } from "@/features/board/components/PostFormShell";
 import type { PostWriteFormValues } from "@/features/board/schemas/postWriteSchema";
-import { PostFormShell } from "./PostFormShell";
+import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 function PostWriteContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
+  const { draft, setDraft, clearDraft } = usePostWriteDraftStore();
 
   function handleSubmit(data: PostWriteFormValues) {
-    void data; // TODO: 생성 API 연동
-    navigate("/board");
+    setDraft(data);
+    navigate("/board/write/checklist", { state: { formData: data } });
+  }
+
+  function handleBack() {
+    clearDraft();
+    handleBackClick();
   }
 
   return (
     <PostFormShell
       headerTitle="룸메이트 모집하기"
       submitLabel="다음으로"
+      defaultValues={draft ?? undefined}
       onSubmit={handleSubmit}
-      onBackClick={handleBackClick}
+      onBackClick={handleBack}
     />
   );
 }

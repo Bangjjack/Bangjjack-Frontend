@@ -2,14 +2,14 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Header, Textarea } from "@/components/ui";
+import { HABIT_CATEGORIES } from "@/constants";
 import {
   postWriteSchema,
-  HABIT_CATEGORY_LABELS,
   type PostWriteFormValues,
 } from "@/features/board/schemas/postWriteSchema";
 import { WriteCard } from "@/features/board/components/WriteCard";
 import { CounterInput } from "@/features/board/components/CounterInput";
-import type { BasicTagCategory, HabitCategory } from "@/features/board/types";
+import type { BasicTagCategory } from "@/features/board/types";
 
 import { BasicTagList } from "@/features/board/components/BasicTagList";
 import { HabitSelectList } from "@/features/board/components/HabitSelectList";
@@ -45,18 +45,6 @@ const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [
       { label: "흡연 여부", selected: false },
       { label: "통화 습관", selected: false },
     ],
-  },
-];
-
-const HABIT_CATEGORIES: HabitCategory[] = [
-  { label: HABIT_CATEGORY_LABELS[0], options: ["O", "X"] },
-  { label: HABIT_CATEGORY_LABELS[1], options: ["분리수거함 공유", "각자 관리"] },
-  { label: HABIT_CATEGORY_LABELS[2], options: ["밖에서만", "짧은 통화는 가능", "무관"] },
-  { label: HABIT_CATEGORY_LABELS[3], options: ["각자 사용", "허락 받고 빌리기", "무관"] },
-  { label: HABIT_CATEGORY_LABELS[4], options: ["O", "X"] },
-  {
-    label: HABIT_CATEGORY_LABELS[5],
-    options: ["23시 이전", "23~24시", "00~01시", "01~02시", "03시 이후", "무관"],
   },
 ];
 
@@ -124,7 +112,7 @@ function PostFormShell({
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header showBack title={headerTitle} onBackClick={onBackClick} />
 
-      <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px]">
+      <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
         <form
           id="post-form"
           onSubmit={handleSubmit(onSubmit)}

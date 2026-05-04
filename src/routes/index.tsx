@@ -16,6 +16,7 @@ import LoginPage from "@/pages/LoginPage";
 import PostDetailPage from "@/pages/PostDetailPage";
 import PostEditPage from "@/pages/PostEditPage";
 import PostWritePage from "@/pages/PostWritePage";
+import PostChecklistPage from "@/pages/PostChecklistPage";
 import RoommateListPage from "@/pages/RoommateListPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
 
@@ -81,6 +82,10 @@ export const routes: RouteObject[] = [
   {
     path: "/board/write",
     element: <PostWritePage />,
+  },
+  {
+    path: "/board/write/checklist",
+    element: <PostChecklistPage />,
   },
   {
     path: "/board/:id",

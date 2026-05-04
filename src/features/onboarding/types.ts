@@ -1,3 +1,5 @@
+export type { LifestyleMultiFieldKey, LifestyleSingleFieldKey } from "@/constants";
+
 export type ProgressState = "active" | "default";
 export type Gender = "male" | "female";
 export type SemesterType = "semester" | "half";
@@ -9,18 +11,6 @@ export type OnBoardingStepId =
   | "preferences"
   | "matching"
   | "complete";
-
-export type LifestyleSingleFieldKey =
-  | "sleepTime"
-  | "wakeUpTime"
-  | "cleaningCycle"
-  | "dormStayDuration"
-  | "callHabit"
-  | "indoorTemperature"
-  | "noiseSensitivity"
-  | "smoking";
-
-export type LifestyleMultiFieldKey = "sleepingHabit";
 
 export type OnBoardingFormValues = {
   birthYear: string;

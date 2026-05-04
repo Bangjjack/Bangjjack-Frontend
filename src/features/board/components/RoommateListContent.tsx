@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header } from "@/components/ui";
+import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { ChecklistCard } from "@/features/roommate/components";
 import { useGoBack } from "@/hooks/useGoBack";
 
@@ -20,17 +21,58 @@ const MOCK_MEMBERS: Member[] = [
 ];
 
 // TODO: API 연동 시 제거
+const MOCK_CHECKLIST_VALUES: Record<string, string> = {
+  sleepTime: "24~2시",
+  wakeUpTime: "불규칙",
+  cleaningCycle: "주 1~2회",
+  sleepingHabit: "없음",
+  callHabit: "소곤소곤",
+  smoking: "비흡연",
+  dormStayDuration: "절반 정도",
+  indoorTemperature: "더위 잘 탐",
+  noiseSensitivity: "보통",
+};
+
+const MOCK_MATCHED_KEYS = new Set([
+  "sleepTime",
+  "wakeUpTime",
+  "callHabit",
+  "smoking",
+  "dormStayDuration",
+]);
+
+function buildMockChecklist(): ChecklistEntry[] {
+  const entries: ChecklistEntry[] = [];
+
+  for (const q of LIFESTYLE_SINGLE_QUESTIONS) {
+    const value = MOCK_CHECKLIST_VALUES[q.key];
+    if (value) {
+      entries.push({
+        id: q.key,
+        label: q.label,
+        value,
+        isMatched: MOCK_MATCHED_KEYS.has(q.key) ? undefined : false,
+      });
+    }
+  }
+
+  for (const q of LIFESTYLE_MULTI_QUESTIONS) {
+    const value = MOCK_CHECKLIST_VALUES[q.key];
+    if (value) {
+      entries.push({
+        id: q.key,
+        label: q.label,
+        value,
+        isMatched: MOCK_MATCHED_KEYS.has(q.key) ? undefined : false,
+      });
+    }
+  }
+
+  return entries;
+}
+
 const MOCK_CHECKLISTS: Record<string, ChecklistEntry[]> = {
-  무구정광대다라니경: [
-    { id: "sleep-time", label: "취침 시간", value: "24~2시" },
-    { id: "wake-time", label: "기상 시간", value: "불규칙" },
-    { id: "cleaning", label: "청소 주기", value: "주 1~2회", isMatched: false },
-    { id: "sleep-habit", label: "잠버릇", value: "없음", isMatched: false },
-    { id: "call-habit", label: "통화 습관", value: "소곤소곤" },
-    { id: "smoking", label: "흡연", value: "24~2시" },
-    { id: "stay-time", label: "기숙사 체류 시간", value: "절반 정도" },
-    { id: "temperature", label: "온도 민감도", value: "더위를 잘 탐" },
-  ],
+  무구정광대다라니경: buildMockChecklist(),
 };
 
 const MOCK_MATCH = {
