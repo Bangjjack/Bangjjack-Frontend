@@ -28,6 +28,9 @@ function MyActivityRoomList() {
       : MY_ACTIVITY_ROOMS;
   const emptyMessages =
     activeFilterId === "pending" ? MY_PENDING_ROOM_EMPTY_MESSAGE : MY_JOINED_ROOM_EMPTY_MESSAGE;
+  const handleRoomActionClick = () => {
+    // TODO: 방 상세보기/방 나가기 기능 추후 추가 예정
+  };
 
   return (
     <div className="flex flex-col gap-400">
@@ -57,9 +60,9 @@ function MyActivityRoomList() {
         {filteredRooms.length > 0 ? (
           filteredRooms.map((room) =>
             room.status === "pending" ? (
-              <PendingRoomCard key={room.id} room={room} />
+              <PendingRoomCard key={room.id} onActionClick={handleRoomActionClick} room={room} />
             ) : (
-              <JoinedRoomCard key={room.id} room={room} />
+              <JoinedRoomCard key={room.id} onActionClick={handleRoomActionClick} room={room} />
             ),
           )
         ) : (

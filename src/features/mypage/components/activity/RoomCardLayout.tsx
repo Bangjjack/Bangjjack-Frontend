@@ -3,15 +3,16 @@ import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
 import { StatusBadge } from "@/features/mypage/components/StatusBadge";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityRoomMock } from "@/features/mypage/types";
+import type { MyActivityRoomActionMock, MyActivityRoomMock } from "@/features/mypage/types";
 
 interface RoomCardLayoutProps {
   children?: React.ReactNode;
   className?: string;
+  onActionClick?: (action: MyActivityRoomActionMock, room: MyActivityRoomMock) => void;
   room: MyActivityRoomMock;
 }
 
-function RoomCardLayout({ children, className, room }: RoomCardLayoutProps) {
+function RoomCardLayout({ children, className, onActionClick, room }: RoomCardLayoutProps) {
   return (
     <article
       className={cn(
@@ -39,7 +40,12 @@ function RoomCardLayout({ children, className, room }: RoomCardLayoutProps) {
 
       <div className="grid w-full grid-cols-2 gap-200">
         {room.actions.map((action) => (
-          <ActivityButton key={action.id} label={action.label} tone={action.tone} />
+          <ActivityButton
+            key={action.id}
+            label={action.label}
+            onClick={onActionClick ? () => onActionClick(action, room) : undefined}
+            tone={action.tone}
+          />
         ))}
       </div>
     </article>
