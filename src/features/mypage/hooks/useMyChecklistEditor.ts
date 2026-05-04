@@ -1,11 +1,8 @@
 import { useState } from "react";
 
 import { toast } from "@/components/ui";
-import {
-  MY_CHECKLIST_LAST_UPDATED,
-  MY_CHECKLIST_SECTIONS,
-  type MyChecklistSectionMock,
-} from "@/features/mypage/mocks";
+import { MY_CHECKLIST_LAST_UPDATED, MY_CHECKLIST_SECTIONS } from "@/features/mypage/mocks";
+import type { MyChecklistSectionMock } from "@/features/mypage/types";
 
 function formatChecklistUpdatedDate(date: Date) {
   return new Intl.DateTimeFormat("ko-KR", {

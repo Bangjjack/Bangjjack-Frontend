@@ -1,7 +1,7 @@
 import { ProfileAvatar } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityRoomMemberMock } from "@/features/mypage/mocks";
+import type { MyActivityRoomMemberMock } from "@/features/mypage/types";
 
 interface RoommateMemberListProps {
   className?: string;

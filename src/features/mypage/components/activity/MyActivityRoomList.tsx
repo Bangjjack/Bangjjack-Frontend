@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { JoinedRoomCard } from "@/features/mypage/components/activity/JoinedRoomCard";
 import { PendingRoomCard } from "@/features/mypage/components/activity/PendingRoomCard";
+import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
 import {
   MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID,
   MY_ACTIVITY_ROOM_FILTERS,
@@ -9,7 +10,13 @@ import {
 } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityRoomFilterId } from "@/features/mypage/mocks";
+import type { MyActivityRoomFilterId } from "@/features/mypage/types";
+
+const MY_JOINED_ROOM_EMPTY_MESSAGE = ["아직 소속된 방이 없어요.", "마음에 드는 방에 참여해보세요!"];
+const MY_PENDING_ROOM_EMPTY_MESSAGE = [
+  "아직 대기중인 방이 없어요.",
+  "관심 있는 방에 신청해보세요!",
+];
 
 function MyActivityRoomList() {
   const [activeFilterId, setActiveFilterId] = useState<MyActivityRoomFilterId>(
@@ -19,6 +26,8 @@ function MyActivityRoomList() {
     activeFilterId === "pending"
       ? MY_ACTIVITY_ROOMS.filter((room) => room.status === "pending")
       : MY_ACTIVITY_ROOMS;
+  const emptyMessages =
+    activeFilterId === "pending" ? MY_PENDING_ROOM_EMPTY_MESSAGE : MY_JOINED_ROOM_EMPTY_MESSAGE;
 
   return (
     <div className="flex flex-col gap-400">
@@ -45,12 +54,16 @@ function MyActivityRoomList() {
       </div>
 
       <div className="flex flex-col gap-400">
-        {filteredRooms.map((room) =>
-          room.status === "pending" ? (
-            <PendingRoomCard key={room.id} room={room} />
-          ) : (
-            <JoinedRoomCard key={room.id} room={room} />
-          ),
+        {filteredRooms.length > 0 ? (
+          filteredRooms.map((room) =>
+            room.status === "pending" ? (
+              <PendingRoomCard key={room.id} room={room} />
+            ) : (
+              <JoinedRoomCard key={room.id} room={room} />
+            ),
+          )
+        ) : (
+          <MyPageEmptyState messages={emptyMessages} />
         )}
       </div>
     </div>

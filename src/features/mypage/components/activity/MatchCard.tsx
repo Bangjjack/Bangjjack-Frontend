@@ -3,7 +3,7 @@ import { ActivityButton } from "@/features/mypage/components/activity/ActivityBu
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityMatchMock } from "@/features/mypage/mocks";
+import type { MyActivityMatchMock } from "@/features/mypage/types";
 
 interface MatchCardProps {
   className?: string;

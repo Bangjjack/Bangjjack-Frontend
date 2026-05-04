@@ -15,6 +15,8 @@ export interface MyProfileEditContentProps {
 }
 
 function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditContentProps) {
+  const isEditDisabled = !onEditClick;
+
   return (
     <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
       <WaveBackgroundIcon
@@ -59,7 +61,14 @@ function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditC
       </main>
 
       <div className="absolute bottom-0 left-0 right-0 z-40 px-400 pb-9 pt-300">
-        <Button className="w-full cursor-pointer" onClick={onEditClick} type="button">
+        {/* TODO: 이슈 분리 후 구현 예정 */}
+        <Button
+          aria-disabled={isEditDisabled}
+          className={cn("w-full", !isEditDisabled && "cursor-pointer")}
+          disabled={isEditDisabled}
+          onClick={onEditClick}
+          type="button"
+        >
           수정하기
         </Button>
       </div>

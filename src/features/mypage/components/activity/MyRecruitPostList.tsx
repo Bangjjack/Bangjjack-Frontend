@@ -1,10 +1,10 @@
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
+import { StatusBadge } from "@/features/mypage/components/StatusBadge";
 import { MY_RECRUIT_POST_EMPTY_MESSAGE, MY_RECRUIT_POSTS } from "@/features/mypage/mocks";
-import { cn } from "@/lib/cn";
 
-import type { MyRecruitPostMock } from "@/features/mypage/mocks";
+import type { MyRecruitPostMock } from "@/features/mypage/types";
 
 function MyRecruitPostList() {
   if (MY_RECRUIT_POSTS.length === 0) {
@@ -25,16 +25,9 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
     <article className="flex flex-col gap-2.5 rounded-2xl border border-border-normal p-400">
       <div className="flex items-start justify-between gap-300">
         <h2 className="typo-title3 min-w-0 flex-1 text-text-strong">{post.title}</h2>
-        <span
-          className={cn(
-            "typo-label1 shrink-0 rounded-full px-2.5 py-0.5",
-            post.status === "open"
-              ? "bg-text-strong text-text-on-primary"
-              : "bg-button-disabled text-text-caption",
-          )}
-        >
+        <StatusBadge variant={post.status === "open" ? "active" : "closed"}>
           {post.statusLabel}
-        </span>
+        </StatusBadge>
       </div>
 
       <p className="typo-caption2 whitespace-pre-line text-text-caption">{post.description}</p>

@@ -1,6 +1,6 @@
-import { ChevronRight } from "lucide-react";
-
+import { ChevronRightIcon } from "@/assets/icons";
 import { Card, ProfileAvatar } from "@/components/ui";
+import { cn } from "@/lib/cn";
 
 export interface MyPageProfileCardProps {
   age: number;
@@ -12,16 +12,23 @@ export interface MyPageProfileCardProps {
 function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCardProps) {
   return (
     <Card
-      className="w-full flex-row items-center justify-between gap-0 rounded-2xl border-0 bg-bg-secondary p-400 py-400 shadow-none cursor-pointer"
+      className={cn(
+        "w-full flex-row items-center justify-between gap-0 rounded-2xl border-0 bg-bg-secondary p-400 py-400 shadow-none",
+        onClick && "cursor-pointer",
+      )}
       onClick={onClick}
-      onKeyDown={(event) => {
-        if (!onClick || (event.key !== "Enter" && event.key !== " ")) {
-          return;
-        }
+      onKeyDown={
+        onClick
+          ? (event) => {
+              if (event.key !== "Enter" && event.key !== " ") {
+                return;
+              }
 
-        event.preventDefault();
-        onClick();
-      }}
+              event.preventDefault();
+              onClick();
+            }
+          : undefined
+      }
       role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
@@ -42,7 +49,7 @@ function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCard
         aria-hidden="true"
         className="flex size-600 shrink-0 items-center justify-center text-icon-alternative"
       >
-        <ChevronRight aria-hidden="true" className="size-600 stroke-2" />
+        <ChevronRightIcon aria-hidden="true" className="size-600" />
       </div>
     </Card>
   );

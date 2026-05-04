@@ -22,6 +22,8 @@ export { ChatInputBar } from "@/components/ui/chat-input-bar";
 export type { ChatInputBarProps } from "@/components/ui/chat-input-bar";
 export { Chip } from "@/components/ui/chip";
 export type { ChipProps } from "@/components/ui/chip";
+export { ChipQuestionSection } from "@/components/ui/chip-question-section";
+export type { ChipQuestionSectionProps } from "@/components/ui/chip-question-section";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
 export { Textarea } from "@/components/ui/textarea";

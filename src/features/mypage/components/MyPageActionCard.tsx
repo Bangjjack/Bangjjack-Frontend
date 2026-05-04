@@ -1,6 +1,6 @@
 import type { ComponentType, SVGProps } from "react";
-import { Bookmark, Puzzle, SquarePen } from "lucide-react";
 
+import { BookmarkIcon, PuzzleIcon, SquarePenIcon } from "@/assets/icons";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
@@ -23,10 +23,15 @@ function MyPageActionCard({
   onChecklistClick,
 }: MyPageActionCardProps) {
   const actions: MyPageAction[] = [
-    { icon: SquarePen, label: "내 체크리스트", onClick: onChecklistClick },
-    { icon: Puzzle, label: "나의 활동", onClick: onActivityClick },
+    { icon: SquarePenIcon, label: "내 체크리스트", onClick: onChecklistClick },
     {
-      icon: Bookmark,
+      icon: PuzzleIcon,
+      iconClassName: "[&_path]:fill-current",
+      label: "나의 활동",
+      onClick: onActivityClick,
+    },
+    {
+      icon: BookmarkIcon,
       iconClassName: "fill-current",
       label: "북마크한 글",
       onClick: onBookmarkClick,

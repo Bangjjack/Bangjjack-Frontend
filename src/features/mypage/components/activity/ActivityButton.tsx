@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui";
 
 import type { ButtonProps } from "@/components/ui";
-import type { MyRecruitPostActionTone } from "@/features/mypage/mocks";
+import type { MyRecruitPostActionTone } from "@/features/mypage/types";
 
 interface ActivityButtonProps {
   label: string;

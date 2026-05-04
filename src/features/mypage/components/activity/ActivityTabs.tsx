@@ -1,7 +1,7 @@
 import { MY_ACTIVITY_TABS } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityTabId } from "@/features/mypage/mocks";
+import type { MyActivityTabId } from "@/features/mypage/types";
 
 interface ActivityTabsProps {
   activeTabId: MyActivityTabId;

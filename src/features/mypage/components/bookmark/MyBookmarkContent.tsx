@@ -1,13 +1,18 @@
 import { BookmarkCard } from "@/features/mypage/components/bookmark/BookmarkCard";
+import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
 import { cn } from "@/lib/cn";
 
-import { MY_BOOKMARK_POSTS } from "../../mocks";
+import { MY_BOOKMARK_POSTS } from "@/features/mypage/mocks";
 
 export interface MyBookmarkContentProps {
   className?: string;
 }
 
+const MY_BOOKMARK_EMPTY_MESSAGE = ["아직 북마크한 글이 없어요.", "관심 있는 글을 북마크해보세요!"];
+
 function MyBookmarkContent({ className }: MyBookmarkContentProps) {
+  const hasBookmarks = MY_BOOKMARK_POSTS.length > 0;
+
   return (
     <section
       className={cn(
@@ -20,11 +25,15 @@ function MyBookmarkContent({ className }: MyBookmarkContentProps) {
         <span className="typo-label1 text-text-placeholder">{MY_BOOKMARK_POSTS.length}개</span>
       </div>
 
-      <div className="flex flex-col">
-        {MY_BOOKMARK_POSTS.map((post) => (
-          <BookmarkCard key={post.id} post={post} />
-        ))}
-      </div>
+      {hasBookmarks ? (
+        <div className="flex flex-col">
+          {MY_BOOKMARK_POSTS.map((post) => (
+            <BookmarkCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <MyPageEmptyState messages={MY_BOOKMARK_EMPTY_MESSAGE} />
+      )}
     </section>
   );
 }

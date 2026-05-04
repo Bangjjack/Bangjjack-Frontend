@@ -1,5 +1,4 @@
-import { ChevronRight } from "lucide-react";
-
+import { ChevronRightIcon } from "@/assets/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,7 +48,7 @@ function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem
       <span className={cn("typo-button2", item.danger ? "text-state-error" : "text-text-normal")}>
         {item.label}
       </span>
-      <ChevronRight aria-hidden="true" className="size-600 shrink-0 text-icon-alternative" />
+      <ChevronRightIcon aria-hidden="true" className="size-600 shrink-0 text-icon-alternative" />
       {index < MENU_ITEMS.length - 1 ? (
         <span
           aria-hidden="true"

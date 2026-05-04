@@ -7,7 +7,7 @@ import { MyRecruitPostList } from "@/features/mypage/components/activity/MyRecru
 import { MY_ACTIVITY_ACTIVE_TAB_ID } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 
-import type { MyActivityTabId } from "@/features/mypage/mocks";
+import type { MyActivityTabId } from "@/features/mypage/types";
 
 export interface MyActivityContentProps {
   className?: string;

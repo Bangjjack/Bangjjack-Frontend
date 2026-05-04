@@ -4,7 +4,7 @@ import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { BookmarkPostStatusBadge } from "@/features/mypage/components/bookmark/BookmarkPostStatusBadge";
 import { cn } from "@/lib/cn";
 
-import type { MyBookmarkPostMock } from "../../mocks";
+import type { MyBookmarkPostMock } from "@/features/mypage/types";
 
 interface BookmarkCardProps {
   className?: string;

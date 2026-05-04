@@ -1,7 +1,5 @@
-import { ChevronLeft } from "lucide-react";
-
-import { Button } from "@/components/ui";
-import { MyChecklistChipSection } from "@/features/mypage/components/checklist/MyChecklistChipSection";
+import { ChevronLeftIcon } from "@/assets/icons";
+import { Button, ChipQuestionSection } from "@/components/ui";
 import { useMyChecklistEditor } from "@/features/mypage/hooks/useMyChecklistEditor";
 import { cn } from "@/lib/cn";
 
@@ -23,7 +21,7 @@ function MyChecklistContent({ className, onBack }: MyChecklistContentProps) {
           onClick={onBack}
           type="button"
         >
-          <ChevronLeft aria-hidden="true" className="size-5" />
+          <ChevronLeftIcon aria-hidden="true" className="size-5" />
           <span className="typo-title1 text-neutral-black">내 체크리스트</span>
         </button>
 
@@ -39,13 +37,13 @@ function MyChecklistContent({ className, onBack }: MyChecklistContentProps) {
 
       <div className="flex flex-col gap-400 bg-bg-primary p-400 pb-500">
         {visibleSections.map((section) => (
-          <MyChecklistChipSection
+          <ChipQuestionSection
             key={section.id}
             editable={isEditing}
             helperText={section.helperText}
-            onOptionToggle={(option) => handleOptionToggle(section.id, option)}
+            onToggle={(option) => handleOptionToggle(section.id, option)}
             options={section.options}
-            selectedOptions={section.selectedOptions}
+            selectedValues={section.selectedOptions}
             selectionType={section.selectionType}
             title={section.title}
           />
