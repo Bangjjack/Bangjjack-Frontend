@@ -7,7 +7,9 @@ import { PostFormShell } from "./PostFormShell";
 function PostEditContent() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const handleBackClick = useGoBack(`/board/${id}`);
+  const handleBackClick = useGoBack(id ? `/board/${id}` : "/board");
+
+  if (!id) return null;
 
   // TODO: API에서 기존 게시글 데이터 fetch
   // const { data: existingPost } = useQuery(...)

@@ -18,6 +18,7 @@ function HabitSelectList({ categories, selected, onSelect }: HabitSelectListProp
               <button
                 key={option}
                 type="button"
+                className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 onClick={() => onSelect(habit.label, option)}
                 aria-pressed={selected[habit.label] === option}
               >

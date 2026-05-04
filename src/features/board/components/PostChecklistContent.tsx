@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { ChipQuestionSection } from "@/components/ui";
@@ -38,13 +38,11 @@ function isAllAnswered(state: ChecklistState): boolean {
 
 function PostChecklistContent() {
   const navigate = useNavigate();
-  const location = useLocation();
   const handleBackClick = useGoBack("/board/write");
+  const { draft, clearDraft } = usePostWriteDraftStore();
 
   // TODO: 실제 API 연동 시 온보딩에서 저장한 사용자 데이터를 초기값으로 로드
   const [answers, setAnswers] = useState<ChecklistState>(getInitialState);
-
-  const _formData = (location.state as { formData?: unknown })?.formData;
 
   function handleSingleSelect(key: LifestyleSingleFieldKey, value: string) {
     setAnswers((prev) => ({
@@ -63,11 +61,9 @@ function PostChecklistContent() {
     });
   }
 
-  const clearDraft = usePostWriteDraftStore((s) => s.clearDraft);
-
   function handleSubmit() {
-    // TODO: API 호출 — formData + answers를 서버에 전송하고, 생성된 게시글 ID로 이동
-    void _formData;
+    // TODO: API 호출 — draft + answers를 서버에 전송하고, 생성된 게시글 ID로 이동
+    void draft;
     clearDraft();
     toast.success("게시글이 등록되었어요");
     navigate("/board");

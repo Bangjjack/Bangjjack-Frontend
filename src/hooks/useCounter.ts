@@ -11,7 +11,7 @@ function useCounter({ min = 0, max = Infinity, initial = min }: UseCounterOption
   const [count, setCount] = useState(Math.max(min, Math.min(safeMax, initial)));
 
   function increment() {
-    setCount((prev) => Math.min(max, prev + 1));
+    setCount((prev) => Math.min(safeMax, prev + 1));
   }
 
   function decrement() {

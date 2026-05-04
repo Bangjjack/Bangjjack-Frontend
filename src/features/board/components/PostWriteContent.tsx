@@ -12,7 +12,7 @@ function PostWriteContent() {
 
   function handleSubmit(data: PostWriteFormValues) {
     setDraft(data);
-    navigate("/board/write/checklist", { state: { formData: data } });
+    navigate("/board/write/checklist");
   }
 
   function handleBack() {
