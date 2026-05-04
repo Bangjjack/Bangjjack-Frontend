@@ -10,6 +10,7 @@ export default function HomePage() {
         onMoreRecruitsClick={() => navigate("/board")}
         onRoommateClick={(id) => navigate(`/roommate/${id}`)}
         onRecruitClick={(id) => navigate(`/board/${id}`)}
+        onRecruitCreateClick={() => navigate("/board/write")}
       />
     </>
   );

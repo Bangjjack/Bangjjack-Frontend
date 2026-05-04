@@ -1,14 +1,9 @@
 import { Tag } from "@/components/ui";
+import type { Habit } from "@/features/board/types";
 
-interface Habit {
-  label: string;
-  options: string[];
-  selectedIndex: number;
-}
-
-interface HabitListProps {
+type HabitListProps = {
   habits: Habit[];
-}
+};
 
 function HabitList({ habits }: HabitListProps) {
   return (
@@ -32,4 +27,4 @@ function HabitList({ habits }: HabitListProps) {
   );
 }
 
-export { HabitList, type Habit };
+export { HabitList };
