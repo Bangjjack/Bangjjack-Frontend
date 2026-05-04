@@ -7,12 +7,12 @@ import {
   HABIT_CATEGORY_LABELS,
   type PostWriteFormValues,
 } from "@/features/board/schemas/postWriteSchema";
-import { WriteCard } from "./WriteCard";
-import { CounterInput } from "./CounterInput";
+import { WriteCard } from "@/features/board/components/WriteCard";
+import { CounterInput } from "@/features/board/components/CounterInput";
 import type { BasicTagCategory, HabitCategory } from "@/features/board/types";
 
-import { BasicTagList } from "./BasicTagList";
-import { HabitSelectList } from "./HabitSelectList";
+import { BasicTagList } from "@/features/board/components/BasicTagList";
+import { HabitSelectList } from "@/features/board/components/HabitSelectList";
 
 // TODO: API 연동 시 실제 유저 데이터로 교체
 const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [
@@ -73,13 +73,13 @@ const EMPTY_DEFAULT_VALUES: PostWriteFormValues = {
   habits: {},
 };
 
-type PostFormShellProps = {
+interface PostFormShellProps {
   headerTitle: string;
   defaultValues?: PostWriteFormValues;
   submitLabel: string;
   onSubmit: (data: PostWriteFormValues) => void;
   onBackClick: () => void;
-};
+}
 
 function PostFormShell({
   headerTitle,
@@ -116,8 +116,7 @@ function PostFormShell({
       delete next[label];
       setValue("habits", next, { shouldValidate: true });
     } else {
-      const hasError = !!errors.habits;
-      setValue("habits", { ...current, [label]: option }, { shouldValidate: hasError });
+      setValue("habits", { ...current, [label]: option }, { shouldValidate: true });
     }
   }
 

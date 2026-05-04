@@ -1,13 +1,14 @@
 import { useState } from "react";
 
-type UseCounterOptions = {
+interface UseCounterOptions {
   min?: number;
   max?: number;
   initial?: number;
-};
+}
 
 function useCounter({ min = 0, max = Infinity, initial = min }: UseCounterOptions = {}) {
-  const [count, setCount] = useState(initial);
+  const safeMax = Math.max(min, max);
+  const [count, setCount] = useState(Math.max(min, Math.min(safeMax, initial)));
 
   function increment() {
     setCount((prev) => Math.min(max, prev + 1));

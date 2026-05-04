@@ -21,14 +21,14 @@ const textareaVariants = cva(
   },
 );
 
-type TextareaProps = Omit<React.ComponentProps<"textarea">, "ref"> & {
+interface TextareaProps extends Omit<React.ComponentProps<"textarea">, "ref"> {
   ref?: React.Ref<HTMLTextAreaElement>;
   error?: boolean;
   errorMessage?: string;
   unstyled?: boolean;
   autoGrow?: boolean;
   onClear?: () => void;
-};
+}
 
 function Textarea({
   className,
@@ -38,6 +38,7 @@ function Textarea({
   autoGrow = false,
   disabled,
   onClear,
+  onChange,
   onFocus,
   onBlur,
   value,
@@ -78,6 +79,7 @@ function Textarea({
         disabled={disabled}
         value={value}
         defaultValue={defaultValue}
+        onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
         {...props}
@@ -121,7 +123,7 @@ function Textarea({
             value={isControlled ? value : internalValue}
             onChange={(e) => {
               if (!isControlled) setInternalValue(e.target.value);
-              props.onChange?.(e);
+              onChange?.(e);
             }}
             onFocus={(e) => {
               setFocused(true);

@@ -1,11 +1,11 @@
 import { Tag } from "@/components/ui";
 import type { HabitCategory } from "@/features/board/types";
 
-type HabitSelectListProps = {
+interface HabitSelectListProps {
   categories: readonly HabitCategory[];
   selected: Record<string, string>;
   onSelect: (label: string, option: string) => void;
-};
+}
 
 function HabitSelectList({ categories, selected, onSelect }: HabitSelectListProps) {
   return (
@@ -15,7 +15,12 @@ function HabitSelectList({ categories, selected, onSelect }: HabitSelectListProp
           <span className="typo-title3 shrink-0 pt-[2px] text-text-strong">{habit.label}</span>
           <div className="flex flex-wrap gap-[4px]">
             {habit.options.map((option) => (
-              <button key={option} type="button" onClick={() => onSelect(habit.label, option)}>
+              <button
+                key={option}
+                type="button"
+                onClick={() => onSelect(habit.label, option)}
+                aria-pressed={selected[habit.label] === option}
+              >
                 <Tag color={selected[habit.label] === option ? "default" : "gray"}>{option}</Tag>
               </button>
             ))}
