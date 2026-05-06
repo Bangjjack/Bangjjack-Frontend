@@ -40,3 +40,5 @@ certs/
 *.key
 *.crt
 *.p12
+
+.claude/settings.local.json
