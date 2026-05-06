@@ -68,7 +68,7 @@ Fill each section:
 - **📣 기타사항:** Risks, questions, follow-ups; if none, short `없음`.
 - **✅ 체크리스트:** Copy verbatim from the template. Keep `[ ]` for items the agent cannot verify; set `[x]` only when the user confirms (e.g. build done).
 
-Quality: prose should read well in **Korean**. If something conflicts with [CURSOR.md](../../../CURSOR.md), mention it under **기타사항**.
+Quality: prose should read well in **Korean**. If something conflicts with [CLAUDE.md](../../../CLAUDE.md), mention it under **기타사항**.
 
 ## Step 5. Update an existing PR (after more commits)
 
