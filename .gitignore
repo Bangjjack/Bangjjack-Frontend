@@ -40,6 +40,3 @@ certs/
 *.key
 *.crt
 *.p12
-
-CLAUDE.md
-.claude/
