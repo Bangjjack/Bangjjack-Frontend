@@ -5,12 +5,13 @@ import { cn } from "@/lib/cn";
 
 export interface MyChecklistContentProps {
   className?: string;
+  initialEditing?: boolean;
   onBack: () => void;
 }
 
-function MyChecklistContent({ className, onBack }: MyChecklistContentProps) {
+function MyChecklistContent({ className, initialEditing = false, onBack }: MyChecklistContentProps) {
   const { handleEditButtonClick, handleOptionToggle, isEditing, lastUpdated, visibleSections } =
-    useMyChecklistEditor();
+    useMyChecklistEditor(initialEditing);
 
   return (
     <div className={cn("-mx-400 flex min-h-full flex-col bg-bg-primary", className)}>

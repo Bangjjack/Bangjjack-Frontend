@@ -29,3 +29,4 @@ export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.sv
 export { default as ChevronRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
 export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
 export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";
+export { default as CameraIcon } from "@/assets/icons/ic-camera.svg?react";

@@ -4,11 +4,18 @@ import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import { cn } from "@/lib/cn";
 
 type OnBoardingPriorityStepProps = {
+  className?: string;
   onToggleFactor: (value: string) => void;
+  options?: readonly string[];
   selectedFactors: string[];
 };
 
-function OnBoardingPriorityStep({ onToggleFactor, selectedFactors }: OnBoardingPriorityStepProps) {
+function OnBoardingPriorityStep({
+  className,
+  onToggleFactor,
+  options = PRIORITY_FACTOR_OPTIONS,
+  selectedFactors,
+}: OnBoardingPriorityStepProps) {
   const [animatingOption, setAnimatingOption] = useState<string | null>(null);
   const [shakingOption, setShakingOption] = useState<string | null>(null);
 
@@ -46,7 +53,7 @@ function OnBoardingPriorityStep({ onToggleFactor, selectedFactors }: OnBoardingP
   };
 
   return (
-    <div className="flex flex-1 flex-col px-400">
+    <div className={cn("flex flex-1 flex-col px-400", className)}>
       <div className="flex flex-col gap-400">
         <p className="typo-button2">
           <span className="text-text-primary-alternative">{selectedFactors.length}</span>
@@ -54,7 +61,7 @@ function OnBoardingPriorityStep({ onToggleFactor, selectedFactors }: OnBoardingP
         </p>
 
         <div className="flex flex-wrap gap-200">
-          {PRIORITY_FACTOR_OPTIONS.map((option) => {
+          {options.map((option) => {
             const selectedIndex = selectedFactors.indexOf(option);
             const isSelected = selectedIndex !== -1;
 

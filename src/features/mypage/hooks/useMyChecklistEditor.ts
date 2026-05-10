@@ -38,10 +38,10 @@ function updateChecklistSelection(
   });
 }
 
-function useMyChecklistEditor() {
+function useMyChecklistEditor(initialEditing = false) {
   const [savedSections, setSavedSections] = useState(MY_CHECKLIST_SECTIONS);
   const [draftSections, setDraftSections] = useState(MY_CHECKLIST_SECTIONS);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(initialEditing);
   const [lastUpdated, setLastUpdated] = useState(MY_CHECKLIST_LAST_UPDATED);
   const visibleSections = isEditing ? draftSections : savedSections;
 
