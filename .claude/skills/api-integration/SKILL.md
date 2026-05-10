@@ -1,44 +1,44 @@
 ---
 name: api-integration
-description: React + TypeScript 프로젝트의 API 연동 규칙을 안내한다. axios / TanStack Query / Zustand / React Hook Form + Zod 계층 분리 원칙을 적용해야 할 때 사용한다. API 파일 생성, 훅 작성, 폼 스키마 정의, 상태 관리 역할 분리가 필요한 모든 상황에서 트리거한다.
+description: Guides API integration rules for React + TypeScript projects. Use when applying axios / TanStack Query / Zustand / React Hook Form + Zod layer separation principles. Triggers for any situation requiring API file creation, hook writing, form schema definition, or state management role separation.
 ---
 
-# API Integration 규칙
+# API Integration Rules
 
-이 프로젝트의 데이터 계층은 **4가지 역할**로 엄격히 분리된다.
+The data layer in this project is strictly separated into **4 roles**.
 
-| 계층            | 도구                  | 역할                         |
-| --------------- | --------------------- | ---------------------------- |
-| HTTP 통신       | axios                 | 서버와의 실제 요청/응답      |
-| 서버 상태       | TanStack Query        | 캐싱, 동기화, 로딩/에러 상태 |
-| 클라이언트 상태 | Zustand               | UI 상태, 전역 앱 상태        |
-| 폼 상태         | React Hook Form + Zod | 입력값, 유효성 검사          |
+| Layer        | Tool                  | Role                                          |
+| ------------ | --------------------- | --------------------------------------------- |
+| HTTP         | axios                 | Actual request/response to server             |
+| Server state | TanStack Query        | Caching, synchronization, loading/error state |
+| Client state | Zustand               | UI state, global app state                    |
+| Form state   | React Hook Form + Zod | Input values, validation                      |
 
 ---
 
-## 1. axios — API 레이어
+## 1. axios — API Layer
 
-### 규칙
+### Rules
 
-- **모든 API 호출은 `src/api/{domain}.ts`에 함수로 분리한다**
-- **컴포넌트 또는 훅에서 axios를 직접 import하거나 호출하는 것은 금지한다**
-- axios 인스턴스는 `src/lib/axios.ts`의 중앙화된 인스턴스만 사용한다
-- API 함수는 순수하게 요청/응답만 담당한다 (부수효과 없음)
-- 요청/응답 타입은 명시적으로 제네릭으로 선언한다
+- **All API calls must be separated as functions in `src/api/{domain}.ts`**
+- **Directly importing or calling axios from components or hooks is prohibited**
+- Use only the centralized instance from `src/lib/axios.ts`
+- API functions handle only request/response (no side effects)
+- Request/response types must be explicitly declared with generics
 
-### 파일 구조
+### File Structure
 
 ```text
 src/
   lib/
-    axios.ts          # 인스턴스, 인터셉터 설정
+    axios.ts          # instance, interceptor config
   api/
-    auth.ts           # 인증 관련 API
-    posts.ts          # 게시글 관련 API
-    users.ts          # 유저 관련 API
+    auth.ts           # auth-related API
+    posts.ts          # posts-related API
+    users.ts          # users-related API
 ```
 
-### axios 인스턴스 (`src/lib/axios.ts`)
+### axios Instance (`src/lib/axios.ts`)
 
 ```ts
 import axios from "axios";
@@ -57,13 +57,13 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (res) => res,
   (error) => {
-    // 공통 에러 처리 (401 리프레시 등)
+    // common error handling (401 refresh, etc.)
     return Promise.reject(error);
   },
 );
 ```
 
-### API 함수 예시 (`src/api/posts.ts`)
+### API Function Example (`src/api/posts.ts`)
 
 ```ts
 import { apiClient } from "@/lib/axios";
@@ -89,36 +89,36 @@ export const deletePost = async (id: number): Promise<void> => {
 };
 ```
 
-### 금지 패턴
+### Prohibited Patterns
 
 ```ts
-// ❌ 컴포넌트에서 직접 호출
+// ❌ direct call from component
 import axios from "axios";
 const res = await axios.get("/posts");
 
-// ❌ 훅에서 직접 호출
+// ❌ direct call from hook
 import { apiClient } from "@/lib/axios";
-const res = await apiClient.get("/posts"); // 훅에서 직접 사용 금지
+const res = await apiClient.get("/posts"); // direct use from hook is prohibited
 
-// ✅ API 레이어 함수를 통해서만 호출
+// ✅ call only through API layer function
 import { getPosts } from "@/api/posts";
 ```
 
 ---
 
-## 2. TanStack Query — 서버 상태
+## 2. TanStack Query — Server State
 
-### 규칙
+### Rules
 
-- **서버 데이터의 캐싱, 로딩/에러 상태는 반드시 TanStack Query로 관리한다**
-- 커스텀 훅으로 래핑한다: `src/features/{feature}/hooks/use{Domain}{Action}.ts`
-- `queryKey`는 해당 도메인 파일에 상수로 중앙화한다
-- `queryFn`에서 API 레이어 함수만 호출한다 (axios 직접 사용 금지)
-- `useMutation` 성공 후 관련 쿼리를 반드시 `invalidateQueries`로 무효화한다
-- 단순 조회는 컴포넌트에서 `useQuery`를 직접 사용할 수 있다. 공통 로직(파라미터 가공, staleTime 설정 등)이 있으면 커스텀 훅으로 분리한다
-- `useMutation`은 항상 커스텀 훅으로 분리한다
+- **Server data caching, loading/error state must be managed with TanStack Query**
+- Wrap in a custom hook: `src/features/{feature}/hooks/use{Domain}{Action}.ts`
+- Centralize `queryKey` as constants in the domain file
+- Call only API layer functions in `queryFn` (direct axios use prohibited)
+- After `useMutation` success, always invalidate related queries with `invalidateQueries`
+- Simple queries can use `useQuery` directly in components. Separate into a custom hook if there is shared logic (parameter processing, staleTime config, etc.)
+- Always separate `useMutation` into a custom hook
 
-### queryKey 규칙
+### queryKey Rules
 
 ```ts
 // src/features/post/queries/postQueryKeys.ts
@@ -131,7 +131,7 @@ export const postQueryKeys = {
 };
 ```
 
-### useQuery 훅 예시 (`src/features/post/hooks/usePostList.ts`)
+### useQuery Hook Example (`src/features/post/hooks/usePostList.ts`)
 
 ```ts
 import { useQuery } from "@tanstack/react-query";
@@ -142,12 +142,12 @@ export const usePostList = () => {
   return useQuery({
     queryKey: postQueryKeys.lists(),
     queryFn: getPosts,
-    staleTime: 1000 * 60 * 5, // 5분
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 ```
 
-### useMutation 훅 예시 (`src/features/post/hooks/useCreatePost.ts`)
+### useMutation Hook Example (`src/features/post/hooks/useCreatePost.ts`)
 
 ```ts
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -167,64 +167,64 @@ export const useCreatePost = () => {
 };
 ```
 
-### 컴포넌트 사용 예시
+### Component Usage Example
 
 ```tsx
-// ✅ 단순 조회 — 컴포넌트에서 직접 사용 가능
+// ✅ simple query — can be used directly in component
 const { data: posts, isLoading } = useQuery({
   queryKey: postQueryKeys.lists(),
   queryFn: getPosts,
 });
 
-// ✅ 공통 로직(staleTime, select, enabled 등)이 있으면 커스텀 훅으로 분리
+// ✅ separate into custom hook if there is shared logic (staleTime, select, enabled, etc.)
 const { data: posts, isLoading } = usePostList();
 
-// ✅ mutation은 항상 커스텀 훅으로 분리
+// ✅ always separate mutation into a custom hook
 const { mutate: createPost, isPending } = useCreatePost();
 
-// ❌ queryKey를 문자열로 직접 작성 금지 (반드시 queryKeys 상수 사용)
+// ❌ do not write queryKey as a string literal (must use queryKeys constants)
 const { data } = useQuery({ queryKey: ["posts"], queryFn: getPosts });
 ```
 
-### invalidateQueries 전략
+### invalidateQueries Strategy
 
-mutation 성공 후 어떤 쿼리를 무효화할지는 영향 범위에 따라 결정한다.
+Decide which queries to invalidate after mutation success based on the scope of impact.
 
-| 상황 | 전략 |
-|------|------|
-| 목록에 영향 (생성/삭제) | `lists()` 키 무효화 |
-| 특정 항목에만 영향 (수정) | `detail(id)` 키 무효화 |
-| 목록 + 상세 모두 영향 | `all` 키 무효화 (상위 키로 일괄 처리) |
+| Situation | Strategy |
+|-----------|----------|
+| Affects list (create/delete) | invalidate `lists()` key |
+| Affects specific item only (update) | invalidate `detail(id)` key |
+| Affects both list and detail | invalidate `all` key (batch with parent key) |
 
 ```ts
-// 생성 → 목록 무효화
+// create → invalidate list
 onSuccess: () => {
   queryClient.invalidateQueries({ queryKey: postQueryKeys.lists() });
 },
 
-// 수정 → 해당 상세만 무효화
+// update → invalidate specific detail
 onSuccess: (_, variables) => {
   queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(variables.id) });
 },
 
-// 삭제 → 목록 + 상세 일괄 무효화
+// delete → invalidate list + detail
 onSuccess: () => {
   queryClient.invalidateQueries({ queryKey: postQueryKeys.all });
 },
 ```
 
-### onSuccess 후처리
+### onSuccess Post-Processing
 
-mutation 성공 후 라우팅, 토스트, 모달 닫기 등의 **UI 후처리는 `onSuccess`에서 수행한다.**
-단, 훅 내부의 `onSuccess`와 컴포넌트에서 `mutate`에 전달하는 `onSuccess`를 역할에 따라 구분한다.
+UI post-processing after mutation success (routing, toast, closing modals, etc.) **is performed in `onSuccess`.**
+Distinguish between the hook's internal `onSuccess` and the `onSuccess` passed to `mutate` in components based on responsibility.
 
-| 위치 | 담당 후처리 |
-|------|------------|
-| 훅 내부 `onSuccess` | 캐시 무효화, 전역 상태 업데이트 등 데이터 계층 후처리 |
-| 컴포넌트 `mutate(..., { onSuccess })` | 토스트 알림, 모달 닫기, 페이지 이동 등 UI 후처리 |
+| Location | Responsibility |
+|----------|----------------|
+| Hook's internal `onSuccess` | Data layer post-processing: cache invalidation, global state updates, etc. |
+| Component `mutate(..., { onSuccess })` | UI post-processing: toast notifications, closing modals, page navigation, etc. |
 
 ```ts
-// ✅ 훅: 데이터 후처리
+// ✅ hook: data post-processing
 export const useCreatePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -235,17 +235,17 @@ export const useCreatePost = () => {
   });
 };
 
-// ✅ 컴포넌트: UI 후처리
+// ✅ component: UI post-processing
 const { mutate: createPost } = useCreatePost();
 
 const onSubmit = (values: CreatePostFormValues) => {
   createPost(values, {
     onSuccess: () => {
-      toast.success('게시글이 등록되었습니다.');
+      toast.success('Post has been created.');
       navigate('/posts');
     },
     onError: (error) => {
-      toast.error('등록에 실패했습니다.');
+      toast.error('Failed to submit.');
     },
   });
 };
@@ -253,29 +253,29 @@ const onSubmit = (values: CreatePostFormValues) => {
 
 ---
 
-## 3. Zustand — 클라이언트 상태
+## 3. Zustand — Client State
 
-### TanStack Query와의 역할 분리
+### Role Separation with TanStack Query
 
-| 상태 종류                                     | 올바른 도구                 |
-| --------------------------------------------- | --------------------------- |
-| 서버에서 가져온 데이터                        | TanStack Query              |
-| 서버 데이터의 로딩/에러                       | TanStack Query              |
-| UI 상태 (모달 열림, 탭 선택 등)               | Zustand                     |
-| 전역 앱 상태 (인증, 테마 등)                  | Zustand                     |
-| 여러 컴포넌트가 공유하는 클라이언트 전용 상태 | Zustand                     |
-| 서버 데이터를 로컬에서 캐시하거나 동기화      | ❌ Zustand 금지, Query 사용 |
+| State Type                                    | Correct Tool                     |
+| --------------------------------------------- | -------------------------------- |
+| Data fetched from server                      | TanStack Query                   |
+| Loading/error state of server data            | TanStack Query                   |
+| UI state (modal open, tab selection, etc.)    | Zustand                          |
+| Global app state (auth, theme, etc.)          | Zustand                          |
+| Client-only state shared across components    | Zustand                          |
+| Caching or syncing server data locally        | ❌ Zustand prohibited, use Query |
 
-### 규칙
+### Rules
 
-- **서버 상태를 Zustand에 저장하지 않는다** (Query가 이미 캐시 관리)
-- **TanStack Query의 데이터를 Zustand로 복사하지 않는다** — `useEffect`로 `data`를 스토어에 `set`하는 패턴은 금지
-- `set`으로 직접 상태를 변경하고, 필요 시 `immer` 미들웨어를 사용한다
-- 스토어는 `src/stores/{domain}Store.ts`에 위치한다
-- 스토어는 도메인 단위로 분리한다 (하나의 거대한 전역 스토어 금지)
-- 인증 토큰 등 민감 정보는 스토어에 저장하지 않는다
+- **Do not store server state in Zustand** (Query already manages caching)
+- **Do not copy TanStack Query data to Zustand** — the pattern of `set`ting `data` to the store via `useEffect` is prohibited
+- Mutate state directly with `set`; use `immer` middleware when needed
+- Stores are located at `src/stores/{domain}Store.ts`
+- Separate stores by domain (one massive global store is prohibited)
+- Do not store sensitive information such as auth tokens in the store
 
-### 스토어 예시 (`src/stores/uiStore.ts`)
+### Store Example (`src/stores/uiStore.ts`)
 
 ```ts
 import { create } from "zustand";
@@ -293,7 +293,7 @@ export const useUiStore = create<UiState>((set) => ({
 }));
 ```
 
-### 인증 스토어 예시 (`src/stores/authStore.ts`)
+### Auth Store Example (`src/stores/authStore.ts`)
 
 ```ts
 import { create } from "zustand";
@@ -313,73 +313,73 @@ export const useAuthStore = create<AuthState>((set) => ({
 }));
 ```
 
-### 금지 패턴
+### Prohibited Patterns
 
 ```ts
-// ❌ 서버 데이터를 Zustand에 저장
+// ❌ storing server data in Zustand
 const usePostStore = create(() => ({
-  posts: [], // 금지: 서버 데이터는 Query가 관리
+  posts: [], // prohibited: server data is managed by Query
   fetchPosts: async () => {
-    /* axios 호출 */
-  }, // 금지
+    /* axios call */
+  }, // prohibited
 }));
 
-// ❌ Query 데이터를 Zustand로 복사 (동기화 문제 발생)
+// ❌ copying Query data to Zustand (causes sync issues)
 const { data } = usePostList();
 useEffect(() => {
-  if (data) usePostStore.getState().setPosts(data); // 금지
+  if (data) usePostStore.getState().setPosts(data); // prohibited
 }, [data]);
 
-// ✅ 서버 데이터는 Query, UI 상태만 Zustand
+// ✅ server data via Query, only UI state in Zustand
 const { data: posts } = usePostList(); // Query
 const { isModalOpen } = useUiStore(); // Zustand
 ```
 
 ---
 
-## 4. React Hook Form + Zod — 폼 상태
+## 4. React Hook Form + Zod — Form State
 
-### 규칙
+### Rules
 
-- **모든 폼 상태는 React Hook Form으로 관리한다** (`useState` 기반 폼 금지)
-- **유효성 검사는 반드시 Zod 스키마로 정의한다** (인라인 validate 함수 금지)
-- 스키마는 `src/features/{feature}/schemas/{formName}.schema.ts`에 위치한다
-- API 요청 타입과 폼 스키마를 최대한 공유한다 (`z.infer<typeof schema>`)
-- `useMutation`과 `handleSubmit`을 연결할 때 `onSubmit`에서 mutate를 호출한다
-- 에러 메시지는 스키마에서 정의한다 (컴포넌트에 하드코딩 금지)
+- **All form state must be managed with React Hook Form** (`useState`-based forms prohibited)
+- **Validation must be defined with Zod schema** (inline validate function prohibited)
+- Schema is located at `src/features/{feature}/schemas/{formName}.schema.ts`
+- Share API request types and form schema as much as possible (`z.infer<typeof schema>`)
+- Call mutate in `onSubmit` when connecting `useMutation` with `handleSubmit`
+- Define error messages in the schema (hardcoding in components is prohibited)
 
-### 파일 구조
+### File Structure
 
 ```text
 src/features/post/
   schemas/
     createPost.schema.ts
   hooks/
-    useCreatePost.ts     # useMutation 훅
+    useCreatePost.ts     # useMutation hook
   components/
     CreatePostForm.tsx
 ```
 
-### Zod 스키마 정의 (`src/features/post/schemas/createPost.schema.ts`)
+### Zod Schema Definition (`src/features/post/schemas/createPost.schema.ts`)
 
 ```ts
 import { z } from "zod";
 
 export const createPostSchema = z.object({
-  title: z.string().min(1, "제목을 입력해주세요.").max(100, "제목은 100자 이하로 입력해주세요."),
+  title: z.string().min(1, "Title is required.").max(100, "Title must be 100 characters or less."),
   content: z
     .string()
-    .min(10, "내용을 10자 이상 입력해주세요.")
-    .max(5000, "내용은 5000자 이하로 입력해주세요."),
+    .min(10, "Content must be at least 10 characters.")
+    .max(5000, "Content must be 5000 characters or less."),
   category: z.enum(["FREE", "QUESTION", "NOTICE"], {
-    required_error: "카테고리를 선택해주세요.",
+    required_error: "Please select a category.",
   }),
 });
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;
 ```
 
-### 폼 컴포넌트 (`src/features/post/components/CreatePostForm.tsx`)
+### Form Component (`src/features/post/components/CreatePostForm.tsx`)
 
 ```tsx
 import { useForm } from "react-hook-form";
@@ -409,84 +409,84 @@ export const CreatePostForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("title")} placeholder="제목" />
+      <input {...register("title")} placeholder="Title" />
       {errors.title && <p>{errors.title.message}</p>}
 
-      <textarea {...register("content")} placeholder="내용" />
+      <textarea {...register("content")} placeholder="Content" />
       {errors.content && <p>{errors.content.message}</p>}
 
       <button type="submit" disabled={isPending}>
-        {isPending ? "등록 중..." : "등록"}
+        {isPending ? "Submitting..." : "Submit"}
       </button>
     </form>
   );
 };
 ```
 
-### API 타입과 스키마 공유
+### Sharing API Types and Schema
 
 ```ts
-// 스키마에서 타입을 파생시켜 API 요청 타입으로 재사용
+// derive type from schema and reuse as API request type
 import type { CreatePostFormValues } from "../schemas/createPost.schema";
 
-// API 함수 시그니처
+// API function signature
 export const createPost = async (body: CreatePostFormValues): Promise<Post> => {
   const { data } = await apiClient.post<Post>("/posts", body);
   return data;
 };
 ```
 
-### 금지 패턴
+### Prohibited Patterns
 
 ```tsx
-// ❌ useState로 폼 상태 관리
+// ❌ managing form state with useState
 const [title, setTitle] = useState("");
 const [content, setContent] = useState("");
 
-// ❌ 인라인 유효성 검사
+// ❌ inline validation
 <input
   {...register("title", {
-    required: "제목을 입력해주세요.", // 금지: 스키마로 정의해야 함
+    required: "Title is required.", // prohibited: must be defined in schema
     maxLength: { value: 100, message: "..." },
   })}
 />;
 
-// ❌ 스키마 없이 직접 validate 함수 작성
+// ❌ writing validate function directly without schema
 resolver: async (values) => {
-  /* 직접 검사 로직 */
+  /* direct validation logic */
 };
 ```
 
 ---
 
-## 5. 에러 처리 규칙
+## 5. Error Handling Rules
 
-에러 처리는 계층별로 책임을 분리한다.
+Error handling responsibilities are separated by layer.
 
-| 계층 | 처리 대상 | 방법 |
-|------|----------|------|
-| axios 인터셉터 | 공통 HTTP 에러 (401, 403, 500 등) | `interceptors.response` |
-| TanStack Query | 쿼리/뮤테이션 단위 에러 상태 | `isError`, `error`, `onError` |
-| 컴포넌트 | UI 에러 표시 (토스트, 에러 메시지) | `mutate(..., { onError })` |
+| Layer | Scope | Method |
+|-------|-------|--------|
+| axios interceptor | Common HTTP errors (401, 403, 500, etc.) | `interceptors.response` |
+| TanStack Query | Per-query/mutation error state | `isError`, `error`, `onError` |
+| Component | UI error display (toast, error message) | `mutate(..., { onError })` |
 
-### axios 인터셉터 — 공통 에러 처리
+### axios Interceptor — Common Error Handling
 
 ```ts
 apiClient.interceptors.response.use(
   (res) => res,
   (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // 토큰 만료 → 리프레시 또는 로그아웃
+      // token expired → refresh or logout
     }
     if (error.response?.status === 403) {
-      // 권한 없음 처리
+      // handle forbidden
     }
     return Promise.reject(error);
   },
 );
 ```
 
-### useQuery 에러 처리
+### useQuery Error Handling
 
 ```tsx
 const { data, isError, error } = useQuery({
@@ -497,43 +497,43 @@ const { data, isError, error } = useQuery({
 if (isError) return <ErrorMessage message={error.message} />;
 ```
 
-### useMutation 에러 처리
+### useMutation Error Handling
 
 ```ts
-// 훅: 공통 에러 처리
+// hook: common error handling
 export const useCreatePost = () => {
   return useMutation({
     mutationFn: createPost,
     onError: (error: AxiosError) => {
-      // 공통 처리가 필요한 경우에만 훅에서 처리
-      console.error('게시글 생성 실패:', error);
+      // only handle in hook if common processing is needed
+      console.error('Failed to create post:', error);
     },
   });
 };
 
-// 컴포넌트: UI 에러 처리
+// component: UI error handling
 createPost(values, {
-  onError: () => toast.error('등록에 실패했습니다.'),
+  onError: () => toast.error('Failed to submit.'),
 });
 ```
 
-### 규칙
+### Rules
 
-- **axios 인터셉터에서는 공통 HTTP 에러만 처리한다** (모든 에러를 삼키지 않는다)
-- **`try/catch`로 Query 에러를 직접 잡지 않는다** — `isError` / `onError` 사용
-- 에러 바운더리(`ErrorBoundary`)는 페이지 단위로 적용한다
-- API 에러 응답의 타입을 `AxiosError<ErrorResponse>`로 명시한다
+- **axios interceptors handle only common HTTP errors** (do not swallow all errors)
+- **Do not catch Query errors directly with `try/catch`** — use `isError` / `onError`
+- Apply `ErrorBoundary` at the page level
+- Explicitly type API error responses as `AxiosError<ErrorResponse>`
 
 ---
 
-## 전체 데이터 흐름 요약
+## Full Data Flow Summary
 
 ```text
-컴포넌트
-  └─ useForm (React Hook Form)      ← 폼 입력값, 유효성
-  └─ useUiStore (Zustand)           ← UI 상태
-  └─ usePostList (TanStack Query)   ← 서버 데이터 읽기
-       └─ getPosts (axios API fn)   ← HTTP 요청
-  └─ useCreatePost (TanStack Query) ← 서버 데이터 쓰기
-       └─ createPost (axios API fn) ← HTTP 요청
+Component
+  └─ useForm (React Hook Form)      ← form input values, validation
+  └─ useUiStore (Zustand)           ← UI state
+  └─ usePostList (TanStack Query)   ← read server data
+       └─ getPosts (axios API fn)   ← HTTP request
+  └─ useCreatePost (TanStack Query) ← write server data
+       └─ createPost (axios API fn) ← HTTP request
 ```
