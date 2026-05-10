@@ -9,7 +9,11 @@ export interface MyChecklistContentProps {
   onBack: () => void;
 }
 
-function MyChecklistContent({ className, initialEditing = false, onBack }: MyChecklistContentProps) {
+function MyChecklistContent({
+  className,
+  initialEditing = false,
+  onBack,
+}: MyChecklistContentProps) {
   const { handleEditButtonClick, handleOptionToggle, isEditing, lastUpdated, visibleSections } =
     useMyChecklistEditor(initialEditing);
 

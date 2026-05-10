@@ -1,14 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { CameraIcon, ChevronRightIcon, WaveBackgroundIcon } from "@/assets/icons";
-import {
-  Button,
-  Header,
-  Input,
-  ProfileAvatar,
-  SelectField,
-  Tag,
-} from "@/components/ui";
+import { Button, Header, Input, ProfileAvatar, SelectField, Tag } from "@/components/ui";
 import { OnBoardingPriorityStep } from "@/features/onboarding/components";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import {
@@ -103,11 +96,7 @@ function ProfileAvatarSection({
     <div className="flex flex-col items-start px-3.5">
       <div className={cn("relative", isEditing && "w-28")}>
         {imageUrl ? (
-          <img
-            alt=""
-            className="size- rounded-full bg-bg-secondary object-cover"
-            src={imageUrl}
-          />
+          <img alt="" className="size- rounded-full bg-bg-secondary object-cover" src={imageUrl} />
         ) : (
           <ProfileAvatar seed={name.length} size={100} variant="orange" />
         )}
@@ -163,10 +152,7 @@ function ProfileEditFields({ onFieldChange, values }: ProfileEditFieldsProps) {
           <span className="shrink-0 typo-body1 text-text-normal">세</span>
         </div>
 
-        <span
-          aria-hidden="true"
-          className="h-3.75 w-[0.09375rem] shrink-0 bg-border-strong"
-        />
+        <span aria-hidden="true" className="h-3.75 w-[0.09375rem] shrink-0 bg-border-strong" />
 
         <SelectField
           ariaLabel="학과"
@@ -187,9 +173,7 @@ function TagSyncNoticeSection() {
   return (
     <section className="flex flex-col items-start gap-1.5 self-stretch rounded-medium bg-bg-secondary px-400 py-300">
       <h2 className="typo-title2 text-text-strong">나의 성향 태그</h2>
-      <p className="typo-caption2 text-text-caption">
-        체크리스트를 수정하면 태그가 업데이트돼요.
-      </p>
+      <p className="typo-caption2 text-text-caption">체크리스트를 수정하면 태그가 업데이트돼요.</p>
     </section>
   );
 }
