@@ -1,8 +1,10 @@
 dist
 node_modules
 coverage
-.cursor/
-CURSOR.md
+.claude/
+CLAUDE.md
+docs/
+**/AGENTS.md
 *.mdc
 pnpm-lock.yaml
 .github/
