@@ -9,7 +9,7 @@ description: >-
 
 # Figma → Component
 
-Use this skill as **extra guidance when turning Figma into code**. **Global rules** (stack, token locations, `cn`, `components/ui`, React 19, etc.) live in **[AGENTS.md](../../../AGENTS.md)** and take precedence.
+Use this skill as **extra guidance when turning Figma into code**. **Global rules** (stack, token locations, `cn`, `components/ui`, React 19, etc.) live in **[AGENTS.md](../AGENTS.md)** and take precedence.
 
 ## 1. Design analysis
 
@@ -86,4 +86,4 @@ If you use Radix and need **`asChild`**, use the Slot pattern in [template.md](t
 - [ ] Token mapping matches `index.css`
 - [ ] No hard-coded values or inline styles; tokens only
 - [ ] DOM matches Figma structure and overflow behavior (`min-w-0`, `truncate`)
-- [ ] [AGENTS.md](../../../AGENTS.md) global rules respected
+- [ ] [AGENTS.md](../AGENTS.md) global rules respected
