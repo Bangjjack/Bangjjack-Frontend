@@ -62,6 +62,7 @@ type ProfileEditFieldsProps = {
 type ImportanceEditSectionProps = {
   items: string[];
   onToggle: (item: string) => void;
+  replaceFeedbackKey: number;
 };
 
 type ProfileViewContentProps = {
@@ -178,7 +179,11 @@ function TagSyncNoticeSection() {
   );
 }
 
-function ImportanceEditSection({ items, onToggle }: ImportanceEditSectionProps) {
+function ImportanceEditSection({
+  items,
+  onToggle,
+  replaceFeedbackKey,
+}: ImportanceEditSectionProps) {
   return (
     <section className="flex flex-col items-start gap-1.5 self-stretch rounded-medium bg-bg-secondary px-400 py-300">
       <h2 className="typo-title2 text-text-strong">룸메이트에게 이런 점이 중요해요</h2>
@@ -186,6 +191,7 @@ function ImportanceEditSection({ items, onToggle }: ImportanceEditSectionProps) 
         className="w-full flex-none px-0 pt-3.5"
         onToggleFactor={onToggle}
         options={PRIORITY_FACTOR_OPTIONS}
+        replaceFeedbackKey={replaceFeedbackKey}
         selectedFactors={items}
       />
     </section>
@@ -249,6 +255,7 @@ function MyProfileEditContent({
   const [profileForm, setProfileForm] = useState(INITIAL_PROFILE_FORM);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [importanceItems, setImportanceItems] = useState(MY_PROFILE_IMPORTANCE_ITEMS);
+  const [replaceFeedbackKey, setReplaceFeedbackKey] = useState(0);
 
   useEffect(() => {
     return () => {
@@ -291,6 +298,7 @@ function MyProfileEditContent({
       }
 
       if (prev.length >= 3) {
+        setReplaceFeedbackKey((value) => value + 1);
         return [...prev.slice(1), item];
       }
 
@@ -326,7 +334,7 @@ function MyProfileEditContent({
             <>
               <ProfileEditFields onFieldChange={updateProfileField} values={profileForm} />
               <TagSyncNoticeSection />
-              <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} />
+              <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} replaceFeedbackKey={replaceFeedbackKey} />
               <ChecklistEditLink onClick={onChecklistClick} />
             </>
           ) : (
