@@ -97,7 +97,11 @@ function ProfileAvatarSection({
     <div className="flex flex-col items-start px-3.5">
       <div className={cn("relative", isEditing && "w-28")}>
         {imageUrl ? (
-          <img alt="" className="size-25 rounded-full bg-bg-secondary object-cover" src={imageUrl} />
+          <img
+            alt=""
+            className="size-25 rounded-full bg-bg-secondary object-cover"
+            src={imageUrl}
+          />
         ) : (
           <ProfileAvatar seed={name.length} size={100} variant="orange" />
         )}
@@ -334,7 +338,11 @@ function MyProfileEditContent({
             <>
               <ProfileEditFields onFieldChange={updateProfileField} values={profileForm} />
               <TagSyncNoticeSection />
-              <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} replaceFeedbackKey={replaceFeedbackKey} />
+              <ImportanceEditSection
+                items={importanceItems}
+                onToggle={toggleImportanceItem}
+                replaceFeedbackKey={replaceFeedbackKey}
+              />
               <ChecklistEditLink onClick={onChecklistClick} />
             </>
           ) : (
