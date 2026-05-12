@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_BASE_URL, ACCESS_TOKEN_KEY } from "@/constants";
 
 export const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: `${API_BASE_URL}api/v1`,
   headers: {
     "Content-Type": "application/json",
   },
