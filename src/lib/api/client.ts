@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import { API_BASE_URL, ACCESS_TOKEN_KEY } from "@/constants";
+import { useAuthStore } from "@/stores/authStore";
 
 export const apiClient = axios.create({
   baseURL: `${API_BASE_URL}api/v1`,
@@ -25,6 +26,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // TODO: refresh token API 연동 후 토큰 갱신 로직 추가
       localStorage.removeItem(ACCESS_TOKEN_KEY);
+      useAuthStore.getState().clearAuth();
       window.location.href = "/login";
     }
 
