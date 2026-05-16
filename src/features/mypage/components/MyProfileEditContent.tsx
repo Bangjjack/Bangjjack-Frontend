@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { CameraIcon, ChevronRightIcon, WaveBackgroundIcon } from "@/assets/icons";
+import { ChevronRightIcon, WaveBackgroundIcon } from "@/assets/icons";
 import { Button, Header, Input, ProfileAvatar, SelectField, Tag } from "@/components/ui";
 import { OnBoardingPriorityStep } from "@/features/onboarding/components";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
@@ -78,20 +78,7 @@ function ProfileAvatarSection({
   imageUrl,
   isEditing,
   name,
-  onImageChange,
 }: ProfileAvatarSectionProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
-
-    onImageChange(file);
-    event.target.value = "";
-  }
 
   return (
     <div className="flex flex-col items-start px-3.5">
@@ -105,25 +92,6 @@ function ProfileAvatarSection({
         ) : (
           <ProfileAvatar seed={name.length} size={100} variant="orange" />
         )}
-        {isEditing ? (
-          <>
-            <input
-              ref={fileInputRef}
-              accept="image/*"
-              className="hidden"
-              onChange={handleFileChange}
-              type="file"
-            />
-            <button
-              aria-label="프로필 사진 변경"
-              className="absolute bottom-0 left-18 flex cursor-pointer items-center gap-2.5 rounded-[6.25rem] border border-border-normal bg-bg-primary p-200 text-icon-primary-alternative"
-              onClick={() => fileInputRef.current?.click()}
-              type="button"
-            >
-              <CameraIcon aria-hidden="true" className="size-400 [&_path]:stroke-current" />
-            </button>
-          </>
-        ) : null}
       </div>
     </div>
   );
