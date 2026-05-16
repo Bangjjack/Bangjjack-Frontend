@@ -3,52 +3,58 @@ import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
-import { HABIT_CATEGORIES } from "@/constants";
 import { useGoBack } from "@/hooks/useGoBack";
 
-import { HabitList } from "./HabitList";
-import { MatchAlertDialog } from "./MatchAlertDialog";
-import { PostActionMenu } from "./PostActionMenu";
-import { RoommateList } from "./RoommateList";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/features/board/constants";
+import { usePostDetail } from "@/features/board/hooks";
+import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
-// TODO: API 연동 시 제거
-const MOCK_POST = {
-  title: "글캠 기숙사 2인실 룸메 구해요!",
-  currentMembers: 1,
-  maxMembers: 2,
-  author: { nickname: "무구정광대다라니경", seed: 1 },
-  timeAgo: "3분 전",
-  description:
-    "깔끔한 편이고 조용한 성격입니다. 코골이 없고 잠버릇도 없어요. 새벽 1시 전에는 자는 편이라 비슷한 분이면 좋겠습니다. 청소는 일주일에 한 번 정도 하고, 환기도 자주 해요. 편하게 연락 주세요!",
-  recruitTags: ["학기 (16주)", "3 기숙사", "2인 1실"],
-  importanceTags: ["취침 시간", "기상 시간", "기숙사 체류 시간"],
-  habits: HABIT_CATEGORIES.map((category, idx) => ({
-    ...category,
-    selectedIndex: idx === 0 ? 1 : 0,
-  })),
-  members: [
-    { nickname: "무구정광대다라니경", seed: 1, isHost: true },
-    { nickname: "햄무라비법전", seed: 2 },
-    { nickname: "직지심체요절", seed: 3 },
-  ],
-  matchRate: 92,
-  matchDetails: "청소 빈도, 흡연 여부",
-  isMine: true, // TODO: API 연동 시 실제 판별 로직으로 교체
-};
+import {
+  HabitList,
+  MatchAlertDialog,
+  PostActionMenu,
+  RoommateList,
+} from "@/features/board/components";
 
 function PostDetailContent() {
   const { id } = useParams();
+  const postId = Number(id);
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { data: post, isLoading, isError } = usePostDetail(postId);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">로딩 중...</span>
+      </div>
+    );
+  }
+
+  if (isError || !post) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">게시글을 불러올 수 없습니다.</span>
+      </div>
+    );
+  }
+
+  const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
+  const recruitTags = [
+    SEMESTER_LABEL[post.semester] ?? post.semester,
+    DORMITORY_LABEL[post.dormitory] ?? post.dormitory,
+    ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize,
+  ];
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       {/* Fixed header */}
       <Header
         showBack
-        showMore={MOCK_POST.isMine}
+        showMore={post.isOwner}
         title="방 찾기"
         onBackClick={handleBackClick}
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
@@ -65,18 +71,18 @@ function PostDetailContent() {
             <div className="flex flex-col gap-300">
               {/* 제목 + 인원 */}
               <div className="flex items-center justify-between">
-                <h2 className="typo-h4 text-text-strong">{MOCK_POST.title}</h2>
+                <h2 className="typo-h4 text-text-strong">{post.title}</h2>
                 <Tag color="black">
-                  {MOCK_POST.currentMembers} / {MOCK_POST.maxMembers}
+                  {post.recruitMemberCount} / {ROOM_SIZE_MAX[post.roomSize] ?? 0}
                 </Tag>
               </div>
 
               {/* 작성자 + 시간 */}
               <div className="flex items-center gap-200">
-                <ProfileAvatar size={24} seed={MOCK_POST.author.seed} />
-                <span className="typo-caption1 text-text-caption">{MOCK_POST.author.nickname}</span>
+                <ProfileAvatar size={24} seed={post.author.authorId} />
+                <span className="typo-caption1 text-text-caption">{post.author.username}</span>
                 <span className="typo-caption2 ml-auto text-text-disabled">
-                  {MOCK_POST.timeAgo}
+                  {formatRelativeTime(post.createdAt)}
                 </span>
               </div>
             </div>
@@ -84,11 +90,9 @@ function PostDetailContent() {
 
           {/* Card 2 - 본문 + 모집 태그 */}
           <Card className="gap-600 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
-            <p className="typo-body2 whitespace-pre-wrap text-text-normal">
-              {MOCK_POST.description}
-            </p>
+            <p className="typo-body2 whitespace-pre-wrap text-text-normal">{post.description}</p>
             <div className="flex flex-wrap gap-[6px]">
-              {MOCK_POST.recruitTags.map((tag) => (
+              {recruitTags.map((tag) => (
                 <Tag key={tag} color="default">
                   {tag}
                 </Tag>
@@ -96,7 +100,7 @@ function PostDetailContent() {
             </div>
           </Card>
 
-          {/* Card 3 - 태그 섹션 */}
+          {/* Card 3 - 공동 생활습관 */}
           <Card className="gap-500 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
             <h3 className="typo-title1 text-text-strong">태그</h3>
 
@@ -104,19 +108,17 @@ function PostDetailContent() {
             <div className="flex flex-col gap-[10px]">
               <span className="typo-title2 text-text-strong">이런 점을 중요하게 생각해요</span>
               <div className="flex flex-wrap gap-[4px]">
-                {MOCK_POST.importanceTags.map((tag) => (
+                {/* {MOCK_POST.importanceTags.map((tag) => (
                   <Tag key={tag} color="black">
                     {tag}
                   </Tag>
-                ))}
+                ))} */}
               </div>
             </div>
 
             {/* 구분선 */}
             <Separator />
-
-            {/* 공동 생활습관 */}
-            <HabitList habits={MOCK_POST.habits} />
+            <HabitList habits={habits} />
           </Card>
 
           {/* Card 4 - 룸메이트 목록 */}
@@ -132,7 +134,15 @@ function PostDetailContent() {
               </span>
             </button>
 
-            <RoommateList members={MOCK_POST.members} />
+            <RoommateList
+              members={[
+                {
+                  nickname: post.author.username,
+                  seed: post.author.authorId,
+                  isHost: true,
+                },
+              ]}
+            />
           </Card>
         </div>
       </main>
@@ -151,23 +161,20 @@ function PostDetailContent() {
             <BookmarkIcon className="size-[30px]" />
           )}
         </button>
-        <MatchAlertDialog
-          matchRate={MOCK_POST.matchRate}
-          matchDetails={MOCK_POST.matchDetails}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1" variant="ghost">
-            매칭하기
-          </Button>
-        </MatchAlertDialog>
 
-        <MatchAlertDialog
-          matchRate={MOCK_POST.matchRate}
-          matchDetails={MOCK_POST.matchDetails}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1">채팅하기</Button>
-        </MatchAlertDialog>
+        {!post.isOwner && (
+          <>
+            <MatchAlertDialog matchRate={0} matchDetails="" onConfirm={() => navigate("/chat")}>
+              <Button className="flex-1" variant="ghost">
+                매칭하기
+              </Button>
+            </MatchAlertDialog>
+
+            <MatchAlertDialog matchRate={0} matchDetails="" onConfirm={() => navigate("/chat")}>
+              <Button className="flex-1">채팅하기</Button>
+            </MatchAlertDialog>
+          </>
+        )}
       </div>
     </div>
   );
