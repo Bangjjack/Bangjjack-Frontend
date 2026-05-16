@@ -262,7 +262,7 @@ function MyProfileEditContent({
         className="absolute inset-x-0 top-0 z-20"
         onBackClick={onBack}
         showBack
-        title="프로필 편집"
+        title={isEditing ? "프로필 편집" : "내 프로필"}
       />
 
       <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
