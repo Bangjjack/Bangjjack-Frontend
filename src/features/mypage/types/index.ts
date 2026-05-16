@@ -6,6 +6,17 @@ export type MyBookmarkPostStatus = "open" | "closed";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
 
+export type {
+  ChecklistEditLinkProps,
+  ImportanceEditSectionProps,
+  MyProfileEditContentProps,
+  ProfileAvatarSectionProps,
+  ProfileEditFieldsProps,
+  ProfileFieldKey,
+  ProfileForm,
+  ProfileViewContentProps,
+} from "@/features/mypage/types/myProfileEditContent.types";
+
 export interface MyActivityMatchMock {
   actions: MyRecruitPostActionMock[];
   age: number;

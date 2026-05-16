@@ -9,6 +9,15 @@ import {
   MY_PROFILE_CHECKLIST,
   MY_PROFILE_IMPORTANCE_ITEMS,
 } from "@/features/mypage/mocks";
+import type {
+  ChecklistEditLinkProps,
+  ImportanceEditSectionProps,
+  MyProfileEditContentProps,
+  ProfileAvatarSectionProps,
+  ProfileEditFieldsProps,
+  ProfileFieldKey,
+  ProfileViewContentProps,
+} from "@/features/mypage/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { cn } from "@/lib/cn";
 
@@ -36,43 +45,6 @@ const PROFILE_PLACEHOLDER = {
 const SELECT_TRIGGER_CLASS_NAME =
   "h-11 rounded-medium border-[1.5px] border-border-normal bg-bg-secondary px-300 typo-body1";
 const WAVE_BACKGROUND_CLASS_NAME = "absolute left-0 -top-0.75 w-full";
-
-type ProfileForm = typeof INITIAL_PROFILE_FORM;
-type ProfileFieldKey = keyof ProfileForm;
-
-export interface MyProfileEditContentProps {
-  className?: string;
-  onBack: () => void;
-  onChecklistClick?: () => void;
-  onEditClick?: () => void;
-}
-
-type ProfileAvatarSectionProps = {
-  imageUrl: string | null;
-  isEditing: boolean;
-  name: string;
-  onImageChange: (file: File) => void;
-};
-
-type ProfileEditFieldsProps = {
-  onFieldChange: (key: ProfileFieldKey, value: string) => void;
-  values: ProfileForm;
-};
-
-type ImportanceEditSectionProps = {
-  items: string[];
-  onToggle: (item: string) => void;
-  replaceFeedbackKey: number;
-};
-
-type ProfileViewContentProps = {
-  importanceItems: string[];
-  values: ProfileForm;
-};
-
-type ChecklistEditLinkProps = {
-  onClick?: () => void;
-};
 
 function ProfileAvatarSection({
   imageUrl,
@@ -334,3 +306,4 @@ function MyProfileEditContent({
 }
 
 export { MyProfileEditContent };
+export type { MyProfileEditContentProps };
