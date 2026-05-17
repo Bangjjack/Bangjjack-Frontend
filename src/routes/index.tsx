@@ -19,89 +19,95 @@ import PostWritePage from "@/pages/PostWritePage";
 import PostChecklistPage from "@/pages/PostChecklistPage";
 import RoommateListPage from "@/pages/RoommateListPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
+import ProtectedRoute from "@/routes/ProtectedRoute";
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
-    element: <MainPage />,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="/login" replace />,
-      },
-      {
-        path: "home",
-        element: <HomePage />,
-      },
-      {
-        path: "board",
-        element: <BoardPage />,
-      },
-      {
-        path: "chat",
-        element: <ChatPage />,
-      },
-      {
-        path: "mypage",
-        element: <MyPage />,
-      },
-      {
-        path: "mypage/activity",
-        element: <MyActivityPage />,
-      },
-      {
-        path: "mypage/bookmarks",
-        element: <MyBookmarkPage />,
-      },
-      {
-        path: "mypage/checklist",
-        element: <MyChecklistPage />,
-      },
-      {
-        path: "mypage/profile",
-        element: <MyProfileEditPage />,
-      },
-    ],
-  },
-  {
     path: "/login",
     element: <LoginPage />,
-  },
-  {
-    path: "/chat/:chatId",
-    element: <ChatDetailPage />,
-  },
-  {
-    path: "/chat/:chatId/roommate-confirmed",
-    element: <ChatRoommateConfirmedPage />,
   },
   {
     path: "/onboarding",
     element: <OnBoardingPage />,
   },
   {
-    path: "/board/write",
-    element: <PostWritePage />,
-  },
-  {
-    path: "/board/write/checklist",
-    element: <PostChecklistPage />,
-  },
-  {
-    path: "/board/:id",
-    element: <PostDetailPage />,
-  },
-  {
-    path: "/board/:id/edit",
-    element: <PostEditPage />,
-  },
-  {
-    path: "/board/:id/roommates",
-    element: <RoommateListPage />,
-  },
-  {
-    path: "/roommate/:id",
-    element: <RoommateProfilePage />,
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/",
+        element: <MainPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="/home" replace />,
+          },
+          {
+            path: "home",
+            element: <HomePage />,
+          },
+          {
+            path: "board",
+            element: <BoardPage />,
+          },
+          {
+            path: "chat",
+            element: <ChatPage />,
+          },
+          {
+            path: "mypage",
+            element: <MyPage />,
+          },
+          {
+            path: "mypage/activity",
+            element: <MyActivityPage />,
+          },
+          {
+            path: "mypage/bookmarks",
+            element: <MyBookmarkPage />,
+          },
+          {
+            path: "mypage/checklist",
+            element: <MyChecklistPage />,
+          },
+          {
+            path: "mypage/profile",
+            element: <MyProfileEditPage />,
+          },
+        ],
+      },
+      {
+        path: "/chat/:chatId",
+        element: <ChatDetailPage />,
+      },
+      {
+        path: "/chat/:chatId/roommate-confirmed",
+        element: <ChatRoommateConfirmedPage />,
+      },
+      {
+        path: "/board/write",
+        element: <PostWritePage />,
+      },
+      {
+        path: "/board/write/checklist",
+        element: <PostChecklistPage />,
+      },
+      {
+        path: "/board/:id",
+        element: <PostDetailPage />,
+      },
+      {
+        path: "/board/:id/edit",
+        element: <PostEditPage />,
+      },
+      {
+        path: "/board/:id/roommates",
+        element: <RoommateListPage />,
+      },
+      {
+        path: "/roommate/:id",
+        element: <RoommateProfilePage />,
+      },
+    ],
   },
   {
     path: "/design-system",
