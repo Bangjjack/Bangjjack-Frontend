@@ -6,7 +6,12 @@ import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/component
 import { useGoBack } from "@/hooks/useGoBack";
 
 import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
-import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/features/board/constants";
+import {
+  DORMITORY_LABEL,
+  ROOM_SIZE_LABEL,
+  ROOM_SIZE_MAX,
+  SEMESTER_LABEL,
+} from "@/features/board/constants";
 import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
@@ -113,7 +118,9 @@ function PostDetailContent() {
                   <div className="flex flex-wrap gap-[4px]">
                     {post.roommatePreferences.map((pref) => (
                       <Tag key={pref} color="black">
-                        {ROOMMATE_PREFERENCE_LABEL[pref as keyof typeof ROOMMATE_PREFERENCE_LABEL] ?? pref}
+                        {ROOMMATE_PREFERENCE_LABEL[
+                          pref as keyof typeof ROOMMATE_PREFERENCE_LABEL
+                        ] ?? pref}
                       </Tag>
                     ))}
                   </div>

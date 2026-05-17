@@ -11,8 +11,7 @@ export const ROOMMATE_PREFERENCE = {
   CLEANING_HABIT: "CLEANING_HABIT",
 } as const;
 
-export type RoommatePreference =
-  (typeof ROOMMATE_PREFERENCE)[keyof typeof ROOMMATE_PREFERENCE];
+export type RoommatePreference = (typeof ROOMMATE_PREFERENCE)[keyof typeof ROOMMATE_PREFERENCE];
 
 export const ROOMMATE_PREFERENCE_LABEL: Record<RoommatePreference, string> = {
   ITEM_SHARING: "물건 공유",
