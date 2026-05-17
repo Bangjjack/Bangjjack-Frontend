@@ -12,7 +12,6 @@ export type {
   MyProfileEditContentProps,
   ProfileAvatarSectionProps,
   ProfileEditFieldsProps,
-  ProfileFieldKey,
   ProfileForm,
   ProfileViewContentProps,
 } from "@/features/mypage/types/myProfileEditContent.types";

@@ -1,10 +1,8 @@
-export interface ProfileForm {
-  age: string;
-  department: string;
-  name: string;
-}
+import type { Control } from "react-hook-form";
 
-export type ProfileFieldKey = keyof ProfileForm;
+import type { MyProfileEditFormValues } from "@/features/mypage/schemas";
+
+export type ProfileForm = MyProfileEditFormValues;
 
 export interface MyProfileEditContentProps {
   className?: string;
@@ -21,8 +19,7 @@ export interface ProfileAvatarSectionProps {
 }
 
 export interface ProfileEditFieldsProps {
-  onFieldChange: (key: ProfileFieldKey, value: string) => void;
-  values: ProfileForm;
+  control: Control<MyProfileEditFormValues>;
 }
 
 export interface ImportanceEditSectionProps {
