@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import { Button } from "@/components/ui/button";
-import { ChipQuestionSection } from "@/components/ui";
-import { Header } from "@/components/ui/header";
-import { toast } from "@/components/ui/sonner";
+import { Button, ChipQuestionSection, Header } from "@/components/ui";
+import { toast } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import type { LifestyleMultiFieldKey, LifestyleSingleFieldKey } from "@/constants";
-import { useGoBack } from "@/hooks/useGoBack";
+import { useGoBack } from "@/hooks";
 import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 type ChecklistState = Record<string, string | string[]>;

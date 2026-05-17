@@ -3,16 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button, Header, Textarea } from "@/components/ui";
 import { HABIT_CATEGORIES } from "@/constants";
-import {
-  postWriteSchema,
-  type PostWriteFormValues,
-} from "@/features/board/schemas/postWriteSchema";
-import { WriteCard } from "@/features/board/components/WriteCard";
-import { CounterInput } from "@/features/board/components/CounterInput";
+import { postWriteSchema, type PostWriteFormValues } from "@/features/board/schemas";
 import type { BasicTagCategory } from "@/features/board/types";
 
-import { BasicTagList } from "@/features/board/components/BasicTagList";
-import { HabitSelectList } from "@/features/board/components/HabitSelectList";
+import {
+  BasicTagList,
+  CounterInput,
+  HabitSelectList,
+  WriteCard,
+} from "@/features/board/components/shared";
 
 // TODO: API 연동 시 실제 유저 데이터로 교체
 const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [

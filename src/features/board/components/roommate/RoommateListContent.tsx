@@ -5,7 +5,7 @@ import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { ChecklistCard } from "@/features/roommate/components";
-import { useGoBack } from "@/hooks/useGoBack";
+import { useGoBack } from "@/hooks";
 
 import { MatchAlertDialog } from "./MatchAlertDialog";
 import { RoommateList } from "./RoommateList";
