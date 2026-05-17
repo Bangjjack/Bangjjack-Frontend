@@ -1,9 +1,18 @@
-import { Button } from "@/components/ui";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { Button, toast } from "@/components/ui";
 import { BangjjackTitleIcon, GoogleIcon, LogoLoginIcon } from "@/assets/icons";
-import { useNavigate } from "react-router";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state?.from?.pathname as string) ?? "/";
+
+  useEffect(() => {
+    if (location.state?.from) {
+      toast.error("로그인이 필요합니다.");
+    }
+  }, []);
 
   return (
     <div className="min-h-dvh bg-neutral-50">
@@ -26,7 +35,7 @@ export default function LoginPage() {
             type="button"
             variant="neutral"
             className="w-full cursor-pointer border-[1.5px] border-border-strong bg-button-neutral-ghost py-300 text-text-normal"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/onboarding", { state: { from } })}
           >
             <GoogleIcon className="size-600 shrink-0" />
             <span className="typo-button1">Google 계정으로 로그인</span>
@@ -34,7 +43,7 @@ export default function LoginPage() {
 
           <button
             type="button"
-            onClick={() => navigate("/onboarding")}
+            onClick={() => navigate("/onboarding", { state: { from } })}
             className="mt-[clamp(0.5rem,1.25vh,0.625rem)] w-full cursor-pointer py-100 text-center typo-button2 text-text-alternative"
           >
             회원가입으로 시작하기

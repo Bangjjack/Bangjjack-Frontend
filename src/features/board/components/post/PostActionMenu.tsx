@@ -11,7 +11,7 @@ import {
   AlertDialogIcon,
   AlertDialogTitle,
 } from "@/components/ui";
-import { useClickOutside } from "@/hooks/useClickOutside";
+import { useClickOutside } from "@/hooks";
 import { cn } from "@/lib/cn";
 
 type PostActionMenuProps = {

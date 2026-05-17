@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router";
 
-import { useGoBack } from "@/hooks/useGoBack";
-import { PostFormShell } from "@/features/board/components/PostFormShell";
-import type { PostWriteFormValues } from "@/features/board/schemas/postWriteSchema";
+import { useGoBack } from "@/hooks";
+import type { PostWriteFormValues } from "@/features/board/schemas";
 import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
+
+import { PostFormShell } from "./PostFormShell";
 
 function PostWriteContent() {
   const navigate = useNavigate();
