@@ -66,6 +66,7 @@ interface PostFormShellProps {
   submitLabel: string;
   onSubmit: (data: PostWriteFormValues) => void;
   onBackClick: () => void;
+  isPending?: boolean;
 }
 
 function PostFormShell({
@@ -74,6 +75,7 @@ function PostFormShell({
   submitLabel,
   onSubmit,
   onBackClick,
+  isPending = false,
 }: PostFormShellProps) {
   const {
     control,
@@ -256,7 +258,7 @@ function PostFormShell({
 
       {/* 하단 고정 버튼 */}
       <div className="absolute inset-x-0 bottom-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
-        <Button type="submit" form="post-form" disabled={!isValid} className="w-full">
+        <Button type="submit" form="post-form" disabled={!isValid || isPending} className="w-full">
           {submitLabel}
         </Button>
       </div>

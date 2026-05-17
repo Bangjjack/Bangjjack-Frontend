@@ -92,6 +92,15 @@ type ApiResponse<T> = {
   data: T;
 };
 
+/** 게시글 작성 요청 body */
+type CreatePostRequest = {
+  title: string;
+  roomSize: RoomSize;
+  recruitMemberCount: number;
+  description: string;
+  sharedLifestyle: SharedLifestyle;
+};
+
 export type {
   TagItem,
   BasicTagCategory,
@@ -109,4 +118,5 @@ export type {
   PostAuthor,
   PostDetail,
   ApiResponse,
+  CreatePostRequest,
 };

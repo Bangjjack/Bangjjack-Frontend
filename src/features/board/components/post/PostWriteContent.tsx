@@ -1,33 +1,44 @@
 import { useNavigate } from "react-router";
 
+import { toast } from "@/components/ui";
 import { useGoBack } from "@/hooks";
 import type { PostWriteFormValues } from "@/features/board/schemas";
-import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
+import { useCreatePost } from "@/features/board/hooks";
+import { mapFormToCreatePostRequest } from "@/features/board/utils";
+// import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 import { PostFormShell } from "./PostFormShell";
 
 function PostWriteContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
-  const { draft, setDraft, clearDraft } = usePostWriteDraftStore();
+  const { mutate: createPost, isPending } = useCreatePost();
+  // const { draft, setDraft, clearDraft } = usePostWriteDraftStore();
 
   function handleSubmit(data: PostWriteFormValues) {
-    setDraft(data);
-    navigate("/board/write/checklist");
-  }
-
-  function handleBack() {
-    clearDraft();
-    handleBackClick();
+    const body = mapFormToCreatePostRequest(data);
+    createPost(body, {
+      onSuccess: () => {
+        toast.success("게시글이 등록되었어요");
+        navigate("/board");
+      },
+      onError: () => {
+        toast.error("게시글 등록에 실패했어요");
+      },
+    });
+    // 체크리스트 확인 화면 (추후 복원)
+    // setDraft(data);
+    // navigate("/board/write/checklist");
   }
 
   return (
     <PostFormShell
       headerTitle="룸메이트 모집하기"
-      submitLabel="다음으로"
-      defaultValues={draft ?? undefined}
+      submitLabel="등록하기"
+      // defaultValues={draft ?? undefined}
       onSubmit={handleSubmit}
-      onBackClick={handleBack}
+      onBackClick={handleBackClick}
+      isPending={isPending}
     />
   );
 }
