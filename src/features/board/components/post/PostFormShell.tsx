@@ -6,10 +6,12 @@ import { HABIT_CATEGORIES } from "@/constants";
 import { postWriteSchema, type PostWriteFormValues } from "@/features/board/schemas";
 import type { BasicTagCategory } from "@/features/board/types";
 
-import { WriteCard } from "../shared";
-import { CounterInput } from "../shared";
-import { BasicTagList } from "../shared";
-import { HabitSelectList } from "../shared";
+import {
+  BasicTagList,
+  CounterInput,
+  HabitSelectList,
+  WriteCard,
+} from "@/features/board/components/shared";
 
 // TODO: API 연동 시 실제 유저 데이터로 교체
 const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [

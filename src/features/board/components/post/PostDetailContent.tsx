@@ -10,8 +10,8 @@ import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from 
 import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
-import { HabitList } from "../shared";
-import { MatchAlertDialog, RoommateList } from "../roommate";
+import { HabitList } from "@/features/board/components/shared";
+import { MatchAlertDialog, RoommateList } from "@/features/board/components/roommate";
 import { PostActionMenu } from "./PostActionMenu";
 
 function PostDetailContent() {
