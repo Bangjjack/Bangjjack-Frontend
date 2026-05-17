@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getPostById } from "@/api/posts";
 
-import { postQueryKeys } from "../queries/postQueryKeys";
+import { postQueryKeys } from "@/features/board/queries";
 
 export const usePostDetail = (postId: number) => {
   return useQuery({

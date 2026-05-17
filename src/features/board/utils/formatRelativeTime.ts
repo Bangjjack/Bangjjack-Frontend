@@ -8,6 +8,8 @@ function parseUTC(dateString: string): Date {
 export function formatRelativeTime(dateString: string): string {
   const now = new Date();
   const date = parseUTC(dateString);
+
+  if (isNaN(date.getTime())) return "-";
   const diffMs = now.getTime() - date.getTime();
   const diffSeconds = Math.floor(diffMs / 1000);
   const diffMinutes = Math.floor(diffSeconds / 60);
