@@ -12,3 +12,6 @@ export type {
   LifestyleSingleFieldKey,
   LifestyleSingleQuestion,
 } from "./lifestyle";
+
+export { ROOMMATE_PREFERENCE, ROOMMATE_PREFERENCE_LABEL } from "./roommatePreference";
+export type { RoommatePreference } from "./roommatePreference";

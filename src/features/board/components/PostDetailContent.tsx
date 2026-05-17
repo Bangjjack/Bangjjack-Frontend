@@ -5,6 +5,7 @@ import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
 import { useGoBack } from "@/hooks/useGoBack";
 
+import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/features/board/constants";
 import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
@@ -105,19 +106,22 @@ function PostDetailContent() {
             <h3 className="typo-title1 text-text-strong">태그</h3>
 
             {/* 중요하게 생각하는 점 */}
-            <div className="flex flex-col gap-[10px]">
-              <span className="typo-title2 text-text-strong">이런 점을 중요하게 생각해요</span>
-              <div className="flex flex-wrap gap-[4px]">
-                {/* {MOCK_POST.importanceTags.map((tag) => (
-                  <Tag key={tag} color="black">
-                    {tag}
-                  </Tag>
-                ))} */}
-              </div>
-            </div>
+            {post.roommatePreferences && post.roommatePreferences.length > 0 && (
+              <>
+                <div className="flex flex-col gap-[10px]">
+                  <span className="typo-title2 text-text-strong">이런 점을 중요하게 생각해요</span>
+                  <div className="flex flex-wrap gap-[4px]">
+                    {post.roommatePreferences.map((pref) => (
+                      <Tag key={pref} color="black">
+                        {ROOMMATE_PREFERENCE_LABEL[pref as keyof typeof ROOMMATE_PREFERENCE_LABEL] ?? pref}
+                      </Tag>
+                    ))}
+                  </div>
+                </div>
 
-            {/* 구분선 */}
-            <Separator />
+                <Separator />
+              </>
+            )}
             <HabitList habits={habits} />
           </Card>
 
@@ -162,7 +166,11 @@ function PostDetailContent() {
           )}
         </button>
 
-        {!post.isOwner && (
+        {post.isOwner ? (
+          <Button className="flex-1" onClick={() => navigate("/chat")}>
+            채팅 확인
+          </Button>
+        ) : (
           <>
             <MatchAlertDialog matchRate={0} matchDetails="" onConfirm={() => navigate("/chat")}>
               <Button className="flex-1" variant="ghost">

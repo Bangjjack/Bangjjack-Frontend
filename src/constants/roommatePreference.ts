@@ -1,0 +1,28 @@
+export const ROOMMATE_PREFERENCE = {
+  ITEM_SHARING: "ITEM_SHARING",
+  CALL_HABIT: "CALL_HABIT",
+  WAKE_UP_TIME: "WAKE_UP_TIME",
+  INDOOR_TEMPERATURE: "INDOOR_TEMPERATURE",
+  NOISE_SENSITIVITY: "NOISE_SENSITIVITY",
+  SLEEP_HABIT: "SLEEP_HABIT",
+  BEDTIME: "BEDTIME",
+  DORM_STAY_TIME: "DORM_STAY_TIME",
+  SMOKING: "SMOKING",
+  CLEANING_HABIT: "CLEANING_HABIT",
+} as const;
+
+export type RoommatePreference =
+  (typeof ROOMMATE_PREFERENCE)[keyof typeof ROOMMATE_PREFERENCE];
+
+export const ROOMMATE_PREFERENCE_LABEL: Record<RoommatePreference, string> = {
+  ITEM_SHARING: "물건 공유",
+  CALL_HABIT: "통화 습관",
+  WAKE_UP_TIME: "기상 시간",
+  INDOOR_TEMPERATURE: "실내 온도",
+  NOISE_SENSITIVITY: "소음 민감도",
+  SLEEP_HABIT: "잠버릇",
+  BEDTIME: "취침 시간",
+  DORM_STAY_TIME: "기숙사 체류 시간",
+  SMOKING: "흡연 여부",
+  CLEANING_HABIT: "청결 습관",
+};
