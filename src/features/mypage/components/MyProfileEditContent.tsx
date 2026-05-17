@@ -1,27 +1,105 @@
+import { useEffect, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { WaveBackgroundIcon } from "@/assets/icons";
-import { Button, Header, ProfileAvatar, Tag } from "@/components/ui";
+import { Button, Header } from "@/components/ui";
 import {
-  MY_PROFILE,
-  MY_PROFILE_CHECKLIST,
-  MY_PROFILE_IMPORTANCE_ITEMS,
-} from "@/features/mypage/mocks";
-import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
+  ChecklistEditLink,
+  ImportanceEditSection,
+  ProfileAvatarSection,
+  ProfileEditFields,
+  ProfileViewContent,
+  TagSyncNoticeSection,
+} from "@/features/mypage/components/profile-edit";
+import {
+  MY_PROFILE_EDIT_DEFAULT_VALUES,
+  MY_PROFILE_EDIT_FORM_ID,
+  WAVE_BACKGROUND_CLASS_NAME,
+} from "@/features/mypage/constants";
+import { MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
+import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
+import type { MyProfileEditContentProps } from "@/features/mypage/types";
 import { cn } from "@/lib/cn";
 
-export interface MyProfileEditContentProps {
-  className?: string;
-  onBack: () => void;
-  onEditClick?: () => void;
-}
+function MyProfileEditContent({
+  className,
+  onBack,
+  onChecklistClick,
+  onEditClick,
+}: MyProfileEditContentProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>(
+    MY_PROFILE_EDIT_DEFAULT_VALUES,
+  );
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [importanceItems, setImportanceItems] = useState(MY_PROFILE_IMPORTANCE_ITEMS);
+  const [replaceFeedbackKey, setReplaceFeedbackKey] = useState(0);
+  const {
+    control,
+    handleSubmit,
+    reset,
+    trigger,
+    formState: { isValid },
+  } = useForm<MyProfileEditFormValues>({
+    defaultValues: MY_PROFILE_EDIT_DEFAULT_VALUES,
+    mode: "onChange",
+    resolver: zodResolver(myProfileEditSchema),
+  });
+  const watchedProfileName = useWatch({ control, name: "name" });
 
-function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditContentProps) {
-  const isEditDisabled = !onEditClick;
+  useEffect(() => {
+    return () => {
+      if (profileImageUrl) {
+        URL.revokeObjectURL(profileImageUrl);
+      }
+    };
+  }, [profileImageUrl]);
+
+  function handleEditButtonClick() {
+    reset(profileForm);
+    setIsEditing(true);
+    void trigger();
+    onEditClick?.();
+  }
+
+  function submitProfileForm(values: MyProfileEditFormValues) {
+    setProfileForm(values);
+    setIsEditing(false);
+  }
+
+  function updateProfileImage(file: File) {
+    const nextImageUrl = URL.createObjectURL(file);
+
+    setProfileImageUrl((prev) => {
+      if (prev) {
+        URL.revokeObjectURL(prev);
+      }
+
+      return nextImageUrl;
+    });
+  }
+
+  function toggleImportanceItem(item: string) {
+    setImportanceItems((prev) => {
+      if (prev.includes(item)) {
+        return prev.filter((value) => value !== item);
+      }
+
+      if (prev.length >= 3) {
+        setReplaceFeedbackKey((value) => value + 1);
+        return [...prev.slice(1), item];
+      }
+
+      return [...prev, item];
+    });
+  }
 
   return (
     <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
       <WaveBackgroundIcon
         aria-hidden="true"
-        className="absolute left-0 -top-0.75 w-full"
+        className={WAVE_BACKGROUND_CLASS_NAME}
         preserveAspectRatio="none"
       />
 
@@ -29,47 +107,48 @@ function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditC
         className="absolute inset-x-0 top-0 z-20"
         onBackClick={onBack}
         showBack
-        title="프로필 편집"
+        title={isEditing ? "프로필 편집" : "내 프로필"}
       />
 
       <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
         <div className="flex flex-col gap-300 px-400 pt-36.5">
-          <div className="flex flex-col items-start px-3.5">
-            <ProfileAvatar seed={MY_PROFILE.name.length} size={100} />
-          </div>
+          <ProfileAvatarSection
+            imageUrl={profileImageUrl}
+            isEditing={isEditing}
+            name={isEditing ? watchedProfileName : profileForm.name}
+            onImageChange={updateProfileImage}
+          />
 
-          <section className="flex flex-col gap-1.5 px-100 pt-300">
-            <h2 className="typo-title1 text-text-strong">{MY_PROFILE.name}</h2>
-            <div className="flex items-center gap-1.5">
-              <span className="typo-label2 text-text-alternative">{MY_PROFILE.age}세</span>
-              <span aria-hidden="true" className="h-3 w-px bg-neutral-300" />
-              <span className="typo-label2 text-text-alternative">{MY_PROFILE.department}</span>
-            </div>
-          </section>
-
-          <div className="flex flex-wrap gap-1.5 px-100 pb-300">
-            {MY_PROFILE.tags.map((tag) => (
-              <Tag key={tag} color="black">
-                {tag}
-              </Tag>
-            ))}
-          </div>
-
-          <ImportanceSection items={MY_PROFILE_IMPORTANCE_ITEMS} />
-          <ChecklistCard items={MY_PROFILE_CHECKLIST} nickname={MY_PROFILE.name} />
+          {isEditing ? (
+            <form
+              className="flex flex-col gap-300"
+              id={MY_PROFILE_EDIT_FORM_ID}
+              onSubmit={handleSubmit(submitProfileForm)}
+            >
+              <ProfileEditFields control={control} />
+              <TagSyncNoticeSection />
+              <ImportanceEditSection
+                items={importanceItems}
+                onToggle={toggleImportanceItem}
+                replaceFeedbackKey={replaceFeedbackKey}
+              />
+              <ChecklistEditLink onClick={onChecklistClick} />
+            </form>
+          ) : (
+            <ProfileViewContent importanceItems={importanceItems} values={profileForm} />
+          )}
         </div>
       </main>
 
-      <div className="absolute bottom-0 left-0 right-0 z-40 px-400 pb-9 pt-300">
-        {/* TODO: 이슈 분리 후 구현 예정 */}
+      <div className="absolute bottom-0 left-0 right-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
         <Button
-          aria-disabled={isEditDisabled}
-          className={cn("w-full", !isEditDisabled && "cursor-pointer")}
-          disabled={isEditDisabled}
-          onClick={onEditClick}
+          className="w-full cursor-pointer"
+          disabled={isEditing && !isValid}
+          onClick={isEditing ? handleSubmit(submitProfileForm) : handleEditButtonClick}
           type="button"
+          variant={isEditing ? "black" : "default"}
         >
-          수정하기
+          {isEditing ? "저장하기" : "수정하기"}
         </Button>
       </div>
     </div>
@@ -77,3 +156,4 @@ function MyProfileEditContent({ className, onBack, onEditClick }: MyProfileEditC
 }
 
 export { MyProfileEditContent };
+export type { MyProfileEditContentProps };

@@ -26,6 +26,8 @@ export { ChipQuestionSection } from "@/components/ui/chip-question-section";
 export type { ChipQuestionSectionProps } from "@/components/ui/chip-question-section";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
+export { SelectField } from "@/components/ui/select-field";
+export type { SelectFieldProps } from "@/components/ui/select-field";
 export { Textarea } from "@/components/ui/textarea";
 export type { TextareaProps } from "@/components/ui/textarea";
 export { Toaster, toast } from "@/components/ui/sonner";
