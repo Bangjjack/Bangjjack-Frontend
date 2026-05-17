@@ -1,7 +1,7 @@
 export { AiRecommendCard } from "./AiRecommendCard";
 export { BasicTagList, type BasicTagListProps } from "./BasicTagList";
 export { BoardPageContent, type BoardPageContentProps } from "./BoardPageContent";
-export { CampusSelector } from "./CampusSelector";
+export { CampusSelector, CAMPUSES } from "./CampusSelector";
 export { CounterInput, type CounterInputProps } from "./CounterInput";
 export { HabitList } from "./HabitList";
 export { HabitSelectList, type HabitSelectListProps } from "./HabitSelectList";

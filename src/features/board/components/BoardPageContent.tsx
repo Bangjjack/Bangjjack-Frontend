@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Chip, RoundButton, toast } from "@/components/ui";
-import { RecruitCard } from "@/components/RecruitCard";
+import { RecruitCard } from "@/components";
 import { AiRecommendCard } from "./AiRecommendCard";
 import { CampusSelector, CAMPUSES } from "./CampusSelector";
 

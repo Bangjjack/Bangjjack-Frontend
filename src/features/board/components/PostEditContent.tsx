@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router";
 
-import { useGoBack } from "@/hooks/useGoBack";
-import type { PostWriteFormValues } from "@/features/board/schemas/postWriteSchema";
+import { useGoBack } from "@/hooks";
+import type { PostWriteFormValues } from "@/features/board/schemas";
 import { PostFormShell } from "./PostFormShell";
 
 function PostEditContent() {
