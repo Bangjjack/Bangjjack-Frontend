@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/components/ui";
-import { useGoBack } from "@/hooks/useGoBack";
+import { useGoBack } from "@/hooks";
 
 import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
 import {
@@ -15,12 +15,9 @@ import {
 import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
-import {
-  HabitList,
-  MatchAlertDialog,
-  PostActionMenu,
-  RoommateList,
-} from "@/features/board/components";
+import { HabitList } from "../shared";
+import { MatchAlertDialog, RoommateList } from "../roommate";
+import { PostActionMenu } from "./PostActionMenu";
 
 function PostDetailContent() {
   const { id } = useParams();
