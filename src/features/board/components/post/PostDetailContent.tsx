@@ -6,12 +6,7 @@ import { Button, Card, Header, ProfileAvatar, Separator, Tag } from "@/component
 import { useGoBack } from "@/hooks";
 
 import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
-import {
-  DORMITORY_LABEL,
-  ROOM_SIZE_LABEL,
-  ROOM_SIZE_MAX,
-  SEMESTER_LABEL,
-} from "@/features/board/constants";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/constants";
 import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
