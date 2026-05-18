@@ -9,5 +9,11 @@ export default function MyProfileEditPage() {
     // TODO: 프로필 수정 기능 추후 추가 예정
   };
 
-  return <MyProfileEditContent onBack={() => navigate("/mypage")} onEditClick={handleEditClick} />;
+  return (
+    <MyProfileEditContent
+      onBack={() => navigate("/mypage")}
+      onChecklistClick={() => navigate("/mypage/checklist", { state: { initialEditing: true } })}
+      onEditClick={handleEditClick}
+    />
+  );
 }
