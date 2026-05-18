@@ -49,6 +49,14 @@ const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [
 
 const ROOM_TYPE_OPTIONS = ["2인 1실", "3인 1실", "4인 1실"] as const;
 
+const ROOM_TYPE_MAX_MEMBER: Record<string, number> = {
+  "2인 1실": 1,
+  "3인 1실": 2,
+  "4인 1실": 3,
+};
+
+const DEFAULT_MAX_MEMBER = 3;
+
 const TITLE_MAX_LENGTH = 40;
 const INTRO_MAX_LENGTH = 500;
 
@@ -95,6 +103,8 @@ function PostFormShell({
   const roomType = watch("roomType");
   const intro = watch("intro");
   const habits = watch("habits");
+
+  const maxMember = ROOM_TYPE_MAX_MEMBER[roomType] ?? DEFAULT_MAX_MEMBER;
 
   function handleHabitSelect(label: string, option: string) {
     const current = getValues("habits") ?? {};
@@ -162,7 +172,7 @@ function PostFormShell({
                   })
                 }
                 onIncrement={() =>
-                  setValue("memberCount", Math.min(4, memberCount + 1), {
+                  setValue("memberCount", Math.min(maxMember, memberCount + 1), {
                     shouldValidate: true,
                   })
                 }
