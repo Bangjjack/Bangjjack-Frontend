@@ -2,17 +2,22 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Button, toast } from "@/components/ui";
 import { BangjjackTitleIcon, GoogleIcon, LogoLoginIcon } from "@/assets/icons";
+import { getGoogleLoginUrl } from "@/features/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const hasProtectedRedirect = Boolean(location.state?.from);
   const from = (location.state?.from?.pathname as string) ?? "/";
+  const handleGoogleLogin = () => {
+    window.location.assign(getGoogleLoginUrl());
+  };
 
   useEffect(() => {
-    if (location.state?.from) {
+    if (hasProtectedRedirect) {
       toast.error("로그인이 필요합니다.");
     }
-  }, []);
+  }, [hasProtectedRedirect]);
 
   return (
     <div className="min-h-dvh bg-neutral-50">
@@ -35,7 +40,7 @@ export default function LoginPage() {
             type="button"
             variant="neutral"
             className="w-full cursor-pointer border-[1.5px] border-border-strong bg-button-neutral-ghost py-300 text-text-normal"
-            onClick={() => navigate("/onboarding", { state: { from } })}
+            onClick={handleGoogleLogin}
           >
             <GoogleIcon className="size-600 shrink-0" />
             <span className="typo-button1">Google 계정으로 로그인</span>

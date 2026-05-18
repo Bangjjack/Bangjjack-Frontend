@@ -13,6 +13,7 @@ import MyProfileEditPage from "@/pages/MyProfileEditPage";
 import OnBoardingPage from "@/pages/OnBoardingPage";
 import BoardPage from "@/pages/BoardPage";
 import LoginPage from "@/pages/LoginPage";
+import LoginCallbackPage from "@/pages/LoginCallbackPage";
 import PostDetailPage from "@/pages/PostDetailPage";
 import PostEditPage from "@/pages/PostEditPage";
 import PostWritePage from "@/pages/PostWritePage";
@@ -25,6 +26,10 @@ export const routes: RouteObject[] = [
   {
     path: "/login",
     element: <LoginPage />,
+  },
+  {
+    path: "/login/callback",
+    element: <LoginCallbackPage />,
   },
   {
     path: "/onboarding",
