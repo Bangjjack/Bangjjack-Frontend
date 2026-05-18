@@ -1,10 +1,10 @@
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller } from "react-hook-form";
 
 import { Button, Header, Textarea } from "@/components/ui";
 import { HABIT_CATEGORIES } from "@/constants";
-import { postWriteSchema, type PostWriteFormValues } from "@/features/board/schemas";
+import type { PostWriteFormValues } from "@/features/board/schemas";
 import type { BasicTagCategory } from "@/features/board/types";
+import { usePostWriteForm } from "@/features/board/hooks";
 
 import {
   BasicTagList,
@@ -49,24 +49,8 @@ const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [
 
 const ROOM_TYPE_OPTIONS = ["2인 1실", "3인 1실", "4인 1실"] as const;
 
-const ROOM_TYPE_MAX_MEMBER: Record<string, number> = {
-  "2인 1실": 1,
-  "3인 1실": 2,
-  "4인 1실": 3,
-};
-
-const DEFAULT_MAX_MEMBER = 3;
-
 const TITLE_MAX_LENGTH = 40;
 const INTRO_MAX_LENGTH = 500;
-
-const EMPTY_DEFAULT_VALUES: PostWriteFormValues = {
-  title: "",
-  memberCount: 1,
-  roomType: "",
-  intro: "",
-  habits: {},
-};
 
 interface PostFormShellProps {
   headerTitle: string;
@@ -88,47 +72,25 @@ function PostFormShell({
   const {
     control,
     handleSubmit,
-    watch,
-    setValue,
-    getValues,
-    formState: { isValid, errors },
-  } = useForm<PostWriteFormValues>({
-    resolver: zodResolver(postWriteSchema),
-    mode: "onTouched",
-    defaultValues: defaultValues ?? EMPTY_DEFAULT_VALUES,
-  });
-
-  const title = watch("title");
-  const memberCount = watch("memberCount");
-  const roomType = watch("roomType");
-  const intro = watch("intro");
-  const habits = watch("habits");
-
-  const maxMember = ROOM_TYPE_MAX_MEMBER[roomType] ?? DEFAULT_MAX_MEMBER;
-
-  function handleHabitSelect(label: string, option: string) {
-    const current = getValues("habits") ?? {};
-    const isDeselect = current[label] === option;
-
-    if (isDeselect) {
-      const next = { ...current };
-      delete next[label];
-      setValue("habits", next, { shouldValidate: true });
-    } else {
-      setValue("habits", { ...current, [label]: option }, { shouldValidate: true });
-    }
-  }
+    isValid,
+    errors,
+    title,
+    memberCount,
+    roomType,
+    intro,
+    habits,
+    handleRoomTypeSelect,
+    incrementMemberCount,
+    decrementMemberCount,
+    handleHabitSelect,
+  } = usePostWriteForm({ defaultValues, onSubmit });
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       <Header showBack title={headerTitle} onBackClick={onBackClick} />
 
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
-        <form
-          id="post-form"
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-300 px-400"
-        >
+        <form id="post-form" onSubmit={handleSubmit} className="flex flex-col gap-300 px-400">
           {/* Card 1 - 제목 */}
           <WriteCard className="gap-200">
             <h2 className="typo-title1 text-text-strong">제목</h2>
@@ -166,16 +128,8 @@ function PostFormShell({
               <h2 className="typo-title1 text-text-strong">모집 인원</h2>
               <CounterInput
                 value={memberCount}
-                onDecrement={() =>
-                  setValue("memberCount", Math.max(1, memberCount - 1), {
-                    shouldValidate: true,
-                  })
-                }
-                onIncrement={() =>
-                  setValue("memberCount", Math.min(maxMember, memberCount + 1), {
-                    shouldValidate: true,
-                  })
-                }
+                onDecrement={decrementMemberCount}
+                onIncrement={incrementMemberCount}
               />
             </div>
 
@@ -189,11 +143,7 @@ function PostFormShell({
                     type="button"
                     size="sm"
                     variant={roomType === option ? "default" : "neutral"}
-                    onClick={() =>
-                      setValue("roomType", roomType === option ? "" : option, {
-                        shouldValidate: true,
-                      })
-                    }
+                    onClick={() => handleRoomTypeSelect(option)}
                     className="flex-1"
                   >
                     {option}
