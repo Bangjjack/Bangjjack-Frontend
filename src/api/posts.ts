@@ -1,5 +1,10 @@
 import { apiClient } from "@/lib/api";
-import type { ApiResponse, CreatePostRequest, PostDetail } from "@/features/board/types";
+import type {
+  ApiResponse,
+  CreatePostRequest,
+  PostDetail,
+  UpdatePostRequest,
+} from "@/features/board/types";
 
 export const getPostById = async (postId: number): Promise<PostDetail> => {
   const { data } = await apiClient.get<ApiResponse<PostDetail>>(`/posts/${postId}`);
@@ -8,5 +13,10 @@ export const getPostById = async (postId: number): Promise<PostDetail> => {
 
 export const createPost = async (body: CreatePostRequest): Promise<PostDetail> => {
   const { data } = await apiClient.post<ApiResponse<PostDetail>>("/posts", body);
+  return data.data;
+};
+
+export const updatePost = async (postId: number, body: UpdatePostRequest): Promise<PostDetail> => {
+  const { data } = await apiClient.patch<ApiResponse<PostDetail>>(`/posts/${postId}`, body);
   return data.data;
 };

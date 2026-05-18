@@ -56,4 +56,6 @@ type CreatePostRequest = {
   sharedLifestyle: SharedLifestyle;
 };
 
-export type { PostAuthor, PostDetail, ApiResponse, CreatePostRequest };
+type UpdatePostRequest = CreatePostRequest;
+
+export type { PostAuthor, PostDetail, ApiResponse, CreatePostRequest, UpdatePostRequest };
