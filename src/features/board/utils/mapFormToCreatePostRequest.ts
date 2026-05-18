@@ -21,15 +21,15 @@ const RECYCLING_MAP: Record<string, Recycling> = {
 };
 
 const PHONE_CALL_MAP: Record<string, PhoneCall> = {
-  "밖에서만": "ONLY_IN_ROOM",
+  밖에서만: "ONLY_IN_ROOM",
   "짧은 통화는 가능": "SHORT_CALLS_OKAY",
-  "무관": "NO_PREFERENCE",
+  무관: "NO_PREFERENCE",
 };
 
 const ITEM_SHARING_MAP: Record<string, ItemSharing> = {
   "각자 사용": "USE_SEPARATELY",
   "허락 받고 빌리기": "BORROW_WITH_PERMISSION",
-  "무관": "NO_PREFERENCE",
+  무관: "NO_PREFERENCE",
 };
 
 const LIGHTS_OUT_MAP: Record<string, LightsOutTime> = {
@@ -38,7 +38,7 @@ const LIGHTS_OUT_MAP: Record<string, LightsOutTime> = {
   "00~01시": "BETWEEN_00_01",
   "01~02시": "BETWEEN_01_02",
   "03시 이후": "AFTER_03",
-  "무관": "NO_PREFERENCE",
+  무관: "NO_PREFERENCE",
 };
 
 function mapHabitsToSharedLifestyle(habits: Record<string, string>): SharedLifestyle {
