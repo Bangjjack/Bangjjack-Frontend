@@ -20,3 +20,8 @@ export const updatePost = async (postId: number, body: UpdatePostRequest): Promi
   const { data } = await apiClient.patch<ApiResponse<PostDetail>>(`/posts/${postId}`, body);
   return data.data;
 };
+
+export const deletePost = async (postId: number): Promise<string> => {
+  const { data } = await apiClient.delete<ApiResponse<string>>(`/posts/${postId}`);
+  return data.data;
+};
