@@ -18,9 +18,9 @@ function PostWriteContent() {
   function handleSubmit(data: PostWriteFormValues) {
     const body = mapFormToCreatePostRequest(data);
     createPost(body, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("게시글이 등록되었어요");
-        navigate("/board");
+        navigate(data.postId ? `/board/${data.postId}` : "/board");
       },
       onError: () => {
         toast.error("게시글 등록에 실패했어요");
