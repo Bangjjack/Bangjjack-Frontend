@@ -48,5 +48,7 @@ export {
 export { ProfileAvatar } from "@/components/ui/profile-avatar";
 export type { ProfileAvatarProps } from "@/components/ui/profile-avatar";
 export { Avatar, AvatarFallback } from "@/components/ui/avatar";
+export { BottomSheet } from "@/components/ui/bottom-sheet";
+export type { BottomSheetProps } from "@/components/ui/bottom-sheet";
 export { Dropdown, DropdownTrigger, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 export type { DropdownProps } from "@/components/ui/dropdown";

@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui";
-import { cn } from "@/lib/cn";
+import { BottomSheet, Button } from "@/components/ui";
 
 type AiRecommendBottomSheetProps = {
   onConfirm: () => void;
@@ -8,43 +7,11 @@ type AiRecommendBottomSheetProps = {
 };
 
 function AiRecommendBottomSheet({ onConfirm, onClose }: AiRecommendBottomSheetProps) {
-  const [closeAction, setCloseAction] = useState<"close" | "confirm" | null>(null);
-  const isClosing = closeAction !== null;
-
-  const handleClose = () => {
-    if (isClosing) return;
-    setCloseAction("close");
-  };
-
-  const handleConfirm = () => {
-    if (isClosing) return;
-    setCloseAction("confirm");
-  };
+  const [confirming, setConfirming] = useState(false);
 
   return (
-    <div
-      className={cn(
-        "fixed inset-0 z-50 flex items-end bg-bg-overlay",
-        isClosing ? "animate-overlay-fade-out" : "animate-overlay-fade-in",
-      )}
-    >
-      <button aria-label="닫기" className="absolute inset-0" onClick={handleClose} type="button" />
-      <div
-        className={cn(
-          "relative z-10 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
-          isClosing ? "animate-bottom-sheet-down" : "animate-bottom-sheet-up",
-        )}
-        onAnimationEnd={() => {
-          if (closeAction === "confirm") {
-            onConfirm();
-            return;
-          }
-          if (closeAction === "close") {
-            onClose();
-          }
-        }}
-      >
-        <div className="mx-auto h-1 w-[30px] rounded-full bg-neutral-300" />
+    <BottomSheet onClose={confirming ? onConfirm : onClose}>
+      {(requestClose) => (
         <div className="flex flex-col gap-400">
           <div className="flex flex-col gap-400">
             <div className="flex items-center gap-200">
@@ -60,16 +27,23 @@ function AiRecommendBottomSheet({ onConfirm, onClose }: AiRecommendBottomSheetPr
             </p>
           </div>
           <div className="flex gap-200">
-            <Button className="flex-1" size="sm" variant="neutral" onClick={handleClose}>
+            <Button className="flex-1" size="sm" variant="neutral" onClick={requestClose}>
               확인
             </Button>
-            <Button className="flex-1" size="sm" onClick={handleConfirm}>
+            <Button
+              className="flex-1"
+              size="sm"
+              onClick={() => {
+                setConfirming(true);
+                requestClose();
+              }}
+            >
               AI 추천 보기
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </BottomSheet>
   );
 }
 
