@@ -33,6 +33,9 @@ type Semester = "SIXTEEN_WEEKS" | "TWENTY_FIVE_WEEKS";
 /** 기숙사 */
 type Dormitory = "DORM_1" | "DORM_2" | "DORM_3";
 
+/** 캠퍼스 */
+type Campus = "GLOBAL_CAMPUS" | "MEDICAL_CAMPUS";
+
 /** 분리수거 */
 type Recycling = "SHARE_BIN" | "MANAGE_SEPARATELY";
 
@@ -70,6 +73,7 @@ export type {
   PostStatus,
   Semester,
   Dormitory,
+  Campus,
   Recycling,
   PhoneCall,
   ItemSharing,
