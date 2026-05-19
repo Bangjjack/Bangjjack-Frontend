@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ACCESS_TOKEN_KEY } from "@/constants/auth";
+import { ACCESS_TOKEN_KEY, USERNAME_KEY } from "@/constants/auth";
 
 interface AuthState {
   userId: number | null;
@@ -13,8 +13,14 @@ interface AuthState {
 // localStorage는 모듈 로드 시점(렌더링 외부)에 한 번만 읽어 초기 인증 상태를 설정한다
 export const useAuthStore = create<AuthState>((set) => ({
   userId: null,
-  username: null,
+  username: localStorage.getItem(USERNAME_KEY),
   isAuthenticated: !!localStorage.getItem(ACCESS_TOKEN_KEY),
-  setAuth: (userId, username) => set({ userId, username, isAuthenticated: true }),
-  clearAuth: () => set({ userId: null, username: null, isAuthenticated: false }),
+  setAuth: (userId, username) => {
+    localStorage.setItem(USERNAME_KEY, username);
+    set({ userId, username, isAuthenticated: true });
+  },
+  clearAuth: () => {
+    localStorage.removeItem(USERNAME_KEY);
+    set({ userId: null, username: null, isAuthenticated: false });
+  },
 }));
