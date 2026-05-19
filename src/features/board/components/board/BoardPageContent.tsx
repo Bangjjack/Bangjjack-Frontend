@@ -7,24 +7,22 @@ import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/bo
 import type { RoomFilter } from "@/features/board/constants";
 import { usePostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/features/board/utils";
-import { AiRecommendCard } from "./AiRecommendCard";
 import { CampusSelector } from "./CampusSelector";
 
 type BoardPageContentProps = {
-  showAiRecommend?: boolean;
+  aiRecommend: boolean;
+  onAiRecommendChange: (value: boolean) => void;
   onPostClick?: (id: number) => void;
-  onAiRecommendClick?: () => void;
   onWriteClick?: () => void;
 };
 
 function BoardPageContent({
-  showAiRecommend = false,
+  aiRecommend,
+  onAiRecommendChange,
   onPostClick,
-  onAiRecommendClick,
   onWriteClick,
 }: BoardPageContentProps) {
   const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
-  const [aiRecommend, setAiRecommend] = useState(false);
   const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -67,15 +65,16 @@ function BoardPageContent({
               variant="neutral"
               selected={aiRecommend}
               onSelectedChange={(selected) => {
-                setAiRecommend(selected);
-                if (selected) {
-                  toast.success("AI 추천순으로 정렬했어요");
-                }
+                onAiRecommendChange(selected);
+                if (selected) toast.success("AI 추천순으로 정렬했어요");
               }}
               className={cn(aiRecommend && "gap-[6px]")}
             >
               {aiRecommend && (
-                <span className="size-[6px] shrink-0 rounded-full bg-brand-primary" aria-hidden="true" />
+                <span
+                  className="size-[6px] shrink-0 rounded-full bg-brand-primary"
+                  aria-hidden="true"
+                />
               )}
               AI 추천글
             </Chip>
@@ -94,8 +93,6 @@ function BoardPageContent({
 
         {/* 게시글 목록 */}
         <div className="flex flex-col gap-[10px]">
-          {showAiRecommend && <AiRecommendCard onClick={onAiRecommendClick} />}
-
           {posts.map((post) => {
             const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
             const currentMembers = maxMembers - post.recruitMemberCount;
