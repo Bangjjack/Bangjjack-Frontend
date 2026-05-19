@@ -1,6 +1,7 @@
 import { BottomNav, Header } from "@/components/ui";
 import type { HeaderProps } from "@/components/ui";
 import { useGoBack } from "@/hooks/useGoBack";
+import { useAuthStore } from "@/stores/authStore";
 import type { BottomNavIcon } from "@/types/bottomNav";
 import { matchPath, Outlet, useLocation } from "react-router";
 
@@ -83,10 +84,15 @@ export default function MainPage() {
   const location = useLocation();
   const routeConfig = getRouteConfig(location.pathname);
   const handleBackClick = useGoBack();
+  const username = useAuthStore((state) => state.username);
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
-      <Header {...routeConfig.header} onBackClick={handleBackClick} userName="방짝" />
+      <Header
+        {...routeConfig.header}
+        onBackClick={handleBackClick}
+        userName={username ?? undefined}
+      />
       <main
         className={
           routeConfig.fullBleed
