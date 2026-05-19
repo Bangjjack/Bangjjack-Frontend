@@ -8,12 +8,7 @@ type BottomSheetProps = {
   closeAriaLabel?: string;
 };
 
-function BottomSheet({
-  children,
-  onClose,
-  className,
-  closeAriaLabel = "닫기",
-}: BottomSheetProps) {
+function BottomSheet({ children, onClose, className, closeAriaLabel = "닫기" }: BottomSheetProps) {
   const [isClosing, setIsClosing] = useState(false);
 
   const requestClose = () => {
