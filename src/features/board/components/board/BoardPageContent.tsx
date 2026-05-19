@@ -26,7 +26,7 @@ function BoardPageContent({
   const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage } = usePostList({
+  const { data, fetchNextPage, isFetching } = usePostList({
     campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
     roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
   });
@@ -49,7 +49,7 @@ function BoardPageContent({
 
   return (
     <>
-      <div className="flex flex-col gap-450">
+      <div className="flex min-h-full flex-col gap-450">
         {/* 헤더: 캠퍼스 선택 + 필터 칩 */}
         <div className="flex flex-col gap-[6px]">
           <CampusSelector value={selectedCampus} onChange={setSelectedCampus} />
@@ -92,29 +92,35 @@ function BoardPageContent({
         </div>
 
         {/* 게시글 목록 */}
-        <div className="flex flex-col gap-[10px]">
-          {posts.map((post) => {
-            const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
-            const currentMembers = maxMembers - post.recruitMemberCount;
+        {!isFetching && posts.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">해당하는 게시글이 없어요</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-[10px]">
+            {posts.map((post) => {
+              const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
+              const currentMembers = maxMembers - post.recruitMemberCount;
 
-            return (
-              <RecruitCard
-                key={post.postId}
-                title={post.title}
-                description={post.description}
-                currentMembers={currentMembers}
-                maxMembers={maxMembers}
-                dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
-                roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
-                timeAgo={formatRelativeTime(post.createdAt)}
-                onClick={() => onPostClick?.(post.postId)}
-              />
-            );
-          })}
+              return (
+                <RecruitCard
+                  key={post.postId}
+                  title={post.title}
+                  description={post.description}
+                  currentMembers={currentMembers}
+                  maxMembers={maxMembers}
+                  dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
+                  roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
+                  timeAgo={formatRelativeTime(post.createdAt)}
+                  onClick={() => onPostClick?.(post.postId)}
+                />
+              );
+            })}
 
-          {/* 무한 스크롤 감지 */}
-          <div ref={sentinelRef} />
-        </div>
+            {/* 무한 스크롤 감지 */}
+            <div ref={sentinelRef} />
+          </div>
+        )}
       </div>
 
       {/* 룸메이트 모집하기 버튼 */}
