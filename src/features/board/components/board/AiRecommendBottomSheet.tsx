@@ -12,7 +12,7 @@ function AiRecommendBottomSheet({ onConfirm, onClose }: AiRecommendBottomSheetPr
   return (
     <BottomSheet onClose={confirming ? onConfirm : onClose}>
       {(requestClose) => (
-        <div className="flex flex-col gap-400">
+        <div className="flex flex-col gap-600 pb-300">
           <div className="flex flex-col gap-400">
             <div className="flex items-center gap-200">
               <span className="rounded-full bg-brand-primary px-300 py-[4px] typo-button2 text-text-on-primary">
