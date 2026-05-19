@@ -7,6 +7,7 @@ import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/bo
 import type { RoomFilter } from "@/features/board/constants";
 import { usePostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/features/board/utils";
+import { useFadeInOnScroll } from "@/hooks";
 import { CampusSelector } from "./CampusSelector";
 
 type BoardPageContentProps = {
@@ -25,6 +26,7 @@ function BoardPageContent({
   const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
   const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
   const { data, fetchNextPage, isFetching } = usePostList({
     campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
@@ -68,14 +70,15 @@ function BoardPageContent({
                 onAiRecommendChange(selected);
                 if (selected) toast.success("AI 추천순으로 정렬했어요");
               }}
-              className={cn(aiRecommend && "gap-[6px]")}
+              className="gap-[6px]"
             >
-              {aiRecommend && (
-                <span
-                  className="size-[6px] shrink-0 rounded-full bg-brand-primary"
-                  aria-hidden="true"
-                />
-              )}
+              <span
+                className={cn(
+                  "size-[6px] shrink-0 rounded-full",
+                  aiRecommend ? "bg-brand-primary" : "bg-button-disabled",
+                )}
+                aria-hidden="true"
+              />
               AI 추천글
             </Chip>
             {ROOM_FILTERS.filter((f) => f !== "전체").map((filter) => (
@@ -97,7 +100,7 @@ function BoardPageContent({
             <p className="typo-body2 text-text-caption">해당하는 게시글이 없어요</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-[10px]">
+          <div ref={fadeInRef} className="flex flex-col gap-[10px]">
             {posts.map((post) => {
               const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
               const currentMembers = maxMembers - post.recruitMemberCount;
