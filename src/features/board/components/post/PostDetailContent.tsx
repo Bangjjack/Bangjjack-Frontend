@@ -40,6 +40,8 @@ function PostDetailContent() {
     );
   }
 
+  const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
+  const currentMembers = maxMembers - post.recruitMemberCount;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
@@ -71,7 +73,7 @@ function PostDetailContent() {
               <div className="flex items-center justify-between">
                 <h2 className="typo-h4 text-text-strong">{post.title}</h2>
                 <Tag color="black">
-                  {post.recruitMemberCount} / {ROOM_SIZE_MAX[post.roomSize] ?? 0}
+                  {currentMembers} / {maxMembers}
                 </Tag>
               </div>
 
@@ -167,7 +169,7 @@ function PostDetailContent() {
 
         {post.isOwner ? (
           <Button className="flex-1" onClick={() => navigate("/chat")}>
-            채팅 확인
+            채팅 확인하기
           </Button>
         ) : (
           <>
