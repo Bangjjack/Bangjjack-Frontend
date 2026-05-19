@@ -1,9 +1,11 @@
 import { RoundButton } from "@/components/ui";
 import { RecruitCard } from "@/components";
-import { RoommateProfileCard } from "./RoommateProfileCard";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
+import { useHomePostList } from "@/features/board/hooks";
+import { formatRelativeTime } from "@/features/board/utils";
 import { useDragScroll, useFadeInOnScroll } from "@/hooks";
-
 import { cn } from "@/lib/cn";
+import { RoommateProfileCard } from "./RoommateProfileCard";
 
 // TODO: API 연동 시 제거
 const MOCK_ROOMMATES = [
@@ -33,43 +35,6 @@ const MOCK_ROOMMATES = [
   },
 ];
 
-const MOCK_RECRUITS = [
-  {
-    id: 1,
-    title: "글캠 기숙사 2인실 룸메 구해요!",
-    description:
-      "깔끔한 편이고 조용한 성격입니다.\n서로 적당한 거리감 유지하면서 편하게 지낼 분 찾아요",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    timeAgo: "3분 전",
-  },
-  {
-    id: 2,
-    title: "메캠 기숙사 룸메 매칭해요",
-    description: "3인실 한 자리 남았어요!\n아침형 인간이라 운동 좋아하는 분이면 좋겠습니당",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    timeAgo: "3분 전",
-  },
-  {
-    id: 3,
-    title: "메캠 기숙사 룸메 매칭해요",
-    description: "3인실 한 자리 남았어요!\n아침형 인간이라 운동 좋아하는 분이면 좋겠습니당",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    timeAgo: "어제",
-  },
-];
-
 type HomePageContentProps = {
   onMoreRecruitsClick?: () => void;
   onRoommateClick?: (id: string) => void;
@@ -85,6 +50,9 @@ function HomePageContent({
 }: HomePageContentProps) {
   const { ref: emblaRef, handlers } = useDragScroll();
   const recruitListRef = useFadeInOnScroll<HTMLDivElement>();
+
+  const { data } = useHomePostList();
+  const posts = data?.content ?? [];
 
   return (
     <div className="flex flex-col gap-600">
@@ -134,13 +102,24 @@ function HomePageContent({
           </button>
         </div>
         <div ref={recruitListRef} className="flex flex-col gap-2.5">
-          {MOCK_RECRUITS.map((recruit) => (
-            <RecruitCard
-              key={recruit.id}
-              onClick={() => onRecruitClick?.(recruit.id)}
-              {...recruit}
-            />
-          ))}
+          {posts.map((post) => {
+            const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
+            const currentMembers = maxMembers - post.recruitMemberCount;
+
+            return (
+              <RecruitCard
+                key={post.postId}
+                title={post.title}
+                description={post.description}
+                currentMembers={currentMembers}
+                maxMembers={maxMembers}
+                dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
+                roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
+                timeAgo={formatRelativeTime(post.createdAt)}
+                onClick={() => onRecruitClick?.(post.postId)}
+              />
+            );
+          })}
         </div>
       </section>
     </div>
