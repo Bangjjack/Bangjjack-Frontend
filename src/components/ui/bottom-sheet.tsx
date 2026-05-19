@@ -35,7 +35,8 @@ function BottomSheet({ children, onClose, className, closeAriaLabel = "닫기" }
           "relative z-10 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
           isClosing ? "animate-bottom-sheet-down" : "animate-bottom-sheet-up",
         )}
-        onAnimationEnd={() => {
+        onAnimationEnd={(event) => {
+          if (event.target !== event.currentTarget) return;
           if (isClosing) onClose();
         }}
       >

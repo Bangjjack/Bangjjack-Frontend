@@ -28,10 +28,12 @@ function BoardPageContent({
   const sentinelRef = useRef<HTMLDivElement>(null);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
-  const { data, fetchNextPage, isFetching } = usePostList({
-    campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
-    roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
-  });
+  const { data, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage, isError } = usePostList(
+    {
+      campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
+      roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
+    },
+  );
 
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
 
@@ -40,14 +42,14 @@ function BoardPageContent({
     if (!el) return;
 
     const observer = new IntersectionObserver((entries) => {
-      if (entries[0]?.isIntersecting) {
+      if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
       }
     });
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [fetchNextPage]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <>
@@ -95,7 +97,11 @@ function BoardPageContent({
         </div>
 
         {/* 게시글 목록 */}
-        {!isFetching && posts.length === 0 ? (
+        {isError ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">게시글을 불러오지 못했어요</p>
+          </div>
+        ) : !isFetching && posts.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="typo-body2 text-text-caption">해당하는 게시글이 없어요</p>
           </div>

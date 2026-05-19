@@ -51,7 +51,7 @@ function HomePageContent({
   const { ref: emblaRef, handlers } = useDragScroll();
   const recruitListRef = useFadeInOnScroll<HTMLDivElement>();
 
-  const { data } = useHomePostList();
+  const { data, isError } = useHomePostList();
   const posts = data?.content ?? [];
 
   return (
@@ -101,26 +101,32 @@ function HomePageContent({
             모두 보기
           </button>
         </div>
-        <div ref={recruitListRef} className="flex flex-col gap-2.5">
-          {posts.map((post) => {
-            const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
-            const currentMembers = maxMembers - post.recruitMemberCount;
+        {isError ? (
+          <p className="typo-body2 py-4 text-center text-text-caption">
+            게시글을 불러오지 못했어요
+          </p>
+        ) : (
+          <div ref={recruitListRef} className="flex flex-col gap-2.5">
+            {posts.map((post) => {
+              const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
+              const currentMembers = maxMembers - post.recruitMemberCount;
 
-            return (
-              <RecruitCard
-                key={post.postId}
-                title={post.title}
-                description={post.description}
-                currentMembers={currentMembers}
-                maxMembers={maxMembers}
-                dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
-                roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
-                timeAgo={formatRelativeTime(post.createdAt)}
-                onClick={() => onRecruitClick?.(post.postId)}
-              />
-            );
-          })}
-        </div>
+              return (
+                <RecruitCard
+                  key={post.postId}
+                  title={post.title}
+                  description={post.description}
+                  currentMembers={currentMembers}
+                  maxMembers={maxMembers}
+                  dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
+                  roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
+                  timeAgo={formatRelativeTime(post.createdAt)}
+                  onClick={() => onRecruitClick?.(post.postId)}
+                />
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
