@@ -79,16 +79,14 @@ type PostListData = {
 /** 게시글 목록 필터 params (queryKey용) */
 type PostListFilterParams = {
   campus?: Campus;
-  roomsize?: RoomSize;
+  roomSize?: RoomSize;
 };
 
 /** 게시글 목록 조회 params */
 type GetPostsParams = PostListFilterParams & {
-  pageable: {
-    page: number;
-    size: number;
-    sort: string[];
-  };
+  page: number;
+  size: number;
+  sort: string[];
 };
 
 export type {

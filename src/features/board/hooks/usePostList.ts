@@ -12,7 +12,7 @@ export const usePostList = (params: PostListFilterParams) => {
     queryFn: ({ pageParam }) =>
       getPosts({
         ...params,
-        pageable: { page: pageParam, size: PAGE_SIZE, sort: [] },
+        page: pageParam, size: PAGE_SIZE, sort: [],
       }),
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastPageParam) =>

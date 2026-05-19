@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Chip, RoundButton, toast } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { RecruitCard } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/board/constants";
@@ -7,7 +8,7 @@ import type { RoomFilter } from "@/features/board/constants";
 import { usePostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/features/board/utils";
 import { AiRecommendCard } from "./AiRecommendCard";
-import { CampusSelector, CAMPUSES } from "./CampusSelector";
+import { CampusSelector } from "./CampusSelector";
 
 type BoardPageContentProps = {
   showAiRecommend?: boolean;
@@ -22,14 +23,14 @@ function BoardPageContent({
   onAiRecommendClick,
   onWriteClick,
 }: BoardPageContentProps) {
-  const [selectedCampus, setSelectedCampus] = useState<string>(CAMPUSES[0]);
+  const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
   const [aiRecommend, setAiRecommend] = useState(false);
-  const [roomFilter, setRoomFilter] = useState<RoomFilter>("전체");
+  const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage } = usePostList({
-    campus: CAMPUS_API_MAP[selectedCampus],
-    roomsize: ROOM_FILTER_API_MAP[roomFilter],
+    campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
+    roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
   });
 
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
@@ -57,8 +58,8 @@ function BoardPageContent({
           <div className="scrollbar-none -mx-400 flex gap-[6px] overflow-x-auto px-400">
             <Chip
               variant="neutral-primary"
-              selected={roomFilter === "전체"}
-              onSelectedChange={() => setRoomFilter("전체")}
+              selected={roomFilter === null}
+              onSelectedChange={() => setRoomFilter(null)}
             >
               전체
             </Chip>
@@ -71,7 +72,11 @@ function BoardPageContent({
                   toast.success("AI 추천순으로 정렬했어요");
                 }
               }}
+              className={cn(aiRecommend && "gap-[6px]")}
             >
+              {aiRecommend && (
+                <span className="size-[6px] shrink-0 rounded-full bg-brand-primary" aria-hidden="true" />
+              )}
               AI 추천글
             </Chip>
             {ROOM_FILTERS.filter((f) => f !== "전체").map((filter) => (
