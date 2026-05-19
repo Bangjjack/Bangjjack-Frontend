@@ -10,9 +10,11 @@ import {
   AlertDialogHeader,
   AlertDialogIcon,
   AlertDialogTitle,
+  toast,
 } from "@/components/ui";
 import { useClickOutside } from "@/hooks";
 import { cn } from "@/lib/cn";
+import { useDeletePost } from "@/features/board/hooks";
 
 type PostActionMenuProps = {
   postId: string;
@@ -24,6 +26,7 @@ function PostActionMenu({ postId, isOpen, onToggle }: PostActionMenuProps) {
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const { mutate: deletePost, isPending } = useDeletePost();
 
   useClickOutside(menuRef, () => {
     if (isOpen) {
@@ -32,8 +35,15 @@ function PostActionMenu({ postId, isOpen, onToggle }: PostActionMenuProps) {
   });
 
   function handleDeleteConfirm() {
-    // TODO: 삭제 API 연동
-    navigate("/board");
+    deletePost(Number(postId), {
+      onSuccess: () => {
+        toast.success("게시글이 삭제되었어요");
+        navigate("/board");
+      },
+      onError: () => {
+        toast.error("게시글 삭제에 실패했어요");
+      },
+    });
   }
 
   return (
@@ -77,7 +87,9 @@ function PostActionMenu({ postId, isOpen, onToggle }: PostActionMenuProps) {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm}>삭제</AlertDialogAction>
+            <AlertDialogAction onClick={handleDeleteConfirm} disabled={isPending}>
+              삭제
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
