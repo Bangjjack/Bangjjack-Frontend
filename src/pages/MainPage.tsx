@@ -23,12 +23,12 @@ const ROUTE_CONFIGS: RouteConfigEntry[] = [
   },
   {
     activeIcon: "chat",
-    header: { showBack: true, title: "채팅", variant: "title" },
+    header: { title: "채팅", variant: "title" },
     pattern: "/chat",
   },
   {
     activeIcon: "mypage",
-    header: { showBack: true, title: "마이페이지", variant: "title" },
+    header: { title: "마이페이지", variant: "title" },
     pattern: "/mypage",
   },
   {
