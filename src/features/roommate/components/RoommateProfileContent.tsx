@@ -1,7 +1,7 @@
 import { WaveBackgroundIcon } from "@/assets/icons";
-import { Button, Header, ProfileAvatar, Tag } from "@/components/ui";
+import { Header, ProfileAvatar, Tag } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
-import { MatchAlertDialog } from "@/features/board/components/roommate";
+import { MatchActionBar } from "@/features/board/components/roommate";
 import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
@@ -120,20 +120,12 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
       </main>
 
       {/* Bottom action buttons */}
-      <div className="absolute inset-x-0 bottom-0 z-40 flex gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        <MatchAlertDialog
-          matchRate={88}
-          matchHighlights={["청소 빈도", "수면 습관"]}
-          onConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}
-        >
-          <Button className="flex-1" variant="ghost">
-            매칭하기
-          </Button>
-        </MatchAlertDialog>
-        <Button className="flex-1" disabled>
-          채팅하기
-        </Button>
-      </div>
+      <MatchActionBar
+        matchRate={88}
+        matchHighlights={["청소 빈도", "수면 습관"]}
+        onMatchConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}
+        onChatConfirm={() => navigate("/chat")}
+      />
     </div>
   );
 }

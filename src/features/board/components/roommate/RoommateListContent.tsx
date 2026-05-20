@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button, Card, Header } from "@/components/ui";
+import { Card, Header } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { ChecklistCard } from "@/features/roommate/components";
 import { useGoBack } from "@/hooks";
 
-import { MatchAlertDialog } from "./MatchAlertDialog";
+import { MatchActionBar } from "./MatchActionBar";
 import { RoommateList } from "./RoommateList";
 
 import type { Member } from "./RoommateList";
@@ -120,36 +120,26 @@ function RoommateListContent() {
       </main>
 
       {/* Fixed bottom bar */}
-      <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        <button
-          type="button"
-          aria-label={isBookmarked ? "북마크 해제" : "북마크"}
-          className="flex size-[30px] shrink-0 items-center justify-center"
-          onClick={() => setIsBookmarked((prev) => !prev)}
-        >
-          {isBookmarked ? (
-            <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
-          ) : (
-            <BookmarkIcon className="size-[30px]" />
-          )}
-        </button>
-        <MatchAlertDialog
-          matchRate={MOCK_MATCH.matchRate}
-          matchHighlights={MOCK_MATCH.matchHighlights}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1" variant="ghost">
-            매칭하기
-          </Button>
-        </MatchAlertDialog>
-        <MatchAlertDialog
-          matchRate={MOCK_MATCH.matchRate}
-          matchHighlights={MOCK_MATCH.matchHighlights}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1">채팅하기</Button>
-        </MatchAlertDialog>
-      </div>
+      <MatchActionBar
+        leadingElement={
+          <button
+            type="button"
+            aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+            className="flex size-[30px] shrink-0 items-center justify-center"
+            onClick={() => setIsBookmarked((prev) => !prev)}
+          >
+            {isBookmarked ? (
+              <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+            ) : (
+              <BookmarkIcon className="size-[30px]" />
+            )}
+          </button>
+        }
+        matchRate={MOCK_MATCH.matchRate}
+        matchHighlights={MOCK_MATCH.matchHighlights}
+        onMatchConfirm={() => navigate("/chat")}
+        onChatConfirm={() => navigate("/chat")}
+      />
     </div>
   );
 }

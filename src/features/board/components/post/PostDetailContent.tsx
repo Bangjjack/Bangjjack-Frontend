@@ -11,7 +11,7 @@ import { usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
 import { HabitList } from "@/features/board/components/shared";
-import { MatchAlertDialog, RoommateList } from "@/features/board/components/roommate";
+import { MatchActionBar, RoommateList } from "@/features/board/components/roommate";
 import { PostActionMenu } from "./PostActionMenu";
 
 function PostDetailContent() {
@@ -154,46 +154,46 @@ function PostDetailContent() {
       </main>
 
       {/* Fixed bottom bar */}
-      <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        <button
-          type="button"
-          aria-label={isBookmarked ? "북마크 해제" : "북마크"}
-          className="flex size-[30px] shrink-0 items-center justify-center"
-          onClick={() => setIsBookmarked((prev) => !prev)}
-        >
-          {isBookmarked ? (
-            <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
-          ) : (
-            <BookmarkIcon className="size-[30px]" />
-          )}
-        </button>
-
-        {post.isOwner ? (
+      {post.isOwner ? (
+        <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
+          <button
+            type="button"
+            aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+            className="flex size-[30px] shrink-0 items-center justify-center"
+            onClick={() => setIsBookmarked((prev) => !prev)}
+          >
+            {isBookmarked ? (
+              <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+            ) : (
+              <BookmarkIcon className="size-[30px]" />
+            )}
+          </button>
           <Button className="flex-1" onClick={() => navigate("/chat")}>
             채팅 확인하기
           </Button>
-        ) : (
-          <>
-            <MatchAlertDialog
-              matchRate={88}
-              matchHighlights={["청소 빈도", "수면 습관"]}
-              onConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+        </div>
+      ) : (
+        <MatchActionBar
+          leadingElement={
+            <button
+              type="button"
+              aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+              className="flex size-[30px] shrink-0 items-center justify-center"
+              onClick={() => setIsBookmarked((prev) => !prev)}
             >
-              <Button className="flex-1" variant="ghost">
-                매칭하기
-              </Button>
-            </MatchAlertDialog>
-
-            <MatchAlertDialog
-              matchRate={88}
-              matchHighlights={["청소 빈도", "수면 습관"]}
-              onConfirm={() => navigate("/chat")}
-            >
-              <Button className="flex-1">채팅하기</Button>
-            </MatchAlertDialog>
-          </>
-        )}
-      </div>
+              {isBookmarked ? (
+                <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+              ) : (
+                <BookmarkIcon className="size-[30px]" />
+              )}
+            </button>
+          }
+          matchRate={88}
+          matchHighlights={["청소 빈도", "수면 습관"]}
+          onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+          onChatConfirm={() => navigate("/chat")}
+        />
+      )}
     </div>
   );
 }
