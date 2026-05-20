@@ -1,27 +1,20 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
+import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 import type {
   ChatDetail,
+  ChatErrorMessage,
   ChatInputMenuAction,
   ChatMessage,
+  ChatReceivedMessage,
   ChatRoommateInviteMessageData,
+  ChatTextMessage,
 } from "@/features/chat/types";
+import { useAuthStore } from "@/stores/authStore";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
-}
-
-function createOutgoingMessage(id: number, text: string): ChatMessage {
-  return {
-    id,
-    sentAt: new Intl.DateTimeFormat("ko-KR", {
-      hour: "numeric",
-      minute: "2-digit",
-    }).format(new Date()),
-    text,
-    type: "outgoing",
-  };
 }
 
 function createInviteMessage(id: number, recipientName: string): ChatMessage {
@@ -40,6 +33,19 @@ function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMes
   return message.type === "roommate_invite";
 }
 
+function formatMessageTime(createdAt: string) {
+  const date = new Date(createdAt);
+
+  if (Number.isNaN(date.getTime())) {
+    return createdAt;
+  }
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
 function prefersReducedMotion() {
   return (
     typeof window !== "undefined" &&
@@ -49,11 +55,56 @@ function prefersReducedMotion() {
 }
 
 function useChatComposer({ chatDetail }: UseChatComposerParams) {
+  const currentUserId = useAuthStore((state) => state.userId);
+  const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
   const [inputMenuOpen, setInputMenuOpen] = useState(false);
   const [inputMenuClosing, setInputMenuClosing] = useState(false);
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
   const [messages, setMessages] = useState(chatDetail.messages);
+
+  const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
+    if (receivedMessage.roomId !== chatDetail.id) {
+      return;
+    }
+
+    setMessages((prev) => {
+      if (prev.some((message) => message.id === receivedMessage.messageId)) {
+        return prev;
+      }
+
+      const pendingMessageIndex = pendingOutgoingMessagesRef.current.findIndex(
+        (message) => message === receivedMessage.content,
+      );
+      const isOutgoing =
+        (currentUserId != null && receivedMessage.senderId === currentUserId) ||
+        pendingMessageIndex >= 0;
+
+      if (pendingMessageIndex >= 0) {
+        pendingOutgoingMessagesRef.current.splice(pendingMessageIndex, 1);
+      }
+
+      const nextMessage: ChatTextMessage = {
+        id: receivedMessage.messageId,
+        messageType: receivedMessage.messageType,
+        sentAt: formatMessageTime(receivedMessage.createdAt),
+        text: receivedMessage.content,
+        type: isOutgoing ? "outgoing" : "incoming",
+      };
+
+      return [...prev, nextMessage];
+    });
+  };
+
+  const handleChatErrorMessage = (errorMessage: ChatErrorMessage) => {
+    console.error("[chat] WebSocket error message received.", errorMessage);
+    toast.error(errorMessage.message);
+  };
+
+  const { sendMessage, status: connectionStatus } = useChatWebSocket({
+    onErrorMessage: handleChatErrorMessage,
+    onMessage: appendReceivedMessage,
+  });
 
   const openInputMenu = () => {
     setInputMenuClosing(false);
@@ -101,7 +152,18 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
       return;
     }
 
-    setMessages((prev) => [...prev, createOutgoingMessage(getNextMessageId(prev), nextMessage)]);
+    const isSent = sendMessage({
+      content: nextMessage,
+      roomId: chatDetail.id,
+      type: "SEND",
+    });
+
+    if (!isSent) {
+      toast.error("채팅 서버에 연결 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+
+    pendingOutgoingMessagesRef.current.push(nextMessage);
     setDraftMessage("");
     completeInputMenuClose();
   };
@@ -140,6 +202,7 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
     closeInputMenu,
     closeInviteSheet,
     completeInputMenuClose,
+    connectionStatus,
     draftMessage,
     handleCancelInviteRequest,
     handleInputMenuAction,

@@ -26,6 +26,7 @@ export type BaseChatCardProps = {
 
 export type ChatTextMessage = {
   id: number;
+  messageType?: ChatServerMessageType;
   sentAt: string;
   text: string;
   type: "incoming" | "outgoing";
@@ -73,3 +74,36 @@ export type ChatDetail = ChatUserProfile & {
   recruitTitle?: string;
   startSource: ChatStartSource;
 };
+
+export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
+
+export type ChatServerMessageType =
+  | "USER"
+  | "APPLICATION_SENT"
+  | "APPLICATION_ACCEPTED"
+  | "APPLICATION_REJECTED"
+  | "GROUP_DISBANDED"
+  | "SYSTEM";
+
+export type ChatSendMessagePayload = {
+  content: string;
+  roomId: number;
+  type: "SEND";
+};
+
+export type ChatReceivedMessage = {
+  content: string;
+  createdAt: string;
+  messageId: number;
+  messageType: ChatServerMessageType;
+  roomId: number;
+  senderId: number;
+};
+
+export type ChatErrorMessage = {
+  code: number;
+  message: string;
+  type: "ERROR";
+};
+
+export type ChatConnectionStatus = "idle" | "connecting" | "open" | "closed" | "error";

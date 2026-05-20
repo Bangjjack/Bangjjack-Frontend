@@ -7,7 +7,7 @@ import {
   ChatRoommateInviteSheet,
   ChatRoommateRequestMessage,
 } from "@/features/chat/components";
-import { useChatComposer } from "@/features/chat/hooks/useChatComposer";
+import { useChatComposer } from "@/features/chat/hooks";
 import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
