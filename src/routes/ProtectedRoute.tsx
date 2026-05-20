@@ -9,7 +9,7 @@ export default function ProtectedRoute() {
   const searchParams = new URLSearchParams(location.search);
   const code = searchParams.get("code");
 
-  if (!isAuthenticated && !hasAccessToken) {
+  if (!isAuthenticated || !hasAccessToken) {
     if (code) {
       return <Navigate to={`/login/callback?code=${encodeURIComponent(code)}`} replace />;
     }
