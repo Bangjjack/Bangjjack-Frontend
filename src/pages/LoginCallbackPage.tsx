@@ -11,41 +11,58 @@ export default function LoginCallbackPage() {
   const [searchParams] = useSearchParams();
   const hasExchangedCode = useRef(false);
   const code = searchParams.get("code");
-  const { mutate: exchangeAuthToken } = useExchangeAuthToken();
+  const { mutateAsync: exchangeAuthToken } = useExchangeAuthToken();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   useEffect(() => {
     if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
+      console.info("[auth] Already authenticated. Redirecting to /home.");
       hasExchangedCode.current = true;
-      window.location.replace("/home");
+      navigate("/home", { replace: true });
     }
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
-    if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
+    const exchangeCode = async () => {
+      if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
+        console.info("[auth] Access token exists. Skipping auth code exchange.");
+        hasExchangedCode.current = true;
+        return;
+      }
+
+      if (!code) {
+        console.warn("[auth] Login callback code is missing. Redirecting to /login.");
+        return;
+      }
+
+      if (hasExchangedCode.current) {
+        console.info("[auth] Auth code exchange already requested. Skipping duplicate request.");
+        return;
+      }
+
+      console.info("[auth] Starting auth code exchange.");
       hasExchangedCode.current = true;
-      return;
-    }
 
-    if (!code || hasExchangedCode.current) {
-      return;
-    }
+      try {
+        const { accessToken, userId, username } = await exchangeAuthToken({ code });
 
-    hasExchangedCode.current = true;
+        console.info("[auth] Auth code exchange succeeded.", {
+          hasAccessToken: Boolean(accessToken),
+          userId,
+          username,
+        });
 
-    exchangeAuthToken(
-      { code },
-      {
-        onSuccess: ({ accessToken, userId, username }) => {
-          setAuth(accessToken, userId, username);
-          window.location.replace("/onboarding");
-        },
-        onError: () => {
-          toast.error("로그인에 실패했습니다.");
-          navigate("/login", { replace: true });
-        },
-      },
-    );
+        setAuth(accessToken, userId, username);
+        console.info("[auth] Auth state saved. Redirecting to /onboarding.");
+        navigate("/onboarding", { replace: true });
+      } catch (error) {
+        console.error("[auth] Auth code exchange failed. Redirecting to /login.", error);
+        toast.error("로그인에 실패했습니다.");
+        navigate("/login", { replace: true });
+      }
+    };
+
+    void exchangeCode();
   }, [code, exchangeAuthToken, navigate, setAuth]);
 
   if (!code) {
