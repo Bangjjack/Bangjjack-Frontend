@@ -31,12 +31,11 @@ export default function BoardPage() {
         onPostClick={(id) => navigate(`/board/${id}`)}
         onWriteClick={() => navigate("/board/write")}
       />
-      {showAiRecommend && (
-        <AiRecommendBottomSheet
-          onClose={handleAiRecommendClose}
-          onConfirm={handleAiRecommendConfirm}
-        />
-      )}
+      <AiRecommendBottomSheet
+        open={showAiRecommend}
+        onClose={handleAiRecommendClose}
+        onConfirm={handleAiRecommendConfirm}
+      />
     </>
   );
 }

@@ -180,17 +180,16 @@ function ChatDetailContent({
         />
       </div>
 
-      {inviteSheetOpen ? (
-        <ChatRoommateInviteSheet
-          age={chatDetail.age}
-          avatarSeed={chatDetail.id}
-          department={chatDetail.department}
-          lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
-          nickname={chatDetail.nickname}
-          onCancel={closeInviteSheet}
-          onConfirm={handleSendInviteRequest}
-        />
-      ) : null}
+      <ChatRoommateInviteSheet
+        age={chatDetail.age}
+        avatarSeed={chatDetail.id}
+        department={chatDetail.department}
+        lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
+        nickname={chatDetail.nickname}
+        open={inviteSheetOpen}
+        onCancel={closeInviteSheet}
+        onConfirm={handleSendInviteRequest}
+      />
     </div>
   );
 }
