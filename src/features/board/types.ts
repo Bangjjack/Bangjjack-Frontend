@@ -1,4 +1,4 @@
-import type { Dormitory, PostStatus, RoomSize, Semester, SharedLifestyle } from "@/types";
+import type { Campus, Dormitory, PostStatus, RoomSize, Semester, SharedLifestyle } from "@/types";
 
 export type {
   TagItem,
@@ -9,6 +9,7 @@ export type {
   PostStatus,
   Semester,
   Dormitory,
+  Campus,
   Recycling,
   PhoneCall,
   ItemSharing,
@@ -58,4 +59,44 @@ type CreatePostRequest = {
 
 type UpdatePostRequest = CreatePostRequest;
 
-export type { PostAuthor, PostDetail, ApiResponse, CreatePostRequest, UpdatePostRequest };
+/** 게시글 목록 아이템 */
+type PostListItem = {
+  postId: number;
+  title: string;
+  description: string;
+  dormitory: Dormitory;
+  roomSize: RoomSize;
+  recruitMemberCount: number;
+  createdAt: string;
+};
+
+/** 게시글 목록 응답 data */
+type PostListData = {
+  content: PostListItem[];
+  hasNext: boolean;
+};
+
+/** 게시글 목록 필터 params (queryKey용) */
+type PostListFilterParams = {
+  campus?: Campus;
+  roomSize?: RoomSize;
+};
+
+/** 게시글 목록 조회 params */
+type GetPostsParams = PostListFilterParams & {
+  page: number;
+  size: number;
+  sort: string[];
+};
+
+export type {
+  PostAuthor,
+  PostDetail,
+  ApiResponse,
+  CreatePostRequest,
+  UpdatePostRequest,
+  PostListItem,
+  PostListData,
+  PostListFilterParams,
+  GetPostsParams,
+};

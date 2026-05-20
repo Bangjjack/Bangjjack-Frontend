@@ -1,20 +1,42 @@
+import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import { BoardPageContent } from "@/features/board/components";
+import { AiRecommendBottomSheet, BoardPageContent } from "@/features/board/components";
+
+const AI_RECOMMEND_SEEN_KEY = "ai-recommend-seen";
 
 export default function BoardPage() {
   const navigate = useNavigate();
+  const [showAiRecommend, setShowAiRecommend] = useState(
+    () => localStorage.getItem(AI_RECOMMEND_SEEN_KEY) !== "true",
+  );
+  const [aiRecommend, setAiRecommend] = useState(false);
 
-  // TODO: 실제 첫 진입 여부는 API/상태로 판별
-  const isFirstVisit = true;
+  const handleAiRecommendClose = () => {
+    localStorage.setItem(AI_RECOMMEND_SEEN_KEY, "true");
+    setShowAiRecommend(false);
+  };
+
+  const handleAiRecommendConfirm = () => {
+    localStorage.setItem(AI_RECOMMEND_SEEN_KEY, "true");
+    setShowAiRecommend(false);
+    setAiRecommend(true);
+  };
 
   return (
-    <BoardPageContent
-      showAiRecommend={isFirstVisit}
-      onPostClick={(id) => navigate(`/board/${id}`)}
-      // TODO: AI 추천 페이지/모달 라우팅 연결
-      onAiRecommendClick={() => console.log("ai recommend click")}
-      onWriteClick={() => navigate("/board/write")}
-    />
+    <>
+      <BoardPageContent
+        aiRecommend={aiRecommend}
+        onAiRecommendChange={setAiRecommend}
+        onPostClick={(id) => navigate(`/board/${id}`)}
+        onWriteClick={() => navigate("/board/write")}
+      />
+      {showAiRecommend && (
+        <AiRecommendBottomSheet
+          onClose={handleAiRecommendClose}
+          onConfirm={handleAiRecommendConfirm}
+        />
+      )}
+    </>
   );
 }
