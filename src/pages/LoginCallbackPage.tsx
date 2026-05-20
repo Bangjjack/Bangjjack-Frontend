@@ -16,11 +16,17 @@ export default function LoginCallbackPage() {
 
   useEffect(() => {
     if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
+      hasExchangedCode.current = true;
       window.location.replace("/onboarding");
     }
   }, []);
 
   useEffect(() => {
+    if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
+      hasExchangedCode.current = true;
+      return;
+    }
+
     if (!code || hasExchangedCode.current) {
       return;
     }
