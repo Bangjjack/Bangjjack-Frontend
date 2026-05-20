@@ -9,6 +9,6 @@ const validateApiBaseUrl = () => {
 };
 
 export const API_BASE_URL = validateApiBaseUrl();
+const VITE_GOOGLE_LOGIN_URL = import.meta.env.VITE_GOOGLE_LOGIN_URL as string | undefined;
 export const GOOGLE_LOGIN_URL =
-  (import.meta.env.VITE_GOOGLE_LOGIN_URL as string | undefined) ??
-  `${API_BASE_URL.replace(/\/$/, "")}/oauth2/authorization/google`;
+  VITE_GOOGLE_LOGIN_URL?.trim() || `${API_BASE_URL.replace(/\/$/, "")}/oauth2/authorization/google`;
