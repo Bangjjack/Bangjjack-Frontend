@@ -35,6 +35,7 @@ type PostDetail = {
   semester: Semester;
   dormitory: Dormitory;
   isOwner: boolean;
+  isBookmarked: boolean;
   createdAt: string;
   author: PostAuthor;
   sharedLifestyle: SharedLifestyle;

@@ -7,7 +7,7 @@ import { useGoBack, useFadeInOnScroll } from "@/hooks";
 
 import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/constants";
-import { usePostDetail } from "@/features/board/hooks";
+import { useBookmarkToggle, usePostDetail } from "@/features/board/hooks";
 import { formatRelativeTime, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
 import { HabitList } from "@/features/board/components/shared";
@@ -19,11 +19,11 @@ function PostDetailContent() {
   const postId = Number(id);
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
   const { data: post, isLoading, isError } = usePostDetail(postId);
+  const { isBookmarked, toggle } = useBookmarkToggle(postId);
 
   if (isLoading) {
     return (
@@ -155,18 +155,20 @@ function PostDetailContent() {
 
       {/* Fixed bottom bar */}
       <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        <button
-          type="button"
-          aria-label={isBookmarked ? "북마크 해제" : "북마크"}
-          className="flex size-[30px] shrink-0 items-center justify-center"
-          onClick={() => setIsBookmarked((prev) => !prev)}
-        >
-          {isBookmarked ? (
-            <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
-          ) : (
-            <BookmarkIcon className="size-[30px]" />
-          )}
-        </button>
+        {!post.isOwner && (
+          <button
+            type="button"
+            aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+            className="flex size-[30px] shrink-0 items-center justify-center"
+            onClick={toggle}
+          >
+            {isBookmarked ? (
+              <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+            ) : (
+              <BookmarkIcon className="size-[30px]" />
+            )}
+          </button>
+        )}
 
         {post.isOwner ? (
           <Button className="flex-1" onClick={() => navigate("/chat")}>
