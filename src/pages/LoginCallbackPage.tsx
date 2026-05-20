@@ -17,7 +17,7 @@ export default function LoginCallbackPage() {
   useEffect(() => {
     if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
       hasExchangedCode.current = true;
-      window.location.replace("/onboarding");
+      window.location.replace("/home");
     }
   }, []);
 
@@ -37,8 +37,7 @@ export default function LoginCallbackPage() {
       { code },
       {
         onSuccess: ({ accessToken, userId, username }) => {
-          localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-          setAuth(userId, username);
+          setAuth(accessToken, userId, username);
           window.location.replace("/onboarding");
         },
         onError: () => {
