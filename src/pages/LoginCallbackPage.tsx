@@ -41,7 +41,7 @@ export default function LoginCallbackPage() {
           window.location.replace("/onboarding");
         },
         onError: () => {
-          toast.error("Login failed.");
+          toast.error("로그인에 실패했습니다.");
           navigate("/login", { replace: true });
         },
       },
