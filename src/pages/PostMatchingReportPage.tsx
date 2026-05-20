@@ -6,5 +6,5 @@ export default function PostMatchingReportPage() {
   const { postId } = useParams();
   const id = Number(postId);
 
-  return <MatchingReportContent roommateId={Number.isNaN(id) ? undefined : id} />;
+  return <MatchingReportContent postId={Number.isNaN(id) ? undefined : id} />;
 }
