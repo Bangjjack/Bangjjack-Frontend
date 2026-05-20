@@ -6,13 +6,14 @@ import { BangjjackTitleIcon, GoogleIcon, LogoLoginIcon } from "@/assets/icons";
 export default function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const redirectFrom = location.state?.from;
   const from = (location.state?.from?.pathname as string) ?? "/";
 
   useEffect(() => {
-    if (location.state?.from) {
+    if (redirectFrom) {
       toast.error("로그인이 필요합니다.");
     }
-  }, []);
+  }, [redirectFrom]);
 
   return (
     <div className="min-h-dvh bg-neutral-50">
