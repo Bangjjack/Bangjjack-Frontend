@@ -174,13 +174,21 @@ function PostDetailContent() {
           </Button>
         ) : (
           <>
-            <MatchAlertDialog matchRate={0} matchDetails="" onConfirm={() => navigate("/chat")}>
+            <MatchAlertDialog
+              matchRate={88}
+              matchHighlights={["청소 빈도", "수면 습관"]}
+              onConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+            >
               <Button className="flex-1" variant="ghost">
                 매칭하기
               </Button>
             </MatchAlertDialog>
 
-            <MatchAlertDialog matchRate={0} matchDetails="" onConfirm={() => navigate("/chat")}>
+            <MatchAlertDialog
+              matchRate={88}
+              matchHighlights={["청소 빈도", "수면 습관"]}
+              onConfirm={() => navigate("/chat")}
+            >
               <Button className="flex-1">채팅하기</Button>
             </MatchAlertDialog>
           </>

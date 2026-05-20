@@ -77,7 +77,7 @@ const MOCK_CHECKLISTS: Record<string, ChecklistEntry[]> = {
 
 const MOCK_MATCH = {
   matchRate: 92,
-  matchDetails: "청소 빈도, 흡연 여부",
+  matchHighlights: ["청소 빈도", "흡연 여부"],
 };
 
 function RoommateListContent() {
@@ -135,7 +135,7 @@ function RoommateListContent() {
         </button>
         <MatchAlertDialog
           matchRate={MOCK_MATCH.matchRate}
-          matchDetails={MOCK_MATCH.matchDetails}
+          matchHighlights={MOCK_MATCH.matchHighlights}
           onConfirm={() => navigate("/chat")}
         >
           <Button className="flex-1" variant="ghost">
@@ -144,7 +144,7 @@ function RoommateListContent() {
         </MatchAlertDialog>
         <MatchAlertDialog
           matchRate={MOCK_MATCH.matchRate}
-          matchDetails={MOCK_MATCH.matchDetails}
+          matchHighlights={MOCK_MATCH.matchHighlights}
           onConfirm={() => navigate("/chat")}
         >
           <Button className="flex-1">채팅하기</Button>

@@ -1,21 +1,7 @@
-import { useState } from "react";
-
 import { WaveBackgroundIcon } from "@/assets/icons";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  Button,
-  Header,
-  ProfileAvatar,
-  Tag,
-} from "@/components/ui";
+import { Button, Header, ProfileAvatar, Tag } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
+import { MatchAlertDialog } from "@/features/board/components/roommate";
 import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
@@ -75,7 +61,6 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
   const handleBackClick = useGoBack();
   const contentRef = useFadeInOnScroll<HTMLDivElement>();
   const navigate = useNavigate();
-  const [isMatchDialogOpen, setIsMatchDialogOpen] = useState(false);
   const displayProfile = {
     ...MOCK_PROFILE,
     age: profile?.age ?? MOCK_PROFILE.age,
@@ -84,14 +69,6 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
     tags: profile?.lifestyleTags ?? MOCK_PROFILE.tags,
   };
   const avatarSeed = profile?.id ?? displayProfile.nickname.length;
-
-  const handleMatchClick = () => {
-    setIsMatchDialogOpen(true);
-  };
-
-  const handleConfirmMatch = () => {
-    navigate(`/roommate/${roommateId}/matching-report`);
-  };
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -144,37 +121,19 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
 
       {/* Bottom action buttons */}
       <div className="absolute inset-x-0 bottom-0 z-40 flex gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        <Button className="flex-1" variant="ghost" onClick={handleMatchClick}>
-          매칭하기
-        </Button>
+        <MatchAlertDialog
+          matchRate={88}
+          matchHighlights={["청소 빈도", "수면 습관"]}
+          onConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}
+        >
+          <Button className="flex-1" variant="ghost">
+            매칭하기
+          </Button>
+        </MatchAlertDialog>
         <Button className="flex-1" disabled>
           채팅하기
         </Button>
       </div>
-
-      {/* AI 매칭률 확인 모달 */}
-      <AlertDialog open={isMatchDialogOpen} onOpenChange={setIsMatchDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {"나와의 매칭률은 "}
-              <span className="text-brand-primary">88%</span>
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              <span className="text-brand-primary">청소 빈도</span>
-              {", "}
-              <span className="text-brand-primary">수면 습관</span>
-              {"이 일치해요!"}
-              <br />
-              {"AI 매칭 리포트를 확인할 수 있어요"}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>취소하기</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirmMatch}>확인하기</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
