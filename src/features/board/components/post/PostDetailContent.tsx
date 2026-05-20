@@ -43,6 +43,7 @@ function PostDetailContent() {
 
   const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
   const currentMembers = maxMembers - post.recruitMemberCount;
+  const isClosed = currentMembers === maxMembers;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
@@ -73,8 +74,8 @@ function PostDetailContent() {
               {/* 제목 + 인원 */}
               <div className="flex items-center justify-between">
                 <h2 className="typo-h4 text-text-strong">{post.title}</h2>
-                <Tag color="black">
-                  {currentMembers} / {maxMembers}
+                <Tag color={isClosed ? "disabled" : "black"}>
+                  {isClosed ? "마감" : `${currentMembers} / ${maxMembers}`}
                 </Tag>
               </div>
 
