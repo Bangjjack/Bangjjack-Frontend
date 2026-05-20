@@ -32,12 +32,12 @@ export const routes: RouteObject[] = [
     element: <LoginCallbackPage />,
   },
   {
-    path: "/onboarding",
-    element: <OnBoardingPage />,
-  },
-  {
     element: <ProtectedRoute />,
     children: [
+      {
+        path: "/onboarding",
+        element: <OnBoardingPage />,
+      },
       {
         path: "/",
         element: <MainPage />,
