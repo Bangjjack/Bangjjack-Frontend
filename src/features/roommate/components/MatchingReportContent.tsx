@@ -1,10 +1,11 @@
 import { Button, Card, Header, ProfileAvatar } from "@/components/ui";
-import { AiCommentCard } from "@/features/roommate/components/AiCommentCard";
-import { MatchRateCard } from "@/features/roommate/components/MatchRateCard";
-import { MatchedItemsCard } from "@/features/roommate/components/MatchedItemsCard";
-import { useGoBack } from "@/hooks/useGoBack";
-
-import type { MatchedItem } from "@/features/roommate/components/MatchedItemsCard";
+import {
+  AiCommentCard,
+  MatchedItemsCard,
+  MatchRateCard,
+  type MatchedItem,
+} from "@/features/roommate/components";
+import { useGoBack } from "@/hooks";
 
 // TODO: API 연동 시 제거
 const MOCK_MATCH_RATE = 88;
@@ -24,17 +25,18 @@ const MOCK_MATCHED_ITEMS: MatchedItem[] = [
 ];
 
 type MatchingReportContentProps = {
+  postId?: number;
   roommateId?: number;
 };
 
-function MatchingReportContent({ roommateId }: MatchingReportContentProps) {
+function MatchingReportContent({ postId, roommateId }: MatchingReportContentProps) {
   const goBack = useGoBack();
 
-  // TODO: API 연동 시 roommateId로 실제 데이터 조회
+  // TODO: API 연동 시 postId 또는 roommateId로 실제 데이터 조회
   const nickname = "무구정광대다라니경";
   const age = 20;
   const department = "컴퓨터공학과";
-  const avatarSeed = roommateId ?? nickname.length;
+  const avatarSeed = roommateId ?? postId ?? nickname.length;
 
   return (
     <div className="relative flex h-dvh flex-col bg-bg-primary">
@@ -91,3 +93,4 @@ function MatchingReportContent({ roommateId }: MatchingReportContentProps) {
 }
 
 export { MatchingReportContent };
+export type { MatchingReportContentProps };

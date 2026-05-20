@@ -4,8 +4,7 @@ import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constan
 import { MatchActionBar } from "@/features/board/components/roommate";
 import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
-import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
-import { useGoBack } from "@/hooks/useGoBack";
+import { useFadeInOnScroll, useGoBack } from "@/hooks";
 import { useNavigate } from "react-router";
 
 import type { ChecklistEntry } from "@/features/roommate/components";

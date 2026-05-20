@@ -6,6 +6,7 @@ export { ChecklistItem } from "@/features/roommate/components/ChecklistItem";
 export { ImportanceSection } from "@/features/roommate/components/ImportanceSection";
 export type { ImportanceSectionProps } from "@/features/roommate/components/ImportanceSection";
 export { MatchingReportContent } from "@/features/roommate/components/MatchingReportContent";
+export type { MatchingReportContentProps } from "@/features/roommate/components/MatchingReportContent";
 export { MatchingGauge } from "@/features/roommate/components/MatchingGauge";
 export { MatchRateCard } from "@/features/roommate/components/MatchRateCard";
 export type { MatchRateCardProps } from "@/features/roommate/components/MatchRateCard";

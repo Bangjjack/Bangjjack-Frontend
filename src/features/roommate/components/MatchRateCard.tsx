@@ -1,5 +1,5 @@
 import { Card, Tag } from "@/components/ui";
-import { MatchingGauge } from "@/features/roommate/components/MatchingGauge";
+import { MatchingGauge } from "@/features/roommate/components";
 
 type MatchRateCardProps = {
   matchCount: number;
