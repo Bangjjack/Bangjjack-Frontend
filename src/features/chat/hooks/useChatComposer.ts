@@ -15,6 +15,7 @@ import { useAuthStore } from "@/stores/authStore";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
+  initialMessages?: ChatMessage[];
   roomId?: number;
 }
 
@@ -55,22 +56,32 @@ function prefersReducedMotion() {
   );
 }
 
-function useChatComposer({ chatDetail, roomId }: UseChatComposerParams) {
+function useChatComposer({ chatDetail, initialMessages, roomId }: UseChatComposerParams) {
   const currentUserId = useAuthStore((state) => state.userId);
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
   const [inputMenuOpen, setInputMenuOpen] = useState(false);
   const [inputMenuClosing, setInputMenuClosing] = useState(false);
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
-  const [messages, setMessages] = useState(chatDetail.messages);
+  const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
+  const baseMessages = initialMessages ?? chatDetail.messages;
+  const messages = [
+    ...baseMessages,
+    ...localMessages.filter(
+      (localMessage) => !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id),
+    ),
+  ];
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
     if (roomId == null || receivedMessage.roomId !== roomId) {
       return;
     }
 
-    setMessages((prev) => {
-      if (prev.some((message) => message.id === receivedMessage.messageId)) {
+    setLocalMessages((prev) => {
+      if (
+        baseMessages.some((message) => message.id === receivedMessage.messageId) ||
+        prev.some((message) => message.id === receivedMessage.messageId)
+      ) {
         return prev;
       }
 
@@ -175,9 +186,9 @@ function useChatComposer({ chatDetail, roomId }: UseChatComposerParams) {
   };
 
   const handleSendInviteRequest = () => {
-    setMessages((prev) => [
+    setLocalMessages((prev) => [
       ...prev,
-      createInviteMessage(getNextMessageId(prev), chatDetail.nickname),
+      createInviteMessage(getNextMessageId(messages), chatDetail.nickname),
     ]);
     closeInviteSheet();
     toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
@@ -189,7 +200,7 @@ function useChatComposer({ chatDetail, roomId }: UseChatComposerParams) {
         message.id === messageId && isInviteMessage(message),
     );
 
-    setMessages((prev) => prev.filter((message) => message.id !== messageId));
+    setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
 
     if (canceledInvite) {
       toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);

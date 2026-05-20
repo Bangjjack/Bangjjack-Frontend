@@ -6,6 +6,7 @@ export { ChatRoommateConfirmedContent } from "@/features/chat/components/ChatRoo
 export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/ChatRoommateConfirmedContent";
 export {
   useChatComposer,
+  useChatMessages,
   useChatWebSocket,
   useCreateChatRoom,
   useIssueChatWsToken,

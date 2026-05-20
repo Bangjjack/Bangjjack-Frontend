@@ -8,12 +8,13 @@ import {
   ChatRoommateRequestMessage,
 } from "@/features/chat/components";
 import { useChatComposer } from "@/features/chat/hooks";
-import type { ChatDetail } from "@/features/chat/types";
+import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
 export interface ChatDetailContentProps {
   chatDetail: ChatDetail;
   className?: string;
+  initialMessages?: ChatMessage[];
   roomId?: number;
   onBack: () => void;
   onRoommateRequestAccept?: () => void;
@@ -24,6 +25,7 @@ export interface ChatDetailContentProps {
 function ChatDetailContent({
   chatDetail,
   className,
+  initialMessages,
   roomId,
   onBack,
   onRoommateRequestAccept,
@@ -57,7 +59,7 @@ function ChatDetailContent({
     messages,
     setDraftMessage,
     toggleInputMenu,
-  } = useChatComposer({ chatDetail, roomId });
+  } = useChatComposer({ chatDetail, initialMessages, roomId });
 
   const recruitTitle =
     chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;

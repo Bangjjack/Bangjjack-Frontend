@@ -116,6 +116,25 @@ export type ChatReceivedMessage = {
   senderId: number;
 };
 
+export type ChatMessageHistoryItem = {
+  content: string;
+  createdAt: string;
+  messageId: number;
+  senderId: number;
+};
+
+export type ChatMessagesData = {
+  hasNext: boolean;
+  messages: ChatMessageHistoryItem[];
+  nextCursor: number | null;
+};
+
+export type GetChatMessagesParams = {
+  cursor?: number;
+  roomId: number;
+  size?: number;
+};
+
 export type ChatErrorMessage = {
   code: number;
   message: string;
