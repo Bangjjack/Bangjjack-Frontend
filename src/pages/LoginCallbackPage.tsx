@@ -11,7 +11,7 @@ export default function LoginCallbackPage() {
   const [searchParams] = useSearchParams();
   const hasExchangedCode = useRef(false);
   const code = searchParams.get("code");
-  const { mutateAsync: exchangeAuthToken } = useExchangeAuthToken();
+  const { mutate: exchangeAuthToken } = useExchangeAuthToken();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   useEffect(() => {
@@ -27,19 +27,20 @@ export default function LoginCallbackPage() {
 
     hasExchangedCode.current = true;
 
-    const handleTokenExchange = async () => {
-      try {
-        const { accessToken, userId, username } = await exchangeAuthToken({ code });
-        localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-        setAuth(userId, username);
-        window.location.replace("/onboarding");
-      } catch {
-        toast.error("Login failed.");
-        navigate("/login", { replace: true });
-      }
-    };
-
-    void handleTokenExchange();
+    exchangeAuthToken(
+      { code },
+      {
+        onSuccess: ({ accessToken, userId, username }) => {
+          localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+          setAuth(userId, username);
+          window.location.replace("/onboarding");
+        },
+        onError: () => {
+          toast.error("Login failed.");
+          navigate("/login", { replace: true });
+        },
+      },
+    );
   }, [code, exchangeAuthToken, navigate, setAuth]);
 
   if (!code) {
