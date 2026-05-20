@@ -1,84 +1,67 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Chip, RoundButton, toast } from "@/components/ui";
+import { cn } from "@/lib/cn";
 import { RecruitCard } from "@/components";
-import { AiRecommendCard } from "./AiRecommendCard";
-import { CampusSelector, CAMPUSES } from "./CampusSelector";
-
-const ROOM_FILTERS = ["전체", "2인 1실", "3인 1실", "4인 1실"] as const;
-
-type RoomFilter = (typeof ROOM_FILTERS)[number];
-
-// TODO: API 연동 후 실제 데이터로 교체
-const MOCK_POSTS = [
-  {
-    id: 1,
-    title: "글캠 기숙사 2인실 룸메 구해요!",
-    description:
-      "깔끔한 편이고 조용한 성격입니다. \n서로 적당한 거리감 유지하면서 편하게 지낼 분 찾아요",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    matchRate: 92,
-    timeAgo: "3분 전",
-  },
-  {
-    id: 2,
-    title: "글캠 기숙사 2인실 룸메 구해요!",
-    description:
-      "깔끔한 편이고 조용한 성격입니다. \n서로 적당한 거리감 유지하면서 편하게 지낼 분 찾아요",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    matchRate: 78,
-    timeAgo: "3분 전",
-  },
-  {
-    id: 3,
-    title: "글캠 기숙사 2인실 룸메 구해요!",
-    description:
-      "깔끔한 편이고 조용한 성격입니다. \n서로 적당한 거리감 유지하면서 편하게 지낼 분 찾아요",
-    currentMembers: 1,
-    maxMembers: 2,
-    dormitory: "3 기숙사",
-    roomType: "2인 1실",
-    tags: ["비흡연"],
-    matchRate: 65,
-    timeAgo: "3분 전",
-  },
-];
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
+import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/board/constants";
+import type { RoomFilter } from "@/features/board/constants";
+import { usePostList } from "@/features/board/hooks";
+import { formatRelativeTime } from "@/features/board/utils";
+import { useFadeInOnScroll } from "@/hooks";
+import { CampusSelector } from "./CampusSelector";
 
 type BoardPageContentProps = {
-  showAiRecommend?: boolean;
+  aiRecommend: boolean;
+  onAiRecommendChange: (value: boolean) => void;
   onPostClick?: (id: number) => void;
-  onAiRecommendClick?: () => void;
   onWriteClick?: () => void;
 };
 
 function BoardPageContent({
-  showAiRecommend = false,
+  aiRecommend,
+  onAiRecommendChange,
   onPostClick,
-  onAiRecommendClick,
   onWriteClick,
 }: BoardPageContentProps) {
-  const [selectedCampus, setSelectedCampus] = useState<string>(CAMPUSES[0]);
-  const [aiRecommend, setAiRecommend] = useState(false);
-  const [roomFilter, setRoomFilter] = useState<RoomFilter>("전체");
+  const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
+  const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
+
+  const { data, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage, isError } = usePostList(
+    {
+      campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
+      roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
+    },
+  );
+
+  const posts = data?.pages.flatMap((page) => page.content) ?? [];
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <>
-      <div className="flex flex-col gap-450">
+      <div className="flex min-h-full flex-col gap-450">
         {/* 헤더: 캠퍼스 선택 + 필터 칩 */}
         <div className="flex flex-col gap-[6px]">
           <CampusSelector value={selectedCampus} onChange={setSelectedCampus} />
           <div className="scrollbar-none -mx-400 flex gap-[6px] overflow-x-auto px-400">
             <Chip
               variant="neutral-primary"
-              selected={roomFilter === "전체"}
-              onSelectedChange={() => setRoomFilter("전체")}
+              selected={roomFilter === null}
+              onSelectedChange={() => setRoomFilter(null)}
             >
               전체
             </Chip>
@@ -86,12 +69,18 @@ function BoardPageContent({
               variant="neutral"
               selected={aiRecommend}
               onSelectedChange={(selected) => {
-                setAiRecommend(selected);
-                if (selected) {
-                  toast.success("AI 추천순으로 정렬했어요");
-                }
+                onAiRecommendChange(selected);
+                if (selected) toast.success("AI 추천순으로 정렬했어요");
               }}
+              className="gap-[6px]"
             >
+              <span
+                className={cn(
+                  "size-[6px] shrink-0 rounded-full",
+                  aiRecommend ? "bg-brand-primary" : "bg-button-disabled",
+                )}
+                aria-hidden="true"
+              />
               AI 추천글
             </Chip>
             {ROOM_FILTERS.filter((f) => f !== "전체").map((filter) => (
@@ -108,25 +97,39 @@ function BoardPageContent({
         </div>
 
         {/* 게시글 목록 */}
-        <div className="flex flex-col gap-[10px]">
-          {showAiRecommend && <AiRecommendCard onClick={onAiRecommendClick} />}
+        {isError ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">게시글을 불러오지 못했어요</p>
+          </div>
+        ) : !isFetching && posts.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">해당하는 게시글이 없어요</p>
+          </div>
+        ) : (
+          <div ref={fadeInRef} className="flex flex-col gap-[10px]">
+            {posts.map((post) => {
+              const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
+              const currentMembers = maxMembers - post.recruitMemberCount;
 
-          {MOCK_POSTS.map((post) => (
-            <RecruitCard
-              key={post.id}
-              title={post.title}
-              description={post.description}
-              currentMembers={post.currentMembers}
-              maxMembers={post.maxMembers}
-              dormitory={post.dormitory}
-              roomType={post.roomType}
-              tags={post.tags}
-              matchRate={aiRecommend ? post.matchRate : undefined}
-              timeAgo={post.timeAgo}
-              onClick={() => onPostClick?.(post.id)}
-            />
-          ))}
-        </div>
+              return (
+                <RecruitCard
+                  key={post.postId}
+                  title={post.title}
+                  description={post.description}
+                  currentMembers={currentMembers}
+                  maxMembers={maxMembers}
+                  dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
+                  roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
+                  timeAgo={formatRelativeTime(post.createdAt)}
+                  onClick={() => onPostClick?.(post.postId)}
+                />
+              );
+            })}
+
+            {/* 무한 스크롤 감지 */}
+            <div ref={sentinelRef} />
+          </div>
+        )}
       </div>
 
       {/* 룸메이트 모집하기 버튼 */}

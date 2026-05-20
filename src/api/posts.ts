@@ -2,9 +2,16 @@ import { apiClient } from "@/lib/api";
 import type {
   ApiResponse,
   CreatePostRequest,
+  GetPostsParams,
   PostDetail,
+  PostListData,
   UpdatePostRequest,
 } from "@/features/board/types";
+
+export const getPosts = async (params: GetPostsParams): Promise<PostListData> => {
+  const { data } = await apiClient.get<ApiResponse<PostListData>>("/posts", { params });
+  return data.data;
+};
 
 export const getPostById = async (postId: number): Promise<PostDetail> => {
   const { data } = await apiClient.get<ApiResponse<PostDetail>>(`/posts/${postId}`);
