@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api";
 import { MASTER_ACCESS_TOKEN } from "@/constants";
 import type { ApiResponse } from "@/features/board/types";
+import type { ChatRoom, CreateChatRoomRequest } from "@/features/chat/types";
 
 export type IssueChatWsTokenResponse = {
   wsToken: string;
@@ -29,4 +30,9 @@ export const issueChatWsToken = async (): Promise<IssueChatWsTokenResponse> => {
 
     return data.data;
   }
+};
+
+export const createChatRoom = async (body: CreateChatRoomRequest): Promise<ChatRoom> => {
+  const { data } = await apiClient.post<ApiResponse<ChatRoom>>("/chat-rooms", body);
+  return data.data;
 };

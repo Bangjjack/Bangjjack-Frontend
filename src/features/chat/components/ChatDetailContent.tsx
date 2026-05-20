@@ -14,6 +14,7 @@ import { cn } from "@/lib/cn";
 export interface ChatDetailContentProps {
   chatDetail: ChatDetail;
   className?: string;
+  roomId?: number;
   onBack: () => void;
   onRoommateRequestAccept?: () => void;
   onProfileClick?: () => void;
@@ -23,6 +24,7 @@ export interface ChatDetailContentProps {
 function ChatDetailContent({
   chatDetail,
   className,
+  roomId,
   onBack,
   onRoommateRequestAccept,
   onProfileClick,
@@ -55,7 +57,7 @@ function ChatDetailContent({
     messages,
     setDraftMessage,
     toggleInputMenu,
-  } = useChatComposer({ chatDetail });
+  } = useChatComposer({ chatDetail, roomId });
 
   const recruitTitle =
     chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;

@@ -15,6 +15,7 @@ import { useAuthStore } from "@/stores/authStore";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
+  roomId?: number;
 }
 
 function createInviteMessage(id: number, recipientName: string): ChatMessage {
@@ -54,7 +55,7 @@ function prefersReducedMotion() {
   );
 }
 
-function useChatComposer({ chatDetail }: UseChatComposerParams) {
+function useChatComposer({ chatDetail, roomId }: UseChatComposerParams) {
   const currentUserId = useAuthStore((state) => state.userId);
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
@@ -64,7 +65,7 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
   const [messages, setMessages] = useState(chatDetail.messages);
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
-    if (receivedMessage.roomId !== chatDetail.id) {
+    if (roomId == null || receivedMessage.roomId !== roomId) {
       return;
     }
 
@@ -152,9 +153,14 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
       return;
     }
 
+    if (roomId == null) {
+      toast.error("채팅방을 준비 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+
     const isSent = sendMessage({
       content: nextMessage,
-      roomId: chatDetail.id,
+      roomId,
       type: "SEND",
     });
 

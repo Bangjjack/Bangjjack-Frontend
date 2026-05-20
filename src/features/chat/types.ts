@@ -75,6 +75,22 @@ export type ChatDetail = ChatUserProfile & {
   startSource: ChatStartSource;
 };
 
+export type CreateChatRoomRequest = {
+  targetUserId: number;
+};
+
+export type ChatRoomParticipant = {
+  userId: number;
+};
+
+export type ChatRoom = {
+  createdAt: string;
+  isNewRoom: boolean;
+  participants: ChatRoomParticipant[];
+  roomId: number;
+  roomType: string;
+};
+
 export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
 
 export type ChatServerMessageType =

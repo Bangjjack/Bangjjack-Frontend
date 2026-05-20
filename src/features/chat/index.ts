@@ -4,6 +4,11 @@ export { ChatDetailContent } from "@/features/chat/components/ChatDetailContent"
 export type { ChatDetailContentProps } from "@/features/chat/components/ChatDetailContent";
 export { ChatRoommateConfirmedContent } from "@/features/chat/components/ChatRoommateConfirmedContent";
 export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/ChatRoommateConfirmedContent";
-export { useChatComposer, useChatWebSocket, useIssueChatWsToken } from "@/features/chat/hooks";
+export {
+  useChatComposer,
+  useChatWebSocket,
+  useCreateChatRoom,
+  useIssueChatWsToken,
+} from "@/features/chat/hooks";
 export { CHAT_DETAILS } from "@/features/chat/mocks";
 export type { ChatUserProfile } from "@/features/chat/types";
