@@ -36,7 +36,7 @@ function MatchAlertDialog({
           </AlertDialogTitle>
           <AlertDialogDescription>
             {matchHighlights.map((highlight, i) => (
-              <Fragment key={highlight}>
+              <Fragment key={i}>
                 {i > 0 && ", "}
                 <span className="text-brand-primary">{highlight}</span>
               </Fragment>
