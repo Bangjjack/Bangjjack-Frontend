@@ -1,21 +1,28 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { Button, toast } from "@/components/ui";
 import { BangjjackTitleIcon, GoogleIcon, LogoLoginIcon } from "@/assets/icons";
 import { getGoogleLoginUrl } from "@/features/auth";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const location = useLocation();
-  const hasProtectedRedirect = Boolean(location.state?.from);
+  const redirectFrom = location.state?.from;
+  const from = (location.state?.from?.pathname as string) ?? "/";
+
   const handleGoogleLogin = () => {
     window.location.assign(getGoogleLoginUrl());
   };
 
+  const handleSignup = () => {
+    navigate("/onboarding", { state: { from } });
+  };
+
   useEffect(() => {
-    if (hasProtectedRedirect) {
+    if (redirectFrom) {
       toast.error("로그인이 필요합니다.");
     }
-  }, [hasProtectedRedirect]);
+  }, [redirectFrom]);
 
   return (
     <div className="min-h-dvh bg-neutral-50">
@@ -46,7 +53,7 @@ export default function LoginPage() {
 
           <button
             type="button"
-            onClick={handleGoogleLogin}
+            onClick={handleSignup}
             className="mt-[clamp(0.5rem,1.25vh,0.625rem)] w-full cursor-pointer py-100 text-center typo-button2 text-text-alternative"
           >
             회원가입으로 시작하기
