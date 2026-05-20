@@ -20,11 +20,13 @@ import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
 import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 import { useGoBack } from "@/hooks/useGoBack";
+import { useNavigate } from "react-router";
 
 import type { ChecklistEntry } from "@/features/roommate/components";
 
 type RoommateProfileContentProps = {
   profile?: ChatDetail;
+  roommateId?: number;
 };
 
 // TODO: API 연동 시 제거
@@ -69,9 +71,10 @@ const MOCK_PROFILE = {
   checklist: buildMockChecklist(),
 };
 
-function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
+function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentProps) {
   const handleBackClick = useGoBack();
   const contentRef = useFadeInOnScroll<HTMLDivElement>();
+  const navigate = useNavigate();
   const [isMatchDialogOpen, setIsMatchDialogOpen] = useState(false);
   const displayProfile = {
     ...MOCK_PROFILE,
@@ -82,15 +85,12 @@ function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
   };
   const avatarSeed = profile?.id ?? displayProfile.nickname.length;
 
-  // TODO: API 연동 시 실제 모집글 존재 여부 확인
-  const hasExistingRecruit = true;
-
   const handleMatchClick = () => {
-    if (hasExistingRecruit) {
-      setIsMatchDialogOpen(true);
-      return;
-    }
-    // TODO: 모집글이 없을 때 매칭 로직
+    setIsMatchDialogOpen(true);
+  };
+
+  const handleConfirmMatch = () => {
+    navigate(`/roommate/${roommateId}/matching-report`);
   };
 
   return (
@@ -143,7 +143,7 @@ function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
       </main>
 
       {/* Bottom action buttons */}
-      <div className="absolute bottom-0 left-0 right-0 z-40 flex gap-[10px] px-400 pb-9 pt-300">
+      <div className="absolute inset-x-0 bottom-0 z-40 flex gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
         <Button className="flex-1" variant="ghost" onClick={handleMatchClick}>
           매칭하기
         </Button>
@@ -152,18 +152,26 @@ function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
         </Button>
       </div>
 
-      {/* 이미 모집글이 있을 때 표시되는 모달 */}
+      {/* AI 매칭률 확인 모달 */}
       <AlertDialog open={isMatchDialogOpen} onOpenChange={setIsMatchDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>이미 작성된 모집글이 있어요!</AlertDialogTitle>
+            <AlertDialogTitle>
+              {"나와의 매칭률은 "}
+              <span className="text-brand-primary">88%</span>
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              채팅을 통해 {displayProfile.nickname} 님을 <br /> 내 방에 초대할 수 있어요
+              <span className="text-brand-primary">청소 빈도</span>
+              {", "}
+              <span className="text-brand-primary">수면 습관</span>
+              {"이 일치해요!"}
+              <br />
+              {"AI 매칭 리포트를 확인할 수 있어요"}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>취소하기</AlertDialogCancel>
-            <AlertDialogAction disabled>채팅하기</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirmMatch}>확인하기</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

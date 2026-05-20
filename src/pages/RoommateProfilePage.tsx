@@ -8,5 +8,5 @@ export default function RoommateProfilePage() {
   const roommateId = Number(id);
   const profile = Number.isNaN(roommateId) ? undefined : CHAT_DETAILS[roommateId];
 
-  return <RoommateProfileContent profile={profile} />;
+  return <RoommateProfileContent profile={profile} roommateId={roommateId} />;
 }

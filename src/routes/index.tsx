@@ -19,6 +19,7 @@ import PostWritePage from "@/pages/PostWritePage";
 import PostChecklistPage from "@/pages/PostChecklistPage";
 import RoommateListPage from "@/pages/RoommateListPage";
 import RoommateProfilePage from "@/pages/RoommateProfilePage";
+import MatchingReportPage from "@/pages/MatchingReportPage";
 import ProtectedRoute from "@/routes/ProtectedRoute";
 
 export const routes: RouteObject[] = [
@@ -106,6 +107,10 @@ export const routes: RouteObject[] = [
       {
         path: "/roommate/:id",
         element: <RoommateProfilePage />,
+      },
+      {
+        path: "/roommate/:id/matching-report",
+        element: <MatchingReportPage />,
       },
     ],
   },
