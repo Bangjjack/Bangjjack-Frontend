@@ -6,7 +6,8 @@ import { RoommateProfileContent } from "@/features/roommate/components";
 export default function RoommateProfilePage() {
   const { id } = useParams();
   const roommateId = Number(id);
-  const profile = Number.isNaN(roommateId) ? undefined : CHAT_DETAILS[roommateId];
+  const validId = Number.isNaN(roommateId) ? undefined : roommateId;
+  const profile = validId !== undefined ? CHAT_DETAILS[validId] : undefined;
 
-  return <RoommateProfileContent profile={profile} />;
+  return <RoommateProfileContent profile={profile} roommateId={validId} />;
 }

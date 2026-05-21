@@ -4,6 +4,7 @@ import type { PostAuthor } from "@/features/board/types";
 
 interface PostDetailInfoCardProps {
   title: string;
+  isClosed: boolean;
   currentMembers: number;
   maxMembers: number;
   author: PostAuthor;
@@ -12,6 +13,7 @@ interface PostDetailInfoCardProps {
 
 function PostDetailInfoCard({
   title,
+  isClosed,
   currentMembers,
   maxMembers,
   author,
@@ -22,8 +24,8 @@ function PostDetailInfoCard({
       <div className="flex flex-col gap-300">
         <div className="flex items-center justify-between">
           <h2 className="typo-h4 text-text-strong">{title}</h2>
-          <Tag color="black">
-            {currentMembers} / {maxMembers}
+          <Tag color={isClosed ? "disabled" : "black"}>
+            {isClosed ? "마감" : `${currentMembers} / ${maxMembers}`}
           </Tag>
         </div>
 

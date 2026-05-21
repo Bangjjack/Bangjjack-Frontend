@@ -1,17 +1,29 @@
-import { useState } from "react";
-import { BottomSheet, Button } from "@/components/ui";
+import { useRef } from "react";
+
+import { BottomSheet, BottomSheetClose, BottomSheetContent, Button } from "@/components/ui";
 
 type AiRecommendBottomSheetProps = {
+  open: boolean;
   onConfirm: () => void;
   onClose: () => void;
 };
 
-function AiRecommendBottomSheet({ onConfirm, onClose }: AiRecommendBottomSheetProps) {
-  const [confirming, setConfirming] = useState(false);
+function AiRecommendBottomSheet({ open, onConfirm, onClose }: AiRecommendBottomSheetProps) {
+  const confirmedRef = useRef(false);
 
   return (
-    <BottomSheet onClose={confirming ? onConfirm : onClose}>
-      {(requestClose) => (
+    <BottomSheet
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          const wasConfirmed = confirmedRef.current;
+          confirmedRef.current = false;
+          if (wasConfirmed) onConfirm();
+          else onClose();
+        }
+      }}
+    >
+      <BottomSheetContent>
         <div className="flex flex-col gap-600 pb-300">
           <div className="flex flex-col gap-400">
             <div className="flex items-center gap-200">
@@ -27,22 +39,25 @@ function AiRecommendBottomSheet({ onConfirm, onClose }: AiRecommendBottomSheetPr
             </p>
           </div>
           <div className="flex gap-200">
-            <Button className="flex-1" size="sm" variant="neutral" onClick={requestClose}>
-              확인
-            </Button>
-            <Button
-              className="flex-1"
-              size="sm"
-              onClick={() => {
-                setConfirming(true);
-                requestClose();
-              }}
-            >
-              AI 추천 보기
-            </Button>
+            <BottomSheetClose asChild>
+              <Button className="flex-1" size="sm" variant="neutral">
+                확인
+              </Button>
+            </BottomSheetClose>
+            <BottomSheetClose asChild>
+              <Button
+                className="flex-1"
+                size="sm"
+                onClick={() => {
+                  confirmedRef.current = true;
+                }}
+              >
+                AI 추천 보기
+              </Button>
+            </BottomSheetClose>
           </div>
         </div>
-      )}
+      </BottomSheetContent>
     </BottomSheet>
   );
 }

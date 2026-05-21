@@ -42,6 +42,7 @@ function PostDetailContent() {
 
   const maxMembers = ROOM_SIZE_MAX[post.roomSize] ?? 0;
   const currentMembers = maxMembers - post.recruitMemberCount;
+  const isClosed = currentMembers === maxMembers;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
@@ -65,6 +66,7 @@ function PostDetailContent() {
         <div ref={fadeInRef} className="flex flex-col gap-300 px-400">
           <PostDetailInfoCard
             title={post.title}
+            isClosed={isClosed}
             currentMembers={currentMembers}
             maxMembers={maxMembers}
             author={post.author}

@@ -63,7 +63,7 @@ Check `[x]` only for applicable items; leave others `[ ]`. Multiple selections a
 Fill each section:
 
 - **🔗 관련 이슈:** If Step 2 yielded a number, use `close #42`. Otherwise `- 없음` or similar.
-- **📌 작업사항:** Bullets as **full sentences** (what, why, where).
+- **📌 작업사항:** Bullets as **short noun phrases** (what was done; no "했습니다" / "추가했습니다" sentence endings; group related items where possible).
 - **📸 스크린샷:** If UI changed, add guidance; if not, e.g. `UI 변경 없음`. A **placeholder** for the user to attach images is fine.
 - **📣 기타사항:** Risks, questions, follow-ups; if none, short `없음`.
 - **✅ 체크리스트:** Copy verbatim from the template. Keep `[ ]` for items the agent cannot verify; set `[x]` only when the user confirms (e.g. build done).

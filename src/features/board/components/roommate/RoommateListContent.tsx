@@ -2,13 +2,13 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button, Card, Header } from "@/components/ui";
+import { Card, Header } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { ChecklistCard } from "@/features/roommate/components";
 import { useBookmarkToggle } from "@/features/board/hooks";
 import { useGoBack } from "@/hooks";
 
-import { MatchAlertDialog } from "./MatchAlertDialog";
+import { MatchActionBar } from "./MatchActionBar";
 import { RoommateList } from "./RoommateList";
 
 import type { Member } from "./RoommateList";
@@ -78,7 +78,7 @@ const MOCK_CHECKLISTS: Record<string, ChecklistEntry[]> = {
 
 const MOCK_MATCH = {
   matchRate: 92,
-  matchDetails: "청소 빈도, 흡연 여부",
+  matchHighlights: ["청소 빈도", "흡연 여부"],
 };
 
 function RoommateListContent() {
@@ -123,39 +123,28 @@ function RoommateListContent() {
         </div>
       </main>
 
-      {/* Fixed bottom bar */}
-      <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
-        {!isOwner && (
-          <button
-            type="button"
-            aria-label={isBookmarked ? "북마크 해제" : "북마크"}
-            className="flex size-[30px] shrink-0 items-center justify-center"
-            onClick={toggle}
-          >
-            {isBookmarked ? (
-              <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
-            ) : (
-              <BookmarkIcon className="size-[30px]" />
-            )}
-          </button>
-        )}
-        <MatchAlertDialog
-          matchRate={MOCK_MATCH.matchRate}
-          matchDetails={MOCK_MATCH.matchDetails}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1" variant="ghost">
-            매칭하기
-          </Button>
-        </MatchAlertDialog>
-        <MatchAlertDialog
-          matchRate={MOCK_MATCH.matchRate}
-          matchDetails={MOCK_MATCH.matchDetails}
-          onConfirm={() => navigate("/chat")}
-        >
-          <Button className="flex-1">채팅하기</Button>
-        </MatchAlertDialog>
-      </div>
+      <MatchActionBar
+        leadingElement={
+          !isOwner ? (
+            <button
+              type="button"
+              aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+              className="flex size-[30px] shrink-0 items-center justify-center"
+              onClick={toggle}
+            >
+              {isBookmarked ? (
+                <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+              ) : (
+                <BookmarkIcon className="size-[30px]" />
+              )}
+            </button>
+          ) : undefined
+        }
+        matchRate={MOCK_MATCH.matchRate}
+        matchHighlights={MOCK_MATCH.matchHighlights}
+        onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+        onChatConfirm={() => navigate("/chat")}
+      />
     </div>
   );
 }
