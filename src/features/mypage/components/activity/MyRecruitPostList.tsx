@@ -22,6 +22,8 @@ function MyRecruitPostList() {
 }
 
 function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
+  const currentMemberStat = post.stats.find((stat) => stat.id === "current-members");
+
   return (
     <Surface as="article" variant="outlined" className="flex flex-col gap-2.5">
       <div className="flex items-start justify-between gap-300">
@@ -38,11 +40,15 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
         <ActivityTag>{post.roomType}</ActivityTag>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
-        {post.stats.map((stat) => (
-          <ActivityStat key={stat.id} label={stat.label} value={stat.value} />
-        ))}
-      </div>
+      {currentMemberStat ? (
+        <RecruitPostMemberStat label={currentMemberStat.label} value={currentMemberStat.value} />
+      ) : (
+        <div className="grid grid-cols-2 gap-2.5">
+          {post.stats.map((stat) => (
+            <ActivityStat key={stat.id} label={stat.label} value={stat.value} />
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-200">
         {post.actions.map((action) => (
@@ -50,6 +56,15 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
         ))}
       </div>
     </Surface>
+  );
+}
+
+function RecruitPostMemberStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex h-[50px] w-full items-center justify-center gap-200 rounded-medium bg-bg-primary">
+      <span className="typo-caption1 text-text-placeholder">{label}</span>
+      <span className="typo-title2 text-text-strong">{value}</span>
+    </div>
   );
 }
 
