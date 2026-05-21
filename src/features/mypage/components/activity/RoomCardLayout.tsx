@@ -1,3 +1,4 @@
+import { Surface } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
 import { StatusBadge } from "@/features/mypage/components/StatusBadge";
@@ -14,11 +15,10 @@ interface RoomCardLayoutProps {
 
 function RoomCardLayout({ children, className, onActionClick, room }: RoomCardLayoutProps) {
   return (
-    <article
-      className={cn(
-        "flex flex-col items-center justify-center gap-3.5 rounded-2xl border border-border-normal bg-bg-secondary p-400",
-        className,
-      )}
+    <Surface
+      as="article"
+      variant="outlined"
+      className={cn("flex flex-col items-center justify-center gap-3.5", className)}
     >
       <div className="flex w-full flex-col gap-2.5">
         <div className="flex w-full flex-col items-start justify-center gap-200">
@@ -48,7 +48,7 @@ function RoomCardLayout({ children, className, onActionClick, room }: RoomCardLa
           />
         ))}
       </div>
-    </article>
+    </Surface>
   );
 }
 

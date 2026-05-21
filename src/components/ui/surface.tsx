@@ -21,10 +21,15 @@ const surfaceVariants = cva("rounded-medium", {
   },
 });
 
-type SurfaceProps = React.ComponentProps<"div"> & VariantProps<typeof surfaceVariants>;
+type SurfaceElement = "article" | "div" | "section";
 
-function Surface({ className, padding, variant, ...props }: SurfaceProps) {
-  return <div className={cn(surfaceVariants({ padding, variant }), className)} {...props} />;
+type SurfaceProps = React.ComponentProps<"div"> &
+  VariantProps<typeof surfaceVariants> & {
+    as?: SurfaceElement;
+  };
+
+function Surface({ as: Comp = "div", className, padding, variant, ...props }: SurfaceProps) {
+  return <Comp className={cn(surfaceVariants({ padding, variant }), className)} {...props} />;
 }
 
 export { Surface };

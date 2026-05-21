@@ -1,3 +1,4 @@
+import { Surface } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
@@ -22,7 +23,7 @@ function MyRecruitPostList() {
 
 function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
   return (
-    <article className="flex flex-col gap-2.5 rounded-2xl border border-border-normal p-400">
+    <Surface as="article" variant="outlined" className="flex flex-col gap-2.5">
       <div className="flex items-start justify-between gap-300">
         <h2 className="typo-title3 min-w-0 flex-1 text-text-strong">{post.title}</h2>
         <StatusBadge variant={post.status === "open" ? "active" : "closed"}>
@@ -48,7 +49,7 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
           <ActivityButton key={action.id} label={action.label} tone={action.tone} />
         ))}
       </div>
-    </article>
+    </Surface>
   );
 }
 

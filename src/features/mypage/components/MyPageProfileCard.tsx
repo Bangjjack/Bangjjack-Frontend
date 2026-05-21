@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@/assets/icons";
-import { Card, ProfileAvatar } from "@/components/ui";
+import { ProfileAvatar, Surface } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 export interface MyPageProfileCardProps {
@@ -11,11 +11,10 @@ export interface MyPageProfileCardProps {
 
 function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCardProps) {
   return (
-    <Card
-      className={cn(
-        "w-full flex-row items-center justify-between gap-0 rounded-2xl border-0 bg-bg-secondary p-400 py-400 shadow-none",
-        onClick && "cursor-pointer",
-      )}
+    <Surface
+      variant="default"
+      as="section"
+      className={cn("flex w-full items-center justify-between gap-0", onClick && "cursor-pointer")}
       onClick={onClick}
       onKeyDown={
         onClick
@@ -51,7 +50,7 @@ function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCard
       >
         <ChevronRightIcon aria-hidden="true" className="size-600" />
       </div>
-    </Card>
+    </Surface>
   );
 }
 
