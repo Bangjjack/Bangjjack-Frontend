@@ -51,5 +51,5 @@ function Tag({ className, color, rank, children, ...props }: TagProps) {
   );
 }
 
-export { Tag, tagVariants };
+export { Tag };
 export type { TagProps };
