@@ -36,6 +36,8 @@ export { Tag } from "@/components/ui/tag";
 export type { TagProps } from "@/components/ui/tag";
 export { RoundButton } from "@/components/ui/round-button";
 export type { RoundButtonProps } from "@/components/ui/round-button";
+export { Surface } from "@/components/ui/surface";
+export type { SurfaceProps } from "@/components/ui/surface";
 export {
   Card,
   CardHeader,
