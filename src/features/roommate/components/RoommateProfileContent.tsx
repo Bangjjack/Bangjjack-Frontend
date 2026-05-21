@@ -1,30 +1,17 @@
-import { useState } from "react";
-
 import { WaveBackgroundIcon } from "@/assets/icons";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  Button,
-  Header,
-  ProfileAvatar,
-  Tag,
-} from "@/components/ui";
+import { Header, ProfileAvatar, Tag } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
+import { MatchActionBar } from "@/features/board/components/roommate";
 import type { ChatDetail } from "@/features/chat/types";
 import { ChecklistCard, ImportanceSection } from "@/features/roommate/components";
-import { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
-import { useGoBack } from "@/hooks/useGoBack";
+import { useFadeInOnScroll, useGoBack } from "@/hooks";
+import { useNavigate } from "react-router";
 
 import type { ChecklistEntry } from "@/features/roommate/components";
 
 type RoommateProfileContentProps = {
   profile?: ChatDetail;
+  roommateId?: number;
 };
 
 // TODO: API 연동 시 제거
@@ -69,10 +56,10 @@ const MOCK_PROFILE = {
   checklist: buildMockChecklist(),
 };
 
-function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
+function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentProps) {
   const handleBackClick = useGoBack();
   const contentRef = useFadeInOnScroll<HTMLDivElement>();
-  const [isMatchDialogOpen, setIsMatchDialogOpen] = useState(false);
+  const navigate = useNavigate();
   const displayProfile = {
     ...MOCK_PROFILE,
     age: profile?.age ?? MOCK_PROFILE.age,
@@ -81,17 +68,6 @@ function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
     tags: profile?.lifestyleTags ?? MOCK_PROFILE.tags,
   };
   const avatarSeed = profile?.id ?? displayProfile.nickname.length;
-
-  // TODO: API 연동 시 실제 모집글 존재 여부 확인
-  const hasExistingRecruit = true;
-
-  const handleMatchClick = () => {
-    if (hasExistingRecruit) {
-      setIsMatchDialogOpen(true);
-      return;
-    }
-    // TODO: 모집글이 없을 때 매칭 로직
-  };
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -143,30 +119,12 @@ function RoommateProfileContent({ profile }: RoommateProfileContentProps) {
       </main>
 
       {/* Bottom action buttons */}
-      <div className="absolute bottom-0 left-0 right-0 z-40 flex gap-[10px] px-400 pb-9 pt-300">
-        <Button className="flex-1" variant="ghost" onClick={handleMatchClick}>
-          매칭하기
-        </Button>
-        <Button className="flex-1" disabled>
-          채팅하기
-        </Button>
-      </div>
-
-      {/* 이미 모집글이 있을 때 표시되는 모달 */}
-      <AlertDialog open={isMatchDialogOpen} onOpenChange={setIsMatchDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>이미 작성된 모집글이 있어요!</AlertDialogTitle>
-            <AlertDialogDescription>
-              채팅을 통해 {displayProfile.nickname} 님을 <br /> 내 방에 초대할 수 있어요
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>취소하기</AlertDialogCancel>
-            <AlertDialogAction disabled>채팅하기</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <MatchActionBar
+        matchRate={88}
+        matchHighlights={["청소 빈도", "수면 습관"]}
+        onMatchConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}
+        onChatConfirm={() => navigate("/chat")}
+      />
     </div>
   );
 }

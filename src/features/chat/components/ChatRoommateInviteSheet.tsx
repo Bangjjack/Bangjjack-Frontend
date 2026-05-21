@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useRef } from "react";
 
-import { BottomSheet, Button, ProfileAvatar, Tag } from "@/components/ui";
+import {
+  BottomSheet,
+  BottomSheetClose,
+  BottomSheetContent,
+  Button,
+  ProfileAvatar,
+  Tag,
+} from "@/components/ui";
 import type { ChatUserProfile } from "@/features/chat/types";
 
 export type ChatRoommateInviteSheetProps = Pick<
@@ -10,6 +17,7 @@ export type ChatRoommateInviteSheetProps = Pick<
   avatarSeed?: number;
   className?: string;
   lifestyleTags: string[];
+  open: boolean;
   onCancel: () => void;
   onConfirm: () => void;
 };
@@ -21,18 +29,25 @@ function ChatRoommateInviteSheet({
   department,
   lifestyleTags,
   nickname,
+  open,
   onCancel,
   onConfirm,
 }: ChatRoommateInviteSheetProps) {
-  const [confirming, setConfirming] = useState(false);
+  const confirmedRef = useRef(false);
 
   return (
     <BottomSheet
-      onClose={confirming ? onConfirm : onCancel}
-      className={className}
-      closeAriaLabel="룸메이트 요청 보내기 닫기"
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          const wasConfirmed = confirmedRef.current;
+          confirmedRef.current = false;
+          if (wasConfirmed) onConfirm();
+          else onCancel();
+        }
+      }}
     >
-      {(requestClose) => (
+      <BottomSheetContent className={className}>
         <div className="flex flex-col gap-400">
           <div className="flex flex-col gap-400">
             <h2 className="typo-h4 text-text-strong">룸메이트 요청 보내기</h2>
@@ -66,27 +81,29 @@ function ChatRoommateInviteSheet({
           </div>
 
           <div className="flex gap-200">
-            <Button
-              className="h-9 flex-1 cursor-pointer rounded-medium"
-              onClick={requestClose}
-              size="sm"
-              variant="neutral"
-            >
-              취소
-            </Button>
-            <Button
-              className="h-9 flex-1 cursor-pointer rounded-medium"
-              onClick={() => {
-                setConfirming(true);
-                requestClose();
-              }}
-              size="sm"
-            >
-              초대 보내기
-            </Button>
+            <BottomSheetClose asChild>
+              <Button
+                className="h-9 flex-1 cursor-pointer rounded-medium"
+                size="sm"
+                variant="neutral"
+              >
+                취소
+              </Button>
+            </BottomSheetClose>
+            <BottomSheetClose asChild>
+              <Button
+                className="h-9 flex-1 cursor-pointer rounded-medium"
+                size="sm"
+                onClick={() => {
+                  confirmedRef.current = true;
+                }}
+              >
+                초대 보내기
+              </Button>
+            </BottomSheetClose>
           </div>
         </div>
-      )}
+      </BottomSheetContent>
     </BottomSheet>
   );
 }
