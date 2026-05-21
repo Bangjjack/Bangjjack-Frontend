@@ -90,6 +90,14 @@ function RoommateListContent() {
 
   const { isBookmarked, isOwner, toggle } = useBookmarkToggle(postId);
 
+  if (!id || isNaN(postId)) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">잘못된 접근입니다.</span>
+      </div>
+    );
+  }
+
   const checklist = selectedMember ? (MOCK_CHECKLISTS[selectedMember.nickname] ?? []) : [];
 
   return (

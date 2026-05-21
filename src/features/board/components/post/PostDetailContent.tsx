@@ -26,6 +26,14 @@ function PostDetailContent() {
 
   const { data: post, isLoading, isError } = usePostDetail(postId);
 
+  if (!id || isNaN(postId)) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">잘못된 접근입니다.</span>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="flex h-dvh items-center justify-center bg-bg-primary">
@@ -62,7 +70,7 @@ function PostDetailContent() {
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
-      <PostActionMenu postId={id!} isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(false)} />
+      <PostActionMenu postId={id} isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(false)} />
 
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
         <div ref={fadeInRef} className="flex flex-col gap-300 px-400">
