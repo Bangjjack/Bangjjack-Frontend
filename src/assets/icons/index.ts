@@ -6,13 +6,16 @@ export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?rea
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
 export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?react";
 export { default as CircleXIcon } from "@/assets/icons/ic-circle-x.svg?react";
+export { default as CircleNonCheckIcon } from "@/assets/icons/ic-circle-non-check.svg?react";
 export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
+export { default as BookOpenTextIcon } from "@/assets/icons/ic-book-open-text.svg?react";
 export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
 export { default as BookmarkFilledIcon } from "@/assets/icons/ic-bookmark-fill.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
 export { default as WriteIcon } from "@/assets/icons/ic-write.svg?react";
 export { default as ChatIcon } from "@/assets/icons/ic-chat.svg?react";
+export { default as ChatCircleIcon } from "@/assets/icons/ic-chat-circle.svg?react";
 export { default as HomeIcon } from "@/assets/icons/ic-home.svg?react";
 export { default as UserIcon } from "@/assets/icons/ic-user.svg?react";
 export { default as UsersIcon } from "@/assets/icons/ic-users.svg?react";
@@ -29,3 +32,8 @@ export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.sv
 export { default as ChevronRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
 export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
 export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";
+export { default as LightbulbIcon } from "@/assets/icons/ic-lightbulb.svg?react";
+export { default as SlidersHorizontalIcon } from "@/assets/icons/ic-sliders-horizontal.svg?react";
+export { default as SoapDispenserDropletIcon } from "@/assets/icons/ic-soap-dispenser-droplet.svg?react";
+export { default as ThermometerIcon } from "@/assets/icons/ic-thermometer.svg?react";
+export { default as WindIcon } from "@/assets/icons/ic-wind.svg?react";
