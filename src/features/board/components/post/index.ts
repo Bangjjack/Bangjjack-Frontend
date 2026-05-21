@@ -1,6 +1,11 @@
 export { PostActionMenu, type PostActionMenuProps } from "./PostActionMenu";
 export { PostChecklistContent } from "./PostChecklistContent";
+export { PostDetailBottomBar } from "./PostDetailBottomBar";
 export { PostDetailContent } from "./PostDetailContent";
+export { PostDetailDescriptionCard } from "./PostDetailDescriptionCard";
+export { PostDetailInfoCard } from "./PostDetailInfoCard";
+export { PostDetailRoommatesCard } from "./PostDetailRoommatesCard";
+export { PostDetailTagsCard } from "./PostDetailTagsCard";
 export { PostEditContent } from "./PostEditContent";
 export { PostFormShell, type PostFormShellProps } from "./PostFormShell";
 export { PostWriteContent } from "./PostWriteContent";

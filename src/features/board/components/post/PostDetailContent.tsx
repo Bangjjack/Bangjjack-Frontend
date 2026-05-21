@@ -8,12 +8,14 @@ import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from 
 import { usePostDetail } from "@/features/board/hooks";
 import { mapSharedLifestyleToHabits } from "@/features/board/utils";
 
-import { PostActionMenu } from "./PostActionMenu";
-import { PostDetailBottomBar } from "./PostDetailBottomBar";
-import { PostDetailDescriptionCard } from "./PostDetailDescriptionCard";
-import { PostDetailInfoCard } from "./PostDetailInfoCard";
-import { PostDetailRoommatesCard } from "./PostDetailRoommatesCard";
-import { PostDetailTagsCard } from "./PostDetailTagsCard";
+import {
+  PostActionMenu,
+  PostDetailBottomBar,
+  PostDetailDescriptionCard,
+  PostDetailInfoCard,
+  PostDetailRoommatesCard,
+  PostDetailTagsCard,
+} from "@/features/board/components/post";
 
 function PostDetailContent() {
   const { id } = useParams();
