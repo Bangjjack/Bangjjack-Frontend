@@ -1,6 +1,4 @@
-import { useAddBookmark } from "./useAddBookmark";
-import { usePostDetail } from "./usePostDetail";
-import { useRemoveBookmark } from "./useRemoveBookmark";
+import { useAddBookmark, usePostDetail, useRemoveBookmark } from "@/features/board/hooks";
 
 export const useBookmarkToggle = (postId: number) => {
   const { data: post } = usePostDetail(postId);
