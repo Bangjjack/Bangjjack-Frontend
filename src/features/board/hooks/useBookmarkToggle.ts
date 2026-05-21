@@ -9,6 +9,8 @@ export const useBookmarkToggle = (postId: number) => {
   const isOwner = post?.isOwner ?? false;
 
   const toggle = () => {
+    if (!post || isOwner) return;
+
     if (isBookmarked) {
       removeBookmark.mutate(postId);
     } else {
