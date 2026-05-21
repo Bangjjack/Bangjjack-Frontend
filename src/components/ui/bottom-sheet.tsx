@@ -1,51 +1,54 @@
-import { useState } from "react";
+import { Dialog as DialogPrimitive } from "radix-ui";
+
 import { cn } from "@/lib/cn";
 
-type BottomSheetProps = {
-  children: (requestClose: () => void) => React.ReactNode;
-  onClose: () => void;
-  className?: string;
-  closeAriaLabel?: string;
-};
+const BottomSheet = DialogPrimitive.Root;
+const BottomSheetTrigger = DialogPrimitive.Trigger;
+const BottomSheetClose = DialogPrimitive.Close;
 
-function BottomSheet({ children, onClose, className, closeAriaLabel = "닫기" }: BottomSheetProps) {
-  const [isClosing, setIsClosing] = useState(false);
+function BottomSheetPortal(props: React.ComponentProps<typeof DialogPrimitive.Portal>) {
+  return <DialogPrimitive.Portal {...props} />;
+}
 
-  const requestClose = () => {
-    if (isClosing) return;
-    setIsClosing(true);
-  };
-
+function BottomSheetOverlay({
+  className,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
   return (
-    <div
+    <DialogPrimitive.Overlay
       className={cn(
-        "fixed inset-0 z-50 flex items-end bg-bg-overlay",
-        isClosing ? "animate-overlay-fade-out" : "animate-overlay-fade-in",
+        "fixed inset-0 z-50 bg-bg-overlay data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
         className,
       )}
-    >
-      <button
-        aria-label={closeAriaLabel}
-        className="absolute inset-0"
-        onClick={requestClose}
-        type="button"
-      />
-      <div
-        className={cn(
-          "relative z-10 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
-          isClosing ? "animate-bottom-sheet-down" : "animate-bottom-sheet-up",
-        )}
-        onAnimationEnd={(event) => {
-          if (event.target !== event.currentTarget) return;
-          if (isClosing) onClose();
-        }}
-      >
-        <div className="mx-auto h-1 w-7.5 rounded-full bg-neutral-300" />
-        {children(requestClose)}
-      </div>
-    </div>
+      {...props}
+    />
   );
 }
 
-export { BottomSheet };
+function BottomSheetContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+  return (
+    <BottomSheetPortal>
+      <BottomSheetOverlay />
+      <DialogPrimitive.Content
+        className={cn(
+          "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+          className,
+        )}
+        {...props}
+      >
+        <div aria-hidden="true" className="mx-auto h-1 w-7.5 rounded-full bg-neutral-300" />
+        {children}
+      </DialogPrimitive.Content>
+    </BottomSheetPortal>
+  );
+}
+
+type BottomSheetProps = React.ComponentProps<typeof DialogPrimitive.Root>;
+
+export { BottomSheet, BottomSheetTrigger, BottomSheetClose, BottomSheetContent };
 export type { BottomSheetProps };
