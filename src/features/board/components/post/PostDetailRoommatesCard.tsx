@@ -2,14 +2,14 @@ import { useNavigate } from "react-router";
 
 import { Card } from "@/components/ui";
 import { RoommateList } from "@/features/board/components/roommate";
-import type { PostAuthor } from "@/features/board/types";
+import type { PostMember } from "@/features/board/types";
 
 interface PostDetailRoommatesCardProps {
   postId: number;
-  author: PostAuthor;
+  members: PostMember[];
 }
 
-function PostDetailRoommatesCard({ postId, author }: PostDetailRoommatesCardProps) {
+function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardProps) {
   const navigate = useNavigate();
 
   return (
@@ -26,7 +26,11 @@ function PostDetailRoommatesCard({ postId, author }: PostDetailRoommatesCardProp
       </button>
 
       <RoommateList
-        members={[{ nickname: author.username, seed: author.authorId, isHost: true }]}
+        members={members.map((m) => ({
+          nickname: m.username,
+          seed: m.userId,
+          isHost: m.role === "LEADER",
+        }))}
       />
     </Card>
   );

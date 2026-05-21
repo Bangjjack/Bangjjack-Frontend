@@ -71,8 +71,8 @@ function PostDetailContent() {
             createdAt={post.createdAt}
           />
           <PostDetailDescriptionCard description={post.description} recruitTags={recruitTags} />
-          <PostDetailTagsCard habits={habits} roommatePreferences={post.roommatePreferences} />
-          <PostDetailRoommatesCard postId={postId} author={post.author} />
+          <PostDetailTagsCard habits={habits} roommatePreference={post.roommatePreference} />
+          <PostDetailRoommatesCard postId={postId} members={post.members} />
         </div>
       </main>
 

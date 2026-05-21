@@ -1,3 +1,4 @@
+import type { RoommatePreference } from "@/constants";
 import type { Campus, Dormitory, PostStatus, RoomSize, Semester, SharedLifestyle } from "@/types";
 
 export type {
@@ -24,6 +25,21 @@ type PostAuthor = {
   profileImage: string;
 };
 
+/** 룸메이트 우선순위 */
+type PostRoommatePreference = {
+  firstPriority: RoommatePreference;
+  secondPriority: RoommatePreference;
+  thirdPriority: RoommatePreference;
+};
+
+/** 룸메이트 멤버 */
+type PostMember = {
+  userId: number;
+  username: string;
+  profileImage: string;
+  role: "LEADER" | "MEMBER";
+};
+
 /** 게시글 상세 응답 data */
 type PostDetail = {
   postId: number;
@@ -39,7 +55,8 @@ type PostDetail = {
   createdAt: string;
   author: PostAuthor;
   sharedLifestyle: SharedLifestyle;
-  roommatePreferences?: string[];
+  roommatePreference?: PostRoommatePreference;
+  members: PostMember[];
 };
 
 /** API 공통 응답 래퍼 */
@@ -92,6 +109,8 @@ type GetPostsParams = PostListFilterParams & {
 
 export type {
   PostAuthor,
+  PostMember,
+  PostRoommatePreference,
   PostDetail,
   ApiResponse,
   CreatePostRequest,
