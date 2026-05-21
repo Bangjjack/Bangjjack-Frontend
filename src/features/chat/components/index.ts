@@ -13,6 +13,8 @@ export { ChatRoommateInviteMessage } from "@/features/chat/components/ChatRoomma
 export type { ChatRoommateInviteMessageProps } from "@/features/chat/components/ChatRoommateInviteMessage";
 export { ChatRoommateConfirmedContent } from "@/features/chat/components/ChatRoommateConfirmedContent";
 export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/ChatRoommateConfirmedContent";
+export { SharedLifeGuideContent } from "@/features/chat/components/SharedLifeGuideContent";
+export type { SharedLifeGuideContentProps } from "@/features/chat/components/SharedLifeGuideContent";
 export { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoommateRequestMessage";
 export type { ChatRoommateRequestMessageProps } from "@/features/chat/components/ChatRoommateRequestMessage";
 export { ChatMatchCard } from "@/features/chat/components/ChatMatchCard";
