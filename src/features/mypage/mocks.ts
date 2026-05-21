@@ -1,8 +1,6 @@
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import type {
   MyActivityMatchMock,
-  MyActivityRoomFilterId,
-  MyActivityRoomFilterMock,
   MyActivityRoomMock,
   MyActivityTabId,
   MyActivityTabMock,
@@ -21,43 +19,23 @@ export const MY_ACTIVITY_TABS: MyActivityTabMock[] = [
   { id: "matches", label: "1:1 매칭" },
 ];
 
-export const MY_ACTIVITY_ROOM_FILTERS: MyActivityRoomFilterMock[] = [
-  { id: "all", label: "전체" },
-  { id: "pending", label: "대기중" },
-];
-
-export const MY_ACTIVITY_ACTIVE_ROOM_FILTER_ID: MyActivityRoomFilterId = "all";
-
 export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
   {
     actions: [
-      { id: "detail", label: "방 상세 보기", tone: "neutral" },
+      { id: "detail", label: "모집글 상세 보기", tone: "neutral" },
       { id: "leave", label: "방 나가기", tone: "primary" },
     ],
     dormitory: "1 기숙사",
     id: 1,
     members: [
-      { id: 1, isHost: true, name: "최다인" },
-      { id: 2, name: "김지수 (나)" },
+      { id: 1, isHost: true, isMe: true, name: "최다인" },
+      { id: 2, name: "김지수" },
       { id: 3, name: "박서연" },
     ],
     roomType: "3인 1실",
     status: "joined",
     statusLabel: "3 / 3",
     title: "컴공 4학년 룸메 구해요",
-  },
-  {
-    actions: [
-      { id: "post", label: "모집글 보기", tone: "neutral" },
-      { id: "cancel", label: "신청 취소", tone: "primary" },
-    ],
-    dormitory: "1 기숙사",
-    id: 2,
-    roomType: "3인 1실",
-    status: "pending",
-    statusLabel: "대기중",
-    title: "조용한 룸메 구합니다",
-    waitingMessage: "방장의 수락을 기다리고 있어요",
   },
 ];
 
