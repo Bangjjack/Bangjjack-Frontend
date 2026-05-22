@@ -31,11 +31,13 @@ export const createChatWebSocketUrls = (wsToken: string) => {
   fallbackPortUrl.pathname = "/ws/chat";
   fallbackPortUrl.search = new URLSearchParams({ token: wsToken }).toString();
 
-  return Array.from(new Set([
-    createUrlFromApiBase(wsToken, preferredProtocol),
-    createUrlFromApiBase(wsToken, fallbackProtocol),
-    fallbackPortUrl.toString(),
-  ]));
+  return Array.from(
+    new Set([
+      createUrlFromApiBase(wsToken, preferredProtocol),
+      createUrlFromApiBase(wsToken, fallbackProtocol),
+      fallbackPortUrl.toString(),
+    ]),
+  );
 };
 
 export const isChatErrorMessage = (value: unknown): value is ChatErrorMessage => {
