@@ -34,6 +34,8 @@ export { Toaster, toast } from "@/components/ui/sonner";
 export { Separator } from "@/components/ui/separator";
 export { Tag } from "@/components/ui/tag";
 export type { TagProps } from "@/components/ui/tag";
+export { TagSelected } from "@/components/ui/tag-selected";
+export type { TagSelectedProps } from "@/components/ui/tag-selected";
 export { RoundButton } from "@/components/ui/round-button";
 export type { RoundButtonProps } from "@/components/ui/round-button";
 export { Surface } from "@/components/ui/surface";

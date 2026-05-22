@@ -1,5 +1,5 @@
 import { CheckIcon } from "@/assets/icons";
-import { Button, Chip } from "@/components/ui";
+import { Button, TagSelected } from "@/components/ui";
 import { ChecklistItem } from "@/features/roommate/components";
 import { MY_PROFILE_BASIC_INFO } from "@/features/mypage/mocks";
 import type { ProfileViewContentProps } from "@/features/mypage/types";
@@ -122,16 +122,9 @@ function ProfileImportanceSection({ items }: { items: string[] }) {
 
       <div className="flex flex-wrap gap-1.5">
         {items.map((item, index) => (
-          <Chip
-            key={item}
-            className="pointer-events-none"
-            rank={index + 1}
-            selected
-            tabIndex={-1}
-            variant="rank-neutral"
-          >
+          <TagSelected key={item} rank={index + 1} variant="variant2">
             {item}
-          </Chip>
+          </TagSelected>
         ))}
       </div>
     </section>
