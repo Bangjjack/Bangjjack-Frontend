@@ -1,8 +1,7 @@
-import { Surface } from "@/components/ui";
+import { Surface, Tag } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
-import { StatusBadge } from "@/features/mypage/components/StatusBadge";
 import { MY_RECRUIT_POST_EMPTY_MESSAGE, MY_RECRUIT_POSTS } from "@/features/mypage/mocks";
 
 import type { MyRecruitPostMock } from "@/features/mypage/types";
@@ -28,9 +27,7 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
     <Surface as="article" variant="outlined" className="flex flex-col gap-2.5">
       <div className="flex items-start justify-between gap-300">
         <h2 className="typo-title3 min-w-0 flex-1 text-text-strong">{post.title}</h2>
-        <StatusBadge variant={post.status === "open" ? "active" : "closed"}>
-          {post.statusLabel}
-        </StatusBadge>
+        <Tag color={post.status === "open" ? "black" : "disabled"}>{post.statusLabel}</Tag>
       </div>
 
       <p className="typo-caption2 whitespace-pre-line text-text-caption">{post.description}</p>
@@ -61,7 +58,7 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
 
 function RecruitPostMemberStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex h-[50px] w-full items-center justify-center gap-200 rounded-medium bg-bg-primary">
+    <div className="flex h-12.5 w-full items-center justify-center gap-200 rounded-medium bg-bg-primary">
       <span className="typo-caption1 text-text-placeholder">{label}</span>
       <span className="typo-title2 text-text-strong">{value}</span>
     </div>

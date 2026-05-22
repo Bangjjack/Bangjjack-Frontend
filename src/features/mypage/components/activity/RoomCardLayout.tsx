@@ -1,7 +1,6 @@
-import { Surface } from "@/components/ui";
+import { Surface, Tag } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
-import { StatusBadge } from "@/features/mypage/components/StatusBadge";
 import { cn } from "@/lib/cn";
 
 import type { MyActivityRoomActionMock, MyActivityRoomMock } from "@/features/mypage/types";
@@ -24,7 +23,7 @@ function RoomCardLayout({ children, className, onActionClick, room }: RoomCardLa
         <div className="flex w-full flex-col items-start justify-center gap-200">
           <div className="flex w-full items-center justify-between gap-300">
             <h2 className="typo-title3 min-w-0 flex-1 truncate text-text-strong">{room.title}</h2>
-            <StatusBadge variant="dark">{room.statusLabel}</StatusBadge>
+            <Tag color="black">{room.statusLabel}</Tag>
           </div>
 
           <div className="flex flex-wrap gap-100">
