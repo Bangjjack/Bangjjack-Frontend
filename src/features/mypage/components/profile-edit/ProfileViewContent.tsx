@@ -1,10 +1,16 @@
 import { CheckIcon } from "@/assets/icons";
-import { Chip } from "@/components/ui";
+import { Button, Chip } from "@/components/ui";
 import { ChecklistItem } from "@/features/roommate/components";
-import { MY_PROFILE_BASIC_INFO, MY_PROFILE_CHECKLIST } from "@/features/mypage/mocks";
+import { MY_PROFILE_BASIC_INFO } from "@/features/mypage/mocks";
 import type { ProfileViewContentProps } from "@/features/mypage/types";
+import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
-function ProfileViewContent({ importanceItems, values }: ProfileViewContentProps) {
+function ProfileViewContent({
+  checklistItems,
+  importanceItems,
+  onChecklistClick,
+  values,
+}: ProfileViewContentProps) {
   const basicInfoItems = [
     { label: "이름", value: values.name },
     ...MY_PROFILE_BASIC_INFO.slice(0, 4),
@@ -12,11 +18,22 @@ function ProfileViewContent({ importanceItems, values }: ProfileViewContentProps
     ...MY_PROFILE_BASIC_INFO.slice(4),
   ];
 
+  const hasChecklist = checklistItems.length > 0;
+  const hasImportanceItems = importanceItems.length > 0;
+
   return (
     <div className="flex flex-col gap-300">
       <BasicInfoCard items={basicInfoItems} />
-      <ProfileChecklistCard nickname={values.name} />
-      <ProfileImportanceSection items={importanceItems} />
+      {hasChecklist ? (
+        <ProfileChecklistCard items={checklistItems} nickname={values.name} />
+      ) : (
+        <ChecklistEmptyCard onChecklistClick={onChecklistClick} />
+      )}
+      {hasImportanceItems ? (
+        <ProfileImportanceSection items={importanceItems} />
+      ) : (
+        <ImportanceEmptyCard />
+      )}
     </div>
   );
 }
@@ -44,7 +61,7 @@ function BasicInfoCard({ items }: { items: { label: string; value: string }[] })
   );
 }
 
-function ProfileChecklistCard({ nickname }: { nickname: string }) {
+function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; nickname: string }) {
   return (
     <section className="flex flex-col gap-2.5 rounded-medium bg-bg-secondary px-400 py-450">
       <div className="flex flex-col gap-600">
@@ -57,7 +74,7 @@ function ProfileChecklistCard({ nickname }: { nickname: string }) {
         </div>
 
         <div className="flex flex-col gap-1.5">
-          {MY_PROFILE_CHECKLIST.map((item) => (
+          {items.map((item) => (
             <ChecklistItem
               key={item.id}
               isMatched={item.isMatched}
@@ -71,6 +88,28 @@ function ProfileChecklistCard({ nickname }: { nickname: string }) {
       <div className="flex items-center justify-end gap-1.5 px-1.5 py-100">
         <span className="size-1.5 rounded-full bg-state-error-2" aria-hidden="true" />
         <span className="typo-title4 text-icon-alternative">불일치</span>
+      </div>
+    </section>
+  );
+}
+
+function ChecklistEmptyCard({ onChecklistClick }: { onChecklistClick?: () => void }) {
+  return (
+    <section className="flex flex-col items-start rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-400 py-450">
+      <div className="flex w-full flex-col gap-400">
+        <div className="flex items-center gap-1.5">
+          <CheckIcon
+            aria-hidden="true"
+            className="size-400 shrink-0 text-brand-primary [&_path]:stroke-current"
+          />
+          <h2 className="typo-title2 min-w-0 text-text-strong">
+            아직 체크리스트가 작성되지 않았어요
+          </h2>
+        </div>
+
+        <Button className="w-full" onClick={onChecklistClick} size="sm" type="button">
+          체크리스트 완성하러 가기
+        </Button>
       </div>
     </section>
   );
@@ -94,6 +133,17 @@ function ProfileImportanceSection({ items }: { items: string[] }) {
             {item}
           </Chip>
         ))}
+      </div>
+    </section>
+  );
+}
+
+function ImportanceEmptyCard() {
+  return (
+    <section className="flex flex-col items-start rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-400 py-300">
+      <div className="flex flex-col gap-1.5">
+        <h2 className="typo-title2 text-text-strong">룸메이트 우선순위 조건이 작성되지 않았어요</h2>
+        <p className="typo-caption2 text-text-primary-alternative">안내 문구</p>
       </div>
     </section>
   );

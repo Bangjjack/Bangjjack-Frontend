@@ -1,6 +1,7 @@
 import type { Control } from "react-hook-form";
 
 import type { MyProfileEditFormValues } from "@/features/mypage/schemas";
+import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
 export type ProfileForm = MyProfileEditFormValues;
 
@@ -29,7 +30,9 @@ export interface ImportanceEditSectionProps {
 }
 
 export interface ProfileViewContentProps {
+  checklistItems: ChecklistEntry[];
   importanceItems: string[];
+  onChecklistClick?: () => void;
   values: ProfileForm;
 }
 
