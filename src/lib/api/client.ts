@@ -25,7 +25,6 @@ apiClient.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       // TODO: refresh token API 연동 후 토큰 갱신 로직 추가
-      localStorage.removeItem(ACCESS_TOKEN_KEY);
       useAuthStore.getState().clearAuth();
       window.location.href = "/login";
     }
