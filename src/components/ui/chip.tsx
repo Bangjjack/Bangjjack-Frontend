@@ -6,7 +6,9 @@ import { CheckIcon } from "@/assets/icons";
 /* ── Rank badge ── */
 
 type RankProps = {
+  color?: "brand" | "neutral";
   rank: number;
+  size?: "default" | "sm";
   visible: boolean;
 };
 
@@ -30,7 +32,7 @@ function CheckMark({ visible }: CheckMarkProps) {
   );
 }
 
-function Rank({ rank, visible }: RankProps) {
+function Rank({ color = "brand", rank, size = "default", visible }: RankProps) {
   return (
     <span
       aria-hidden={!visible}
@@ -41,7 +43,9 @@ function Rank({ rank, visible }: RankProps) {
     >
       <span
         className={cn(
-          "flex size-[20px] items-center justify-center overflow-hidden rounded-full bg-brand-primary typo-label1 text-white",
+          "flex items-center justify-center overflow-hidden rounded-full text-white",
+          color === "brand" ? "bg-brand-primary" : "bg-neutral-800",
+          size === "default" ? "size-[20px] typo-label1" : "size-3.75 typo-label3",
           visible && "animate-chip-rank-pop",
         )}
       >
@@ -61,6 +65,7 @@ const chipVariants = cva(
         single: "",
         multi: "",
         rank: "",
+        "rank-neutral": "",
         neutral: "",
         "neutral-primary": "",
       },
@@ -86,6 +91,11 @@ const chipVariants = cva(
         class: "border border-transparent bg-bg-input text-text-alternative",
       },
       {
+        variant: "rank-neutral",
+        selected: false,
+        class: "bg-neutral-150 text-text-label",
+      },
+      {
         variant: "neutral",
         selected: false,
         class: "border border-border-normal bg-bg-secondary text-text-alternative",
@@ -105,6 +115,11 @@ const chipVariants = cva(
         selected: true,
         class:
           "gap-[6px] border border-brand-primary bg-brand-primary-light text-brand-primary-dark",
+      },
+      {
+        variant: "rank-neutral",
+        selected: true,
+        class: "gap-100 bg-neutral-150 px-2.5 py-1.5 typo-label1 text-text-label",
       },
       {
         variant: "neutral",
@@ -167,6 +182,9 @@ function Chip({
     >
       {variant === "multi" && <CheckMark visible={selected} />}
       {variant === "rank" && <Rank rank={rank ?? 0} visible={selected && rank != null} />}
+      {variant === "rank-neutral" && (
+        <Rank color="neutral" rank={rank ?? 0} size="sm" visible={selected && rank != null} />
+      )}
       {children}
     </button>
   );
