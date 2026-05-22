@@ -25,6 +25,27 @@ export interface ChatDetailContentProps {
   onRecruitClick?: () => void;
 }
 
+function getMessageDateBadgeLabels(messages: ChatMessage[], fallbackDateLabel: string) {
+  let previousDateKey: string | undefined;
+
+  return messages.map((message) => {
+    const isTextMessage = message.type === "outgoing" || message.type === "incoming";
+    const messageDateKey = isTextMessage
+      ? (message.dateKey ?? fallbackDateLabel)
+      : fallbackDateLabel;
+    const messageDateLabel = isTextMessage
+      ? (message.dateLabel ?? fallbackDateLabel)
+      : fallbackDateLabel;
+
+    if (messageDateKey === previousDateKey) {
+      return null;
+    }
+
+    previousDateKey = messageDateKey;
+    return messageDateLabel;
+  });
+}
+
 function ChatDetailContent({
   chatDetail,
   className,
@@ -81,6 +102,7 @@ function ChatDetailContent({
 
   const recruitTitle =
     chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
+  const dateBadgeLabels = getMessageDateBadgeLabels(messages, chatDetail.dateLabel);
 
   return (
     <div className={cn("relative flex h-dvh overflow-hidden flex-col bg-bg-primary", className)}>
@@ -100,36 +122,41 @@ function ChatDetailContent({
             recruitTitle={recruitTitle}
           />
 
-          <div className="flex justify-center">
-            <ChatDateBadge label={chatDetail.dateLabel} />
-          </div>
-
           <div className="flex flex-col gap-400">
-            {messages.map((message) => {
+            {messages.map((message, index) => {
+              const dateBadgeLabel = dateBadgeLabels[index];
+              const dateBadge = dateBadgeLabel ? <ChatDateBadge label={dateBadgeLabel} /> : null;
+
               if (message.type === "roommate_request") {
                 return (
-                  <div key={message.id} className="flex w-full items-end gap-200">
-                    <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
-                    <ChatRoommateRequestMessage
-                      onAccept={onRoommateRequestAccept}
-                      requesterName={message.requesterName}
-                    />
-                    {message.sentAt ? (
-                      <span className="shrink-0 whitespace-nowrap text-[8px] font-medium leading-3.5 tracking-[-0.005em] text-text-disabled">
-                        {message.sentAt}
-                      </span>
-                    ) : null}
+                  <div key={message.id} className="flex flex-col gap-400">
+                    {dateBadge}
+                    <div className="flex w-full items-end gap-200">
+                      <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
+                      <ChatRoommateRequestMessage
+                        onAccept={onRoommateRequestAccept}
+                        requesterName={message.requesterName}
+                      />
+                      {message.sentAt ? (
+                        <span className="shrink-0 whitespace-nowrap text-[8px] font-medium leading-3.5 tracking-[-0.005em] text-text-disabled">
+                          {message.sentAt}
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                 );
               }
 
               if (message.type === "roommate_invite") {
                 return (
-                  <div key={message.id} className="flex w-full justify-end">
-                    <ChatRoommateInviteMessage
-                      onCancel={() => handleCancelInviteRequest(message.id)}
-                      recipientName={message.recipientName}
-                    />
+                  <div key={message.id} className="flex flex-col gap-400">
+                    {dateBadge}
+                    <div className="flex w-full justify-end">
+                      <ChatRoommateInviteMessage
+                        onCancel={() => handleCancelInviteRequest(message.id)}
+                        recipientName={message.recipientName}
+                      />
+                    </div>
                   </div>
                 );
               }
@@ -137,31 +164,31 @@ function ChatDetailContent({
               const isOutgoing = message.type === "outgoing";
 
               return (
-                <div
-                  key={message.id}
-                  className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}
-                >
-                  {!isOutgoing ? (
-                    <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
-                  ) : null}
+                <div key={message.id} className="flex flex-col gap-400">
+                  {dateBadge}
+                  <div className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}>
+                    {!isOutgoing ? (
+                      <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
+                    ) : null}
 
-                  {!isOutgoing ? (
-                    <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
-                      <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-alternative">
-                        {message.text}
-                      </p>
-                    </div>
-                  ) : null}
+                    {!isOutgoing ? (
+                      <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
+                        <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-alternative">
+                          {message.text}
+                        </p>
+                      </div>
+                    ) : null}
 
-                  <span className="typo-caption4 text-text-disabled">{message.sentAt}</span>
+                    <span className="typo-caption4 text-text-disabled">{message.sentAt}</span>
 
-                  {isOutgoing ? (
-                    <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-brand-primary px-300 py-300">
-                      <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-on-primary">
-                        {message.text}
-                      </p>
-                    </div>
-                  ) : null}
+                    {isOutgoing ? (
+                      <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-brand-primary px-300 py-300">
+                        <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-on-primary">
+                          {message.text}
+                        </p>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               );
             })}

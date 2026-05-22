@@ -25,6 +25,8 @@ export type BaseChatCardProps = {
 };
 
 export type ChatTextMessage = {
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
   messageType?: ChatServerMessageType;
   sentAt: string;

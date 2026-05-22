@@ -9,6 +9,7 @@ import {
   useCreateChatRoom,
 } from "@/features/chat";
 import type { ChatMessage, ChatMessageHistoryItem, ChatRoom } from "@/features/chat/types";
+import { formatMessageDateLabel } from "@/features/chat/utils";
 import { useAuthStore } from "@/stores/authStore";
 
 function formatMessageTime(createdAt: string) {
@@ -28,7 +29,11 @@ function mapHistoryMessageToChatMessage(
   message: ChatMessageHistoryItem,
   currentUserId: number | null,
 ): ChatMessage {
+  const { dateKey, dateLabel } = formatMessageDateLabel(message.createdAt);
+
   return {
+    dateKey,
+    dateLabel,
     id: message.messageId,
     sentAt: formatMessageTime(message.createdAt),
     text: message.content,

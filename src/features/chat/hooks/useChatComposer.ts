@@ -11,6 +11,7 @@ import type {
   ChatRoommateInviteMessageData,
   ChatTextMessage,
 } from "@/features/chat/types";
+import { formatMessageDateLabel } from "@/features/chat/utils";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
@@ -101,6 +102,7 @@ function useChatComposer({
       }
 
       const nextMessage: ChatTextMessage = {
+        ...formatMessageDateLabel(receivedMessage.createdAt),
         id: receivedMessage.messageId,
         messageType: receivedMessage.messageType,
         sentAt: formatMessageTime(receivedMessage.createdAt),
