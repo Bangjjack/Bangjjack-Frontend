@@ -11,10 +11,10 @@ import type {
   ChatRoommateInviteMessageData,
   ChatTextMessage,
 } from "@/features/chat/types";
-import { useAuthStore } from "@/stores/authStore";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
+  currentUserId?: number | null;
   initialMessages?: ChatMessage[];
   roomId?: number;
 }
@@ -56,8 +56,12 @@ function prefersReducedMotion() {
   );
 }
 
-function useChatComposer({ chatDetail, initialMessages, roomId }: UseChatComposerParams) {
-  const currentUserId = useAuthStore((state) => state.userId);
+function useChatComposer({
+  chatDetail,
+  currentUserId,
+  initialMessages,
+  roomId,
+}: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
   const [inputMenuOpen, setInputMenuOpen] = useState(false);
@@ -114,6 +118,7 @@ function useChatComposer({ chatDetail, initialMessages, roomId }: UseChatCompose
   };
 
   const { sendMessage, status: connectionStatus } = useChatWebSocket({
+    enabled: roomId != null,
     onErrorMessage: handleChatErrorMessage,
     onMessage: appendReceivedMessage,
   });

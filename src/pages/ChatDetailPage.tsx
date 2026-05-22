@@ -2,8 +2,13 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { toast } from "@/components/ui";
-import { ChatDetailContent, CHAT_DETAILS, useChatMessages, useCreateChatRoom } from "@/features/chat";
-import type { ChatMessage, ChatMessageHistoryItem } from "@/features/chat/types";
+import {
+  ChatDetailContent,
+  CHAT_DETAILS,
+  useChatMessages,
+  useCreateChatRoom,
+} from "@/features/chat";
+import type { ChatMessage, ChatMessageHistoryItem, ChatRoom } from "@/features/chat/types";
 import { useAuthStore } from "@/stores/authStore";
 
 function formatMessageTime(createdAt: string) {
@@ -29,6 +34,35 @@ function mapHistoryMessageToChatMessage(
     text: message.content,
     type: currentUserId != null && message.senderId === currentUserId ? "outgoing" : "incoming",
   };
+}
+
+function compareHistoryMessageByCreatedAt(
+  firstMessage: ChatMessageHistoryItem,
+  secondMessage: ChatMessageHistoryItem,
+) {
+  const firstCreatedAt = new Date(firstMessage.createdAt).getTime();
+  const secondCreatedAt = new Date(secondMessage.createdAt).getTime();
+
+  if (Number.isNaN(firstCreatedAt) || Number.isNaN(secondCreatedAt)) {
+    return firstMessage.messageId - secondMessage.messageId;
+  }
+
+  return firstCreatedAt - secondCreatedAt;
+}
+
+function getCurrentUserId(
+  chatRoom: ChatRoom | undefined,
+  targetUserId: number,
+  authUserId: number | null,
+) {
+  if (authUserId != null) {
+    return authUserId;
+  }
+
+  return (
+    chatRoom?.participants.find((participant) => participant.userId !== targetUserId)?.userId ??
+    null
+  );
 }
 
 export default function ChatDetailPage() {
@@ -80,14 +114,16 @@ export default function ChatDetailPage() {
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
-  const initialMessages = chatMessagesData?.messages.map((message) =>
-    mapHistoryMessageToChatMessage(message, currentUserId),
-  );
+  const resolvedCurrentUserId = getCurrentUserId(chatRoom, chatDetail.id, currentUserId);
+  const initialMessages = chatMessagesData?.messages
+    .toSorted(compareHistoryMessageByCreatedAt)
+    .map((message) => mapHistoryMessageToChatMessage(message, resolvedCurrentUserId));
 
   return (
     <ChatDetailContent
       key={chatDetail.id}
       chatDetail={chatDetail}
+      currentUserId={resolvedCurrentUserId}
       initialMessages={initialMessages}
       roomId={chatRoom?.roomId}
       onBack={() => navigate("/chat")}
