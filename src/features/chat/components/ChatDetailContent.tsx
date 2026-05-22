@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 import { ChatInputBar, Header, ProfileAvatar, type HeaderProps } from "@/components/ui";
 import {
   ChatDateBadge,
@@ -34,6 +36,7 @@ function ChatDetailContent({
   onProfileClick,
   onRecruitClick,
 }: ChatDetailContentProps) {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const headerProps: Pick<
     HeaderProps,
     "onBackClick" | "onProfileClick" | "profileElement" | "showBack" | "showProfile" | "title"
@@ -63,6 +66,19 @@ function ChatDetailContent({
     toggleInputMenu,
   } = useChatComposer({ chatDetail, currentUserId, initialMessages, roomId });
 
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+
+    if (!scrollContainer) {
+      return;
+    }
+
+    scrollContainer.scrollTo({
+      behavior: "smooth",
+      top: scrollContainer.scrollHeight,
+    });
+  }, [messages.length]);
+
   const recruitTitle =
     chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
 
@@ -70,7 +86,10 @@ function ChatDetailContent({
     <div className={cn("relative flex h-dvh overflow-hidden flex-col bg-bg-primary", className)}>
       <Header {...headerProps} />
 
-      <div className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <div
+        ref={scrollContainerRef}
+        className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto"
+      >
         <div className="flex flex-col gap-400 px-400 py-[8px]">
           <ChatMatchCard
             className="sticky top-200 z-10 shrink-0"
