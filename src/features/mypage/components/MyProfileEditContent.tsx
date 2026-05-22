@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { WaveBackgroundIcon } from "@/assets/icons";
+import { waveImage } from "@/assets/images";
 import { Button, Header } from "@/components/ui";
 import {
   ChecklistEditLink,
@@ -97,11 +97,7 @@ function MyProfileEditContent({
 
   return (
     <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
-      <WaveBackgroundIcon
-        aria-hidden="true"
-        className={WAVE_BACKGROUND_CLASS_NAME}
-        preserveAspectRatio="none"
-      />
+      <img alt="" aria-hidden="true" className={WAVE_BACKGROUND_CLASS_NAME} src={waveImage} />
 
       <Header
         className="absolute inset-x-0 top-0 z-20"
@@ -111,7 +107,12 @@ function MyProfileEditContent({
       />
 
       <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
-        <div className="flex flex-col gap-300 px-400 pt-36.5">
+        <div
+          className={cn(
+            "flex flex-col px-400",
+            isEditing ? "gap-300 pt-36.5" : "gap-600 pb-400 pt-29",
+          )}
+        >
           <ProfileAvatarSection
             imageUrl={profileImageUrl}
             isEditing={isEditing}

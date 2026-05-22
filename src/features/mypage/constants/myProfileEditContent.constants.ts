@@ -16,6 +16,7 @@ export const MY_PROFILE_EDIT_FORM_ID = "my-profile-edit-form";
 export const MY_PROFILE_EDIT_DEFAULT_VALUES: MyProfileEditFormValues = {
   age: "20",
   department: MY_PROFILE.department,
+  grade: MY_PROFILE.grade,
   name: MY_PROFILE.name,
 };
 

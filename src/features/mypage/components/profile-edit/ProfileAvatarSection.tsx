@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 function ProfileAvatarSection({ imageUrl, isEditing, name }: ProfileAvatarSectionProps) {
   return (
-    <div className="flex flex-col items-start px-3.5">
+    <div className="flex flex-col items-start px-3.5 pt-600">
       <div className={cn("relative", isEditing && "w-28")}>
         {imageUrl ? (
           <img
