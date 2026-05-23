@@ -21,11 +21,35 @@ const tagVariants = cva(
   },
 );
 
-type TagProps = React.ComponentProps<"span"> & VariantProps<typeof tagVariants>;
+type TagProps = React.ComponentProps<"span"> &
+  VariantProps<typeof tagVariants> & {
+    rank?: number;
+  };
 
-function Tag({ className, color, ...props }: TagProps) {
-  return <span className={cn(tagVariants({ color }), className)} {...props} />;
+function Tag({ className, color, rank, children, ...props }: TagProps) {
+  if (rank !== undefined) {
+    return (
+      <span
+        className={cn(
+          "inline-flex items-center gap-100 rounded-full bg-neutral-150 px-[10px] py-[6px]",
+          className,
+        )}
+        {...props}
+      >
+        <span className="flex size-[15px] shrink-0 items-center justify-center rounded-full bg-brand-primary text-[9px] font-bold leading-none text-white">
+          {rank}
+        </span>
+        <span className="typo-label1 text-text-label">{children}</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className={cn(tagVariants({ color }), className)} {...props}>
+      {children}
+    </span>
+  );
 }
 
-export { Tag, tagVariants };
+export { Tag };
 export type { TagProps };
