@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
+import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
 import type {
   ChatDetail,
   ChatErrorMessage,
@@ -11,7 +12,7 @@ import type {
   ChatRoommateInviteMessageData,
   ChatTextMessage,
 } from "@/features/chat/types";
-import { formatMessageDateLabel } from "@/features/chat/utils";
+import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
@@ -36,27 +37,6 @@ function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMes
   return message.type === "roommate_invite";
 }
 
-function formatMessageTime(createdAt: string) {
-  const date = new Date(createdAt);
-
-  if (Number.isNaN(date.getTime())) {
-    return createdAt;
-  }
-
-  return new Intl.DateTimeFormat("ko-KR", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(date);
-}
-
-function prefersReducedMotion() {
-  return (
-    typeof window !== "undefined" &&
-    "matchMedia" in window &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
-
 function useChatComposer({
   chatDetail,
   currentUserId,
@@ -65,10 +45,15 @@ function useChatComposer({
 }: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
-  const [inputMenuOpen, setInputMenuOpen] = useState(false);
-  const [inputMenuClosing, setInputMenuClosing] = useState(false);
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
   const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
+  const {
+    closeInputMenu,
+    completeInputMenuClose,
+    inputMenuClosing,
+    inputMenuOpen,
+    toggleInputMenu,
+  } = useInputMenuState();
   const baseMessages = initialMessages ?? chatDetail.messages;
   const messages = [
     ...baseMessages,
@@ -94,10 +79,11 @@ function useChatComposer({
         (message) => message === receivedMessage.content,
       );
       const isOutgoing =
-        (currentUserId != null && receivedMessage.senderId === currentUserId) ||
-        pendingMessageIndex >= 0;
+        currentUserId != null
+          ? receivedMessage.senderId === currentUserId
+          : pendingMessageIndex >= 0;
 
-      if (pendingMessageIndex >= 0) {
+      if (currentUserId == null && pendingMessageIndex >= 0) {
         pendingOutgoingMessagesRef.current.splice(pendingMessageIndex, 1);
       }
 
@@ -124,37 +110,6 @@ function useChatComposer({
     onErrorMessage: handleChatErrorMessage,
     onMessage: appendReceivedMessage,
   });
-
-  const openInputMenu = () => {
-    setInputMenuClosing(false);
-    setInputMenuOpen(true);
-  };
-
-  const completeInputMenuClose = () => {
-    setInputMenuClosing(false);
-    setInputMenuOpen(false);
-  };
-
-  const closeInputMenu = () => {
-    if (!inputMenuOpen || inputMenuClosing) {
-      return;
-    }
-
-    setInputMenuClosing(true);
-
-    if (prefersReducedMotion()) {
-      completeInputMenuClose();
-    }
-  };
-
-  const toggleInputMenu = () => {
-    if (inputMenuOpen) {
-      closeInputMenu();
-      return;
-    }
-
-    openInputMenu();
-  };
 
   const closeInviteSheet = () => {
     setInviteSheetOpen(false);

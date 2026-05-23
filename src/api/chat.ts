@@ -1,6 +1,5 @@
 import { apiClient } from "@/lib/api";
-import { MASTER_ACCESS_TOKEN } from "@/constants";
-import type { ApiResponse } from "@/features/board/types";
+import type { ApiResponse } from "@/api/types";
 import type {
   ChatMessagesData,
   ChatRoom,
@@ -8,37 +7,25 @@ import type {
   GetChatMessagesParams,
 } from "@/features/chat/types";
 
+const CHAT_API_PATHS = {
+  chatRooms: "/chat-rooms",
+  messages: (roomId: number) => `/chat-rooms/${roomId}/messages`,
+  wsToken: "/auth/ws-token",
+} as const;
+
 export type IssueChatWsTokenResponse = {
   wsToken: string;
 };
 
 export const issueChatWsToken = async (): Promise<IssueChatWsTokenResponse> => {
-  try {
-    const { data } = await apiClient.post<ApiResponse<IssueChatWsTokenResponse>>("/auth/ws-token");
-    return data.data;
-  } catch (error) {
-    if (!MASTER_ACCESS_TOKEN) {
-      throw error;
-    }
-
-    console.warn("[chat] Failed to issue WS token with local token. Retrying with master token.");
-
-    const { data } = await apiClient.post<ApiResponse<IssueChatWsTokenResponse>>(
-      "/auth/ws-token",
-      undefined,
-      {
-        headers: {
-          Authorization: `Bearer ${MASTER_ACCESS_TOKEN}`,
-        },
-      },
-    );
-
-    return data.data;
-  }
+  const { data } = await apiClient.post<ApiResponse<IssueChatWsTokenResponse>>(
+    CHAT_API_PATHS.wsToken,
+  );
+  return data.data;
 };
 
 export const createChatRoom = async (body: CreateChatRoomRequest): Promise<ChatRoom> => {
-  const { data } = await apiClient.post<ApiResponse<ChatRoom>>("/chat-rooms", body);
+  const { data } = await apiClient.post<ApiResponse<ChatRoom>>(CHAT_API_PATHS.chatRooms, body);
   return data.data;
 };
 
@@ -48,7 +35,7 @@ export const getChatMessages = async ({
   size = 30,
 }: GetChatMessagesParams): Promise<ChatMessagesData> => {
   const { data } = await apiClient.get<ApiResponse<ChatMessagesData>>(
-    `/chat-rooms/${roomId}/messages`,
+    CHAT_API_PATHS.messages(roomId),
     {
       params: {
         cursor,

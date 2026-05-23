@@ -8,22 +8,9 @@ import {
   useChatMessages,
   useCreateChatRoom,
 } from "@/features/chat";
-import type { ChatMessage, ChatMessageHistoryItem, ChatRoom } from "@/features/chat/types";
-import { formatMessageDateLabel } from "@/features/chat/utils";
+import type { ChatMessage, ChatMessageHistoryItem } from "@/features/chat/types";
+import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
 import { useAuthStore } from "@/stores/authStore";
-
-function formatMessageTime(createdAt: string) {
-  const date = new Date(createdAt);
-
-  if (Number.isNaN(date.getTime())) {
-    return createdAt;
-  }
-
-  return new Intl.DateTimeFormat("ko-KR", {
-    hour: "numeric",
-    minute: "2-digit",
-  }).format(date);
-}
 
 function mapHistoryMessageToChatMessage(
   message: ChatMessageHistoryItem,
@@ -55,21 +42,6 @@ function compareHistoryMessageByCreatedAt(
   return firstCreatedAt - secondCreatedAt;
 }
 
-function getCurrentUserId(
-  chatRoom: ChatRoom | undefined,
-  targetUserId: number,
-  authUserId: number | null,
-) {
-  if (authUserId != null) {
-    return authUserId;
-  }
-
-  return (
-    chatRoom?.participants.find((participant) => participant.userId !== targetUserId)?.userId ??
-    null
-  );
-}
-
 export default function ChatDetailPage() {
   const navigate = useNavigate();
   const { chatId } = useParams();
@@ -82,7 +54,13 @@ export default function ChatDetailPage() {
     isError: isCreateChatRoomError,
     mutate: createChatRoom,
   } = useCreateChatRoom();
-  const { data: chatMessagesData, isError: isChatMessagesError } = useChatMessages({
+  const {
+    data: chatMessagesData,
+    fetchNextPage: fetchPreviousMessages,
+    hasNextPage: hasPreviousMessages,
+    isError: isChatMessagesError,
+    isFetchingNextPage: isLoadingPreviousMessages,
+  } = useChatMessages({
     roomId: chatRoom?.roomId,
   });
 
@@ -119,19 +97,21 @@ export default function ChatDetailPage() {
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
-  const resolvedCurrentUserId = getCurrentUserId(chatRoom, chatDetail.id, currentUserId);
   const initialMessages = chatMessagesData?.messages
     .toSorted(compareHistoryMessageByCreatedAt)
-    .map((message) => mapHistoryMessageToChatMessage(message, resolvedCurrentUserId));
+    .map((message) => mapHistoryMessageToChatMessage(message, currentUserId));
 
   return (
     <ChatDetailContent
       key={chatDetail.id}
       chatDetail={chatDetail}
-      currentUserId={resolvedCurrentUserId}
+      currentUserId={currentUserId}
+      hasPreviousMessages={hasPreviousMessages}
       initialMessages={initialMessages}
+      isLoadingPreviousMessages={isLoadingPreviousMessages}
       roomId={chatRoom?.roomId}
       onBack={() => navigate("/chat")}
+      onLoadPreviousMessages={fetchPreviousMessages}
       onRecruitClick={handleRecruitClick}
       onRoommateRequestAccept={() => navigate(`/chat/${chatDetail.id}/roommate-confirmed`)}
       onProfileClick={() => navigate(`/roommate/${chatDetail.id}`)}

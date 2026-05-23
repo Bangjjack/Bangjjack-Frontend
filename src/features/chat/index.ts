@@ -12,4 +12,15 @@ export {
   useIssueChatWsToken,
 } from "@/features/chat/hooks";
 export { CHAT_DETAILS } from "@/features/chat/mocks";
-export type { ChatUserProfile } from "@/features/chat/types";
+export type {
+  ChatConnectionStatus,
+  ChatErrorMessage,
+  ChatReceivedMessage,
+  ChatSendMessagePayload,
+  ChatUserProfile,
+} from "@/features/chat/types";
+export {
+  createChatWebSocketUrls,
+  isChatErrorMessage,
+  isChatReceivedMessage,
+} from "@/features/chat/utils/webSocket";

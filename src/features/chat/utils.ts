@@ -6,6 +6,19 @@ export function formatUnreadCount(count: number) {
   return count > 99 ? "99+" : `${count}`;
 }
 
+export function formatMessageTime(createdAt: string) {
+  const date = new Date(createdAt);
+
+  if (Number.isNaN(date.getTime())) {
+    return createdAt;
+  }
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+}
+
 function getDateKey(date: Date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");

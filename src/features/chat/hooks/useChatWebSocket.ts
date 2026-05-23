@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 
-import { useIssueChatWsToken } from "@/features/chat/hooks/useIssueChatWsToken";
+import {
+  createChatWebSocketUrls,
+  isChatErrorMessage,
+  isChatReceivedMessage,
+  useIssueChatWsToken,
+} from "@/features/chat";
 import type {
   ChatConnectionStatus,
   ChatErrorMessage,
   ChatReceivedMessage,
   ChatSendMessagePayload,
-} from "@/features/chat/types";
-import {
-  createChatWebSocketUrls,
-  isChatErrorMessage,
-  isChatReceivedMessage,
-} from "@/features/chat/utils/webSocket";
+} from "@/features/chat";
 
 type UseChatWebSocketParams = {
   enabled?: boolean;
@@ -37,6 +37,9 @@ export const useChatWebSocket = ({
 
   useEffect(() => {
     if (!enabled) {
+      setStatus("idle");
+      socketRef.current?.close();
+      socketRef.current = null;
       return;
     }
 

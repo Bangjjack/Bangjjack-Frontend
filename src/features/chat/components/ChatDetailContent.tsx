@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
 import { ChatInputBar, Header, ProfileAvatar, type HeaderProps } from "@/components/ui";
 import {
@@ -17,9 +17,12 @@ export interface ChatDetailContentProps {
   chatDetail: ChatDetail;
   className?: string;
   currentUserId?: number | null;
+  hasPreviousMessages?: boolean;
   initialMessages?: ChatMessage[];
+  isLoadingPreviousMessages?: boolean;
   roomId?: number;
   onBack: () => void;
+  onLoadPreviousMessages?: () => void | Promise<unknown>;
   onRoommateRequestAccept?: () => void;
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
@@ -46,18 +49,38 @@ function getMessageDateBadgeLabels(messages: ChatMessage[], fallbackDateLabel: s
   });
 }
 
+function ChatMessageWrapper({
+  children,
+  dateBadgeLabel,
+}: {
+  children: ReactNode;
+  dateBadgeLabel?: string | null;
+}) {
+  return (
+    <div className="flex flex-col gap-400">
+      {dateBadgeLabel ? <ChatDateBadge label={dateBadgeLabel} /> : null}
+      {children}
+    </div>
+  );
+}
+
 function ChatDetailContent({
   chatDetail,
   className,
   currentUserId,
+  hasPreviousMessages = false,
   initialMessages,
+  isLoadingPreviousMessages = false,
   roomId,
   onBack,
+  onLoadPreviousMessages,
   onRoommateRequestAccept,
   onProfileClick,
   onRecruitClick,
 }: ChatDetailContentProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const previousScrollHeightRef = useRef(0);
+  const shouldRestoreScrollPositionRef = useRef(false);
   const headerProps: Pick<
     HeaderProps,
     "onBackClick" | "onProfileClick" | "profileElement" | "showBack" | "showProfile" | "title"
@@ -94,11 +117,34 @@ function ChatDetailContent({
       return;
     }
 
+    if (shouldRestoreScrollPositionRef.current) {
+      shouldRestoreScrollPositionRef.current = false;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight - previousScrollHeightRef.current;
+      return;
+    }
+
     scrollContainer.scrollTo({
       behavior: "smooth",
       top: scrollContainer.scrollHeight,
     });
   }, [messages.length]);
+
+  const handleMessagesScroll = () => {
+    const scrollContainer = scrollContainerRef.current;
+
+    if (
+      !scrollContainer ||
+      !hasPreviousMessages ||
+      isLoadingPreviousMessages ||
+      scrollContainer.scrollTop > 24
+    ) {
+      return;
+    }
+
+    previousScrollHeightRef.current = scrollContainer.scrollHeight;
+    shouldRestoreScrollPositionRef.current = true;
+    void onLoadPreviousMessages?.();
+  };
 
   const recruitTitle =
     chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
@@ -111,8 +157,9 @@ function ChatDetailContent({
       <div
         ref={scrollContainerRef}
         className="scrollbar-none flex min-h-0 flex-1 flex-col overflow-y-auto"
+        onScroll={handleMessagesScroll}
       >
-        <div className="flex flex-col gap-400 px-400 py-[8px]">
+        <div className="flex flex-col gap-400 px-400 py-200">
           <ChatMatchCard
             className="sticky top-200 z-10 shrink-0"
             matchRate={chatDetail.matchRate}
@@ -125,12 +172,10 @@ function ChatDetailContent({
           <div className="flex flex-col gap-400">
             {messages.map((message, index) => {
               const dateBadgeLabel = dateBadgeLabels[index];
-              const dateBadge = dateBadgeLabel ? <ChatDateBadge label={dateBadgeLabel} /> : null;
 
               if (message.type === "roommate_request") {
                 return (
-                  <div key={message.id} className="flex flex-col gap-400">
-                    {dateBadge}
+                  <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
                     <div className="flex w-full items-end gap-200">
                       <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
                       <ChatRoommateRequestMessage
@@ -138,34 +183,32 @@ function ChatDetailContent({
                         requesterName={message.requesterName}
                       />
                       {message.sentAt ? (
-                        <span className="shrink-0 whitespace-nowrap text-[8px] font-medium leading-3.5 tracking-[-0.005em] text-text-disabled">
+                        <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
                           {message.sentAt}
                         </span>
                       ) : null}
                     </div>
-                  </div>
+                  </ChatMessageWrapper>
                 );
               }
 
               if (message.type === "roommate_invite") {
                 return (
-                  <div key={message.id} className="flex flex-col gap-400">
-                    {dateBadge}
+                  <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
                     <div className="flex w-full justify-end">
                       <ChatRoommateInviteMessage
                         onCancel={() => handleCancelInviteRequest(message.id)}
                         recipientName={message.recipientName}
                       />
                     </div>
-                  </div>
+                  </ChatMessageWrapper>
                 );
               }
 
               const isOutgoing = message.type === "outgoing";
 
               return (
-                <div key={message.id} className="flex flex-col gap-400">
-                  {dateBadge}
+                <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
                   <div className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}>
                     {!isOutgoing ? (
                       <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
@@ -173,7 +216,7 @@ function ChatDetailContent({
 
                     {!isOutgoing ? (
                       <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
-                        <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-alternative">
+                        <p className="whitespace-pre-wrap break-words typo-caption2 text-text-alternative">
                           {message.text}
                         </p>
                       </div>
@@ -183,13 +226,13 @@ function ChatDetailContent({
 
                     {isOutgoing ? (
                       <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-brand-primary px-300 py-300">
-                        <p className="whitespace-pre-wrap break-words typo-caption2 tracking-[-0.03125rem] text-text-on-primary">
+                        <p className="whitespace-pre-wrap break-words typo-caption2 text-text-on-primary">
                           {message.text}
                         </p>
                       </div>
                     ) : null}
                   </div>
-                </div>
+                </ChatMessageWrapper>
               );
             })}
           </div>

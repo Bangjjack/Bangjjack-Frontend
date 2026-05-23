@@ -1,5 +1,18 @@
-import { API_BASE_URL, WS_BASE_URL } from "@/constants";
-import type { ChatErrorMessage, ChatReceivedMessage } from "@/features/chat/types";
+import { WS_BASE_URL } from "@/constants";
+import type {
+  ChatErrorMessage,
+  ChatReceivedMessage,
+  ChatServerMessageType,
+} from "@/features/chat/types";
+
+const VALID_MESSAGE_TYPES = [
+  "USER",
+  "APPLICATION_SENT",
+  "APPLICATION_ACCEPTED",
+  "APPLICATION_REJECTED",
+  "GROUP_DISBANDED",
+  "SYSTEM",
+] satisfies ChatServerMessageType[];
 
 const createUrlWithToken = (baseUrl: string, wsToken: string) => {
   const url = new URL(baseUrl);
@@ -8,36 +21,8 @@ const createUrlWithToken = (baseUrl: string, wsToken: string) => {
   return url.toString();
 };
 
-const createUrlFromApiBase = (wsToken: string, protocol: "ws:" | "wss:") => {
-  const apiUrl = new URL(API_BASE_URL);
-  apiUrl.protocol = protocol;
-  apiUrl.pathname = "/ws/chat";
-  apiUrl.search = new URLSearchParams({ token: wsToken }).toString();
-
-  return apiUrl.toString();
-};
-
 export const createChatWebSocketUrls = (wsToken: string) => {
-  if (WS_BASE_URL) {
-    return [createUrlWithToken(WS_BASE_URL, wsToken)];
-  }
-
-  const apiUrl = new URL(API_BASE_URL);
-  const preferredProtocol = apiUrl.protocol === "https:" ? "wss:" : "ws:";
-  const fallbackProtocol = preferredProtocol === "wss:" ? "ws:" : "wss:";
-  const fallbackPortUrl = new URL(API_BASE_URL);
-  fallbackPortUrl.protocol = "ws:";
-  fallbackPortUrl.port = "8080";
-  fallbackPortUrl.pathname = "/ws/chat";
-  fallbackPortUrl.search = new URLSearchParams({ token: wsToken }).toString();
-
-  return Array.from(
-    new Set([
-      createUrlFromApiBase(wsToken, preferredProtocol),
-      createUrlFromApiBase(wsToken, fallbackProtocol),
-      fallbackPortUrl.toString(),
-    ]),
-  );
+  return [createUrlWithToken(WS_BASE_URL, wsToken)];
 };
 
 export const isChatErrorMessage = (value: unknown): value is ChatErrorMessage => {
@@ -61,7 +46,11 @@ export const isChatReceivedMessage = (value: unknown): value is ChatReceivedMess
     typeof message.roomId === "number" &&
     typeof message.senderId === "number" &&
     typeof message.content === "string" &&
-    typeof message.messageType === "string" &&
+    isChatServerMessageType(message.messageType) &&
     typeof message.createdAt === "string"
   );
+};
+
+const isChatServerMessageType = (value: unknown): value is ChatServerMessageType => {
+  return typeof value === "string" && VALID_MESSAGE_TYPES.includes(value as ChatServerMessageType);
 };
