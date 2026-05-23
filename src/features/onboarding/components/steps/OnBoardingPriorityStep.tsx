@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Tag, TagSelected } from "@/components/ui";
+import { TagSelected } from "@/components/ui";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import { cn } from "@/lib/cn";
 
@@ -54,35 +54,31 @@ function OnBoardingPriorityStep({
             const isSelected = selectedIndex !== -1;
             const isReplacedFactor = replacedFactor === option;
 
-            const commonClassName = cn(
-              "cursor-pointer",
+            const optionKey = `${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`;
+            const buttonClassName = cn(
+              "inline-flex cursor-pointer rounded-large transition-[filter,box-shadow] duration-400 ease-[ease] hover:brightness-[0.96] active:brightness-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus-primary",
               animatingOption === option && "animate-chip-fade-up",
               isReplacedFactor && "animate-chip-fade-up",
             );
 
-            const commonProps = {
-              onClick: () => handleToggle(option, isSelected),
-              className: commonClassName,
-              children: option,
-            };
-
-            if (isSelected) {
-              return (
-                <TagSelected
-                  key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
-                  rank={selectedIndex + 1}
-                  variant="default"
-                  {...commonProps}
-                />
-              );
-            }
-
             return (
-              <Tag
-                key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
-                color="gray"
-                {...commonProps}
-              />
+              <button
+                key={optionKey}
+                aria-pressed={isSelected}
+                className={buttonClassName}
+                onClick={() => handleToggle(option, isSelected)}
+                type="button"
+              >
+                {isSelected ? (
+                  <TagSelected className="pointer-events-none" rank={selectedIndex + 1}>
+                    {option}
+                  </TagSelected>
+                ) : (
+                  <TagSelected className="pointer-events-none" variant="gray">
+                    {option}
+                  </TagSelected>
+                )}
+              </button>
             );
           })}
         </div>
