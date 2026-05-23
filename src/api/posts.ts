@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api";
+import type { ApiResponse } from "@/types";
 import type {
-  ApiResponse,
   CreatePostRequest,
   GetPostsParams,
   PostDetail,
