@@ -2,7 +2,7 @@ import { RoundButton } from "@/components/ui";
 import { RecruitCard } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { useHomePostList } from "@/features/board/hooks";
-import { formatRelativeTime } from "@/features/board/utils";
+import { formatRelativeTime } from "@/utils";
 import { useDragScroll, useFadeInOnScroll } from "@/hooks";
 import { cn } from "@/lib/cn";
 import { RoommateProfileCard } from "./RoommateProfileCard";
