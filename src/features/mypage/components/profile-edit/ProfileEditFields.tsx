@@ -1,74 +1,151 @@
 import { Controller } from "react-hook-form";
 
-import { Input, SelectField } from "@/components/ui";
+import { Button, Chip, Input, SelectField } from "@/components/ui";
 import {
-  AGE_OPTIONS,
+  CAMPUS_OPTIONS,
   DEPARTMENT_OPTIONS,
+  DORMITORY_OPTIONS,
+  GENDER_OPTIONS,
+  GRADE_OPTIONS,
   PROFILE_PLACEHOLDER,
   SELECT_TRIGGER_CLASS_NAME,
 } from "@/features/mypage/constants";
+import { MY_PROFILE_SEMESTER_OPTIONS } from "@/features/mypage/mocks";
 import type { ProfileEditFieldsProps } from "@/features/mypage/types";
+import { cn } from "@/lib/cn";
 
 function ProfileEditFields({ control }: ProfileEditFieldsProps) {
   return (
-    <section className="flex flex-col gap-300 px-100 pt-300">
+    <section className="flex flex-col gap-300 rounded-medium bg-bg-secondary px-300 py-500">
+      <div className="flex items-center gap-2.5 pb-1.5">
+        <span aria-hidden="true" className="size-1.5 rounded-full bg-brand-primary" />
+        <h2 className="typo-title1 text-text-strong">기본 정보</h2>
+      </div>
+
+      <ProfileField label="이름">
+        <Input
+          className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
+          disabled
+          placeholder={PROFILE_PLACEHOLDER.fixed}
+        />
+      </ProfileField>
+
+      <ProfileField label="이메일">
+        <Input
+          className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
+          disabled
+          placeholder={PROFILE_PLACEHOLDER.fixed}
+        />
+      </ProfileField>
+
       <Controller
         control={control}
-        name="name"
+        name="birthYear"
         render={({ field, fieldState }) => (
-          <Input
-            aria-label="이름"
-            className="h-11 rounded-medium bg-bg-secondary px-300 typo-body1"
-            error={!!fieldState.error}
-            errorMessage={fieldState.error?.message}
-            onBlur={field.onBlur}
-            onChange={field.onChange}
-            onClear={() => field.onChange("")}
-            placeholder={PROFILE_PLACEHOLDER.name}
-            value={field.value}
-          />
+          <ProfileField errorMessage={fieldState.error?.message} label="출생년도">
+            <Input
+              className="h-11 rounded-small border border-border-normal bg-bg-secondary px-300 typo-body1"
+              error={!!fieldState.error}
+              onBlur={field.onBlur}
+              onChange={field.onChange}
+              value={field.value}
+            />
+          </ProfileField>
         )}
       />
 
-      <div className="flex items-center justify-center gap-2.5 self-stretch">
-        <div className="flex flex-[1_0_0] items-start justify-center gap-100">
-          <Controller
-            control={control}
-            name="age"
-            render={({ field, fieldState }) => (
-              <div className="flex min-w-0 flex-1 flex-col">
-                <SelectField
-                  ariaLabel="나이"
-                  className="min-w-0 flex-1"
-                  fieldClassName="gap-0"
-                  onChange={field.onChange}
-                  options={AGE_OPTIONS}
-                  placeholder={PROFILE_PLACEHOLDER.age}
-                  triggerClassName={SELECT_TRIGGER_CLASS_NAME}
+      <Controller
+        control={control}
+        name="gender"
+        render={({ field, fieldState }) => (
+          <ProfileField errorMessage={fieldState.error?.message} label="성별">
+            <div className="flex w-full gap-200">
+              {GENDER_OPTIONS.map((option) => (
+                <Button
+                  key={option}
+                  className={cn(
+                    "min-w-0 flex-1 cursor-pointer bg-button-neutral-ghost",
+                    field.value === option ? "text-text-normal" : "text-text-alternative",
+                  )}
+                  onClick={() => field.onChange(option)}
+                  type="button"
+                  variant="neutral"
+                >
+                  {option}
+                </Button>
+              ))}
+            </div>
+          </ProfileField>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="campus"
+        render={({ field, fieldState }) => (
+          <ProfileField errorMessage={fieldState.error?.message} label="캠퍼스">
+            <SelectField
+              ariaLabel="캠퍼스"
+              fieldClassName="gap-0"
+              onChange={field.onChange}
+              options={CAMPUS_OPTIONS}
+              placeholder={PROFILE_PLACEHOLDER.campus}
+              triggerClassName={SELECT_TRIGGER_CLASS_NAME}
+              value={field.value}
+            />
+          </ProfileField>
+        )}
+      />
+
+      <div className="flex gap-2.5">
+        <Controller
+          control={control}
+          name="grade"
+          render={({ field, fieldState }) => (
+            <ProfileField
+              className="min-w-0 flex-1"
+              errorMessage={fieldState.error?.message}
+              label="학년"
+            >
+              <div
+                className={cn(
+                  "flex h-11 w-full items-center gap-2.5 rounded-small border border-border-normal bg-bg-secondary px-300 py-200 typo-body1",
+                  fieldState.error && "border-border-focus-error",
+                )}
+              >
+                <input
+                  aria-label="학년"
+                  className="min-w-0 flex-1 bg-transparent text-text-strong outline-none"
+                  inputMode="numeric"
+                  maxLength={1}
+                  onBlur={field.onBlur}
+                  onChange={(event) => {
+                    const nextValue = event.target.value;
+
+                    if (GRADE_OPTIONS.includes(nextValue as (typeof GRADE_OPTIONS)[number])) {
+                      field.onChange(nextValue);
+                      return;
+                    }
+
+                    field.onChange("");
+                  }}
                   value={field.value}
                 />
-                {fieldState.error?.message ? (
-                  <span className="mt-100 px-1.5 typo-caption2 text-state-error">
-                    {fieldState.error.message}
-                  </span>
-                ) : null}
+                <span className="shrink-0 text-text-alternative">학년</span>
               </div>
-            )}
-          />
-
-          <span className="shrink-0 pt-200 typo-body1 text-text-normal">세</span>
-        </div>
-
-        <span
-          aria-hidden="true"
-          className="mt-200 h-3.75 w-[0.09375rem] shrink-0 bg-border-strong"
+            </ProfileField>
+          )}
         />
 
         <Controller
           control={control}
           name="department"
           render={({ field, fieldState }) => (
-            <div className="flex min-w-0 flex-1 flex-col">
+            <ProfileField
+              className="min-w-0 flex-1"
+              errorMessage={fieldState.error?.message}
+              label="학과"
+            >
               <SelectField
                 ariaLabel="학과"
                 className="min-w-0 flex-1"
@@ -79,16 +156,79 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
                 triggerClassName={SELECT_TRIGGER_CLASS_NAME}
                 value={field.value}
               />
-              {fieldState.error?.message ? (
-                <span className="mt-100 px-1.5 typo-caption2 text-state-error">
-                  {fieldState.error.message}
-                </span>
-              ) : null}
-            </div>
+            </ProfileField>
           )}
         />
       </div>
+
+      <Controller
+        control={control}
+        name="semester"
+        render={({ field, fieldState }) => (
+          <ProfileField errorMessage={fieldState.error?.message} label="학기">
+            <div className="flex w-full gap-200">
+              {MY_PROFILE_SEMESTER_OPTIONS.map((option) => (
+                <Button
+                  key={option}
+                  className={cn(
+                    "min-w-0 flex-1 cursor-pointer bg-button-neutral-ghost",
+                    field.value === option ? "text-text-normal" : "text-text-alternative",
+                  )}
+                  onClick={() => field.onChange(option)}
+                  type="button"
+                  variant="neutral"
+                >
+                  {option}
+                </Button>
+              ))}
+            </div>
+          </ProfileField>
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="dormitory"
+        render={({ field, fieldState }) => (
+          <ProfileField errorMessage={fieldState.error?.message} label="기숙사">
+            <div className="flex flex-wrap gap-200">
+              {DORMITORY_OPTIONS.map((option) => (
+                <Chip
+                  key={option}
+                  className="cursor-pointer"
+                  onClick={() => field.onChange(option)}
+                  selected={field.value === option}
+                >
+                  {option}
+                </Chip>
+              ))}
+            </div>
+          </ProfileField>
+        )}
+      />
     </section>
+  );
+}
+
+function ProfileField({
+  children,
+  className,
+  errorMessage,
+  label,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  errorMessage?: string;
+  label: string;
+}) {
+  return (
+    <div className={cn("flex flex-col gap-1.5", className)}>
+      <label className="typo-title2 text-text-normal">{label}</label>
+      {children}
+      {errorMessage ? (
+        <span className="px-1.5 typo-caption2 text-state-error">{errorMessage}</span>
+      ) : null}
+    </div>
   );
 }
 

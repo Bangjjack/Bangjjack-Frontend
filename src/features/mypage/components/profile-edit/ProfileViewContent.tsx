@@ -1,7 +1,6 @@
 import { CheckIcon } from "@/assets/icons";
 import { Button, TagSelected } from "@/components/ui";
 import { ChecklistItem } from "@/features/roommate/components";
-import { MY_PROFILE_BASIC_INFO } from "@/features/mypage/mocks";
 import type { ProfileViewContentProps } from "@/features/mypage/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
@@ -13,9 +12,13 @@ function ProfileViewContent({
 }: ProfileViewContentProps) {
   const basicInfoItems = [
     { label: "이름", value: values.name },
-    ...MY_PROFILE_BASIC_INFO.slice(0, 4),
-    { label: "학과·학년", value: `${values.department} ${values.grade}` },
-    ...MY_PROFILE_BASIC_INFO.slice(4),
+    { label: "이메일", value: values.email },
+    { label: "출생년도", value: values.birthYear },
+    { label: "성별", value: values.gender },
+    { label: "캠퍼스", value: values.campus },
+    { label: "학과·학년", value: `${values.department} ${values.grade}학년` },
+    { label: "학기", value: values.semester },
+    { label: "기숙사", value: values.dormitory },
   ];
 
   const hasChecklist = checklistItems.length > 0;

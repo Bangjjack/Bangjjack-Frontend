@@ -128,11 +128,19 @@ export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
 
 export const MY_PROFILE = {
   age: 20,
+  birthYear: "2003",
+  campus: "글로벌 캠퍼스",
   department: "컴퓨터공학과",
-  grade: "1학년",
+  dormitory: "3 기숙사",
+  email: "~~~~@gachon.ac.kr",
+  gender: "여성",
+  grade: "1",
   name: "무구정광대다라니경",
+  semester: "반기 (25주)",
   tags: ["얼리버드", "집순이", "비흡연"],
-};
+} as const;
+
+export const MY_PROFILE_SEMESTER_OPTIONS = ["학기 (16주)", "반기 (25주)"] as const;
 
 export const MY_PROFILE_IMPORTANCE_ITEMS = ["기상 시간", "흡연 여부", "취침 시간"];
 

@@ -10,7 +10,6 @@ import {
   ProfileAvatarSection,
   ProfileEditFields,
   ProfileViewContent,
-  TagSyncNoticeSection,
 } from "@/features/mypage/components/profile-edit";
 import {
   MY_PROFILE_EDIT_DEFAULT_VALUES,
@@ -105,14 +104,13 @@ function MyProfileEditContent({
         className="absolute inset-x-0 top-0 z-20"
         onBackClick={onBack}
         showBack
-        title={isEditing ? "프로필 편집" : "내 프로필"}
+        title={isEditing ? "내 프로필 편집" : "내 프로필"}
       />
 
       <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
         <div
           className={cn(
-            "flex flex-col px-400",
-            isEditing ? "gap-300 pt-36.5" : "gap-600 pb-400 pt-29",
+            "flex flex-col px-400 gap-600 pt-29 pb-400",
           )}
         >
           <ProfileAvatarSection
@@ -129,13 +127,12 @@ function MyProfileEditContent({
               onSubmit={handleSubmit(submitProfileForm)}
             >
               <ProfileEditFields control={control} />
-              <TagSyncNoticeSection />
+              <ChecklistEditLink onClick={onChecklistClick} />
               <ImportanceEditSection
                 items={importanceItems}
                 onToggle={toggleImportanceItem}
                 replaceFeedbackKey={replaceFeedbackKey}
               />
-              <ChecklistEditLink onClick={onChecklistClick} />
             </form>
           ) : (
             <ProfileViewContent

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Chip } from "@/components/ui";
+import { Tag, TagSelected } from "@/components/ui";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import { cn } from "@/lib/cn";
 
@@ -54,21 +54,35 @@ function OnBoardingPriorityStep({
             const isSelected = selectedIndex !== -1;
             const isReplacedFactor = replacedFactor === option;
 
+            const commonClassName = cn(
+              "cursor-pointer",
+              animatingOption === option && "animate-chip-fade-up",
+              isReplacedFactor && "animate-chip-fade-up",
+            );
+
+            const commonProps = {
+              onClick: () => handleToggle(option, isSelected),
+              className: commonClassName,
+              children: option,
+            };
+
+            if (isSelected) {
+              return (
+                <TagSelected
+                  key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
+                  rank={selectedIndex + 1}
+                  variant="default"
+                  {...commonProps}
+                />
+              );
+            }
+
             return (
-              <Chip
+              <Tag
                 key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
-                variant="rank"
-                rank={isSelected ? selectedIndex + 1 : undefined}
-                selected={isSelected}
-                onClick={() => handleToggle(option, isSelected)}
-                className={cn(
-                  "cursor-pointer",
-                  animatingOption === option && "animate-chip-fade-up",
-                  isReplacedFactor && "animate-chip-fade-up",
-                )}
-              >
-                {option}
-              </Chip>
+                color="gray"
+                {...commonProps}
+              />
             );
           })}
         </div>
