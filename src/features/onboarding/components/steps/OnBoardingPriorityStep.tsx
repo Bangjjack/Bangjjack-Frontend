@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TagSelected } from "@/components/ui";
+import { Chip } from "@/components/ui";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
 import { cn } from "@/lib/cn";
 
@@ -21,6 +21,7 @@ function OnBoardingPriorityStep({
   selectedFactors,
 }: OnBoardingPriorityStepProps) {
   const [animatingOption, setAnimatingOption] = useState<string | null>(null);
+  const [shakingOption, setShakingOption] = useState<string | null>(null);
 
   useEffect(() => {
     if (!animatingOption) return;
@@ -32,7 +33,22 @@ function OnBoardingPriorityStep({
     return () => window.clearTimeout(timer);
   }, [animatingOption]);
 
+  useEffect(() => {
+    if (!shakingOption) return;
+
+    const timer = window.setTimeout(() => {
+      setShakingOption(null);
+    }, 320);
+
+    return () => window.clearTimeout(timer);
+  }, [shakingOption]);
+
   const handleToggle = (option: string, isSelected: boolean) => {
+    if (!isSelected && selectedFactors.length >= 3) {
+      setShakingOption(option);
+      return;
+    }
+
     if (!isSelected) {
       setAnimatingOption(option);
     }
@@ -54,31 +70,22 @@ function OnBoardingPriorityStep({
             const isSelected = selectedIndex !== -1;
             const isReplacedFactor = replacedFactor === option;
 
-            const optionKey = `${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`;
-            const buttonClassName = cn(
-              "inline-flex cursor-pointer rounded-large transition-[filter,box-shadow] duration-400 ease-[ease] hover:brightness-[0.96] active:brightness-[0.92] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus-primary",
-              animatingOption === option && "animate-chip-fade-up",
-              isReplacedFactor && "animate-chip-fade-up",
-            );
-
             return (
-              <button
-                key={optionKey}
-                aria-pressed={isSelected}
-                className={buttonClassName}
-                onClick={() => handleToggle(option, isSelected)}
-                type="button"
-              >
-                {isSelected ? (
-                  <TagSelected className="pointer-events-none" rank={selectedIndex + 1}>
-                    {option}
-                  </TagSelected>
-                ) : (
-                  <TagSelected className="pointer-events-none" variant="gray">
-                    {option}
-                  </TagSelected>
+              <Chip
+                key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
+                className={cn(
+                  "cursor-pointer",
+                  animatingOption === option && "animate-chip-fade-up",
+                  shakingOption === option && "animate-chip-shake",
+                  isReplacedFactor && "animate-chip-fade-up",
                 )}
-              </button>
+                onClick={() => handleToggle(option, isSelected)}
+                rank={isSelected ? selectedIndex + 1 : undefined}
+                selected={isSelected}
+                variant="rank"
+              >
+                {option}
+              </Chip>
             );
           })}
         </div>

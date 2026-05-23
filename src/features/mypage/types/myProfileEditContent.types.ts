@@ -26,7 +26,6 @@ export interface ProfileEditFieldsProps {
 export interface ImportanceEditSectionProps {
   items: string[];
   onToggle: (item: string) => void;
-  replaceFeedbackKey: number;
 }
 
 export interface ProfileViewContentProps {

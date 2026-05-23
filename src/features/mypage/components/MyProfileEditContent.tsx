@@ -35,7 +35,6 @@ function MyProfileEditContent({
   const [checklistItems] = useState<ChecklistEntry[]>(MY_PROFILE_CHECKLIST);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [importanceItems, setImportanceItems] = useState<string[]>(MY_PROFILE_IMPORTANCE_ITEMS);
-  const [replaceFeedbackKey, setReplaceFeedbackKey] = useState(0);
   const {
     control,
     handleSubmit,
@@ -87,11 +86,6 @@ function MyProfileEditContent({
         return prev.filter((value) => value !== item);
       }
 
-      if (prev.length >= 3) {
-        setReplaceFeedbackKey((value) => value + 1);
-        return [...prev.slice(1), item];
-      }
-
       return [...prev, item];
     });
   }
@@ -108,11 +102,7 @@ function MyProfileEditContent({
       />
 
       <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
-        <div
-          className={cn(
-            "flex flex-col px-400 gap-600 pt-29 pb-400",
-          )}
-        >
+        <div className={cn("flex flex-col px-400 gap-600 pt-29 pb-400")}>
           <ProfileAvatarSection
             imageUrl={profileImageUrl}
             isEditing={isEditing}
@@ -128,11 +118,7 @@ function MyProfileEditContent({
             >
               <ProfileEditFields control={control} />
               <ChecklistEditLink onClick={onChecklistClick} />
-              <ImportanceEditSection
-                items={importanceItems}
-                onToggle={toggleImportanceItem}
-                replaceFeedbackKey={replaceFeedbackKey}
-              />
+              <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} />
             </form>
           ) : (
             <ProfileViewContent
