@@ -34,6 +34,7 @@ function MyProfileEditContent({
   );
   const [checklistItems] = useState<ChecklistEntry[]>(MY_PROFILE_CHECKLIST);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
   const [importanceItems, setImportanceItems] = useState<string[]>(MY_PROFILE_IMPORTANCE_ITEMS);
   const {
     control,
@@ -90,18 +91,36 @@ function MyProfileEditContent({
     });
   }
 
+  function handleProfileScroll(event: React.UIEvent<HTMLElement>) {
+    const nextIsHeaderOpaque = event.currentTarget.scrollTop > 0;
+
+    setIsHeaderOpaque((prev) => {
+      if (prev === nextIsHeaderOpaque) {
+        return prev;
+      }
+
+      return nextIsHeaderOpaque;
+    });
+  }
+
   return (
     <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
       <img alt="" aria-hidden="true" className={WAVE_BACKGROUND_CLASS_NAME} src={waveImage} />
 
       <Header
-        className="absolute inset-x-0 top-0 z-20"
+        className={cn(
+          "absolute inset-x-0 top-0 z-20 transition-colors",
+          isHeaderOpaque ? "bg-bg-primary/70" : "bg-transparent",
+        )}
         onBackClick={onBack}
         showBack
         title={isEditing ? "내 프로필 편집" : "내 프로필"}
       />
 
-      <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
+      <main
+        className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28"
+        onScroll={handleProfileScroll}
+      >
         <div className={cn("flex flex-col px-400 gap-600 pt-29 pb-400")}>
           <ProfileAvatarSection
             imageUrl={profileImageUrl}
