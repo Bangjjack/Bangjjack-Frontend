@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Card, Header } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { ChecklistCard } from "@/features/roommate/components";
+import { useBookmarkToggle } from "@/features/board/hooks";
 import { useGoBack } from "@/hooks";
 
 import { MatchActionBar } from "./MatchActionBar";
@@ -81,10 +82,21 @@ const MOCK_MATCH = {
 };
 
 function RoommateListContent() {
+  const { id } = useParams();
+  const postId = Number(id);
   const navigate = useNavigate();
   const handleBackClick = useGoBack();
-  const [isBookmarked, setIsBookmarked] = useState(false);
   const [selectedMember, setSelectedMember] = useState<Member | null>(MOCK_MEMBERS[0] ?? null);
+
+  const { isBookmarked, isOwner, toggle } = useBookmarkToggle(postId);
+
+  if (!id || isNaN(postId)) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">잘못된 접근입니다.</span>
+      </div>
+    );
+  }
 
   const checklist = selectedMember ? (MOCK_CHECKLISTS[selectedMember.nickname] ?? []) : [];
 
@@ -119,25 +131,26 @@ function RoommateListContent() {
         </div>
       </main>
 
-      {/* Fixed bottom bar */}
       <MatchActionBar
         leadingElement={
-          <button
-            type="button"
-            aria-label={isBookmarked ? "북마크 해제" : "북마크"}
-            className="flex size-[30px] shrink-0 items-center justify-center"
-            onClick={() => setIsBookmarked((prev) => !prev)}
-          >
-            {isBookmarked ? (
-              <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
-            ) : (
-              <BookmarkIcon className="size-[30px]" />
-            )}
-          </button>
+          !isOwner ? (
+            <button
+              type="button"
+              aria-label={isBookmarked ? "북마크 해제" : "북마크"}
+              className="flex size-[30px] shrink-0 items-center justify-center"
+              onClick={toggle}
+            >
+              {isBookmarked ? (
+                <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
+              ) : (
+                <BookmarkIcon className="size-[30px]" />
+              )}
+            </button>
+          ) : undefined
         }
         matchRate={MOCK_MATCH.matchRate}
         matchHighlights={MOCK_MATCH.matchHighlights}
-        onMatchConfirm={() => navigate("/chat")}
+        onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
         onChatConfirm={() => navigate("/chat")}
       />
     </div>

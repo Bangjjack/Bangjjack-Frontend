@@ -1,5 +1,5 @@
-export { API_BASE_URL } from "./env";
-export { ACCESS_TOKEN_KEY } from "./auth";
+export { API_BASE_URL, GOOGLE_LOGIN_URL } from "./env";
+export { ACCESS_TOKEN_KEY, USERNAME_KEY } from "./auth";
 
 export { HABIT_CATEGORIES, HABIT_CATEGORY_LABELS } from "./habits";
 export type { HabitCategoryDefinition } from "./habits";
@@ -15,5 +15,8 @@ export type {
 
 export { ROOMMATE_PREFERENCE, ROOMMATE_PREFERENCE_LABEL } from "./roommatePreference";
 export type { RoommatePreference } from "./roommatePreference";
+
+export { MEMBER_ROLE } from "./memberRole";
+export type { MemberRole } from "./memberRole";
 
 export { ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL, DORMITORY_LABEL } from "./labels";
