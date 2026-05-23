@@ -10,7 +10,7 @@ import {
   ChatRoommateRequestMessage,
 } from "@/features/chat/components";
 import { useChatComposer } from "@/features/chat/hooks";
-import type { ChatDetail, ChatMessage } from "@/features/chat/types";
+import type { ChatDetail, ChatMessage, ChatTextMessage } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
 export interface ChatDetailContentProps {
@@ -49,15 +49,62 @@ function getMessageDateBadgeLabels(messages: ChatMessage[], fallbackDateLabel: s
   });
 }
 
+function isTextMessage(message: ChatMessage): message is ChatTextMessage {
+  return message.type === "outgoing" || message.type === "incoming";
+}
+
+function shouldShowMessageTime(messages: ChatMessage[], index: number) {
+  const message = messages[index];
+  const nextMessage = messages[index + 1];
+
+  if (!message || !isTextMessage(message)) {
+    return false;
+  }
+
+  if (!nextMessage || !isTextMessage(nextMessage)) {
+    return true;
+  }
+
+  return !isSameMessageTimeGroup(message, nextMessage);
+}
+
+function isSameMessageTimeGroup(message: ChatTextMessage, otherMessage: ChatTextMessage) {
+  const messageDateKey = message.dateKey ?? message.dateLabel ?? "";
+  const otherMessageDateKey = otherMessage.dateKey ?? otherMessage.dateLabel ?? "";
+
+  return (
+    message.type === otherMessage.type &&
+    message.sentAt === otherMessage.sentAt &&
+    messageDateKey === otherMessageDateKey
+  );
+}
+
+function isSameMessageTimeGroupWithPrevious(messages: ChatMessage[], index: number) {
+  const message = messages[index];
+  const previousMessage = messages[index - 1];
+
+  if (!message || !previousMessage || !isTextMessage(message) || !isTextMessage(previousMessage)) {
+    return false;
+  }
+
+  return isSameMessageTimeGroup(previousMessage, message);
+}
+
 function ChatMessageWrapper({
   children,
+  compactSpacing = false,
   dateBadgeLabel,
+  isFirst = false,
 }: {
   children: ReactNode;
+  compactSpacing?: boolean;
   dateBadgeLabel?: string | null;
+  isFirst?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-400">
+    <div
+      className={cn("flex flex-col gap-400", !isFirst && (compactSpacing ? "mt-200" : "mt-400"))}
+    >
       {dateBadgeLabel ? <ChatDateBadge label={dateBadgeLabel} /> : null}
       {children}
     </div>
@@ -169,13 +216,18 @@ function ChatDetailContent({
             recruitTitle={recruitTitle}
           />
 
-          <div className="flex flex-col gap-400">
+          <div className="flex flex-col">
             {messages.map((message, index) => {
               const dateBadgeLabel = dateBadgeLabels[index];
+              const compactSpacing = isSameMessageTimeGroupWithPrevious(messages, index);
 
               if (message.type === "roommate_request") {
                 return (
-                  <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
+                  <ChatMessageWrapper
+                    key={message.id}
+                    dateBadgeLabel={dateBadgeLabel}
+                    isFirst={index === 0}
+                  >
                     <div className="flex w-full items-end gap-200">
                       <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
                       <ChatRoommateRequestMessage
@@ -194,7 +246,11 @@ function ChatDetailContent({
 
               if (message.type === "roommate_invite") {
                 return (
-                  <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
+                  <ChatMessageWrapper
+                    key={message.id}
+                    dateBadgeLabel={dateBadgeLabel}
+                    isFirst={index === 0}
+                  >
                     <div className="flex w-full justify-end">
                       <ChatRoommateInviteMessage
                         onCancel={() => handleCancelInviteRequest(message.id)}
@@ -206,12 +262,23 @@ function ChatDetailContent({
               }
 
               const isOutgoing = message.type === "outgoing";
+              const showProfile = !isOutgoing && !compactSpacing;
+              const showMessageTime = shouldShowMessageTime(messages, index);
 
               return (
-                <ChatMessageWrapper key={message.id} dateBadgeLabel={dateBadgeLabel}>
+                <ChatMessageWrapper
+                  key={message.id}
+                  compactSpacing={compactSpacing}
+                  dateBadgeLabel={dateBadgeLabel}
+                  isFirst={index === 0}
+                >
                   <div className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}>
                     {!isOutgoing ? (
-                      <ProfileAvatar className="shrink-0 self-end" seed={chatDetail.id} size={36} />
+                      <ProfileAvatar
+                        className={cn("shrink-0 self-end", !showProfile && "invisible")}
+                        seed={chatDetail.id}
+                        size={36}
+                      />
                     ) : null}
 
                     {!isOutgoing ? (
@@ -222,7 +289,9 @@ function ChatDetailContent({
                       </div>
                     ) : null}
 
-                    <span className="typo-caption4 text-text-disabled">{message.sentAt}</span>
+                    {showMessageTime ? (
+                      <span className="typo-caption4 text-text-disabled">{message.sentAt}</span>
+                    ) : null}
 
                     {isOutgoing ? (
                       <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-brand-primary px-300 py-300">
