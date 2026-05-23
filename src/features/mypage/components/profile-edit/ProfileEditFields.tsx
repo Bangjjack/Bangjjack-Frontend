@@ -46,8 +46,12 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
             <Input
               className="h-11 rounded-small border border-border-normal bg-bg-secondary px-300 typo-body1"
               error={!!fieldState.error}
+              inputMode="numeric"
+              maxLength={4}
               onBlur={field.onBlur}
-              onChange={field.onChange}
+              onChange={(event) => {
+                field.onChange(event.target.value.replace(/\D/g, ""));
+              }}
               value={field.value}
             />
           </ProfileField>
@@ -59,21 +63,24 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
         name="gender"
         render={({ field, fieldState }) => (
           <ProfileField errorMessage={fieldState.error?.message} label="성별">
-            <div className="flex w-full gap-200">
-              {GENDER_OPTIONS.map((option) => (
-                <Button
-                  key={option}
-                  className={cn(
-                    "min-w-0 flex-1 cursor-pointer bg-button-neutral-ghost",
-                    field.value === option ? "text-text-normal" : "text-text-alternative",
-                  )}
-                  onClick={() => field.onChange(option)}
-                  type="button"
-                  variant="neutral"
-                >
-                  {option}
-                </Button>
-              ))}
+            <div aria-label="성별" className="flex w-full gap-200" role="radiogroup">
+              {GENDER_OPTIONS.map((option) => {
+                const isSelected = field.value === option;
+
+                return (
+                  <Button
+                    key={option}
+                    aria-checked={isSelected}
+                    className="min-w-0 flex-1 cursor-pointer"
+                    onClick={() => field.onChange(option)}
+                    role="radio"
+                    type="button"
+                    variant={isSelected ? "default" : "neutral"}
+                  >
+                    {option}
+                  </Button>
+                );
+              })}
             </div>
           </ProfileField>
         )}
@@ -166,21 +173,24 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
         name="semester"
         render={({ field, fieldState }) => (
           <ProfileField errorMessage={fieldState.error?.message} label="학기">
-            <div className="flex w-full gap-200">
-              {MY_PROFILE_SEMESTER_OPTIONS.map((option) => (
-                <Button
-                  key={option}
-                  className={cn(
-                    "min-w-0 flex-1 cursor-pointer bg-button-neutral-ghost",
-                    field.value === option ? "text-text-normal" : "text-text-alternative",
-                  )}
-                  onClick={() => field.onChange(option)}
-                  type="button"
-                  variant="neutral"
-                >
-                  {option}
-                </Button>
-              ))}
+            <div aria-label="학기" className="flex w-full gap-200" role="radiogroup">
+              {MY_PROFILE_SEMESTER_OPTIONS.map((option) => {
+                const isSelected = field.value === option;
+
+                return (
+                  <Button
+                    key={option}
+                    aria-checked={isSelected}
+                    className="min-w-0 flex-1 cursor-pointer"
+                    onClick={() => field.onChange(option)}
+                    role="radio"
+                    type="button"
+                    variant={isSelected ? "default" : "neutral"}
+                  >
+                    {option}
+                  </Button>
+                );
+              })}
             </div>
           </ProfileField>
         )}
