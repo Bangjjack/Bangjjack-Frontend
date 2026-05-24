@@ -7,10 +7,12 @@ import { useSaveOnboarding } from "@/features/onboarding/hooks";
 import type { OnBoardingFormValues } from "@/features/onboarding/types";
 import { mapOnboardingFormToRequest } from "@/features/onboarding/utils";
 import { useGoBack } from "@/hooks/useGoBack";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function OnBoardingPage() {
   const navigate = useNavigate();
   const handleBack = useGoBack();
+  const username = useAuthStore((state) => state.username);
   const { mutate: saveOnboarding, isPending } = useSaveOnboarding();
 
   const handleNext = (values: OnBoardingFormValues) => {
@@ -33,5 +35,12 @@ export default function OnBoardingPage() {
     });
   };
 
-  return <OnBoardingPageContent isSubmitting={isPending} onBack={handleBack} onNext={handleNext} />;
+  return (
+    <OnBoardingPageContent
+      isSubmitting={isPending}
+      userName={username ?? undefined}
+      onBack={handleBack}
+      onNext={handleNext}
+    />
+  );
 }

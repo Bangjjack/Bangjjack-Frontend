@@ -122,7 +122,7 @@ function getOnBoardingStepMeta(
         actionLabel: "다음으로",
         isComplete: isBasicInfoStepComplete(formValues),
         progressStates: STEP_PROGRESS_STATE_MAP["basic-info"],
-        title: `${userName}님에 대해\n알려주세요`,
+        title: `${userName}님에 대해 알려주세요`,
       };
   }
 }
