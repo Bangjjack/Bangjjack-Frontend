@@ -16,6 +16,7 @@ export type {
   ChatConnectionStatus,
   ChatErrorMessage,
   ChatReceivedMessage,
+  ChatRoom,
   ChatSendMessagePayload,
   ChatTab,
   ChatUserProfile,

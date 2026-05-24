@@ -5,6 +5,7 @@ import { toast } from "@/components/ui";
 import {
   CHAT_DETAILS,
   type ChatDetailContentProps,
+  type ChatRoom,
   mapHistoryMessagesToChatMessages,
   useChatMessages,
   useCreateChatRoom,
@@ -13,10 +14,21 @@ import { useAuthStore } from "@/stores/authStore";
 
 type ChatDetailPageContentProps = ChatDetailContentProps;
 
+function getCurrentUserIdFromChatRoom(
+  chatRoom: ChatRoom | undefined,
+  targetUserId: number,
+  fallbackUserId: number | null,
+) {
+  const participantUserIds = chatRoom?.participants.map((participant) => participant.userId) ?? [];
+  const viewerUserId = participantUserIds.find((userId) => userId !== targetUserId);
+
+  return viewerUserId ?? fallbackUserId;
+}
+
 function useChatDetailPage() {
   const navigate = useNavigate();
   const { chatId } = useParams();
-  const currentUserId = useAuthStore((state) => state.userId);
+  const authUserId = useAuthStore((state) => state.userId);
 
   const parsedChatId = Number(chatId);
   const chatDetail = Number.isNaN(parsedChatId) ? undefined : CHAT_DETAILS[parsedChatId];
@@ -68,6 +80,7 @@ function useChatDetailPage() {
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
+  const currentUserId = getCurrentUserIdFromChatRoom(chatRoom, chatDetail.id, authUserId);
   const initialMessages = chatMessagesData
     ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
     : undefined;
