@@ -142,7 +142,9 @@ function ImportanceEmptyCard() {
     <section className="flex flex-col items-start rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-400 py-300">
       <div className="flex flex-col gap-1.5">
         <h2 className="typo-title2 text-text-strong">룸메이트 우선순위 조건이 작성되지 않았어요</h2>
-        <p className="typo-caption2 text-text-primary-alternative">원하는 룸메이트 조건을 직접 설정해보세요</p>
+        <p className="typo-caption2 text-text-primary-alternative">
+          원하는 룸메이트 조건을 직접 설정해보세요
+        </p>
       </div>
     </section>
   );
