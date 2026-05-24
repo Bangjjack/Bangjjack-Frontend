@@ -1,6 +1,6 @@
 import { ProfileAvatar } from "@/components/ui";
-import { ChatRoommateInviteMessage } from "@/features/chat/components/ChatRoommateInviteMessage";
-import { ChatRoommateRequestMessage } from "@/features/chat/components/ChatRoommateRequestMessage";
+import { ChatRoommateInviteMessage } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessage";
+import { ChatRoommateRequestMessage } from "@/features/chat/components/chat-detail/ChatRoommateRequestMessage";
 import { ChatMessageWrapper } from "@/features/chat/components/chat-detail/ChatMessageWrapper";
 import type { ChatMessage, ChatTextMessage } from "@/features/chat/types";
 import { shouldShowMessageTime } from "@/features/chat/utils/chatMessageGrouping";
