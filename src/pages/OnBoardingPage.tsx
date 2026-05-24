@@ -3,9 +3,12 @@ import { isAxiosError } from "axios";
 
 import { toast } from "@/components/ui";
 import { OnBoardingPageContent } from "@/features/onboarding/components";
-import { useSaveOnboarding } from "@/features/onboarding/hooks";
+import { useSaveOnboarding, useSaveOnboardingChecklist } from "@/features/onboarding/hooks";
 import type { OnBoardingFormValues } from "@/features/onboarding/types";
-import { mapOnboardingFormToRequest } from "@/features/onboarding/utils";
+import {
+  mapOnboardingChecklistFormToRequest,
+  mapOnboardingFormToRequest,
+} from "@/features/onboarding/utils";
 import { useGoBack } from "@/hooks/useGoBack";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -14,14 +17,36 @@ export default function OnBoardingPage() {
   const handleBack = useGoBack();
   const username = useAuthStore((state) => state.username);
   const { mutate: saveOnboarding, isPending } = useSaveOnboarding();
+  const { mutate: saveOnboardingChecklist, isPending: isChecklistPending } =
+    useSaveOnboardingChecklist();
 
   const handleNext = (values: OnBoardingFormValues) => {
     const body = mapOnboardingFormToRequest(values);
+    const checklistBody = mapOnboardingChecklistFormToRequest(values);
 
     saveOnboarding(body, {
       onSuccess: () => {
-        toast.success("온보딩 정보가 저장되었어요");
-        navigate("/home");
+        if (!checklistBody) {
+          toast.success("온보딩 정보가 저장되었어요");
+          navigate("/home");
+          return;
+        }
+
+        saveOnboardingChecklist(checklistBody, {
+          onSuccess: () => {
+            toast.success("온보딩 정보가 저장되었어요");
+            navigate("/home");
+          },
+          onError: (error) => {
+            if (isAxiosError(error) && error.response?.status === 409) {
+              toast.error("이미 생활습관 체크리스트가 저장되었어요");
+              navigate("/home");
+              return;
+            }
+
+            toast.error("생활습관 체크리스트 저장에 실패했어요");
+          },
+        });
       },
       onError: (error) => {
         if (isAxiosError(error) && error.response?.status === 409) {
@@ -37,7 +62,7 @@ export default function OnBoardingPage() {
 
   return (
     <OnBoardingPageContent
-      isSubmitting={isPending}
+      isSubmitting={isPending || isChecklistPending}
       userName={username ?? undefined}
       onBack={handleBack}
       onNext={handleNext}

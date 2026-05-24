@@ -1,3 +1,4 @@
+export { mapOnboardingChecklistFormToRequest } from "@/features/onboarding/utils/mapOnboardingChecklistFormToRequest";
 export {
   mapOnboardingCampusToRequest,
   mapOnboardingFormToRequest,
