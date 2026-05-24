@@ -25,7 +25,10 @@ export type BaseChatCardProps = {
 };
 
 export type ChatTextMessage = {
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
+  messageType?: ChatServerMessageType;
   sentAt: string;
   text: string;
   type: "incoming" | "outgoing";
@@ -73,3 +76,71 @@ export type ChatDetail = ChatUserProfile & {
   recruitTitle?: string;
   startSource: ChatStartSource;
 };
+
+export type CreateChatRoomRequest = {
+  targetUserId: number;
+};
+
+export type ChatRoomParticipant = {
+  userId: number;
+};
+
+export type ChatRoom = {
+  createdAt: string;
+  isNewRoom: boolean;
+  participants: ChatRoomParticipant[];
+  roomId: number;
+  roomType: string;
+};
+
+export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
+
+export type ChatServerMessageType =
+  | "USER"
+  | "APPLICATION_SENT"
+  | "APPLICATION_ACCEPTED"
+  | "APPLICATION_REJECTED"
+  | "GROUP_DISBANDED"
+  | "SYSTEM";
+
+export type ChatSendMessagePayload = {
+  content: string;
+  roomId: number;
+  type: "SEND";
+};
+
+export type ChatReceivedMessage = {
+  content: string;
+  createdAt: string;
+  messageId: number;
+  messageType: ChatServerMessageType;
+  roomId: number;
+  senderId: number;
+};
+
+export type ChatMessageHistoryItem = {
+  content: string;
+  createdAt: string;
+  messageId: number;
+  senderId: number;
+};
+
+export type ChatMessagesData = {
+  hasNext: boolean;
+  messages: ChatMessageHistoryItem[];
+  nextCursor: number | null;
+};
+
+export type GetChatMessagesParams = {
+  cursor?: number;
+  roomId: number;
+  size?: number;
+};
+
+export type ChatErrorMessage = {
+  code: number;
+  message: string;
+  type: "ERROR";
+};
+
+export type ChatConnectionStatus = "idle" | "connecting" | "open" | "closed" | "error";

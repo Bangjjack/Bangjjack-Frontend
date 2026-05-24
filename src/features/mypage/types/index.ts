@@ -1,7 +1,6 @@
 export type MyChecklistSelectionType = "single" | "multi";
 export type MyActivityTabId = "posts" | "rooms" | "matches";
-export type MyActivityRoomFilterId = "all" | "pending";
-export type MyActivityRoomStatus = "joined" | "pending";
+export type MyActivityRoomStatus = "joined";
 export type MyBookmarkPostStatus = "open" | "closed";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
@@ -31,16 +30,23 @@ export interface MyActivityTabMock {
   label: string;
 }
 
-export interface MyActivityRoomFilterMock {
-  id: MyActivityRoomFilterId;
-  label: string;
-}
-
-export interface MyActivityRoomMemberMock {
+type MyActivityRoomHostMemberMock = {
   id: number;
-  isHost?: boolean;
+  isHost: true;
+  isMe?: boolean;
   name: string;
-}
+};
+
+type MyActivityRoomRegularMemberMock = {
+  id: number;
+  isHost?: false;
+  isMe?: never;
+  name: string;
+};
+
+export type MyActivityRoomMemberMock =
+  | MyActivityRoomHostMemberMock
+  | MyActivityRoomRegularMemberMock;
 
 export interface MyActivityRoomActionMock {
   id: string;
@@ -57,7 +63,6 @@ export interface MyActivityRoomMock {
   status: MyActivityRoomStatus;
   statusLabel: string;
   title: string;
-  waitingMessage?: string;
 }
 
 export interface MyBookmarkPostMock {

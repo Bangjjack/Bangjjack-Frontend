@@ -28,7 +28,6 @@ export { default as StarIcon } from "@/assets/icons/ic-star.svg?react";
 export { default as SquarePenIcon } from "@/assets/icons/ic-square-pen.svg?react";
 export { default as MoreVerticalIcon } from "@/assets/icons/ic-more-vertical.svg?react";
 export { default as LogoLoginIcon } from "@/assets/icons/logo-login.svg?react";
-export { default as WaveBackgroundIcon } from "@/assets/icons/wave-background.svg?react";
 export { default as ChevronRightIcon } from "@/assets/icons/ic-chevron-right.svg?react";
 export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
 export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";

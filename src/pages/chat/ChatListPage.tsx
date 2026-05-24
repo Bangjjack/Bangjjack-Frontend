@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import { ChatListItem } from "@/features/chat/components/ChatListItem";
-import { CHAT_DETAILS, CHAT_HELPER_TEXT, CHAT_PREVIEWS, CHAT_TABS } from "@/features/chat/mocks";
-import type { ChatTab } from "@/features/chat/types";
+import {
+  ChatListItem,
+  CHAT_DETAILS,
+  CHAT_HELPER_TEXT,
+  CHAT_PREVIEWS,
+  CHAT_TABS,
+} from "@/features/chat";
+import type { ChatTab } from "@/features/chat";
 import { cn } from "@/lib/cn";
 
-export type ChatPageContentProps = {
-  className?: string;
-};
-
-function ChatPageContent({ className }: ChatPageContentProps) {
+export default function ChatListPage() {
   const [activeTab, setActiveTab] = useState<ChatTab>("all");
   const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ function ChatPageContent({ className }: ChatPageContentProps) {
       : CHAT_PREVIEWS.filter((chatPreview) => chatPreview.type === activeTab);
 
   return (
-    <div className={cn("flex min-h-full flex-col pt-100", className)}>
+    <div className={cn("flex min-h-full flex-col pt-100")}>
       <section className="flex min-h-0 flex-1 flex-col rounded-medium bg-bg-secondary px-300 pb-100">
         <div className="flex">
           {CHAT_TABS.map((tab) => {
@@ -68,5 +69,3 @@ function ChatPageContent({ className }: ChatPageContentProps) {
     </div>
   );
 }
-
-export { ChatPageContent };

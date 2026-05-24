@@ -1,4 +1,4 @@
-import { WaveBackgroundIcon } from "@/assets/icons";
+import { waveImage } from "@/assets/images";
 import { Header, ProfileAvatar, Tag } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import { MatchActionBar } from "@/features/board/components/roommate";
@@ -82,7 +82,7 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
       {/* Scrollable content */}
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px]">
         {/* Wave background - tucked behind fixed header */}
-        <WaveBackgroundIcon aria-hidden="true" className="w-full" preserveAspectRatio="none" />
+        <img alt="" aria-hidden="true" className="w-full" src={waveImage} />
 
         {/* Content */}
         <div ref={contentRef} className="flex flex-col gap-300 px-400">

@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-  Card,
+  Surface,
   toast,
 } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -30,11 +30,11 @@ function MyPageMenuSection() {
     <section className="flex flex-col gap-300">
       <h2 className="typo-title2 px-0.5 text-neutral-black">기타</h2>
 
-      <Card className="w-full gap-0 overflow-hidden rounded-2xl border-0 bg-bg-secondary p-0 py-0 shadow-none">
+      <Surface padding="none" className="flex w-full flex-col gap-0 overflow-hidden">
         {MENU_ITEMS.map((item, index) => (
           <MyPageMenuButton key={item.label} index={index} item={item} />
         ))}
-      </Card>
+      </Surface>
     </section>
   );
 }

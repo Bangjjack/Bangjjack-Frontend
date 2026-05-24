@@ -1,27 +1,24 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
+import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
+import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
 import type {
   ChatDetail,
+  ChatErrorMessage,
   ChatInputMenuAction,
   ChatMessage,
+  ChatReceivedMessage,
   ChatRoommateInviteMessageData,
+  ChatTextMessage,
 } from "@/features/chat/types";
+import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
-}
-
-function createOutgoingMessage(id: number, text: string): ChatMessage {
-  return {
-    id,
-    sentAt: new Intl.DateTimeFormat("ko-KR", {
-      hour: "numeric",
-      minute: "2-digit",
-    }).format(new Date()),
-    text,
-    type: "outgoing",
-  };
+  currentUserId?: number | null;
+  initialMessages?: ChatMessage[];
+  roomId?: number;
 }
 
 function createInviteMessage(id: number, recipientName: string): ChatMessage {
@@ -40,51 +37,79 @@ function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMes
   return message.type === "roommate_invite";
 }
 
-function prefersReducedMotion() {
-  return (
-    typeof window !== "undefined" &&
-    "matchMedia" in window &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
-
-function useChatComposer({ chatDetail }: UseChatComposerParams) {
+function useChatComposer({
+  chatDetail,
+  currentUserId,
+  initialMessages,
+  roomId,
+}: UseChatComposerParams) {
+  const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
-  const [inputMenuOpen, setInputMenuOpen] = useState(false);
-  const [inputMenuClosing, setInputMenuClosing] = useState(false);
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
-  const [messages, setMessages] = useState(chatDetail.messages);
+  const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
+  const {
+    closeInputMenu,
+    completeInputMenuClose,
+    inputMenuClosing,
+    inputMenuOpen,
+    toggleInputMenu,
+  } = useInputMenuState();
+  const baseMessages = initialMessages ?? chatDetail.messages;
+  const messages = [
+    ...baseMessages,
+    ...localMessages.filter(
+      (localMessage) => !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id),
+    ),
+  ];
 
-  const openInputMenu = () => {
-    setInputMenuClosing(false);
-    setInputMenuOpen(true);
-  };
-
-  const completeInputMenuClose = () => {
-    setInputMenuClosing(false);
-    setInputMenuOpen(false);
-  };
-
-  const closeInputMenu = () => {
-    if (!inputMenuOpen || inputMenuClosing) {
+  const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
+    if (roomId == null || receivedMessage.roomId !== roomId) {
       return;
     }
 
-    setInputMenuClosing(true);
+    setLocalMessages((prev) => {
+      if (
+        baseMessages.some((message) => message.id === receivedMessage.messageId) ||
+        prev.some((message) => message.id === receivedMessage.messageId)
+      ) {
+        return prev;
+      }
 
-    if (prefersReducedMotion()) {
-      completeInputMenuClose();
-    }
+      const pendingMessageIndex = pendingOutgoingMessagesRef.current.findIndex(
+        (message) => message === receivedMessage.content,
+      );
+      const isOutgoing =
+        currentUserId != null
+          ? receivedMessage.senderId === currentUserId
+          : pendingMessageIndex >= 0;
+
+      if (currentUserId == null && pendingMessageIndex >= 0) {
+        pendingOutgoingMessagesRef.current.splice(pendingMessageIndex, 1);
+      }
+
+      const nextMessage: ChatTextMessage = {
+        ...formatMessageDateLabel(receivedMessage.createdAt),
+        id: receivedMessage.messageId,
+        messageType: receivedMessage.messageType,
+        sentAt: formatMessageTime(receivedMessage.createdAt),
+        text: receivedMessage.content,
+        type: isOutgoing ? "outgoing" : "incoming",
+      };
+
+      return [...prev, nextMessage];
+    });
   };
 
-  const toggleInputMenu = () => {
-    if (inputMenuOpen) {
-      closeInputMenu();
-      return;
-    }
-
-    openInputMenu();
+  const handleChatErrorMessage = (errorMessage: ChatErrorMessage) => {
+    console.error("[chat] WebSocket error message received.", errorMessage);
+    toast.error(errorMessage.message);
   };
+
+  const { sendMessage, status: connectionStatus } = useChatWebSocket({
+    enabled: roomId != null,
+    onErrorMessage: handleChatErrorMessage,
+    onMessage: appendReceivedMessage,
+  });
 
   const closeInviteSheet = () => {
     setInviteSheetOpen(false);
@@ -101,15 +126,31 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
       return;
     }
 
-    setMessages((prev) => [...prev, createOutgoingMessage(getNextMessageId(prev), nextMessage)]);
+    if (roomId == null) {
+      toast.error("채팅방을 준비 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+
+    const isSent = sendMessage({
+      content: nextMessage,
+      roomId,
+      type: "SEND",
+    });
+
+    if (!isSent) {
+      toast.error("채팅 서버에 연결 중입니다. 잠시 후 다시 시도해 주세요.");
+      return;
+    }
+
+    pendingOutgoingMessagesRef.current.push(nextMessage);
     setDraftMessage("");
     completeInputMenuClose();
   };
 
   const handleSendInviteRequest = () => {
-    setMessages((prev) => [
+    setLocalMessages((prev) => [
       ...prev,
-      createInviteMessage(getNextMessageId(prev), chatDetail.nickname),
+      createInviteMessage(getNextMessageId(messages), chatDetail.nickname),
     ]);
     closeInviteSheet();
     toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
@@ -121,7 +162,7 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
         message.id === messageId && isInviteMessage(message),
     );
 
-    setMessages((prev) => prev.filter((message) => message.id !== messageId));
+    setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
 
     if (canceledInvite) {
       toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
@@ -140,6 +181,7 @@ function useChatComposer({ chatDetail }: UseChatComposerParams) {
     closeInputMenu,
     closeInviteSheet,
     completeInputMenuClose,
+    connectionStatus,
     draftMessage,
     handleCancelInviteRequest,
     handleInputMenuAction,

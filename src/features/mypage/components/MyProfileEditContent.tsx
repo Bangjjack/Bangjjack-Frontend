@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { WaveBackgroundIcon } from "@/assets/icons";
+import { waveImage } from "@/assets/images";
 import { Button, Header } from "@/components/ui";
 import {
   ChecklistEditLink,
@@ -10,7 +10,6 @@ import {
   ProfileAvatarSection,
   ProfileEditFields,
   ProfileViewContent,
-  TagSyncNoticeSection,
 } from "@/features/mypage/components/profile-edit";
 import {
   MY_PROFILE_EDIT_DEFAULT_VALUES,
@@ -20,6 +19,7 @@ import {
 import { MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
+import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import { cn } from "@/lib/cn";
 
 function MyProfileEditContent({
@@ -32,9 +32,12 @@ function MyProfileEditContent({
   const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>(
     MY_PROFILE_EDIT_DEFAULT_VALUES,
   );
+  const [checklistItems] = useState<ChecklistEntry[]>([]);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
-  const [importanceItems, setImportanceItems] = useState(MY_PROFILE_IMPORTANCE_ITEMS);
-  const [replaceFeedbackKey, setReplaceFeedbackKey] = useState(0);
+  const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
+  const [importanceItems, setImportanceItems] = useState<string[]>(
+    checklistItems.length > 0 ? MY_PROFILE_IMPORTANCE_ITEMS : [],
+  );
   const {
     control,
     handleSubmit,
@@ -86,32 +89,41 @@ function MyProfileEditContent({
         return prev.filter((value) => value !== item);
       }
 
-      if (prev.length >= 3) {
-        setReplaceFeedbackKey((value) => value + 1);
-        return [...prev.slice(1), item];
+      return [...prev, item];
+    });
+  }
+
+  function handleProfileScroll(event: React.UIEvent<HTMLElement>) {
+    const nextIsHeaderOpaque = event.currentTarget.scrollTop > 0;
+
+    setIsHeaderOpaque((prev) => {
+      if (prev === nextIsHeaderOpaque) {
+        return prev;
       }
 
-      return [...prev, item];
+      return nextIsHeaderOpaque;
     });
   }
 
   return (
     <div className={cn("relative flex h-full flex-col overflow-hidden bg-bg-primary", className)}>
-      <WaveBackgroundIcon
-        aria-hidden="true"
-        className={WAVE_BACKGROUND_CLASS_NAME}
-        preserveAspectRatio="none"
-      />
+      <img alt="" aria-hidden="true" className={WAVE_BACKGROUND_CLASS_NAME} src={waveImage} />
 
       <Header
-        className="absolute inset-x-0 top-0 z-20"
+        className={cn(
+          "absolute inset-x-0 top-0 z-20 transition-colors",
+          isHeaderOpaque ? "bg-bg-primary/70" : "bg-transparent",
+        )}
         onBackClick={onBack}
         showBack
-        title={isEditing ? "프로필 편집" : "내 프로필"}
+        title={isEditing ? "내 프로필 편집" : "내 프로필"}
       />
 
-      <main className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28">
-        <div className="flex flex-col gap-300 px-400 pt-36.5">
+      <main
+        className="scrollbar-none relative z-10 min-h-0 flex-1 overflow-y-auto pb-28"
+        onScroll={handleProfileScroll}
+      >
+        <div className={cn("flex flex-col px-400 gap-600 pt-29 pb-400")}>
           <ProfileAvatarSection
             imageUrl={profileImageUrl}
             isEditing={isEditing}
@@ -126,16 +138,19 @@ function MyProfileEditContent({
               onSubmit={handleSubmit(submitProfileForm)}
             >
               <ProfileEditFields control={control} />
-              <TagSyncNoticeSection />
-              <ImportanceEditSection
-                items={importanceItems}
-                onToggle={toggleImportanceItem}
-                replaceFeedbackKey={replaceFeedbackKey}
+              <ChecklistEditLink
+                hasChecklist={checklistItems.length > 0}
+                onClick={onChecklistClick}
               />
-              <ChecklistEditLink onClick={onChecklistClick} />
+              <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} />
             </form>
           ) : (
-            <ProfileViewContent importanceItems={importanceItems} values={profileForm} />
+            <ProfileViewContent
+              checklistItems={checklistItems}
+              importanceItems={importanceItems}
+              onChecklistClick={onChecklistClick}
+              values={profileForm}
+            />
           )}
         </div>
       </main>
