@@ -1,8 +1,8 @@
 import { Navigate, type RouteObject } from "react-router";
 import MainPage from "@/pages/MainPage";
-import ChatPage from "@/pages/ChatPage";
-import ChatDetailPage from "@/pages/ChatDetailPage";
-import ChatRoommateConfirmedPage from "@/pages/ChatRoommateConfirmedPage";
+import ChatListPage from "@/pages/chat/ChatListPage";
+import ChatDetailPage from "@/pages/chat/ChatDetailPage";
+import ChatRoommateConfirmedPage from "@/pages/chat/ChatRoommateConfirmedPage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyActivityPage from "@/pages/MyActivityPage";
@@ -58,7 +58,7 @@ export const routes: RouteObject[] = [
           },
           {
             path: "chat",
-            element: <ChatPage />,
+            element: <ChatListPage />,
           },
           {
             path: "mypage",

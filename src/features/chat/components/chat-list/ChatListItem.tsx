@@ -1,5 +1,5 @@
 import { ProfileAvatar } from "@/components/ui/profile-avatar";
-import { MessageCount } from "@/features/chat/components/MessageCount";
+import { MessageCount } from "@/features/chat/components/chat-list/MessageCount";
 
 export interface ChatListItemProps {
   id: number;

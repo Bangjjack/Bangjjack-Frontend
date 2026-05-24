@@ -1,3 +1,14 @@
+const validateWsBaseUrl = () => {
+  const wsBaseUrl = import.meta.env.VITE_WS_BASE_URL as string | undefined;
+  const trimmedWsBaseUrl = wsBaseUrl?.trim();
+
+  if (!trimmedWsBaseUrl) {
+    throw new Error("VITE_WS_BASE_URL 환경 변수가 설정되지 않았습니다.");
+  }
+
+  return trimmedWsBaseUrl;
+};
+
 const validateApiBaseUrl = () => {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string | undefined;
 
@@ -9,6 +20,7 @@ const validateApiBaseUrl = () => {
 };
 
 export const API_BASE_URL = validateApiBaseUrl();
+export const WS_BASE_URL = validateWsBaseUrl();
 const VITE_GOOGLE_LOGIN_URL = import.meta.env.VITE_GOOGLE_LOGIN_URL as string | undefined;
 export const GOOGLE_LOGIN_URL =
   VITE_GOOGLE_LOGIN_URL?.trim() || `${API_BASE_URL.replace(/\/$/, "")}/oauth2/authorization/google`;
