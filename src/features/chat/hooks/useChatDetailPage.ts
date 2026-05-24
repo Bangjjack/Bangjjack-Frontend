@@ -2,17 +2,27 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { toast } from "@/components/ui";
-import {
-  CHAT_DETAILS,
-  type ChatDetailContentProps,
-  type ChatRoom,
-  mapHistoryMessagesToChatMessages,
-  useChatMessages,
-  useCreateChatRoom,
-} from "@/features/chat";
+import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
+import { useCreateChatRoom } from "@/features/chat/hooks/useCreateChatRoom";
+import { CHAT_DETAILS } from "@/features/chat/mocks";
+import type { ChatDetail, ChatMessage, ChatRoom } from "@/features/chat/types";
+import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { useAuthStore } from "@/stores/authStore";
 
-type ChatDetailPageContentProps = ChatDetailContentProps;
+export type ChatDetailPageProps = {
+  chatDetail: ChatDetail;
+  className?: string;
+  currentUserId?: number | null;
+  hasPreviousMessages?: boolean;
+  initialMessages?: ChatMessage[];
+  isLoadingPreviousMessages?: boolean;
+  roomId?: number;
+  onBack: () => void;
+  onLoadPreviousMessages?: () => void | Promise<unknown>;
+  onProfileClick?: () => void;
+  onRecruitClick?: () => void;
+  onRoommateRequestAccept?: () => void;
+};
 
 function getCurrentUserIdFromChatRoom(
   chatRoom: ChatRoom | undefined,
@@ -85,7 +95,7 @@ function useChatDetailPage() {
     ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
     : undefined;
 
-  const contentProps: ChatDetailPageContentProps = {
+  const contentProps: ChatDetailPageProps = {
     chatDetail,
     currentUserId,
     hasPreviousMessages,

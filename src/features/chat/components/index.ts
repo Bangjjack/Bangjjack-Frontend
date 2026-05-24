@@ -1,5 +1,3 @@
-export { ChatDetailContent } from "@/features/chat/components/ChatDetailContent";
-export type { ChatDetailContentProps } from "@/features/chat/components/ChatDetailContent";
 export { ChatDateBadge } from "@/features/chat/components/chat-detail/ChatDateBadge";
 export type { ChatDateBadgeProps } from "@/features/chat/components/chat-detail/ChatDateBadge";
 export { ChatMessageList } from "@/features/chat/components/chat-detail/ChatMessageList";
