@@ -1,7 +1,7 @@
+import { Surface, Tag } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
-import { StatusBadge } from "@/features/mypage/components/StatusBadge";
 import { MY_RECRUIT_POST_EMPTY_MESSAGE, MY_RECRUIT_POSTS } from "@/features/mypage/mocks";
 
 import type { MyRecruitPostMock } from "@/features/mypage/types";
@@ -21,13 +21,13 @@ function MyRecruitPostList() {
 }
 
 function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
+  const currentMemberStat = post.stats.find((stat) => stat.id === "current-members");
+
   return (
-    <article className="flex flex-col gap-2.5 rounded-2xl border border-border-normal p-400">
+    <Surface as="article" variant="outlined" className="flex flex-col gap-2.5">
       <div className="flex items-start justify-between gap-300">
         <h2 className="typo-title3 min-w-0 flex-1 text-text-strong">{post.title}</h2>
-        <StatusBadge variant={post.status === "open" ? "active" : "closed"}>
-          {post.statusLabel}
-        </StatusBadge>
+        <Tag color={post.status === "open" ? "black" : "disabled"}>{post.statusLabel}</Tag>
       </div>
 
       <p className="typo-caption2 whitespace-pre-line text-text-caption">{post.description}</p>
@@ -37,18 +37,31 @@ function MyRecruitPostCard({ post }: { post: MyRecruitPostMock }) {
         <ActivityTag>{post.roomType}</ActivityTag>
       </div>
 
-      <div className="grid grid-cols-2 gap-2.5">
-        {post.stats.map((stat) => (
-          <ActivityStat key={stat.id} label={stat.label} value={stat.value} />
-        ))}
-      </div>
+      {currentMemberStat ? (
+        <RecruitPostMemberStat label={currentMemberStat.label} value={currentMemberStat.value} />
+      ) : (
+        <div className="grid grid-cols-2 gap-2.5">
+          {post.stats.map((stat) => (
+            <ActivityStat key={stat.id} label={stat.label} value={stat.value} />
+          ))}
+        </div>
+      )}
 
       <div className="grid grid-cols-2 gap-200">
         {post.actions.map((action) => (
           <ActivityButton key={action.id} label={action.label} tone={action.tone} />
         ))}
       </div>
-    </article>
+    </Surface>
+  );
+}
+
+function RecruitPostMemberStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex h-12.5 w-full items-center justify-center gap-200 rounded-medium bg-bg-primary">
+      <span className="typo-caption1 text-text-placeholder">{label}</span>
+      <span className="typo-title2 text-text-strong">{value}</span>
+    </div>
   );
 }
 

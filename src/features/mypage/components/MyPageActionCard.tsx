@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 
 import { BookmarkIcon, PuzzleIcon, SquarePenIcon } from "@/assets/icons";
-import { Card } from "@/components/ui";
+import { Surface } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 interface MyPageAction {
@@ -39,7 +39,11 @@ function MyPageActionCard({
   ];
 
   return (
-    <Card className="inline-grid w-full grid-cols-3 grid-rows-1 items-center gap-0 self-stretch rounded-2xl border-0 bg-bg-secondary px-0 py-400 shadow-none">
+    <Surface
+      as="section"
+      variant="default"
+      className="inline-grid w-full grid-cols-3 grid-rows-1 items-center gap-0 self-stretch px-0 py-400"
+    >
       {actions.map(({ icon: Icon, iconClassName, label, onClick }, index) => (
         <button
           key={label}
@@ -57,7 +61,7 @@ function MyPageActionCard({
           <span className="typo-label1 text-center text-text-normal">{label}</span>
         </button>
       ))}
-    </Card>
+    </Surface>
   );
 }
 

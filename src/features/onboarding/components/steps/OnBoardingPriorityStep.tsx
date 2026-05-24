@@ -21,6 +21,7 @@ function OnBoardingPriorityStep({
   selectedFactors,
 }: OnBoardingPriorityStepProps) {
   const [animatingOption, setAnimatingOption] = useState<string | null>(null);
+  const [shakingOption, setShakingOption] = useState<string | null>(null);
 
   useEffect(() => {
     if (!animatingOption) return;
@@ -32,7 +33,22 @@ function OnBoardingPriorityStep({
     return () => window.clearTimeout(timer);
   }, [animatingOption]);
 
+  useEffect(() => {
+    if (!shakingOption) return;
+
+    const timer = window.setTimeout(() => {
+      setShakingOption(null);
+    }, 320);
+
+    return () => window.clearTimeout(timer);
+  }, [shakingOption]);
+
   const handleToggle = (option: string, isSelected: boolean) => {
+    if (!isSelected && selectedFactors.length >= 3) {
+      setShakingOption(option);
+      return;
+    }
+
     if (!isSelected) {
       setAnimatingOption(option);
     }
@@ -57,15 +73,16 @@ function OnBoardingPriorityStep({
             return (
               <Chip
                 key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
-                variant="rank"
-                rank={isSelected ? selectedIndex + 1 : undefined}
-                selected={isSelected}
-                onClick={() => handleToggle(option, isSelected)}
                 className={cn(
                   "cursor-pointer",
                   animatingOption === option && "animate-chip-fade-up",
+                  shakingOption === option && "animate-chip-shake",
                   isReplacedFactor && "animate-chip-fade-up",
                 )}
+                onClick={() => handleToggle(option, isSelected)}
+                rank={isSelected ? selectedIndex + 1 : undefined}
+                selected={isSelected}
+                variant="rank"
               >
                 {option}
               </Chip>

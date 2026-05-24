@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { Surface } from "@/components/ui";
 import { ActivityTabs } from "@/features/mypage/components/activity/ActivityTabs";
 import { MyActivityMatchList } from "@/features/mypage/components/activity/MyActivityMatchList";
 import { MyActivityRoomList } from "@/features/mypage/components/activity/MyActivityRoomList";
@@ -17,18 +18,17 @@ function MyActivityContent({ className }: MyActivityContentProps) {
   const [activeTabId, setActiveTabId] = useState<MyActivityTabId>(MY_ACTIVITY_ACTIVE_TAB_ID);
 
   return (
-    <section
-      className={cn(
-        "flex flex-col gap-400 overflow-hidden rounded-[20px] border border-border-normal bg-bg-secondary p-400",
-        className,
-      )}
+    <Surface
+      as="section"
+      variant="default"
+      className={cn("flex flex-col gap-400 overflow-hidden", className)}
     >
       <ActivityTabs activeTabId={activeTabId} onTabChange={setActiveTabId} />
 
       {activeTabId === "posts" ? <MyRecruitPostList /> : null}
       {activeTabId === "rooms" ? <MyActivityRoomList /> : null}
       {activeTabId === "matches" ? <MyActivityMatchList /> : null}
-    </section>
+    </Surface>
   );
 }
 

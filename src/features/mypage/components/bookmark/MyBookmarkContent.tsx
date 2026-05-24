@@ -1,3 +1,4 @@
+import { Surface } from "@/components/ui";
 import { BookmarkCard } from "@/features/mypage/components/bookmark/BookmarkCard";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
 import { cn } from "@/lib/cn";
@@ -14,11 +15,11 @@ function MyBookmarkContent({ className }: MyBookmarkContentProps) {
   const hasBookmarks = MY_BOOKMARK_POSTS.length > 0;
 
   return (
-    <section
-      className={cn(
-        "mt-3.75 overflow-hidden rounded-[20px] border border-border-normal bg-bg-secondary",
-        className,
-      )}
+    <Surface
+      as="section"
+      padding="none"
+      variant="outlined"
+      className={cn("mt-3.75 overflow-hidden", className)}
     >
       <div className="flex items-center justify-between border-b border-border-normal p-400">
         <h2 className="typo-title3 text-text-normal">내가 북마크한 글</h2>
@@ -34,7 +35,7 @@ function MyBookmarkContent({ className }: MyBookmarkContentProps) {
       ) : (
         <MyPageEmptyState messages={MY_BOOKMARK_EMPTY_MESSAGE} />
       )}
-    </section>
+    </Surface>
   );
 }
 

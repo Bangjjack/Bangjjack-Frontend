@@ -1,4 +1,4 @@
-import { ProfileAvatar } from "@/components/ui";
+import { ProfileAvatar, Surface } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
 import { cn } from "@/lib/cn";
@@ -14,11 +14,10 @@ interface MatchCardProps {
 
 function MatchCard({ className, match, onChatClick, onProfileClick }: MatchCardProps) {
   return (
-    <article
-      className={cn(
-        "flex flex-col items-start justify-center gap-2.5 rounded-2xl border border-border-normal bg-bg-secondary p-400",
-        className,
-      )}
+    <Surface
+      as="article"
+      variant="outlined"
+      className={cn("flex flex-col items-start justify-center gap-2.5", className)}
     >
       <div className="flex w-full items-center justify-between gap-300 overflow-hidden">
         <div className="flex min-w-0 items-center gap-2.5">
@@ -61,7 +60,7 @@ function MatchCard({ className, match, onChatClick, onProfileClick }: MatchCardP
           />
         ))}
       </div>
-    </article>
+    </Surface>
   );
 }
 

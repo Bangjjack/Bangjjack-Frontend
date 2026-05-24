@@ -24,6 +24,8 @@ export { Chip } from "@/components/ui/chip";
 export type { ChipProps } from "@/components/ui/chip";
 export { ChipQuestionSection } from "@/components/ui/chip-question-section";
 export type { ChipQuestionSectionProps } from "@/components/ui/chip-question-section";
+export { IconBadge } from "@/components/ui/icon-badge";
+export type { IconBadgeProps } from "@/components/ui/icon-badge";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
 export { SelectField } from "@/components/ui/select-field";
@@ -34,8 +36,12 @@ export { Toaster, toast } from "@/components/ui/sonner";
 export { Separator } from "@/components/ui/separator";
 export { Tag } from "@/components/ui/tag";
 export type { TagProps } from "@/components/ui/tag";
+export { TagSelected } from "@/components/ui/tag-selected";
+export type { TagSelectedProps } from "@/components/ui/tag-selected";
 export { RoundButton } from "@/components/ui/round-button";
 export type { RoundButtonProps } from "@/components/ui/round-button";
+export { Surface } from "@/components/ui/surface";
+export type { SurfaceProps } from "@/components/ui/surface";
 export {
   Card,
   CardHeader,
