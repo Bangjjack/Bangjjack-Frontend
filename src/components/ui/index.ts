@@ -24,6 +24,8 @@ export { Chip } from "@/components/ui/chip";
 export type { ChipProps } from "@/components/ui/chip";
 export { ChipQuestionSection } from "@/components/ui/chip-question-section";
 export type { ChipQuestionSectionProps } from "@/components/ui/chip-question-section";
+export { IconBadge } from "@/components/ui/icon-badge";
+export type { IconBadgeProps } from "@/components/ui/icon-badge";
 export { Input } from "@/components/ui/input";
 export type { InputProps } from "@/components/ui/input";
 export { SelectField } from "@/components/ui/select-field";

@@ -1,5 +1,5 @@
-import { CheckIcon } from "@/assets/icons";
-import { Button, TagSelected } from "@/components/ui";
+import { CheckIcon, ChevronRightIcon } from "@/assets/icons";
+import { IconBadge, TagSelected } from "@/components/ui";
 import { ChecklistItem } from "@/features/roommate/components";
 import type { ProfileViewContentProps } from "@/features/mypage/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
@@ -98,23 +98,26 @@ function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; ni
 
 function ChecklistEmptyCard({ onChecklistClick }: { onChecklistClick?: () => void }) {
   return (
-    <section className="flex flex-col items-start rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-400 py-450">
-      <div className="flex w-full flex-col gap-400">
-        <div className="flex items-center gap-1.5">
-          <CheckIcon
-            aria-hidden="true"
-            className="size-400 shrink-0 text-brand-primary [&_path]:stroke-current"
-          />
-          <h2 className="typo-title2 min-w-0 text-text-strong">
-            아직 체크리스트가 작성되지 않았어요
-          </h2>
-        </div>
+    <button
+      className="flex cursor-pointer items-center justify-between gap-1.5 rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-300 py-450 text-left"
+      onClick={onChecklistClick}
+      type="button"
+    >
+      <span className="flex min-w-0 flex-1 items-center gap-300">
+        <IconBadge size="medium" variant="solid" />
 
-        <Button className="w-full" onClick={onChecklistClick} size="sm" type="button">
-          체크리스트 완성하러 가기
-        </Button>
-      </div>
-    </section>
+        <span className="flex min-w-0 flex-col gap-0.5">
+          <span className="block typo-title2 text-text-strong">내 체크리스트 완성하기</span>
+          <span className="block typo-caption2 text-text-primary-alternative">
+            나와 맞는 룸메이트를 추천 받아봐요
+          </span>
+        </span>
+      </span>
+      <ChevronRightIcon
+        aria-hidden="true"
+        className="size-600 shrink-0 text-icon-alternative [&_path]:stroke-current"
+      />
+    </button>
   );
 }
 
@@ -139,7 +142,7 @@ function ImportanceEmptyCard() {
     <section className="flex flex-col items-start rounded-medium border border-dashed border-brand-primary bg-bg-secondary px-400 py-300">
       <div className="flex flex-col gap-1.5">
         <h2 className="typo-title2 text-text-strong">룸메이트 우선순위 조건이 작성되지 않았어요</h2>
-        <p className="typo-caption2 text-text-primary-alternative">안내 문구</p>
+        <p className="typo-caption2 text-text-primary-alternative">원하는 룸메이트 조건을 직접 설정해보세요</p>
       </div>
     </section>
   );

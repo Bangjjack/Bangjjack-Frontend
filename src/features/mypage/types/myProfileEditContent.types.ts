@@ -36,5 +36,6 @@ export interface ProfileViewContentProps {
 }
 
 export interface ChecklistEditLinkProps {
+  hasChecklist?: boolean;
   onClick?: () => void;
 }

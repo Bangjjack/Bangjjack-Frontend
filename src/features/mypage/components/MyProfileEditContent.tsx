@@ -16,7 +16,7 @@ import {
   MY_PROFILE_EDIT_FORM_ID,
   WAVE_BACKGROUND_CLASS_NAME,
 } from "@/features/mypage/constants";
-import { MY_PROFILE_CHECKLIST, MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
+import { MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
@@ -32,10 +32,12 @@ function MyProfileEditContent({
   const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>(
     MY_PROFILE_EDIT_DEFAULT_VALUES,
   );
-  const [checklistItems] = useState<ChecklistEntry[]>(MY_PROFILE_CHECKLIST);
+  const [checklistItems] = useState<ChecklistEntry[]>([]);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
-  const [importanceItems, setImportanceItems] = useState<string[]>(MY_PROFILE_IMPORTANCE_ITEMS);
+  const [importanceItems, setImportanceItems] = useState<string[]>(
+    checklistItems.length > 0 ? MY_PROFILE_IMPORTANCE_ITEMS : [],
+  );
   const {
     control,
     handleSubmit,
@@ -136,7 +138,10 @@ function MyProfileEditContent({
               onSubmit={handleSubmit(submitProfileForm)}
             >
               <ProfileEditFields control={control} />
-              <ChecklistEditLink onClick={onChecklistClick} />
+              <ChecklistEditLink
+                hasChecklist={checklistItems.length > 0}
+                onClick={onChecklistClick}
+              />
               <ImportanceEditSection items={importanceItems} onToggle={toggleImportanceItem} />
             </form>
           ) : (
