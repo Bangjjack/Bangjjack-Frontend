@@ -12,6 +12,11 @@ export {
   type OnboardingChecklistRequestValues,
 } from "@/features/onboarding/schemas/onboardingChecklistRequestSchema";
 export {
+  onboardingPreferenceRequestSchema,
+  onboardingPreferenceSchema,
+  type OnboardingPreferenceRequestValues,
+} from "@/features/onboarding/schemas/onboardingPreferenceRequestSchema";
+export {
   onboardingCampusSchema,
   onboardingDormitorySchema,
   onboardingGenderSchema,
