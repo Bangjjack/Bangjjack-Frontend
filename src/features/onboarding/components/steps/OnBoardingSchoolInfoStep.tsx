@@ -1,8 +1,8 @@
+import type { Department } from "@/api";
 import { Button, Chip } from "@/components/ui";
 import { OnBoardingSelectField } from "@/features/onboarding/components/fields";
 import {
   CAMPUS_OPTIONS,
-  DEPARTMENT_OPTIONS,
   DORMITORY_OPTIONS,
   SEMESTER_OPTIONS,
 } from "@/features/onboarding/constants";
@@ -11,18 +11,43 @@ import type { OnBoardingFormValues, SemesterType } from "@/features/onboarding/t
 type SchoolInfoFieldKey = "campus" | "department";
 
 type OnBoardingSchoolInfoStepProps = {
-  onFieldChange: (key: SchoolInfoFieldKey, value: string) => void;
+  departments: Department[];
+  isDepartmentsError: boolean;
+  isDepartmentsLoading: boolean;
+  onDepartmentChange: (department: string, departmentId: number) => void;
   onDormitoryChange: (value: string) => void;
+  onFieldChange: (key: SchoolInfoFieldKey, value: string) => void;
   onSemesterTypeChange: (value: SemesterType) => void;
   values: OnBoardingFormValues;
 };
 
 function OnBoardingSchoolInfoStep({
-  onFieldChange,
+  departments,
+  isDepartmentsError,
+  isDepartmentsLoading,
+  onDepartmentChange,
   onDormitoryChange,
+  onFieldChange,
   onSemesterTypeChange,
   values,
 }: OnBoardingSchoolInfoStepProps) {
+  const departmentOptions = departments.map((department) => department.name);
+
+  const handleDepartmentChange = (departmentName: string) => {
+    const department = departments.find((item) => item.name === departmentName);
+
+    if (!department) {
+      return;
+    }
+
+    onDepartmentChange(department.name, department.departmentId);
+  };
+  const departmentPlaceholder = isDepartmentsError
+    ? "학과를 불러오지 못했어요"
+    : isDepartmentsLoading
+      ? "학과를 불러오는 중이에요"
+      : "학과를 선택해주세요";
+
   return (
     <div className="flex flex-1 flex-col gap-8.75">
       <OnBoardingSelectField
@@ -36,9 +61,9 @@ function OnBoardingSchoolInfoStep({
       <OnBoardingSelectField
         label="학과"
         value={values.department}
-        onChange={(value) => onFieldChange("department", value)}
-        options={DEPARTMENT_OPTIONS}
-        placeholder="학과를 선택해주세요"
+        onChange={handleDepartmentChange}
+        options={departmentOptions}
+        placeholder={departmentPlaceholder}
       />
 
       <div className="flex w-full flex-col gap-300 px-400">

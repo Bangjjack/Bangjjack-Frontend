@@ -18,6 +18,7 @@ export type OnBoardingFormValues = {
   callHabit: string | null;
   cleaningCycle: string | null;
   department: string;
+  departmentId: number | null;
   dormStayDuration: string | null;
   dormitory: string | null;
   gender: Gender | null;

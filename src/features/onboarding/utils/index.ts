@@ -1,1 +1,4 @@
-export { mapOnboardingFormToRequest } from "@/features/onboarding/utils/mapOnboardingFormToRequest";
+export {
+  mapOnboardingCampusToRequest,
+  mapOnboardingFormToRequest,
+} from "@/features/onboarding/utils/mapOnboardingFormToRequest";

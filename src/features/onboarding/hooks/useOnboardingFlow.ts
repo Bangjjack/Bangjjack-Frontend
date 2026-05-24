@@ -23,6 +23,7 @@ function createInitialFormValues(
     callHabit: initialValues?.callHabit ?? null,
     cleaningCycle: initialValues?.cleaningCycle ?? null,
     department: initialValues?.department ?? "",
+    departmentId: initialValues?.departmentId ?? null,
     dormStayDuration: initialValues?.dormStayDuration ?? null,
     dormitory: initialValues?.dormitory ?? null,
     gender: initialValues?.gender ?? null,
@@ -62,7 +63,15 @@ function useOnboardingFlow({
   };
 
   const handleChangeSchoolInfoField = (key: "campus" | "department", value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
+    setFormValues((prev) => ({
+      ...prev,
+      [key]: value,
+      ...(key === "campus" ? { department: "", departmentId: null } : {}),
+    }));
+  };
+
+  const handleSelectDepartment = (department: string, departmentId: number) => {
+    setFormValues((prev) => ({ ...prev, department, departmentId }));
   };
 
   const handleSelectGender = (gender: NonNullable<OnBoardingFormValues["gender"]>) => {
@@ -159,6 +168,7 @@ function useOnboardingFlow({
     handleBack,
     handleChangeBasicInfoField,
     handleChangeSchoolInfoField,
+    handleSelectDepartment,
     handleSelectDormitory,
     handleSelectGender,
     handleSelectLifestyleSingle,

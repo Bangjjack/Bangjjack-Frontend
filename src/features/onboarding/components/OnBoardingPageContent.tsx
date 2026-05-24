@@ -7,8 +7,10 @@ import {
   OnBoardingPriorityStep,
   OnBoardingSchoolInfoStep,
 } from "@/features/onboarding/components/steps";
+import { useDepartments } from "@/features/onboarding/hooks";
 import { useOnboardingFlow } from "@/features/onboarding/hooks/useOnboardingFlow";
 import type { OnBoardingPageContentProps } from "@/features/onboarding/types";
+import { mapOnboardingCampusToRequest } from "@/features/onboarding/utils";
 
 function OnBoardingPageContent({
   initialValues,
@@ -26,6 +28,7 @@ function OnBoardingPageContent({
     handleBack,
     handleChangeBasicInfoField,
     handleChangeSchoolInfoField,
+    handleSelectDepartment,
     handleSelectDormitory,
     handleSelectGender,
     handleSelectLifestyleSingle,
@@ -41,6 +44,12 @@ function OnBoardingPageContent({
     progressStates,
     userName,
   });
+  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus);
+  const {
+    data: departments = [],
+    isError: isDepartmentsError,
+    isLoading: isDepartmentsLoading,
+  } = useDepartments(selectedCampus);
 
   const handleHeaderAction = () => {
     if (currentStep === "lifestyle" || currentStep === "preferences") {
@@ -80,7 +89,11 @@ function OnBoardingPageContent({
 
           {currentStep === "school-info" ? (
             <OnBoardingSchoolInfoStep
+              departments={departments}
+              isDepartmentsError={isDepartmentsError}
+              isDepartmentsLoading={isDepartmentsLoading}
               values={formValues}
+              onDepartmentChange={handleSelectDepartment}
               onFieldChange={handleChangeSchoolInfoField}
               onDormitoryChange={handleSelectDormitory}
               onSemesterTypeChange={handleSelectSemesterType}
