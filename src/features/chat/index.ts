@@ -1,7 +1,8 @@
-export { ChatListItem } from "@/features/chat/components/chat-list/ChatListItem";
-export type { ChatListItemProps } from "@/features/chat/components/chat-list/ChatListItem";
-export { ChatRoommateConfirmedContent } from "@/features/chat/components/chat-confirmed/ChatRoommateConfirmedContent";
-export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/chat-confirmed/ChatRoommateConfirmedContent";
+export { ChatListItem, ChatRoommateConfirmedContent } from "@/features/chat/components";
+export type {
+  ChatListItemProps,
+  ChatRoommateConfirmedContentProps,
+} from "@/features/chat/components";
 export {
   useChatComposer,
   useChatDetailPage,

@@ -1,11 +1,12 @@
 const validateWsBaseUrl = () => {
   const wsBaseUrl = import.meta.env.VITE_WS_BASE_URL as string | undefined;
+  const trimmedWsBaseUrl = wsBaseUrl?.trim();
 
-  if (!wsBaseUrl) {
+  if (!trimmedWsBaseUrl) {
     throw new Error("VITE_WS_BASE_URL 환경 변수가 설정되지 않았습니다.");
   }
 
-  return wsBaseUrl.trim();
+  return trimmedWsBaseUrl;
 };
 
 const validateApiBaseUrl = () => {

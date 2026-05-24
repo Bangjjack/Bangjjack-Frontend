@@ -45,6 +45,8 @@ function useChatDetailPage() {
   const {
     data: chatRoom,
     isError: isCreateChatRoomError,
+    isPending: isCreatingChatRoom,
+    isSuccess: isCreateChatRoomSuccess,
     mutate: createChatRoom,
   } = useCreateChatRoom();
   const {
@@ -63,8 +65,12 @@ function useChatDetailPage() {
       return;
     }
 
+    if (chatRoom || isCreatingChatRoom || isCreateChatRoomSuccess) {
+      return;
+    }
+
     createChatRoom({ targetUserId: chatDetail.id });
-  }, [chatDetail, createChatRoom, navigate]);
+  }, [chatDetail, chatRoom, createChatRoom, isCreateChatRoomSuccess, isCreatingChatRoom, navigate]);
 
   useEffect(() => {
     if (isCreateChatRoomError) {
