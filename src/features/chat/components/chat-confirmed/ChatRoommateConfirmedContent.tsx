@@ -108,7 +108,7 @@ function ChatRoommateConfirmedContent({
             size="sm"
             variant="black"
           >
-            공통 생활 가이드 보러가기
+            공동 생활 가이드 보러가기
           </Button>
           <Button
             className="h-9 w-full cursor-pointer rounded-medium py-200 typo-button2 text-text-normal"

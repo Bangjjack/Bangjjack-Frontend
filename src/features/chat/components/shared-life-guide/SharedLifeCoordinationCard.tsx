@@ -8,7 +8,7 @@ function SharedLifeCoordinationCard({
   title,
 }: SharedLifeCoordinationCardProps) {
   return (
-    <div className="flex min-h-[115px] flex-col items-start gap-2.5 overflow-hidden rounded-medium bg-neutral-100 p-300">
+    <div className="flex min-h-28.75 flex-col items-start gap-2.5 overflow-hidden rounded-medium bg-neutral-100 p-300">
       <span className="flex size-6 items-center justify-center rounded-small bg-brand-primary text-icon-on-primary">
         <Icon aria-hidden="true" className="size-[14.4px] [&_path]:stroke-current" />
       </span>

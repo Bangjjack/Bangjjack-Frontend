@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { CHAT_DETAILS, SharedLifeGuideContent } from "@/features/chat";
-import type { ChatDetail } from "@/features/chat/types";
+import { CHAT_DETAILS, SharedLifeGuideContent, type ChatDetail } from "@/features/chat";
 
 type SharedLifeGuideChatDetail = ChatDetail & Required<Pick<ChatDetail, "age" | "department">>;
 

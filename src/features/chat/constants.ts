@@ -11,7 +11,6 @@ import type { ChatInputMenuItem } from "@/features/chat/types";
 
 export type GuideChecklistItem = {
   category: string;
-  checked: boolean;
   label: string;
   required: boolean;
 };
@@ -41,31 +40,26 @@ export const CHAT_INPUT_MENU_ITEMS: ChatInputMenuItem[] = [
 export const SHARED_LIFE_CHECKLIST_ITEMS: GuideChecklistItem[] = [
   {
     category: "취침 시간",
-    checked: true,
     label: "기상·취침 시간 공유하기",
     required: true,
   },
   {
     category: "청소",
-    checked: true,
     label: "공용공간 청소 분담 정하기",
     required: true,
   },
   {
     category: "공간",
-    checked: true,
     label: "냉장고 공간 나누기",
     required: true,
   },
   {
     category: "생활품",
-    checked: true,
     label: "공용 생활품 구매 방식 정하기",
     required: false,
   },
   {
     category: "소음",
-    checked: false,
     label: "소음·음악 허용 시간대 설정",
     required: false,
   },
