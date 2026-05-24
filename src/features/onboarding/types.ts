@@ -35,6 +35,7 @@ export type OnBoardingFormValues = {
 
 export type OnBoardingPageContentProps = {
   initialValues?: Partial<OnBoardingFormValues>;
+  isSubmitting?: boolean;
   onBack?: () => void;
   onNext?: (values: OnBoardingFormValues) => void;
   progressStates?: readonly ProgressState[];

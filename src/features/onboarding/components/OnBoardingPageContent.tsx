@@ -12,6 +12,7 @@ import type { OnBoardingPageContentProps } from "@/features/onboarding/types";
 
 function OnBoardingPageContent({
   initialValues,
+  isSubmitting = false,
   onBack,
   onNext,
   progressStates,
@@ -54,7 +55,7 @@ function OnBoardingPageContent({
     <>
       <form onSubmit={handleSubmit}>
         <OnBoardingLayout
-          actionDisabled={!currentStepMeta.isComplete}
+          actionDisabled={!currentStepMeta.isComplete || isSubmitting}
           actionLabel={currentStepMeta.actionLabel}
           description={currentStepMeta.description}
           footerDescription={currentStepMeta.footerDescription}
