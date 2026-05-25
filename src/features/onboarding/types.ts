@@ -1,8 +1,19 @@
 export type { LifestyleMultiFieldKey, LifestyleSingleFieldKey } from "@/constants";
+import type { Campus } from "@/types";
 
 export type ProgressState = "active" | "default";
 export type Gender = "male" | "female";
 export type SemesterType = "semester" | "half";
+
+export type Department = {
+  campus: Campus;
+  departmentId: number;
+  name: string;
+};
+
+export type GetDepartmentsParams = {
+  campus: Campus;
+};
 
 export type OnBoardingStepId =
   | "basic-info"

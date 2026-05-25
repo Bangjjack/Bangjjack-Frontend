@@ -1,15 +1,6 @@
 import { apiClient } from "@/lib/api";
-import type { ApiResponse, Campus } from "@/types";
-
-export type Department = {
-  campus: Campus;
-  departmentId: number;
-  name: string;
-};
-
-export type GetDepartmentsParams = {
-  campus: Campus;
-};
+import type { Department, GetDepartmentsParams } from "@/features/onboarding/types";
+import type { ApiResponse } from "@/types";
 
 export const getDepartments = async (params: GetDepartmentsParams): Promise<Department[]> => {
   const { data } = await apiClient.get<ApiResponse<Department[]>>("/departments", { params });
