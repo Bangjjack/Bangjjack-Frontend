@@ -11,6 +11,7 @@ export { default as CheckIcon } from "@/assets/icons/ic-check.svg?react";
 export { default as BookOpenTextIcon } from "@/assets/icons/ic-book-open-text.svg?react";
 export { default as BookmarkIcon } from "@/assets/icons/ic-bookmark.svg?react";
 export { default as BookmarkFilledIcon } from "@/assets/icons/ic-bookmark-fill.svg?react";
+export { default as BrushCleaningIcon } from "@/assets/icons/ic-brush-cleaning.svg?react";
 export { default as ProfileMintIcon } from "@/assets/icons/ic-profile-mint.svg?react";
 export { default as ProfileOrangeIcon } from "@/assets/icons/ic-profile-orange.svg?react";
 export { default as WriteIcon } from "@/assets/icons/ic-write.svg?react";
