@@ -1,39 +1,17 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, type FormEvent } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import {
   NEXT_STEP_MAP,
   PREVIOUS_STEP_MAP,
   SKIP_STEP_MAP,
   getOnBoardingStepMeta,
-  type ActiveOnBoardingStep,
 } from "@/features/onboarding/config/stepConfig";
+import { useOnboardingStore } from "@/features/onboarding/stores";
 import type { OnBoardingFormValues, OnBoardingPageContentProps } from "@/features/onboarding/types";
-import { mapOnboardingCampusToRequest } from "@/features/onboarding/utils/mapOnboardingFormToRequest";
-
-function createInitialFormValues(
-  initialValues?: Partial<OnBoardingFormValues>,
-): OnBoardingFormValues {
-  return {
-    birthYear: initialValues?.birthYear ?? "",
-    campus: initialValues?.campus ?? "",
-    callHabit: initialValues?.callHabit ?? null,
-    cleaningCycle: initialValues?.cleaningCycle ?? null,
-    department: initialValues?.department ?? "",
-    departmentId: initialValues?.departmentId ?? null,
-    dormStayDuration: initialValues?.dormStayDuration ?? null,
-    dormitory: initialValues?.dormitory ?? null,
-    gender: initialValues?.gender ?? null,
-    grade: initialValues?.grade ?? "",
-    indoorTemperature: initialValues?.indoorTemperature ?? null,
-    noiseSensitivity: initialValues?.noiseSensitivity ?? null,
-    priorityFactors: initialValues?.priorityFactors ?? [],
-    semesterType: initialValues?.semesterType ?? null,
-    sleepTime: initialValues?.sleepTime ?? null,
-    sleepingHabit: initialValues?.sleepingHabit ?? [],
-    smoking: initialValues?.smoking ?? null,
-    wakeUpTime: initialValues?.wakeUpTime ?? null,
-  };
-}
+import {
+  createInitialOnboardingFormValues,
+  mapOnboardingCampusToRequest,
+} from "@/features/onboarding/utils";
 
 function useOnboardingFlow({
   initialValues,
@@ -42,11 +20,21 @@ function useOnboardingFlow({
   progressStates,
   userName = "OO",
 }: OnBoardingPageContentProps) {
-  const [currentStep, setCurrentStep] = useState<ActiveOnBoardingStep>("basic-info");
+  const currentStep = useOnboardingStore((state) => state.currentStep);
+  const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
+  const setStoredFormValues = useOnboardingStore((state) => state.setFormValues);
+  const storedFormValues = useOnboardingStore.getState().formValues;
   const { control, setValue } = useForm<OnBoardingFormValues>({
-    defaultValues: createInitialFormValues(initialValues),
+    defaultValues: createInitialOnboardingFormValues({
+      ...storedFormValues,
+      ...initialValues,
+    }),
   });
   const formValues = useWatch({ control }) as OnBoardingFormValues;
+
+  useEffect(() => {
+    setStoredFormValues(createInitialOnboardingFormValues(formValues));
+  }, [formValues, setStoredFormValues]);
 
   const defaultCurrentStepMeta = getOnBoardingStepMeta(currentStep, formValues, userName);
   const currentStepMeta = {

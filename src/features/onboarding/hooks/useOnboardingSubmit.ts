@@ -6,6 +6,7 @@ import {
   mapOnboardingFormToRequest,
   mapOnboardingPreferenceFormToRequest,
 } from "@/features/onboarding/utils";
+import { useOnboardingStore } from "@/features/onboarding/stores";
 import { useSaveOnboarding } from "@/features/onboarding/hooks/useSaveOnboarding";
 import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks/useSaveOnboardingChecklist";
 import { useSaveOnboardingPreference } from "@/features/onboarding/hooks/useSaveOnboardingPreference";
@@ -50,6 +51,7 @@ function useOnboardingSubmit({
     useSaveOnboardingChecklist();
   const { mutateAsync: saveOnboardingPreference, isPending: isPreferencePending } =
     useSaveOnboardingPreference();
+  const resetOnboarding = useOnboardingStore((state) => state.reset);
 
   const submit = useCallback(
     async (values: OnBoardingFormValues) => {
@@ -77,6 +79,7 @@ function useOnboardingSubmit({
         await saveOnboarding(body);
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
+          resetOnboarding();
           onAlreadySaved?.(getOnboardingErrorMessage(error));
           return;
         }
@@ -90,6 +93,7 @@ function useOnboardingSubmit({
           await saveOnboardingChecklist(checklistResult.value);
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
+            resetOnboarding();
             onAlreadySaved?.(getChecklistErrorMessage(error));
             return;
           }
@@ -104,6 +108,7 @@ function useOnboardingSubmit({
           await saveOnboardingPreference(preferenceResult.value);
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
+            resetOnboarding();
             onAlreadySaved?.(getPreferenceErrorMessage(error));
             return;
           }
@@ -113,12 +118,14 @@ function useOnboardingSubmit({
         }
       }
 
+      resetOnboarding();
       onSuccess?.();
     },
     [
       onAlreadySaved,
       onError,
       onSuccess,
+      resetOnboarding,
       saveOnboarding,
       saveOnboardingChecklist,
       saveOnboardingPreference,
