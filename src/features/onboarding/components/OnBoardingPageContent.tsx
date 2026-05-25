@@ -24,19 +24,12 @@ function OnBoardingPageContent({
   const {
     currentStep,
     currentStepMeta,
+    control,
     formValues,
     handleBack,
-    handleChangeBasicInfoField,
-    handleChangeSchoolInfoField,
-    handleSelectDepartment,
-    handleSelectDormitory,
-    handleSelectGender,
-    handleSelectLifestyleSingle,
-    handleSelectSemesterType,
     handleSkipCurrentStep,
     handleSubmit,
-    handleToggleLifestyleMulti,
-    handleTogglePriorityFactor,
+    setValue,
   } = useOnboardingFlow({
     initialValues,
     onBack,
@@ -80,11 +73,7 @@ function OnBoardingPageContent({
           title={currentStepMeta.title}
         >
           {currentStep === "basic-info" ? (
-            <OnBoardingBasicInfoStep
-              values={formValues}
-              onFieldChange={handleChangeBasicInfoField}
-              onGenderChange={handleSelectGender}
-            />
+            <OnBoardingBasicInfoStep control={control} values={formValues} />
           ) : null}
 
           {currentStep === "school-info" ? (
@@ -92,26 +81,20 @@ function OnBoardingPageContent({
               departments={departments}
               isDepartmentsError={isDepartmentsError}
               isDepartmentsLoading={isDepartmentsLoading}
+              control={control}
+              setValue={setValue}
               values={formValues}
-              onDepartmentChange={handleSelectDepartment}
-              onFieldChange={handleChangeSchoolInfoField}
-              onDormitoryChange={handleSelectDormitory}
-              onSemesterTypeChange={handleSelectSemesterType}
             />
           ) : null}
 
           {currentStep === "lifestyle" ? (
-            <OnBoardingLifestyleStep
-              values={formValues}
-              onSingleSelectChange={handleSelectLifestyleSingle}
-              onMultiSelectChange={handleToggleLifestyleMulti}
-            />
+            <OnBoardingLifestyleStep control={control} values={formValues} />
           ) : null}
 
           {currentStep === "preferences" ? (
             <OnBoardingPriorityStep
+              control={control}
               selectedFactors={formValues.priorityFactors}
-              onToggleFactor={handleTogglePriorityFactor}
             />
           ) : null}
         </OnBoardingLayout>

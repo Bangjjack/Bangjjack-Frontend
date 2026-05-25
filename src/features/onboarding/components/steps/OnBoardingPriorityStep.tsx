@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
+import { Controller, type Control } from "react-hook-form";
 import { Chip } from "@/components/ui";
 import { PRIORITY_FACTOR_OPTIONS } from "@/features/onboarding/constants";
+import type { OnBoardingFormValues } from "@/features/onboarding/types";
 import { cn } from "@/lib/cn";
 
 type OnBoardingPriorityStepProps = {
   className?: string;
-  onToggleFactor: (value: string) => void;
+  control: Control<OnBoardingFormValues>;
   options?: readonly string[];
   replaceFeedbackKey?: number;
   replacedFactor?: string | null;
@@ -14,7 +16,7 @@ type OnBoardingPriorityStepProps = {
 
 function OnBoardingPriorityStep({
   className,
-  onToggleFactor,
+  control,
   options = PRIORITY_FACTOR_OPTIONS,
   replaceFeedbackKey = 0,
   replacedFactor = null,
@@ -43,7 +45,11 @@ function OnBoardingPriorityStep({
     return () => window.clearTimeout(timer);
   }, [shakingOption]);
 
-  const handleToggle = (option: string, isSelected: boolean) => {
+  const handleToggle = (
+    option: string,
+    isSelected: boolean,
+    onChange: (value: string[]) => void,
+  ) => {
     if (!isSelected && selectedFactors.length >= 3) {
       setShakingOption(option);
       return;
@@ -53,7 +59,9 @@ function OnBoardingPriorityStep({
       setAnimatingOption(option);
     }
 
-    onToggleFactor(option);
+    onChange(
+      isSelected ? selectedFactors.filter((item) => item !== option) : [...selectedFactors, option],
+    );
   };
 
   return (
@@ -71,21 +79,27 @@ function OnBoardingPriorityStep({
             const isReplacedFactor = replacedFactor === option;
 
             return (
-              <Chip
+              <Controller
                 key={`${option}-${isReplacedFactor ? replaceFeedbackKey : 0}`}
-                className={cn(
-                  "cursor-pointer",
-                  animatingOption === option && "animate-chip-fade-up",
-                  shakingOption === option && "animate-chip-shake",
-                  isReplacedFactor && "animate-chip-fade-up",
+                control={control}
+                name="priorityFactors"
+                render={({ field }) => (
+                  <Chip
+                    className={cn(
+                      "cursor-pointer",
+                      animatingOption === option && "animate-chip-fade-up",
+                      shakingOption === option && "animate-chip-shake",
+                      isReplacedFactor && "animate-chip-fade-up",
+                    )}
+                    onClick={() => handleToggle(option, isSelected, field.onChange)}
+                    rank={isSelected ? selectedIndex + 1 : undefined}
+                    selected={isSelected}
+                    variant="rank"
+                  >
+                    {option}
+                  </Chip>
                 )}
-                onClick={() => handleToggle(option, isSelected)}
-                rank={isSelected ? selectedIndex + 1 : undefined}
-                selected={isSelected}
-                variant="rank"
-              >
-                {option}
-              </Chip>
+              />
             );
           })}
         </div>
