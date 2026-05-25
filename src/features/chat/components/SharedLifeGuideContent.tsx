@@ -81,7 +81,7 @@ function SharedLifeGuideContent({
           }
           title="미리 조율하면 좋은 점"
         >
-          <div className="grid grid-cols-2 gap-2.5">
+          <div className="flex flex-col gap-2.5">
             {SHARED_LIFE_COORDINATION_ITEMS.map((item) => (
               <SharedLifeCoordinationCard key={item.title} {...item} />
             ))}
