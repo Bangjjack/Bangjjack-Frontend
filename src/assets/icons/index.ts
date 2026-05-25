@@ -36,3 +36,5 @@ export { default as SlidersHorizontalIcon } from "@/assets/icons/ic-sliders-hori
 export { default as SoapDispenserDropletIcon } from "@/assets/icons/ic-soap-dispenser-droplet.svg?react";
 export { default as ThermometerIcon } from "@/assets/icons/ic-thermometer.svg?react";
 export { default as WindIcon } from "@/assets/icons/ic-wind.svg?react";
+export { default as FanIcon } from "@/assets/icons/ic-fan.svg?react";
+export { default as MoonIcon } from "@/assets/icons/ic-moon.svg?react";
