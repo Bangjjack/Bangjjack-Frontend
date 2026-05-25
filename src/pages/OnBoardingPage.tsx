@@ -29,6 +29,12 @@ export default function OnBoardingPage() {
 
   const handleNext = (values: OnBoardingFormValues) => {
     const body = mapOnboardingFormToRequest(values);
+
+    if (!body) {
+      toast.error("온보딩 정보 변환에 실패했어요.");
+      return;
+    }
+
     const checklistBody = mapOnboardingChecklistFormToRequest(values);
     const preferenceBody = mapOnboardingPreferenceFormToRequest(values);
 

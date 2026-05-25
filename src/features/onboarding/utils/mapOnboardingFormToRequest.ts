@@ -15,7 +15,7 @@ function mapOnboardingCampusToRequest(
   return CAMPUS_VALUES[campusIndex];
 }
 
-function mapOnboardingFormToRequest(values: OnBoardingFormValues): OnboardingRequestValues {
+function mapOnboardingFormToRequest(values: OnBoardingFormValues): OnboardingRequestValues | null {
   const dormitoryIndex = DORMITORY_OPTIONS.findIndex((option) => option === values.dormitory);
   const gender =
     values.gender === "male" ? "MALE" : values.gender === "female" ? "FEMALE" : undefined;
@@ -26,7 +26,7 @@ function mapOnboardingFormToRequest(values: OnBoardingFormValues): OnboardingReq
         ? "TWENTY_FIVE_WEEKS"
         : undefined;
 
-  return onboardingRequestSchema.parse({
+  const result = onboardingRequestSchema.safeParse({
     birthYear: Number(values.birthYear),
     campus: mapOnboardingCampusToRequest(values.campus),
     departmentId: values.departmentId,
@@ -35,6 +35,8 @@ function mapOnboardingFormToRequest(values: OnBoardingFormValues): OnboardingReq
     grade: Number(values.grade),
     semester,
   });
+
+  return result.success ? result.data : null;
 }
 
 export { mapOnboardingCampusToRequest, mapOnboardingFormToRequest };
