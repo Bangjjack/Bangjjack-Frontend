@@ -18,8 +18,8 @@ const onboardingSleepHabitSchema = z.enum([
   "NONE",
   "TEETH_GRINDING",
   "SNORING",
-  "SLEEP_TALKING",
-  "OFTEN_WAKES_UP",
+  "TOSS_AND_TURN",
+  "FREQUENT_WAKING",
 ]);
 const onboardingCleaningCycleSchema = z.enum([
   "ALMOST_DAILY",

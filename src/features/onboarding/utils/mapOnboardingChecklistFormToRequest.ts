@@ -26,8 +26,8 @@ const SLEEP_HABIT_VALUES = [
   "NONE",
   "TEETH_GRINDING",
   "SNORING",
-  "SLEEP_TALKING",
-  "OFTEN_WAKES_UP",
+  "TOSS_AND_TURN",
+  "FREQUENT_WAKING",
 ] as const;
 const CLEANING_CYCLE_VALUES = [
   "ALMOST_DAILY",
@@ -76,13 +76,11 @@ function mapMultiOption<T extends readonly string[]>(
   values: string[],
   options: readonly string[],
   enumValues: T,
-): T[number][] {
-  return values
-    .map((value) => {
-      const selectedIndex = options.findIndex((option) => option === value);
-      return enumValues[selectedIndex];
-    })
-    .filter((value): value is T[number] => value !== undefined);
+): Array<T[number] | undefined> {
+  return values.map((value) => {
+    const selectedIndex = options.findIndex((option) => option === value);
+    return enumValues[selectedIndex];
+  });
 }
 
 function mapOnboardingChecklistFormToRequest(
