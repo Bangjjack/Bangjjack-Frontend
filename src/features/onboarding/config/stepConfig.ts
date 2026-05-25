@@ -16,7 +16,7 @@ import {
   isLifestyleStepComplete,
   isPriorityStepComplete,
   isSchoolInfoStepComplete,
-} from "@/features/onboarding/validation";
+} from "@/features/onboarding/schemas";
 
 type ActiveOnBoardingStep = Extract<
   OnBoardingStepId,

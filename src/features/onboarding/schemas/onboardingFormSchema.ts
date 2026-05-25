@@ -84,9 +84,13 @@ function isPriorityStepComplete(selectedFactors: string[]) {
 }
 
 export {
+  basicInfoStepSchema,
   isBasicInfoStepComplete,
   isLifestyleStepComplete,
   isPriorityStepComplete,
   isSchoolInfoStepComplete,
+  lifestyleStepSchema,
   onboardingFormSchema,
+  priorityStepSchema,
+  schoolInfoStepSchema,
 };

@@ -1,4 +1,15 @@
 export {
+  basicInfoStepSchema,
+  isBasicInfoStepComplete,
+  isLifestyleStepComplete,
+  isPriorityStepComplete,
+  isSchoolInfoStepComplete,
+  lifestyleStepSchema,
+  onboardingFormSchema,
+  priorityStepSchema,
+  schoolInfoStepSchema,
+} from "@/features/onboarding/schemas/onboardingFormSchema";
+export {
   onboardingBedtimeSchema,
   onboardingCallHabitSchema,
   onboardingChecklistRequestSchema,
