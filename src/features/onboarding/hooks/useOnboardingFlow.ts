@@ -67,6 +67,7 @@ function useOnboardingFlow({
       ...prev,
       [key]: value,
       ...(key === "campus" ? { department: "", departmentId: null } : {}),
+      ...(key === "department" ? { departmentId: null } : {}),
     }));
   };
 
