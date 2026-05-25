@@ -1,18 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 
-import { ChatRoommateConfirmedContent, CHAT_DETAILS } from "@/features/chat";
-import type { ChatDetail } from "@/features/chat/types";
+import { CHAT_DETAILS, SharedLifeGuideContent, type ChatDetail } from "@/features/chat";
 
-type ConfirmedRoommateChatDetail = ChatDetail & Required<Pick<ChatDetail, "age" | "department">>;
+type SharedLifeGuideChatDetail = ChatDetail & Required<Pick<ChatDetail, "age" | "department">>;
 
-function hasConfirmedRoommateData(
+function hasSharedLifeGuideData(
   chatDetail: ChatDetail | undefined,
-): chatDetail is ConfirmedRoommateChatDetail {
+): chatDetail is SharedLifeGuideChatDetail {
   return chatDetail?.age !== undefined && chatDetail.department !== undefined;
 }
 
-export default function ChatRoommateConfirmedPage() {
+export default function ChatSharedLifeGuidePage() {
   const navigate = useNavigate();
   const { chatId } = useParams();
 
@@ -20,24 +19,24 @@ export default function ChatRoommateConfirmedPage() {
   const chatDetail = Number.isNaN(parsedChatId) ? undefined : CHAT_DETAILS[parsedChatId];
 
   useEffect(() => {
-    if (!hasConfirmedRoommateData(chatDetail)) {
+    if (!hasSharedLifeGuideData(chatDetail)) {
       navigate("/chat", { replace: true });
     }
   }, [chatDetail, navigate]);
 
-  if (!hasConfirmedRoommateData(chatDetail)) {
+  if (!hasSharedLifeGuideData(chatDetail)) {
     return null;
   }
 
   return (
-    <ChatRoommateConfirmedContent
+    <SharedLifeGuideContent
       age={chatDetail.age}
       avatarSeed={chatDetail.id}
       department={chatDetail.department}
       matchRate={chatDetail.matchRate}
       nickname={chatDetail.nickname}
+      onBack={() => navigate(`/chat/${chatDetail.id}/roommate-confirmed`)}
       onContinueChat={() => navigate(`/chat/${chatDetail.id}`)}
-      onGuideClick={() => navigate(`/chat/${chatDetail.id}/shared-life-guide`)}
       onGoHome={() => navigate("/home")}
     />
   );

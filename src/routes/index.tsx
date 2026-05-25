@@ -3,6 +3,7 @@ import MainPage from "@/pages/MainPage";
 import ChatListPage from "@/pages/chat/ChatListPage";
 import ChatDetailPage from "@/pages/chat/ChatDetailPage";
 import ChatRoommateConfirmedPage from "@/pages/chat/ChatRoommateConfirmedPage";
+import ChatSharedLifeGuidePage from "@/pages/ChatSharedLifeGuidePage";
 import DesignSystemPage from "@/pages/DesignSystemPage";
 import HomePage from "@/pages/HomePage";
 import MyActivityPage from "@/pages/MyActivityPage";
@@ -89,6 +90,10 @@ export const routes: RouteObject[] = [
       {
         path: "/chat/:chatId/roommate-confirmed",
         element: <ChatRoommateConfirmedPage />,
+      },
+      {
+        path: "/chat/:chatId/shared-life-guide",
+        element: <ChatSharedLifeGuidePage />,
       },
       {
         path: "/board/write",

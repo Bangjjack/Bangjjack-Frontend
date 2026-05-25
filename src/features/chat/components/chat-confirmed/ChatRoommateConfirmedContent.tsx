@@ -9,6 +9,7 @@ export interface ChatRoommateConfirmedContentProps extends Required<
   avatarSeed?: number;
   className?: string;
   onContinueChat: () => void;
+  onGuideClick: () => void;
   onGoHome: () => void;
 }
 
@@ -34,6 +35,7 @@ function ChatRoommateConfirmedContent({
   matchRate,
   nickname,
   onContinueChat,
+  onGuideClick,
   onGoHome,
 }: ChatRoommateConfirmedContentProps) {
   return (
@@ -99,6 +101,14 @@ function ChatRoommateConfirmedContent({
             size="sm"
           >
             채팅 계속하기
+          </Button>
+          <Button
+            className="h-9 w-full cursor-pointer rounded-medium py-200 typo-button2"
+            onClick={onGuideClick}
+            size="sm"
+            variant="black"
+          >
+            공동 생활 가이드 보러가기
           </Button>
           <Button
             className="h-9 w-full cursor-pointer rounded-medium py-200 typo-button2 text-text-normal"
