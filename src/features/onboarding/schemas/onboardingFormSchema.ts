@@ -23,7 +23,6 @@ const onboardingFormSchema = z.object({
   grade: requiredTextSchema,
   departmentId: z.number().int().nonnegative().nullable(),
   indoorTemperature: requiredSelectionSchema,
-  itemSharingPreference: z.array(requiredTextSchema),
   noiseSensitivity: requiredSelectionSchema,
   priorityFactors: z.array(requiredTextSchema).length(3),
   semesterType: requiredSelectionSchema,

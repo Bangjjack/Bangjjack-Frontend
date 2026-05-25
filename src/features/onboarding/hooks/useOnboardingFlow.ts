@@ -25,7 +25,6 @@ function createInitialFormValues(
     gender: initialValues?.gender ?? null,
     grade: initialValues?.grade ?? "",
     indoorTemperature: initialValues?.indoorTemperature ?? null,
-    itemSharingPreference: initialValues?.itemSharingPreference ?? [],
     noiseSensitivity: initialValues?.noiseSensitivity ?? null,
     priorityFactors: initialValues?.priorityFactors ?? [],
     semesterType: initialValues?.semesterType ?? null,

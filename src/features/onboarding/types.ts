@@ -35,7 +35,6 @@ export type OnBoardingFormValues = {
   gender: Gender | null;
   grade: string;
   indoorTemperature: string | null;
-  itemSharingPreference: string[];
   noiseSensitivity: string | null;
   priorityFactors: string[];
   semesterType: SemesterType | null;
