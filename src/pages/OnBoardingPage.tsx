@@ -35,17 +35,22 @@ export default function OnBoardingPage() {
       return;
     }
 
-    const checklistBody = mapOnboardingChecklistFormToRequest(values);
-    const preferenceBody = mapOnboardingPreferenceFormToRequest(values);
+    const checklistResult = mapOnboardingChecklistFormToRequest(values);
+    const preferenceResult = mapOnboardingPreferenceFormToRequest(values);
 
     const handleSavePreference = () => {
-      if (!preferenceBody) {
+      if (preferenceResult.status === "invalid") {
+        toast.error(preferenceResult.error);
+        return;
+      }
+
+      if (preferenceResult.status === "skipped") {
         toast.success("온보딩 정보가 저장되었어요");
         navigate("/home");
         return;
       }
 
-      saveOnboardingPreference(preferenceBody, {
+      saveOnboardingPreference(preferenceResult.value, {
         onSuccess: () => {
           toast.success("온보딩 정보가 저장되었어요");
           navigate("/home");
@@ -64,12 +69,17 @@ export default function OnBoardingPage() {
 
     saveOnboarding(body, {
       onSuccess: () => {
-        if (!checklistBody) {
+        if (checklistResult.status === "invalid") {
+          toast.error(checklistResult.error);
+          return;
+        }
+
+        if (checklistResult.status === "skipped") {
           handleSavePreference();
           return;
         }
 
-        saveOnboardingChecklist(checklistBody, {
+        saveOnboardingChecklist(checklistResult.value, {
           onSuccess: handleSavePreference,
           onError: (error) => {
             if (isAxiosError(error) && error.response?.status === 409) {

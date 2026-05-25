@@ -8,6 +8,11 @@ import {
 } from "@/features/onboarding/schemas";
 import type { OnBoardingFormValues } from "@/features/onboarding/types";
 
+type OnboardingChecklistMappingResult =
+  | { status: "skipped" }
+  | { status: "invalid"; error: string }
+  | { status: "valid"; value: OnboardingChecklistRequestValues };
+
 const BEDTIME_VALUES = [
   "BEFORE_22",
   "BETWEEN_22_24",
@@ -85,7 +90,22 @@ function mapMultiOption<T extends readonly string[]>(
 
 function mapOnboardingChecklistFormToRequest(
   values: OnBoardingFormValues,
-): OnboardingChecklistRequestValues | null {
+): OnboardingChecklistMappingResult {
+  const isSkipped =
+    values.sleepTime === null &&
+    values.wakeUpTime === null &&
+    values.sleepingHabit.length === 0 &&
+    values.cleaningCycle === null &&
+    values.dormStayDuration === null &&
+    values.callHabit === null &&
+    values.indoorTemperature === null &&
+    values.noiseSensitivity === null &&
+    values.smoking === null;
+
+  if (isSkipped) {
+    return { status: "skipped" };
+  }
+
   const parsed = onboardingChecklistRequestSchema.safeParse({
     bedtime: mapSingleOption(values.sleepTime, getSingleOptions("sleepTime"), BEDTIME_VALUES),
     wakeUpTime: mapSingleOption(
@@ -118,7 +138,11 @@ function mapOnboardingChecklistFormToRequest(
     smoking: mapSingleOption(values.smoking, getSingleOptions("smoking"), SMOKING_VALUES),
   });
 
-  return parsed.success ? parsed.data : null;
+  if (!parsed.success) {
+    return { status: "invalid", error: "생활 습관 체크리스트 정보를 다시 확인해 주세요." };
+  }
+
+  return { status: "valid", value: parsed.data };
 }
 
 export { mapOnboardingChecklistFormToRequest };

@@ -5,6 +5,11 @@ import {
 } from "@/features/onboarding/schemas";
 import type { OnBoardingFormValues } from "@/features/onboarding/types";
 
+type OnboardingPreferenceMappingResult =
+  | { status: "skipped" }
+  | { status: "invalid"; error: string }
+  | { status: "valid"; value: OnboardingPreferenceRequestValues };
+
 const PREFERENCE_VALUES = [
   "BEDTIME",
   "WAKE_UP_TIME",
@@ -20,7 +25,11 @@ const PREFERENCE_VALUES = [
 
 function mapOnboardingPreferenceFormToRequest(
   values: OnBoardingFormValues,
-): OnboardingPreferenceRequestValues | null {
+): OnboardingPreferenceMappingResult {
+  if (values.priorityFactors.length === 0) {
+    return { status: "skipped" };
+  }
+
   const parsed = onboardingPreferenceRequestSchema.safeParse({
     preferences: values.priorityFactors.map((factor) => {
       const selectedIndex = PRIORITY_FACTOR_OPTIONS.findIndex((option) => option === factor);
@@ -28,7 +37,11 @@ function mapOnboardingPreferenceFormToRequest(
     }),
   });
 
-  return parsed.success ? parsed.data : null;
+  if (!parsed.success) {
+    return { status: "invalid", error: "룸메이트 선호도 정보를 다시 확인해 주세요." };
+  }
+
+  return { status: "valid", value: parsed.data };
 }
 
 export { mapOnboardingPreferenceFormToRequest };
