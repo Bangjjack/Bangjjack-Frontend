@@ -1,12 +1,6 @@
 import type { ComponentType, SVGProps } from "react";
 
-import {
-  FanIcon,
-  MoonIcon,
-  BrushCleaningIcon,
-  ThermometerIcon,
-  UsersIcon,
-} from "@/assets/icons";
+import { FanIcon, MoonIcon, BrushCleaningIcon, ThermometerIcon, UsersIcon } from "@/assets/icons";
 import type { ChatInputMenuItem } from "@/features/chat/types";
 
 export type GuideChecklistItem = {

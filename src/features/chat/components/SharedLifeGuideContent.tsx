@@ -64,6 +64,16 @@ function SharedLifeGuideContent({
           </div>
         </Card>
 
+        <div className="flex items-center gap-2.5 overflow-hidden rounded-small border border-brand-secondary bg-brand-secondary-light p-300">
+          <LightbulbIcon
+            aria-hidden="true"
+            className="size-6 shrink-0 text-brand-secondary-dark [&_path]:stroke-current"
+          />
+          <p className="typo-body2 text-text-secondary-normal">
+            전체적으로 잘 맞지만, 청소 주기와 잠버릇 항목에서 차이가 있어요. 미리 이야기 나눠보세요.
+          </p>
+        </div>
+
         <SharedLifeGuideSectionCard
           icon={<CheckIcon aria-hidden="true" className="size-4 [&_path]:stroke-current" />}
           title="공동 생활 체크포인트"
@@ -98,22 +108,6 @@ function SharedLifeGuideContent({
             ))}
           </div>
         </SharedLifeGuideSectionCard>
-
-        <div className="flex gap-2.5 overflow-hidden rounded-medium border border-brand-secondary bg-brand-secondary-light p-300">
-          <LightbulbIcon
-            aria-hidden="true"
-            className="mt-0.5 size-4 shrink-0 text-brand-secondary-dark [&_path]:stroke-current"
-          />
-          <div className="flex min-w-0 flex-col gap-100">
-            <h2 className="typo-title3 leading-5 text-brand-secondary-dark">
-              처음 2주가 가장 중요해요.
-            </h2>
-            <p className="typo-caption2 text-text-secondary-normal">
-              어색하더라도 작은 것부터 솔직하게 이야기하는 습관을 들이면, 장기적으로 훨씬 편한
-              관계가 돼요.
-            </p>
-          </div>
-        </div>
 
         <div className="flex flex-col gap-200">
           <Button
