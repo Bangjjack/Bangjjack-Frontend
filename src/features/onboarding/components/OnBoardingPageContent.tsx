@@ -44,7 +44,7 @@ function OnBoardingPageContent({
     progressStates,
     userName,
   });
-  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus);
+  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus) ?? null;
   const {
     data: departments = [],
     isError: isDepartmentsError,

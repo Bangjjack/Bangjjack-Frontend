@@ -25,24 +25,24 @@ const onboardingCleaningCycleSchema = z.enum([
   "ALMOST_DAILY",
   "ONCE_OR_TWICE_A_WEEK",
   "SOMETIMES",
-  "ALMOST_NEVER",
+  "RARELY",
 ]);
 const onboardingDormStayTimeSchema = z.enum(["MOSTLY_OUTSIDE", "HALF_AND_HALF", "MOSTLY_INSIDE"]);
-const onboardingCallHabitSchema = z.enum(["INSIDE_OK", "OUTSIDE_ONLY", "OCCASIONALLY"]);
+const onboardingCallHabitSchema = z.enum(["INSIDE_OK", "OUTSIDE_ONLY", "WHISPER"]);
 const onboardingIndoorTemperatureSchema = z.enum([
   "SENSITIVE_TO_HEAT",
   "SENSITIVE_TO_COLD",
-  "NOT_SENSITIVE",
-  "VERY_SENSITIVE",
+  "INSENSITIVE",
+  "BOTH_SENSITIVE",
 ]);
 const onboardingNoiseSensitivitySchema = z.enum([
   "VERY_SENSITIVE",
-  "SENSITIVE",
+  "SLIGHTLY_SENSITIVE",
   "NORMAL",
-  "INSENSITIVE",
+  "SLIGHTLY_INSENSITIVE",
   "VERY_INSENSITIVE",
 ]);
-const onboardingSmokingSchema = z.enum(["NON_SMOKER", "SMOKER", "E_CIGARETTE"]);
+const onboardingSmokingSchema = z.enum(["NON_SMOKER", "CIGARETTE", "ELECTRONIC_CIGARETTE"]);
 
 const onboardingChecklistRequestSchema = z.object({
   bedtime: onboardingBedtimeSchema,
