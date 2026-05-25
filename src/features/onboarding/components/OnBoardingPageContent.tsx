@@ -10,7 +10,6 @@ import {
 import { useDepartments } from "@/features/onboarding/hooks";
 import { useOnboardingFlow } from "@/features/onboarding/hooks/useOnboardingFlow";
 import type { OnBoardingPageContentProps } from "@/features/onboarding/types";
-import { mapOnboardingCampusToRequest } from "@/features/onboarding/utils";
 
 function OnBoardingPageContent({
   initialValues,
@@ -29,6 +28,7 @@ function OnBoardingPageContent({
     handleBack,
     handleSkipCurrentStep,
     handleSubmit,
+    selectedCampus,
     setValue,
   } = useOnboardingFlow({
     initialValues,
@@ -37,7 +37,6 @@ function OnBoardingPageContent({
     progressStates,
     userName,
   });
-  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus) ?? null;
   const {
     data: departments = [],
     isError: isDepartmentsError,

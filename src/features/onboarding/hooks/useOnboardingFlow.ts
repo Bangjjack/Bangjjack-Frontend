@@ -8,6 +8,7 @@ import {
   type ActiveOnBoardingStep,
 } from "@/features/onboarding/config/stepConfig";
 import type { OnBoardingFormValues, OnBoardingPageContentProps } from "@/features/onboarding/types";
+import { mapOnboardingCampusToRequest } from "@/features/onboarding/utils/mapOnboardingFormToRequest";
 
 function createInitialFormValues(
   initialValues?: Partial<OnBoardingFormValues>,
@@ -53,6 +54,7 @@ function useOnboardingFlow({
     ...defaultCurrentStepMeta,
     progressStates: progressStates ?? defaultCurrentStepMeta.progressStates,
   };
+  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus) ?? null;
 
   const handleBack = () => {
     const previousStep = PREVIOUS_STEP_MAP[currentStep];
@@ -101,6 +103,7 @@ function useOnboardingFlow({
     handleBack,
     handleSkipCurrentStep,
     handleSubmit,
+    selectedCampus,
     setValue,
   };
 }
