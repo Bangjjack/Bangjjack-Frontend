@@ -16,8 +16,10 @@ export type {
 } from "@/types";
 
 export type {
+  ChecklistField,
   PostAuthor,
   PostMember,
+  PostMemberLifestyleChecklist,
   PostRoommatePreference,
   PostDetail,
   PostListItem,
