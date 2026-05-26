@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router";
 import { isAxiosError } from "axios";
 
 import { Button, ChipQuestionSection, Header } from "@/components/ui";
@@ -12,21 +12,9 @@ import { useUpdateUserChecklist, useUserChecklist } from "@/features/user/hooks"
 import { mapFormToCreatePostRequest } from "@/features/board/utils";
 import { apiChecklistToFormState, formStateToApiChecklist } from "@/features/board/utils";
 import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
+import type { UserChecklistData } from "@/features/user/types";
 
 type ChecklistState = Record<string, string | string[]>;
-
-function getInitialState(): ChecklistState {
-  const state: ChecklistState = {};
-
-  for (const q of LIFESTYLE_SINGLE_QUESTIONS) {
-    state[q.key] = "";
-  }
-  for (const q of LIFESTYLE_MULTI_QUESTIONS) {
-    state[q.key] = [];
-  }
-
-  return state;
-}
 
 function isAllAnswered(state: ChecklistState): boolean {
   for (const q of LIFESTYLE_SINGLE_QUESTIONS) {
@@ -40,28 +28,39 @@ function isAllAnswered(state: ChecklistState): boolean {
 }
 
 function PostChecklistContent() {
+  const { data: checklistData, isLoading } = useUserChecklist();
+  const { draft, postId } = usePostWriteDraftStore();
+
+  if (!draft) {
+    return <Navigate to={postId ? `/board/${postId}/edit` : "/board/write"} replace />;
+  }
+
+  if (isLoading || !checklistData) {
+    return (
+      <div className="flex h-dvh items-center justify-center bg-bg-primary">
+        <span className="typo-body2 text-text-caption">로딩 중...</span>
+      </div>
+    );
+  }
+
+  return <PostChecklistForm initialChecklistData={checklistData} />;
+}
+
+function PostChecklistForm({ initialChecklistData }: { initialChecklistData: UserChecklistData }) {
   const navigate = useNavigate();
   const { draft, postId, clearDraft } = usePostWriteDraftStore();
   const handleBackClick = useGoBack(postId ? `/board/${postId}/edit` : "/board/write");
 
-  const { data: checklistData } = useUserChecklist();
   const { mutate: createPost, isPending: isCreatePending } = useCreatePost();
   const { mutate: updatePost, isPending: isUpdatePending } = useUpdatePost(postId ?? 0);
   const { mutate: updateChecklist, isPending: isChecklistPending } = useUpdateUserChecklist();
 
-  const [answers, setAnswers] = useState<ChecklistState>(getInitialState);
-  const [originalAnswers, setOriginalAnswers] = useState<ChecklistState | null>(null);
+  const [answers, setAnswers] = useState<ChecklistState>(() =>
+    apiChecklistToFormState(initialChecklistData),
+  );
 
-  useEffect(() => {
-    if (checklistData && originalAnswers === null) {
-      const loaded = apiChecklistToFormState(checklistData);
-      setAnswers(loaded);
-      setOriginalAnswers(loaded);
-    }
-  }, [checklistData, originalAnswers]);
-
-  const isDirty =
-    originalAnswers !== null && JSON.stringify(answers) !== JSON.stringify(originalAnswers);
+  const originalAnswers = apiChecklistToFormState(initialChecklistData);
+  const isDirty = JSON.stringify(answers) !== JSON.stringify(originalAnswers);
 
   function handleSingleSelect(key: LifestyleSingleFieldKey, value: string) {
     setAnswers((prev) => ({
