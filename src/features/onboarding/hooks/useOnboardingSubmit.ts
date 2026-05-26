@@ -19,7 +19,7 @@ type UseOnboardingSubmitOptions = {
 
 type OnboardingSubmitResult = {
   isChecklistRegistered?: boolean;
-  isOnboardingCompleted: boolean;
+  isOnboarded: boolean;
   isRoommatePreferenceRegistered?: boolean;
 };
 
@@ -83,7 +83,7 @@ function useOnboardingSubmit({
 
       const alreadySavedMessages: string[] = [];
       const submitResult: OnboardingSubmitResult = {
-        isOnboardingCompleted: true,
+        isOnboarded: true,
       };
 
       try {

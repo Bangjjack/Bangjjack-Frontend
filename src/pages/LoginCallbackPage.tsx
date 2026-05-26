@@ -1,10 +1,11 @@
 import { isAxiosError } from "axios";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router";
 
 import type { ApiResponse } from "@/api";
 import { ACCESS_TOKEN_KEY } from "@/constants";
-import { useExchangeAuthToken } from "@/features/auth";
+import { authQueryKeys, type AuthRegistrationStatus, useExchangeAuthToken } from "@/features/auth";
 import { useAuthStore } from "@/stores/authStore";
 
 const DEFAULT_LOGIN_ERROR_MESSAGE = "로그인에 실패했습니다.";
@@ -21,6 +22,7 @@ const getLoginErrorMessage = (error: unknown) => {
 
 export default function LoginCallbackPage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
   const hasExchangedCode = useRef(false);
   const code = searchParams.get("code");
@@ -28,6 +30,11 @@ export default function LoginCallbackPage() {
   const isOnboardingCompleted = useAuthStore((state) => state.isOnboardingCompleted);
   const { mutate: exchangeAuthToken } = useExchangeAuthToken({
     onSuccess: (authSession) => {
+      queryClient.setQueryData<AuthRegistrationStatus>(authQueryKeys.registrationStatus(), {
+        isChecklistRegistered: authSession.isChecklistRegistered,
+        isOnboarded: authSession.isOnboarded,
+        isRoommatePreferenceRegistered: authSession.isRoommatePreferenceRegistered,
+      });
       setAuth(authSession);
       navigate(getAuthRedirectPath(authSession.isOnboarded), { replace: true });
     },
