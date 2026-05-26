@@ -9,6 +9,8 @@ import { useCreateChatRoom, type ChatDetail } from "@/features/chat";
 interface PostDetailBottomBarProps {
   isOwner: boolean;
   postId: number;
+  recruitTags: string[];
+  recruitTitle: string;
   targetUserId: number;
   targetUsername: string;
 }
@@ -16,6 +18,8 @@ interface PostDetailBottomBarProps {
 function PostDetailBottomBar({
   isOwner,
   postId,
+  recruitTags,
+  recruitTitle,
   targetUserId,
   targetUsername,
 }: PostDetailBottomBarProps) {
@@ -44,9 +48,9 @@ function PostDetailBottomBar({
             matchRate: 0,
             messages: [],
             nickname: targetUsername,
-            profileSummary: [],
+            profileSummary: recruitTags,
             recruitPostId: postId,
-            recruitTitle: "모집글",
+            recruitTitle,
             startSource: "recruit_post",
           };
 
