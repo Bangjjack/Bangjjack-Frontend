@@ -18,7 +18,6 @@ export {
   useCreateChatRoom,
   useIssueChatWsToken,
 } from "@/features/chat/hooks";
-export type { ChatDetailPageProps } from "@/features/chat/hooks";
 export type {
   ChatDetail,
   ChatConnectionStatus,

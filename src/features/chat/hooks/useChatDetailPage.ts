@@ -8,19 +8,24 @@ import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/feat
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { useAuthStore } from "@/stores/authStore";
 
-export type ChatDetailPageProps = {
-  chatDetail: ChatDetail;
-  className?: string;
-  currentUserId?: number | null;
-  hasPreviousMessages?: boolean;
-  initialMessages?: ChatMessage[];
-  isLoadingPreviousMessages?: boolean;
-  roomId?: number;
-  onBack: () => void;
-  onLoadPreviousMessages?: () => void | Promise<unknown>;
-  onProfileClick?: () => void;
-  onRecruitClick?: () => void;
-  onRoommateRequestAccept?: () => void;
+export type ChatDetailPageState = {
+  chatDetail?: ChatDetail;
+  composer: {
+    currentUserId?: number | null;
+    initialMessages?: ChatMessage[];
+    roomId?: number;
+  };
+  messageList: {
+    hasPreviousMessages?: boolean;
+    isLoadingPreviousMessages?: boolean;
+    onLoadPreviousMessages?: () => void | Promise<unknown>;
+  };
+  navigation: {
+    onBack: () => void;
+    onProfileClick?: () => void;
+    onRecruitClick?: () => void;
+    onRoommateRequestAccept?: () => void;
+  };
 };
 
 type ChatDetailLocationState = {
@@ -132,39 +137,44 @@ function useChatDetailPage() {
     }
   }, [isChatMessagesError]);
 
-  if (!chatDetail) {
-    return null;
-  }
-
   const handleRecruitClick = () => {
-    if (!chatDetail.recruitPostId) {
+    if (!chatDetail?.recruitPostId) {
       return;
     }
 
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
-  const currentUserId = getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId);
+  const currentUserId = chatDetail
+    ? getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId)
+    : authUserId;
   const initialMessages = chatMessagesData
     ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
     : undefined;
 
-  const contentProps: ChatDetailPageProps = {
+  const pageState: ChatDetailPageState = {
     chatDetail,
-    currentUserId,
-    hasPreviousMessages,
-    initialMessages,
-    isLoadingPreviousMessages,
-    roomId: parsedChatId,
-    onBack: () => navigate("/chat"),
-    onLoadPreviousMessages: fetchPreviousMessages,
-    onProfileClick: () => navigate(`/roommate/${chatDetail.id}`),
-    onRecruitClick: handleRecruitClick,
-    onRoommateRequestAccept: () =>
-      navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } }),
+    composer: {
+      currentUserId,
+      initialMessages,
+      roomId: Number.isNaN(parsedChatId) || !chatDetail ? undefined : parsedChatId,
+    },
+    messageList: {
+      hasPreviousMessages,
+      isLoadingPreviousMessages,
+      onLoadPreviousMessages: fetchPreviousMessages,
+    },
+    navigation: {
+      onBack: () => navigate("/chat"),
+      onProfileClick: chatDetail ? () => navigate(`/roommate/${chatDetail.id}`) : undefined,
+      onRecruitClick: chatDetail ? handleRecruitClick : undefined,
+      onRoommateRequestAccept: chatDetail
+        ? () => navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } })
+        : undefined,
+    },
   };
 
-  return contentProps;
+  return pageState;
 }
 
 export { useChatDetailPage };
