@@ -10,17 +10,17 @@ export default function OnBoardingPage() {
   const navigate = useNavigate();
   const handleBack = useGoBack();
   const username = useAuthStore((state) => state.username);
-  const setOnboardingCompleted = useAuthStore((state) => state.setOnboardingCompleted);
+  const setRegistrationStatus = useAuthStore((state) => state.setRegistrationStatus);
 
-  const handleSaved = () => {
-    setOnboardingCompleted(true);
+  const handleSaved = (registrationStatus: Parameters<typeof setRegistrationStatus>[0]) => {
+    setRegistrationStatus(registrationStatus);
     toast.success("온보딩 정보가 저장되었어요.");
     navigate("/home");
   };
 
   const { submit, isPending } = useOnboardingSubmit({
-    onAlreadySaved: (message) => {
-      setOnboardingCompleted(true);
+    onAlreadySaved: (message, registrationStatus) => {
+      setRegistrationStatus(registrationStatus);
       toast.error(message);
       navigate("/home");
     },

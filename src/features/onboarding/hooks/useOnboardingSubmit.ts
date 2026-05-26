@@ -12,9 +12,15 @@ import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks/useSaveO
 import { useSaveOnboardingPreference } from "@/features/onboarding/hooks/useSaveOnboardingPreference";
 
 type UseOnboardingSubmitOptions = {
-  onAlreadySaved?: (message: string) => void;
+  onAlreadySaved?: (message: string, result: OnboardingSubmitResult) => void;
   onError?: (message: string) => void;
-  onSuccess?: () => void;
+  onSuccess?: (result: OnboardingSubmitResult) => void;
+};
+
+type OnboardingSubmitResult = {
+  isChecklistRegistered?: boolean;
+  isOnboardingCompleted: boolean;
+  isRoommatePreferenceRegistered?: boolean;
 };
 
 function getOnboardingErrorMessage(error: unknown) {
@@ -76,6 +82,9 @@ function useOnboardingSubmit({
       }
 
       const alreadySavedMessages: string[] = [];
+      const submitResult: OnboardingSubmitResult = {
+        isOnboardingCompleted: true,
+      };
 
       try {
         await saveOnboarding(body);
@@ -91,9 +100,11 @@ function useOnboardingSubmit({
       if (checklistResult.status === "valid") {
         try {
           await saveOnboardingChecklist(checklistResult.value);
+          submitResult.isChecklistRegistered = true;
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
             alreadySavedMessages.push(getChecklistErrorMessage(error));
+            submitResult.isChecklistRegistered = true;
           } else {
             onError?.(getChecklistErrorMessage(error));
             return;
@@ -104,9 +115,11 @@ function useOnboardingSubmit({
       if (preferenceResult.status === "valid") {
         try {
           await saveOnboardingPreference(preferenceResult.value);
+          submitResult.isRoommatePreferenceRegistered = true;
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
             alreadySavedMessages.push(getPreferenceErrorMessage(error));
+            submitResult.isRoommatePreferenceRegistered = true;
           } else {
             onError?.(getPreferenceErrorMessage(error));
             return;
@@ -116,11 +129,11 @@ function useOnboardingSubmit({
 
       resetOnboarding();
       if (alreadySavedMessages.length > 0) {
-        onAlreadySaved?.(alreadySavedMessages.join("\n"));
+        onAlreadySaved?.(alreadySavedMessages.join("\n"), submitResult);
         return;
       }
 
-      onSuccess?.();
+      onSuccess?.(submitResult);
     },
     [
       onAlreadySaved,

@@ -17,6 +17,7 @@ interface AuthState {
   isChecklistRegistered: boolean;
   isRoommatePreferenceRegistered: boolean;
   setAuth: (authSession: AuthSession) => void;
+  setRegistrationStatus: (registrationStatus: RegistrationStatus) => void;
   setOnboardingCompleted: (isOnboardingCompleted: boolean) => void;
   clearAuth: () => void;
 }
@@ -28,6 +29,12 @@ type AuthSession = {
   isRoommatePreferenceRegistered: boolean;
   userId: number;
   username: string;
+};
+
+type RegistrationStatus = {
+  isChecklistRegistered?: boolean;
+  isOnboardingCompleted?: boolean;
+  isRoommatePreferenceRegistered?: boolean;
 };
 
 function getStoredUserId() {
@@ -93,6 +100,34 @@ export const useAuthStore = create<AuthState>((set) => ({
   setOnboardingCompleted: (isOnboardingCompleted) => {
     localStorage.setItem(ONBOARDING_COMPLETED_KEY, String(isOnboardingCompleted));
     set({ isOnboardingCompleted });
+  },
+  setRegistrationStatus: ({
+    isChecklistRegistered,
+    isOnboardingCompleted,
+    isRoommatePreferenceRegistered,
+  }) => {
+    if (isChecklistRegistered !== undefined) {
+      localStorage.setItem(CHECKLIST_REGISTERED_KEY, String(isChecklistRegistered));
+    }
+
+    if (isOnboardingCompleted !== undefined) {
+      localStorage.setItem(ONBOARDING_COMPLETED_KEY, String(isOnboardingCompleted));
+    }
+
+    if (isRoommatePreferenceRegistered !== undefined) {
+      localStorage.setItem(
+        ROOMMATE_PREFERENCE_REGISTERED_KEY,
+        String(isRoommatePreferenceRegistered),
+      );
+    }
+
+    set({
+      ...(isChecklistRegistered !== undefined ? { isChecklistRegistered } : {}),
+      ...(isOnboardingCompleted !== undefined ? { isOnboardingCompleted } : {}),
+      ...(isRoommatePreferenceRegistered !== undefined
+        ? { isRoommatePreferenceRegistered }
+        : {}),
+    });
   },
   clearAuth: () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
