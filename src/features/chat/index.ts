@@ -36,4 +36,8 @@ export {
   isChatReceivedMessage,
 } from "@/features/chat/utils/webSocket";
 export { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
-export { formatChatRoomMessage, formatChatRoomTime } from "@/features/chat/utils/chatRoomList";
+export {
+  formatChatRoomMessage,
+  formatChatRoomTime,
+  getChatRoomImportanceTags,
+} from "@/features/chat/utils/chatRoomList";

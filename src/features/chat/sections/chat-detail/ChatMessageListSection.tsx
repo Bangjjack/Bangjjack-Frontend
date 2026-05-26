@@ -14,6 +14,7 @@ export type ChatMessageListSectionProps = {
   onLoadPreviousMessages?: () => void | Promise<unknown>;
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
+  onReportClick?: () => void;
   onRoommateRequestAccept?: () => void;
 };
 
@@ -26,6 +27,7 @@ function ChatMessageListSection({
   onLoadPreviousMessages,
   onProfileClick,
   onRecruitClick,
+  onReportClick,
   onRoommateRequestAccept,
 }: ChatMessageListSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -94,6 +96,7 @@ function ChatMessageListSection({
           matchRate={chatDetail.matchRate}
           onProfileClick={onProfileClick}
           onRecruitClick={onRecruitClick}
+          onReportClick={onReportClick}
           profileSummary={profileSummary}
           recruitTitle={recruitTitle}
         />

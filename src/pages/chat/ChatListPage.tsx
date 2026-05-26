@@ -8,6 +8,7 @@ import {
   CHAT_TABS,
   formatChatRoomMessage,
   formatChatRoomTime,
+  getChatRoomImportanceTags,
   useChatRooms,
 } from "@/features/chat";
 import type { ChatDetail, ChatRoom, ChatRoomListItem, ChatTab } from "@/features/chat";
@@ -20,7 +21,7 @@ function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
     matchRate: 0,
     messages: [],
     nickname: chatRoom.partnerName,
-    profileSummary: [],
+    profileSummary: getChatRoomImportanceTags(chatRoom),
     profileImage: chatRoom.partnerProfileImage,
     startSource: "ai_recommendation",
   };

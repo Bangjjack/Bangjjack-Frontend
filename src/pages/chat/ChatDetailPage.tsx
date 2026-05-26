@@ -71,6 +71,7 @@ export default function ChatDetailPage() {
         onLoadPreviousMessages={messageList.onLoadPreviousMessages}
         onProfileClick={navigation.onProfileClick}
         onRecruitClick={navigation.onRecruitClick}
+        onReportClick={navigation.onReportClick}
         onRoommateRequestAccept={navigation.onRoommateRequestAccept}
       />
 

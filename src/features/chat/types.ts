@@ -1,5 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 
+import type { RoommatePreference } from "@/constants";
+
 export type ChatTab = "all" | "roommateRequest";
 
 export type ChatPreview = {
@@ -96,6 +98,12 @@ export type ChatRoom = {
   roomType: string;
 };
 
+export type ChatRoomImportancePreference = {
+  firstPriority?: RoommatePreference | string | null;
+  secondPriority?: RoommatePreference | string | null;
+  thirdPriority?: RoommatePreference | string | null;
+};
+
 export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
 
 export type ChatServerMessageType =
@@ -141,12 +149,17 @@ export type GetChatMessagesParams = {
 };
 
 export type ChatRoomListItem = {
+  importanceTags?: string[] | null;
   lastMessage: string | null;
   lastMessageAt: string | null;
   partnerId: number;
+  partnerImportanceTags?: string[] | null;
   partnerName: string;
   partnerProfileImage: string | null;
+  partnerRoommatePreference?: ChatRoomImportancePreference | null;
+  priorityFactors?: string[] | null;
   roomId: number;
+  roommatePreference?: ChatRoomImportancePreference | null;
   unreadCount: number;
 };
 

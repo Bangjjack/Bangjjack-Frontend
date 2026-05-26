@@ -6,6 +6,7 @@ import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
 import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
+import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
 import { useAuthStore } from "@/stores/authStore";
 
 export type ChatDetailPageState = {
@@ -24,6 +25,7 @@ export type ChatDetailPageState = {
     onBack: () => void;
     onProfileClick?: () => void;
     onRecruitClick?: () => void;
+    onReportClick?: () => void;
     onRoommateRequestAccept?: () => void;
   };
 };
@@ -50,7 +52,7 @@ function mapChatRoomListItemToChatDetail(chatRoom: ChatRoomListItem): ChatDetail
     matchRate: 0,
     messages: [],
     nickname: chatRoom.partnerName,
-    profileSummary: [],
+    profileSummary: getChatRoomImportanceTags(chatRoom),
     profileImage: chatRoom.partnerProfileImage,
     startSource: "ai_recommendation",
   };
@@ -168,6 +170,9 @@ function useChatDetailPage() {
       onBack: () => navigate("/chat"),
       onProfileClick: chatDetail ? () => navigate(`/roommate/${chatDetail.id}`) : undefined,
       onRecruitClick: chatDetail ? handleRecruitClick : undefined,
+      onReportClick: chatDetail
+        ? () => navigate(`/roommate/${chatDetail.id}/matching-report`)
+        : undefined,
       onRoommateRequestAccept: chatDetail
         ? () => navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } })
         : undefined,

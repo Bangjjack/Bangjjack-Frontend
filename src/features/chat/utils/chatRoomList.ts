@@ -1,3 +1,7 @@
+import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
+import type { RoommatePreference } from "@/constants";
+import type { ChatRoomImportancePreference, ChatRoomListItem } from "@/features/chat/types";
+
 function parseChatRoomDate(dateString: string) {
   if (/[Zz]|[+-]\d{2}:\d{2}$/.test(dateString)) {
     return new Date(dateString);
@@ -31,4 +35,40 @@ export function formatChatRoomTime(lastMessageAt: string | null) {
     month: "2-digit",
     day: "2-digit",
   }).format(date);
+}
+
+function isRoommatePreference(value: string): value is RoommatePreference {
+  return value in ROOMMATE_PREFERENCE_LABEL;
+}
+
+function formatImportanceTag(value?: RoommatePreference | string | null) {
+  if (!value) return undefined;
+
+  return isRoommatePreference(value) ? ROOMMATE_PREFERENCE_LABEL[value] : value;
+}
+
+function mapRoommatePreferenceTags(preference?: ChatRoomImportancePreference | null) {
+  return [
+    formatImportanceTag(preference?.firstPriority),
+    formatImportanceTag(preference?.secondPriority),
+    formatImportanceTag(preference?.thirdPriority),
+  ].filter((tag): tag is string => Boolean(tag));
+}
+
+function getFirstThreeTags(tags?: string[] | null) {
+  return tags?.filter(Boolean).slice(0, 3) ?? [];
+}
+
+export function getChatRoomImportanceTags(chatRoom: ChatRoomListItem) {
+  const directTags = getFirstThreeTags(
+    chatRoom.partnerImportanceTags ?? chatRoom.importanceTags ?? chatRoom.priorityFactors,
+  );
+
+  if (directTags.length > 0) {
+    return directTags;
+  }
+
+  return mapRoommatePreferenceTags(
+    chatRoom.partnerRoommatePreference ?? chatRoom.roommatePreference,
+  ).slice(0, 3);
 }
