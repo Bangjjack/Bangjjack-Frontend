@@ -43,10 +43,12 @@ export default function OnBoardingPage() {
   };
 
   const { submit, isPending } = useOnboardingSubmit({
-    onAlreadySaved: (message, registrationStatus) => {
+    onAlreadySaved: (messages, registrationStatus) => {
       setOnboardingCompleted(registrationStatus.isOnboarded);
       updateRegistrationStatusCache(registrationStatus);
-      toast.error(message);
+      messages.forEach((message) => {
+        toast.error(message);
+      });
       navigate("/home");
     },
     onError: toast.error,

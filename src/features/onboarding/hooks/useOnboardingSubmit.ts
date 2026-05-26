@@ -1,18 +1,19 @@
 import { isAxiosError } from "axios";
 import { useCallback } from "react";
+
+import { useSaveOnboarding } from "@/features/onboarding/hooks/useSaveOnboarding";
+import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks/useSaveOnboardingChecklist";
+import { useSaveOnboardingPreference } from "@/features/onboarding/hooks/useSaveOnboardingPreference";
+import { useOnboardingStore } from "@/features/onboarding/stores";
 import type { OnBoardingFormValues } from "@/features/onboarding/types";
 import {
   mapOnboardingChecklistFormToRequest,
   mapOnboardingFormToRequest,
   mapOnboardingPreferenceFormToRequest,
 } from "@/features/onboarding/utils";
-import { useOnboardingStore } from "@/features/onboarding/stores";
-import { useSaveOnboarding } from "@/features/onboarding/hooks/useSaveOnboarding";
-import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks/useSaveOnboardingChecklist";
-import { useSaveOnboardingPreference } from "@/features/onboarding/hooks/useSaveOnboardingPreference";
 
 type UseOnboardingSubmitOptions = {
-  onAlreadySaved?: (message: string, result: OnboardingSubmitResult) => void;
+  onAlreadySaved?: (messages: string[], result: OnboardingSubmitResult) => void;
   onError?: (message: string) => void;
   onSuccess?: (result: OnboardingSubmitResult) => void;
 };
@@ -129,7 +130,7 @@ function useOnboardingSubmit({
 
       resetOnboarding();
       if (alreadySavedMessages.length > 0) {
-        onAlreadySaved?.(alreadySavedMessages.join("\n"), submitResult);
+        onAlreadySaved?.(alreadySavedMessages, submitResult);
         return;
       }
 
