@@ -26,8 +26,8 @@ function useOnboardingFlow({
   const storedFormValues = useOnboardingStore.getState().formValues;
   const { control, setValue } = useForm<OnBoardingFormValues>({
     defaultValues: createInitialOnboardingFormValues({
-      ...storedFormValues,
       ...initialValues,
+      ...storedFormValues,
     }),
   });
   const formValues = useWatch({ control }) as OnBoardingFormValues;
