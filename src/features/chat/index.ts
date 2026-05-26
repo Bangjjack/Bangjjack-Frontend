@@ -8,6 +8,7 @@ export type {
   ChatRoommateConfirmedContentProps,
   SharedLifeGuideContentProps,
 } from "@/features/chat/components";
+export { CHAT_TAB_CATEGORY } from "@/features/chat/constants";
 export {
   useChatComposer,
   useChatDetailPage,
@@ -37,3 +38,4 @@ export {
   isChatReceivedMessage,
 } from "@/features/chat/utils/webSocket";
 export { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
+export { formatChatRoomMessage, formatChatRoomTime } from "@/features/chat/utils/chatRoomList";

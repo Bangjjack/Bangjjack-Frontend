@@ -1,7 +1,12 @@
 import type { ComponentType, SVGProps } from "react";
 
 import { FanIcon, MoonIcon, BrushCleaningIcon, ThermometerIcon, UsersIcon } from "@/assets/icons";
-import type { ChatInputMenuItem } from "@/features/chat/types";
+import type { ChatInputMenuItem, ChatTab } from "@/features/chat/types";
+
+export const CHAT_TAB_CATEGORY = {
+  all: undefined,
+  roommateRequest: "APPLICATION",
+} as const satisfies Record<ChatTab, "APPLICATION" | undefined>;
 
 export type GuideChecklistItem = {
   category: string;
