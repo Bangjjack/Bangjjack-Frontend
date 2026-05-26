@@ -34,7 +34,7 @@ export const CLEANING_CYCLE_LABEL: Record<string, string> = {
 
 export const DORM_STAY_TIME_LABEL: Record<string, string> = {
   MOSTLY_OUTSIDE: "대부분 밖에",
-  HALF: "절반 정도",
+  HALF_AND_HALF: "절반 정도",
   MOSTLY_INSIDE: "대부분 기숙사 안에",
 };
 
@@ -54,7 +54,7 @@ export const INDOOR_TEMPERATURE_LABEL: Record<string, string> = {
 export const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
   VERY_INSENSITIVE: "둔감한 편",
   SLIGHTLY_INSENSITIVE: "약간 둔감",
-  MODERATE: "보통",
+  NORMAL: "보통",
   SLIGHTLY_SENSITIVE: "약간 예민",
   VERY_SENSITIVE: "예민한 편",
 };
