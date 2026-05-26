@@ -30,28 +30,28 @@ const SMOKING_INV = invertMap(SMOKING_LABEL);
 
 export function apiChecklistToFormState(data: UserChecklistData): ChecklistState {
   return {
-    sleepTime: BEDTIME_LABEL[data.bedtime] ?? "",
-    wakeUpTime: WAKE_UP_TIME_LABEL[data.wakeUpTime] ?? "",
+    sleepTime: BEDTIME_LABEL[data.bedtime] ?? data.bedtime,
+    wakeUpTime: WAKE_UP_TIME_LABEL[data.wakeUpTime] ?? data.wakeUpTime,
     sleepingHabit: data.sleepHabits.map((v) => SLEEP_HABITS_LABEL[v] ?? v),
-    cleaningCycle: CLEANING_CYCLE_LABEL[data.cleaningCycle] ?? "",
-    dormStayDuration: DORM_STAY_TIME_LABEL[data.dormStayTime] ?? "",
-    callHabit: CALL_HABIT_LABEL[data.callHabit] ?? "",
-    indoorTemperature: INDOOR_TEMPERATURE_LABEL[data.indoorTemperature] ?? "",
-    noiseSensitivity: NOISE_SENSITIVITY_LABEL[data.noiseSensitivity] ?? "",
-    smoking: SMOKING_LABEL[data.smoking] ?? "",
+    cleaningCycle: CLEANING_CYCLE_LABEL[data.cleaningCycle] ?? data.cleaningCycle,
+    dormStayDuration: DORM_STAY_TIME_LABEL[data.dormStayTime] ?? data.dormStayTime,
+    callHabit: CALL_HABIT_LABEL[data.callHabit] ?? data.callHabit,
+    indoorTemperature: INDOOR_TEMPERATURE_LABEL[data.indoorTemperature] ?? data.indoorTemperature,
+    noiseSensitivity: NOISE_SENSITIVITY_LABEL[data.noiseSensitivity] ?? data.noiseSensitivity,
+    smoking: SMOKING_LABEL[data.smoking] ?? data.smoking,
   };
 }
 
 export function formStateToApiChecklist(state: ChecklistState): UserChecklistData {
   return {
-    bedtime: BEDTIME_INV[state.sleepTime as string] ?? "",
-    wakeUpTime: WAKE_UP_TIME_INV[state.wakeUpTime as string] ?? "",
+    bedtime: BEDTIME_INV[state.sleepTime as string] ?? (state.sleepTime as string),
+    wakeUpTime: WAKE_UP_TIME_INV[state.wakeUpTime as string] ?? (state.wakeUpTime as string),
     sleepHabits: (state.sleepingHabit as string[]).map((v) => SLEEP_HABITS_INV[v] ?? v),
-    cleaningCycle: CLEANING_CYCLE_INV[state.cleaningCycle as string] ?? "",
-    dormStayTime: DORM_STAY_TIME_INV[state.dormStayDuration as string] ?? "",
-    callHabit: CALL_HABIT_INV[state.callHabit as string] ?? "",
-    indoorTemperature: INDOOR_TEMPERATURE_INV[state.indoorTemperature as string] ?? "",
-    noiseSensitivity: NOISE_SENSITIVITY_INV[state.noiseSensitivity as string] ?? "",
-    smoking: SMOKING_INV[state.smoking as string] ?? "",
+    cleaningCycle: CLEANING_CYCLE_INV[state.cleaningCycle as string] ?? (state.cleaningCycle as string),
+    dormStayTime: DORM_STAY_TIME_INV[state.dormStayDuration as string] ?? (state.dormStayDuration as string),
+    callHabit: CALL_HABIT_INV[state.callHabit as string] ?? (state.callHabit as string),
+    indoorTemperature: INDOOR_TEMPERATURE_INV[state.indoorTemperature as string] ?? (state.indoorTemperature as string),
+    noiseSensitivity: NOISE_SENSITIVITY_INV[state.noiseSensitivity as string] ?? (state.noiseSensitivity as string),
+    smoking: SMOKING_INV[state.smoking as string] ?? (state.smoking as string),
   };
 }
