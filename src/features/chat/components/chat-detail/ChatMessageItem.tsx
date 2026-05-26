@@ -7,6 +7,7 @@ import { shouldShowMessageTime } from "@/features/chat/utils/chatMessageGrouping
 import { cn } from "@/lib/cn";
 
 export type ChatMessageItemProps = {
+  avatarImageUrl?: string | null;
   avatarSeed: number;
   compactSpacing: boolean;
   dateBadgeLabel?: string | null;
@@ -19,6 +20,7 @@ export type ChatMessageItemProps = {
 };
 
 export function ChatMessageItem({
+  avatarImageUrl,
   avatarSeed,
   compactSpacing,
   dateBadgeLabel,
@@ -33,6 +35,7 @@ export function ChatMessageItem({
     return (
       <ChatMessageWrapper dateBadgeLabel={dateBadgeLabel} isFirst={isFirst}>
         <RoommateRequestMessageItem
+          avatarImageUrl={avatarImageUrl}
           avatarSeed={avatarSeed}
           message={message}
           onAccept={onRoommateRequestAccept}
@@ -56,6 +59,7 @@ export function ChatMessageItem({
       isFirst={isFirst}
     >
       <TextMessageItem
+        avatarImageUrl={avatarImageUrl}
         avatarSeed={avatarSeed}
         compactSpacing={compactSpacing}
         message={message}
@@ -66,17 +70,24 @@ export function ChatMessageItem({
 }
 
 function RoommateRequestMessageItem({
+  avatarImageUrl,
   avatarSeed,
   message,
   onAccept,
 }: {
+  avatarImageUrl?: string | null;
   avatarSeed: number;
   message: Extract<ChatMessage, { type: "roommate_request" }>;
   onAccept?: () => void;
 }) {
   return (
     <div className="flex w-full items-end gap-200">
-      <ProfileAvatar className="shrink-0 self-end" seed={avatarSeed} size={36} />
+      <ProfileAvatar
+        className="shrink-0 self-end"
+        imageUrl={avatarImageUrl}
+        seed={avatarSeed}
+        size={36}
+      />
       <ChatRoommateRequestMessage onAccept={onAccept} requesterName={message.requesterName} />
       {message.sentAt ? (
         <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
@@ -105,11 +116,13 @@ function RoommateInviteMessageItem({
 }
 
 function TextMessageItem({
+  avatarImageUrl,
   avatarSeed,
   compactSpacing,
   message,
   showMessageTime,
 }: {
+  avatarImageUrl?: string | null;
   avatarSeed: number;
   compactSpacing: boolean;
   message: ChatTextMessage;
@@ -123,6 +136,7 @@ function TextMessageItem({
       {!isOutgoing ? (
         <ProfileAvatar
           className={cn("shrink-0 self-end", !showProfile && "invisible")}
+          imageUrl={avatarImageUrl}
           seed={avatarSeed}
           size={36}
         />

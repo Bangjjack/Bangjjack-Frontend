@@ -16,6 +16,7 @@ export type ChatUserProfile = {
   department?: string;
   matchRate?: number;
   nickname: string;
+  profileImage?: string | null;
 };
 
 export type BaseChatCardProps = {

@@ -21,6 +21,7 @@ function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
     messages: [],
     nickname: chatRoom.partnerName,
     profileSummary: [],
+    profileImage: chatRoom.partnerProfileImage,
     startSource: "ai_recommendation",
   };
 }

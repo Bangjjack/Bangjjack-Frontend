@@ -92,6 +92,7 @@ function PostDetailContent() {
         postId={postId}
         isOwner={post.isOwner}
         targetUserId={post.author.authorId}
+        targetProfileImage={post.author.profileImage}
         targetUsername={post.author.username}
       />
     </div>

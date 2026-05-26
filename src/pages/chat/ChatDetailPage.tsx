@@ -23,7 +23,9 @@ function ChatDetailPageContent({
   > = {
     onBackClick: onBack,
     onProfileClick,
-    profileElement: <ProfileAvatar seed={chatDetail.id} size={36} />,
+    profileElement: (
+      <ProfileAvatar imageUrl={chatDetail.profileImage} seed={chatDetail.id} size={36} />
+    ),
     showBack: true,
     showProfile: true,
     title: chatDetail.nickname,

@@ -6,6 +6,7 @@ import {
 } from "@/features/chat/utils/chatMessageGrouping";
 
 export type ChatMessageListProps = {
+  avatarImageUrl?: string | null;
   avatarSeed: number;
   fallbackDateLabel: string;
   messages: ChatMessage[];
@@ -14,6 +15,7 @@ export type ChatMessageListProps = {
 };
 
 export function ChatMessageList({
+  avatarImageUrl,
   avatarSeed,
   fallbackDateLabel,
   messages,
@@ -27,6 +29,7 @@ export function ChatMessageList({
       {messages.map((message, index) => (
         <ChatMessageItem
           key={message.id}
+          avatarImageUrl={avatarImageUrl}
           avatarSeed={avatarSeed}
           compactSpacing={isSameMessageTimeGroupWithPrevious(messages, index)}
           dateBadgeLabel={dateBadgeLabels[index]}

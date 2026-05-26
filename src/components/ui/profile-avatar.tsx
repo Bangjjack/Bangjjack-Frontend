@@ -1,5 +1,5 @@
 import { cn } from "@/lib/cn";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileMintIcon, ProfileOrangeIcon } from "@/assets/icons";
 import { useMemo } from "react";
 
@@ -23,6 +23,7 @@ const SIZE_CLASS: Record<ProfileAvatarSize, string> = {
 
 type ProfileAvatarProps = {
   className?: string;
+  imageUrl?: string | null;
   /** 같은 seed는 항상 같은 아이콘을 반환 */
   seed?: number;
   size?: ProfileAvatarSize;
@@ -40,7 +41,7 @@ function getRandomIcon(seed?: number) {
   return <Icon className="size-full" />;
 }
 
-function ProfileAvatar({ className, seed, size = 70, variant }: ProfileAvatarProps) {
+function ProfileAvatar({ className, imageUrl, seed, size = 70, variant }: ProfileAvatarProps) {
   const iconElement = useMemo(() => {
     if (variant) {
       const Icon = PROFILE_ICON_BY_VARIANT[variant];
@@ -53,6 +54,7 @@ function ProfileAvatar({ className, seed, size = 70, variant }: ProfileAvatarPro
 
   return (
     <Avatar className={cn(SIZE_CLASS[size], className)}>
+      {imageUrl ? <AvatarImage alt="" src={imageUrl} /> : null}
       <AvatarFallback className="bg-transparent">{iconElement}</AvatarFallback>
     </Avatar>
   );
