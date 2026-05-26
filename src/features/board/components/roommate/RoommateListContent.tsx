@@ -94,7 +94,11 @@ function RoommateListContent() {
           </Card>
 
           {selectedMember && checklist.length > 0 && (
-            <ChecklistCard items={checklist} nickname={selectedMember.nickname} />
+            <ChecklistCard
+              items={checklist}
+              nickname={selectedMember.nickname}
+              hideMatchStatus={isOwner}
+            />
           )}
         </div>
       </main>
