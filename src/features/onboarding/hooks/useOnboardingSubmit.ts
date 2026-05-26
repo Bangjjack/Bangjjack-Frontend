@@ -75,17 +75,17 @@ function useOnboardingSubmit({
         return;
       }
 
+      const alreadySavedMessages: string[] = [];
+
       try {
         await saveOnboarding(body);
       } catch (error) {
         if (isAxiosError(error) && error.response?.status === 409) {
-          resetOnboarding();
-          onAlreadySaved?.(getOnboardingErrorMessage(error));
+          alreadySavedMessages.push(getOnboardingErrorMessage(error));
+        } else {
+          onError?.(getOnboardingErrorMessage(error));
           return;
         }
-
-        onError?.(getOnboardingErrorMessage(error));
-        return;
       }
 
       if (checklistResult.status === "valid") {
@@ -93,13 +93,11 @@ function useOnboardingSubmit({
           await saveOnboardingChecklist(checklistResult.value);
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
-            resetOnboarding();
-            onAlreadySaved?.(getChecklistErrorMessage(error));
+            alreadySavedMessages.push(getChecklistErrorMessage(error));
+          } else {
+            onError?.(getChecklistErrorMessage(error));
             return;
           }
-
-          onError?.(getChecklistErrorMessage(error));
-          return;
         }
       }
 
@@ -108,17 +106,20 @@ function useOnboardingSubmit({
           await saveOnboardingPreference(preferenceResult.value);
         } catch (error) {
           if (isAxiosError(error) && error.response?.status === 409) {
-            resetOnboarding();
-            onAlreadySaved?.(getPreferenceErrorMessage(error));
+            alreadySavedMessages.push(getPreferenceErrorMessage(error));
+          } else {
+            onError?.(getPreferenceErrorMessage(error));
             return;
           }
-
-          onError?.(getPreferenceErrorMessage(error));
-          return;
         }
       }
 
       resetOnboarding();
+      if (alreadySavedMessages.length > 0) {
+        onAlreadySaved?.(alreadySavedMessages.join("\n"));
+        return;
+      }
+
       onSuccess?.();
     },
     [
