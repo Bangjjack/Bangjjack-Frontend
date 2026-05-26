@@ -7,6 +7,7 @@ export type ChatInputSectionProps = {
   draftMessage: string;
   inputMenuClosing: boolean;
   inputMenuOpen: boolean;
+  isSendingInviteRequest?: boolean;
   inviteSheetOpen: boolean;
   onCloseInputMenu: () => void;
   onCloseInviteSheet: () => void;
@@ -23,6 +24,7 @@ function ChatInputSection({
   draftMessage,
   inputMenuClosing,
   inputMenuOpen,
+  isSendingInviteRequest = false,
   inviteSheetOpen,
   onCloseInputMenu,
   onCloseInviteSheet,
@@ -78,6 +80,7 @@ function ChatInputSection({
         lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
         nickname={chatDetail.nickname}
         open={inviteSheetOpen}
+        confirmDisabled={isSendingInviteRequest}
         onCancel={onCloseInviteSheet}
         onConfirm={onSendInviteRequest}
       />

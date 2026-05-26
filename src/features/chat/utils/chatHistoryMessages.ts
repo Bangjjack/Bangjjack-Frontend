@@ -4,8 +4,31 @@ import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils
 export function mapHistoryMessageToChatMessage(
   message: ChatMessageHistoryItem,
   currentUserId: number | null,
+  partnerName: string,
 ): ChatMessage {
   const { dateKey, dateLabel } = formatMessageDateLabel(message.createdAt);
+  const isOutgoing = currentUserId != null && message.senderId === currentUserId;
+
+  if (message.messageType === "APPLICATION_SENT") {
+    if (isOutgoing) {
+      return {
+        dateKey,
+        dateLabel,
+        id: message.messageId,
+        recipientName: partnerName,
+        type: "roommate_invite",
+      };
+    }
+
+    return {
+      dateKey,
+      dateLabel,
+      id: message.messageId,
+      requesterName: partnerName,
+      sentAt: formatMessageTime(message.createdAt),
+      type: "roommate_request",
+    };
+  }
 
   return {
     dateKey,
@@ -13,7 +36,7 @@ export function mapHistoryMessageToChatMessage(
     id: message.messageId,
     sentAt: formatMessageTime(message.createdAt),
     text: message.content,
-    type: currentUserId != null && message.senderId === currentUserId ? "outgoing" : "incoming",
+    type: isOutgoing ? "outgoing" : "incoming",
   };
 }
 
@@ -34,8 +57,9 @@ export function compareHistoryMessageByCreatedAt(
 export function mapHistoryMessagesToChatMessages(
   messages: ChatMessageHistoryItem[],
   currentUserId: number | null,
+  partnerName: string,
 ) {
   return messages
     .toSorted(compareHistoryMessageByCreatedAt)
-    .map((message) => mapHistoryMessageToChatMessage(message, currentUserId));
+    .map((message) => mapHistoryMessageToChatMessage(message, currentUserId, partnerName));
 }

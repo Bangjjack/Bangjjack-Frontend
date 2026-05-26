@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
+import { isAxiosError } from "axios";
 
+import type { ApiResponse } from "@/api";
 import { toast } from "@/components/ui";
+import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
 import type {
@@ -10,7 +13,6 @@ import type {
   ChatMessage,
   ChatReceivedMessage,
   ChatRoommateInviteMessageData,
-  ChatTextMessage,
 } from "@/features/chat/types";
 import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
 
@@ -21,8 +23,13 @@ interface UseChatComposerParams {
   roomId?: number;
 }
 
-function createInviteMessage(id: number, recipientName: string): ChatMessage {
+function createInviteMessage(
+  id: number,
+  recipientName: string,
+  applicationId?: number,
+): ChatMessage {
   return {
+    applicationId,
     id,
     recipientName,
     type: "roommate_invite",
@@ -35,6 +42,20 @@ function getNextMessageId(messages: ChatMessage[]) {
 
 function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessageData {
   return message.type === "roommate_invite";
+}
+
+function hasRoommateApplicationMessage(messages: ChatMessage[], isOutgoing: boolean) {
+  return messages.some((message) =>
+    isOutgoing ? message.type === "roommate_invite" : message.type === "roommate_request",
+  );
+}
+
+function getApiErrorMessage(error: unknown, fallbackMessage: string) {
+  if (!isAxiosError<ApiResponse<null>>(error)) {
+    return fallbackMessage;
+  }
+
+  return error.response?.data.message ?? fallbackMessage;
 }
 
 function useChatComposer({
@@ -54,16 +75,33 @@ function useChatComposer({
     inputMenuOpen,
     toggleInputMenu,
   } = useInputMenuState();
+  const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
+    useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
   const messages = [
     ...baseMessages,
     ...localMessages.filter(
-      (localMessage) => !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id),
+      (localMessage) =>
+        !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id) &&
+        !(
+          localMessage.type === "roommate_invite" &&
+          hasRoommateApplicationMessage(baseMessages, true)
+        ) &&
+        !(
+          localMessage.type === "roommate_request" &&
+          hasRoommateApplicationMessage(baseMessages, false)
+        ),
     ),
   ];
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
+    console.log("[chat] appendReceivedMessage called", { receivedMessage, roomId });
+
     if (roomId == null || receivedMessage.roomId !== roomId) {
+      console.log("[chat] appendReceivedMessage skipped by room mismatch", {
+        receivedRoomId: receivedMessage.roomId,
+        roomId,
+      });
       return;
     }
 
@@ -72,6 +110,9 @@ function useChatComposer({
         baseMessages.some((message) => message.id === receivedMessage.messageId) ||
         prev.some((message) => message.id === receivedMessage.messageId)
       ) {
+        console.log("[chat] appendReceivedMessage skipped by duplicated message", {
+          messageId: receivedMessage.messageId,
+        });
         return prev;
       }
 
@@ -87,15 +128,43 @@ function useChatComposer({
         pendingOutgoingMessagesRef.current.splice(pendingMessageIndex, 1);
       }
 
-      const nextMessage: ChatTextMessage = {
-        ...formatMessageDateLabel(receivedMessage.createdAt),
-        id: receivedMessage.messageId,
+      const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
+      console.log("[chat] appendReceivedMessage parsed", {
+        isApplicationMessage,
+        isOutgoing,
         messageType: receivedMessage.messageType,
-        sentAt: formatMessageTime(receivedMessage.createdAt),
-        text: receivedMessage.content,
-        type: isOutgoing ? "outgoing" : "incoming",
-      };
+      });
 
+      if (
+        isApplicationMessage &&
+        hasRoommateApplicationMessage([...baseMessages, ...prev], isOutgoing)
+      ) {
+        console.log("[chat] appendReceivedMessage skipped by existing application bubble", {
+          isOutgoing,
+        });
+        return prev;
+      }
+
+      const nextMessage: ChatMessage = isApplicationMessage
+        ? isOutgoing
+          ? createInviteMessage(receivedMessage.messageId, chatDetail.nickname)
+          : {
+              ...formatMessageDateLabel(receivedMessage.createdAt),
+              id: receivedMessage.messageId,
+              requesterName: chatDetail.nickname,
+              sentAt: formatMessageTime(receivedMessage.createdAt),
+              type: "roommate_request",
+            }
+        : {
+            ...formatMessageDateLabel(receivedMessage.createdAt),
+            id: receivedMessage.messageId,
+            messageType: receivedMessage.messageType,
+            sentAt: formatMessageTime(receivedMessage.createdAt),
+            text: receivedMessage.content,
+            type: isOutgoing ? "outgoing" : "incoming",
+          };
+
+      console.log("[chat] appendReceivedMessage added local message", nextMessage);
       return [...prev, nextMessage];
     });
   };
@@ -148,12 +217,48 @@ function useChatComposer({
   };
 
   const handleSendInviteRequest = () => {
-    setLocalMessages((prev) => [
-      ...prev,
-      createInviteMessage(getNextMessageId(messages), chatDetail.nickname),
-    ]);
-    closeInviteSheet();
-    toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
+    console.log("[chat] roommate invite confirm clicked", {
+      roomId,
+      targetUserId: chatDetail.id,
+      targetUsername: chatDetail.nickname,
+    });
+
+    sendRoommateApplication(chatDetail.id, {
+      onError: (error) => {
+        console.error("[chat] sendRoommateApplication failed", error);
+        toast.error(getApiErrorMessage(error, "룸메이트 요청을 보내지 못했어요."));
+      },
+      onSuccess: (application) => {
+        console.log("[chat] sendRoommateApplication succeeded", application);
+        setLocalMessages((prev) => {
+          const currentMessages = [...messages, ...prev];
+
+          if (hasRoommateApplicationMessage(currentMessages, true)) {
+            console.log("[chat] invite bubble skipped by existing outgoing application bubble", {
+              application,
+            });
+            return prev;
+          }
+
+          const nextMessageId = currentMessages.some(
+            (message) => message.id === application.applicationId,
+          )
+            ? getNextMessageId(currentMessages)
+            : application.applicationId;
+
+          console.log("[chat] invite bubble appended", {
+            application,
+            nextMessageId,
+          });
+          return [
+            ...prev,
+            createInviteMessage(nextMessageId, chatDetail.nickname, application.applicationId),
+          ];
+        });
+        closeInviteSheet();
+        toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
+      },
+    });
   };
 
   const handleCancelInviteRequest = (messageId: number) => {
@@ -189,6 +294,7 @@ function useChatComposer({
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,
+    isSendingInviteRequest,
     inviteSheetOpen,
     messages,
     setDraftMessage,

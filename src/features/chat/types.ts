@@ -38,6 +38,9 @@ export type ChatTextMessage = {
 };
 
 export type ChatRoommateRequestMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
   requesterName: string;
   sentAt?: string;
@@ -45,6 +48,9 @@ export type ChatRoommateRequestMessageData = {
 };
 
 export type ChatRoommateInviteMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
   recipientName: string;
   type: "roommate_invite";
@@ -124,7 +130,7 @@ export type ChatReceivedMessage = {
   content: string;
   createdAt: string;
   messageId: number;
-  messageType: ChatServerMessageType;
+  messageType?: ChatServerMessageType;
   roomId: number;
   senderId: number;
 };
@@ -133,6 +139,7 @@ export type ChatMessageHistoryItem = {
   content: string;
   createdAt: string;
   messageId: number;
+  messageType: ChatServerMessageType;
   senderId: number;
 };
 

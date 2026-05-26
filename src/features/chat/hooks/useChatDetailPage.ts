@@ -151,7 +151,11 @@ function useChatDetailPage() {
     ? getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId)
     : authUserId;
   const initialMessages = chatMessagesData
-    ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
+    ? mapHistoryMessagesToChatMessages(
+        chatMessagesData.messages,
+        currentUserId,
+        chatDetail?.nickname ?? "",
+      )
     : undefined;
 
   const pageState: ChatDetailPageState = {

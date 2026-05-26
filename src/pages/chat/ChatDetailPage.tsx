@@ -29,6 +29,7 @@ export default function ChatDetailPage() {
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,
+    isSendingInviteRequest,
     inviteSheetOpen,
     messages,
     setDraftMessage,
@@ -80,6 +81,7 @@ export default function ChatDetailPage() {
         draftMessage={draftMessage}
         inputMenuClosing={inputMenuClosing}
         inputMenuOpen={inputMenuOpen}
+        isSendingInviteRequest={isSendingInviteRequest}
         inviteSheetOpen={inviteSheetOpen}
         onCloseInputMenu={closeInputMenu}
         onCloseInviteSheet={closeInviteSheet}

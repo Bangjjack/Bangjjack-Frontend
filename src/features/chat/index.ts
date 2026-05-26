@@ -17,6 +17,7 @@ export {
   useChatWebSocket,
   useCreateChatRoom,
   useIssueChatWsToken,
+  useSendRoommateApplication,
 } from "@/features/chat/hooks";
 export type {
   ChatDetail,
