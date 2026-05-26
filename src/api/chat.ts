@@ -3,8 +3,10 @@ import type { ApiResponse } from "@/api/types";
 import type {
   ChatMessagesData,
   ChatRoom,
+  ChatRoomsData,
   CreateChatRoomRequest,
   GetChatMessagesParams,
+  GetChatRoomsParams,
 } from "@/features/chat/types";
 
 const CHAT_API_PATHS = {
@@ -26,6 +28,22 @@ export const issueChatWsToken = async (): Promise<IssueChatWsTokenResponse> => {
 
 export const createChatRoom = async (body: CreateChatRoomRequest): Promise<ChatRoom> => {
   const { data } = await apiClient.post<ApiResponse<ChatRoom>>(CHAT_API_PATHS.chatRooms, body);
+  return data.data;
+};
+
+export const getChatRooms = async ({
+  category,
+  cursor,
+  size = 20,
+}: GetChatRoomsParams = {}): Promise<ChatRoomsData> => {
+  const { data } = await apiClient.get<ApiResponse<ChatRoomsData>>(CHAT_API_PATHS.chatRooms, {
+    params: {
+      category,
+      cursor,
+      size,
+    },
+  });
+
   return data.data;
 };
 

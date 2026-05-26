@@ -56,6 +56,8 @@ export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
 export type ChatInputMenuAction = "invite";
 
+export type ChatRoomCategory = "APPLICATION";
+
 export type ChatInputMenuItem = {
   description: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
@@ -134,6 +136,28 @@ export type ChatMessagesData = {
 export type GetChatMessagesParams = {
   cursor?: number;
   roomId: number;
+  size?: number;
+};
+
+export type ChatRoomListItem = {
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  partnerId: number;
+  partnerName: string;
+  partnerProfileImage: string | null;
+  roomId: number;
+  unreadCount: number;
+};
+
+export type ChatRoomsData = {
+  hasNext: boolean;
+  nextCursor: string | null;
+  rooms: ChatRoomListItem[];
+};
+
+export type GetChatRoomsParams = {
+  category?: ChatRoomCategory;
+  cursor?: string;
   size?: number;
 };
 

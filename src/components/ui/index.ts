@@ -53,7 +53,7 @@ export {
 } from "@/components/ui/card";
 export { ProfileAvatar } from "@/components/ui/profile-avatar";
 export type { ProfileAvatarProps } from "@/components/ui/profile-avatar";
-export { Avatar, AvatarFallback } from "@/components/ui/avatar";
+export { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export {
   BottomSheet,
   BottomSheetTrigger,
