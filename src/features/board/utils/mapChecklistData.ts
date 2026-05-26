@@ -47,11 +47,16 @@ export function formStateToApiChecklist(state: ChecklistState): UserChecklistDat
     bedtime: BEDTIME_INV[state.sleepTime as string] ?? (state.sleepTime as string),
     wakeUpTime: WAKE_UP_TIME_INV[state.wakeUpTime as string] ?? (state.wakeUpTime as string),
     sleepHabits: (state.sleepingHabit as string[]).map((v) => SLEEP_HABITS_INV[v] ?? v),
-    cleaningCycle: CLEANING_CYCLE_INV[state.cleaningCycle as string] ?? (state.cleaningCycle as string),
-    dormStayTime: DORM_STAY_TIME_INV[state.dormStayDuration as string] ?? (state.dormStayDuration as string),
+    cleaningCycle:
+      CLEANING_CYCLE_INV[state.cleaningCycle as string] ?? (state.cleaningCycle as string),
+    dormStayTime:
+      DORM_STAY_TIME_INV[state.dormStayDuration as string] ?? (state.dormStayDuration as string),
     callHabit: CALL_HABIT_INV[state.callHabit as string] ?? (state.callHabit as string),
-    indoorTemperature: INDOOR_TEMPERATURE_INV[state.indoorTemperature as string] ?? (state.indoorTemperature as string),
-    noiseSensitivity: NOISE_SENSITIVITY_INV[state.noiseSensitivity as string] ?? (state.noiseSensitivity as string),
+    indoorTemperature:
+      INDOOR_TEMPERATURE_INV[state.indoorTemperature as string] ??
+      (state.indoorTemperature as string),
+    noiseSensitivity:
+      NOISE_SENSITIVITY_INV[state.noiseSensitivity as string] ?? (state.noiseSensitivity as string),
     smoking: SMOKING_INV[state.smoking as string] ?? (state.smoking as string),
   };
 }
