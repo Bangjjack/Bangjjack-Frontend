@@ -3,23 +3,23 @@ import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
 export const BEDTIME_LABEL: Record<string, string> = {
   BEFORE_22: "22시 이전",
-  "22_TO_24": "22~24시",
-  "24_TO_2": "24~2시",
+  BETWEEN_22_24: "22~24시",
+  BETWEEN_24_2: "24~2시",
   AFTER_2: "2시 이후",
   IRREGULAR: "불규칙",
 };
 
 export const WAKE_UP_TIME_LABEL: Record<string, string> = {
   BEFORE_6: "6시 이전",
-  "6_TO_8": "6~8시",
-  "8_TO_10": "8~10시",
+  BETWEEN_6_8: "6~8시",
+  BETWEEN_8_10: "8~10시",
   AFTER_10: "10시 이후",
   IRREGULAR: "불규칙",
 };
 
 export const SLEEP_HABITS_LABEL: Record<string, string> = {
   NONE: "없음",
-  TOSSING: "뒤척임",
+  TOSS_AND_TURN: "뒤척임",
   SNORING: "코골이",
   TEETH_GRINDING: "이갈이",
   FREQUENT_WAKING: "자주 깸",
@@ -41,14 +41,14 @@ export const DORM_STAY_TIME_LABEL: Record<string, string> = {
 export const CALL_HABIT_LABEL: Record<string, string> = {
   INSIDE_OK: "기숙사 내부 가능",
   OUTSIDE_ONLY: "밖에서만",
-  QUIET: "소곤소곤",
+  WHISPER: "소곤소곤",
 };
 
 export const INDOOR_TEMPERATURE_LABEL: Record<string, string> = {
   SENSITIVE_TO_HEAT: "더위 잘 탐",
   SENSITIVE_TO_COLD: "추위 잘 탐",
   BOTH_SENSITIVE: "둘 다 예민",
-  NOT_SENSITIVE: "둔감한 편",
+  INSENSITIVE: "둔감한 편",
 };
 
 export const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
@@ -61,8 +61,8 @@ export const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
 
 export const SMOKING_LABEL: Record<string, string> = {
   NON_SMOKER: "비흡연",
-  SMOKER: "연초",
-  E_CIGARETTE: "전자 담배",
+  CIGARETTE: "연초",
+  ELECTRONIC_CIGARETTE: "전자 담배",
 };
 
 type ChecklistFieldMeta = {
