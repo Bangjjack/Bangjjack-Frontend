@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
-import { useCreateChatRoom } from "@/features/chat/hooks/useCreateChatRoom";
-import { CHAT_DETAILS } from "@/features/chat/mocks";
-import type { ChatDetail, ChatMessage, ChatRoom } from "@/features/chat/types";
+import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
+import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -24,6 +23,43 @@ export type ChatDetailPageProps = {
   onRoommateRequestAccept?: () => void;
 };
 
+type ChatDetailLocationState = {
+  chatDetail: ChatDetail;
+  chatRoom: ChatRoom;
+};
+
+function isChatDetailLocationState(state: unknown): state is ChatDetailLocationState {
+  return (
+    typeof state === "object" &&
+    state !== null &&
+    "chatDetail" in state &&
+    "chatRoom" in state &&
+    typeof (state as ChatDetailLocationState).chatRoom.roomId === "number"
+  );
+}
+
+function mapChatRoomListItemToChatDetail(chatRoom: ChatRoomListItem): ChatDetail {
+  return {
+    dateLabel: "",
+    id: chatRoom.partnerId,
+    matchRate: 0,
+    messages: [],
+    nickname: chatRoom.partnerName,
+    profileSummary: [],
+    startSource: "ai_recommendation",
+  };
+}
+
+function mapChatRoomListItemToChatRoom(chatRoom: ChatRoomListItem): ChatRoom {
+  return {
+    createdAt: chatRoom.lastMessageAt ?? "",
+    isNewRoom: false,
+    participants: [{ userId: chatRoom.partnerId }],
+    roomId: chatRoom.roomId,
+    roomType: "DIRECT",
+  };
+}
+
 function getCurrentUserIdFromChatRoom(
   chatRoom: ChatRoom | undefined,
   targetUserId: number,
@@ -37,18 +73,29 @@ function getCurrentUserIdFromChatRoom(
 
 function useChatDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { chatId } = useParams();
   const authUserId = useAuthStore((state) => state.userId);
 
   const parsedChatId = Number(chatId);
-  const chatDetail = Number.isNaN(parsedChatId) ? undefined : CHAT_DETAILS[parsedChatId];
+  const locationState =
+    isChatDetailLocationState(location.state) && location.state.chatRoom.roomId === parsedChatId
+      ? location.state
+      : undefined;
   const {
-    data: chatRoom,
-    isError: isCreateChatRoomError,
-    isPending: isCreatingChatRoom,
-    isSuccess: isCreateChatRoomSuccess,
-    mutate: createChatRoom,
-  } = useCreateChatRoom();
+    data: chatRoomsData,
+    isError: isChatRoomsError,
+    isPending: isChatRoomsPending,
+  } = useChatRooms();
+  const chatRoomFromList = chatRoomsData?.rooms.find(
+    (chatRoom) => chatRoom.roomId === parsedChatId,
+  );
+  const chatDetail =
+    locationState?.chatDetail ??
+    (chatRoomFromList ? mapChatRoomListItemToChatDetail(chatRoomFromList) : undefined);
+  const activeChatRoom =
+    locationState?.chatRoom ??
+    (chatRoomFromList ? mapChatRoomListItemToChatRoom(chatRoomFromList) : undefined);
   const {
     data: chatMessagesData,
     fetchNextPage: fetchPreviousMessages,
@@ -56,27 +103,27 @@ function useChatDetailPage() {
     isError: isChatMessagesError,
     isFetchingNextPage: isLoadingPreviousMessages,
   } = useChatMessages({
-    roomId: chatRoom?.roomId,
+    roomId: Number.isNaN(parsedChatId) ? undefined : parsedChatId,
   });
 
   useEffect(() => {
-    if (!chatDetail) {
+    if (Number.isNaN(parsedChatId)) {
       navigate("/chat", { replace: true });
       return;
     }
 
-    if (chatRoom || isCreatingChatRoom || isCreateChatRoomSuccess) {
+    if (chatDetail || isChatRoomsPending) {
       return;
     }
 
-    createChatRoom({ targetUserId: chatDetail.id });
-  }, [chatDetail, chatRoom, createChatRoom, isCreateChatRoomSuccess, isCreatingChatRoom, navigate]);
+    navigate("/chat", { replace: true });
+  }, [chatDetail, isChatRoomsPending, navigate, parsedChatId]);
 
   useEffect(() => {
-    if (isCreateChatRoomError) {
+    if (isChatRoomsError) {
       toast.error("채팅방을 불러오지 못했습니다.");
     }
-  }, [isCreateChatRoomError]);
+  }, [isChatRoomsError]);
 
   useEffect(() => {
     if (isChatMessagesError) {
@@ -96,7 +143,7 @@ function useChatDetailPage() {
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
-  const currentUserId = getCurrentUserIdFromChatRoom(chatRoom, chatDetail.id, authUserId);
+  const currentUserId = getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId);
   const initialMessages = chatMessagesData
     ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
     : undefined;
@@ -107,12 +154,13 @@ function useChatDetailPage() {
     hasPreviousMessages,
     initialMessages,
     isLoadingPreviousMessages,
-    roomId: chatRoom?.roomId,
+    roomId: parsedChatId,
     onBack: () => navigate("/chat"),
     onLoadPreviousMessages: fetchPreviousMessages,
     onProfileClick: () => navigate(`/roommate/${chatDetail.id}`),
     onRecruitClick: handleRecruitClick,
-    onRoommateRequestAccept: () => navigate(`/chat/${chatDetail.id}/roommate-confirmed`),
+    onRoommateRequestAccept: () =>
+      navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } }),
   };
 
   return contentProps;

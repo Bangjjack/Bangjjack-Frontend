@@ -8,6 +8,13 @@ export const CHAT_TAB_CATEGORY = {
   roommateRequest: "APPLICATION",
 } as const satisfies Record<ChatTab, "APPLICATION" | undefined>;
 
+export const CHAT_TABS: Array<{ key: ChatTab; label: string }> = [
+  { key: "all", label: "전체" },
+  { key: "roommateRequest", label: "룸메이트 요청" },
+];
+
+export const CHAT_HELPER_TEXT = "매칭된 룸메이트에게 먼저 말을 걸어보세요.";
+
 export type GuideChecklistItem = {
   category: string;
   label: string;

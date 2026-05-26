@@ -10,8 +10,30 @@ import {
   formatChatRoomTime,
   useChatRooms,
 } from "@/features/chat";
-import type { ChatTab } from "@/features/chat";
+import type { ChatDetail, ChatRoom, ChatRoomListItem, ChatTab } from "@/features/chat";
 import { cn } from "@/lib/cn";
+
+function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
+  return {
+    dateLabel: "",
+    id: chatRoom.partnerId,
+    matchRate: 0,
+    messages: [],
+    nickname: chatRoom.partnerName,
+    profileSummary: [],
+    startSource: "ai_recommendation",
+  };
+}
+
+function createChatRoomState(chatRoom: ChatRoomListItem): ChatRoom {
+  return {
+    createdAt: chatRoom.lastMessageAt ?? "",
+    isNewRoom: false,
+    participants: [{ userId: chatRoom.partnerId }],
+    roomId: chatRoom.roomId,
+    roomType: "DIRECT",
+  };
+}
 
 export default function ChatListPage() {
   const [activeTab, setActiveTab] = useState<ChatTab>("all");
@@ -85,7 +107,14 @@ export default function ChatListPage() {
                 id={chatRoom.partnerId}
                 message={formatChatRoomMessage(chatRoom.lastMessage)}
                 nickname={chatRoom.partnerName}
-                onClick={() => navigate(`/chat/${chatRoom.roomId}`)}
+                onClick={() =>
+                  navigate(`/chat/${chatRoom.roomId}`, {
+                    state: {
+                      chatDetail: createChatDetailFromRoom(chatRoom),
+                      chatRoom: createChatRoomState(chatRoom),
+                    },
+                  })
+                }
                 profileImageUrl={chatRoom.partnerProfileImage}
                 timeLabel={formatChatRoomTime(chatRoom.lastMessageAt)}
                 unreadCount={chatRoom.unreadCount}

@@ -8,7 +8,7 @@ export type {
   ChatRoommateConfirmedContentProps,
   SharedLifeGuideContentProps,
 } from "@/features/chat/components";
-export { CHAT_TAB_CATEGORY } from "@/features/chat/constants";
+export { CHAT_HELPER_TEXT, CHAT_TAB_CATEGORY, CHAT_TABS } from "@/features/chat/constants";
 export {
   useChatComposer,
   useChatDetailPage,
@@ -19,7 +19,6 @@ export {
   useIssueChatWsToken,
 } from "@/features/chat/hooks";
 export type { ChatDetailPageProps } from "@/features/chat/hooks";
-export { CHAT_DETAILS, CHAT_HELPER_TEXT, CHAT_PREVIEWS, CHAT_TABS } from "@/features/chat/mocks";
 export type {
   ChatDetail,
   ChatConnectionStatus,

@@ -1,18 +1,65 @@
 import { useNavigate } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button } from "@/components/ui";
-import { useBookmarkToggle } from "@/features/board/hooks";
+import { Button, toast } from "@/components/ui";
 import { MatchActionBar } from "@/features/board/components/roommate";
+import { useBookmarkToggle } from "@/features/board/hooks";
+import { useCreateChatRoom, type ChatDetail } from "@/features/chat";
 
 interface PostDetailBottomBarProps {
-  postId: number;
   isOwner: boolean;
+  postId: number;
+  targetUserId: number;
+  targetUsername: string;
 }
 
-function PostDetailBottomBar({ postId, isOwner }: PostDetailBottomBarProps) {
+function PostDetailBottomBar({
+  isOwner,
+  postId,
+  targetUserId,
+  targetUsername,
+}: PostDetailBottomBarProps) {
   const navigate = useNavigate();
   const { isBookmarked, toggle } = useBookmarkToggle(postId);
+  const { isPending: isCreatingChatRoom, mutate: createChatRoom } = useCreateChatRoom();
+
+  const handleChatConfirm = () => {
+    console.log("[post-detail] chat confirm clicked", {
+      postId,
+      targetUserId,
+    });
+
+    createChatRoom(
+      { targetUserId },
+      {
+        onError: (error) => {
+          console.error("[post-detail] create chat room failed", error);
+          toast.error("채팅방을 생성하지 못했어요.");
+        },
+        onSuccess: (chatRoom) => {
+          console.log("[post-detail] create chat room succeeded", chatRoom);
+          const chatDetail: ChatDetail = {
+            dateLabel: "",
+            id: targetUserId,
+            matchRate: 0,
+            messages: [],
+            nickname: targetUsername,
+            profileSummary: [],
+            recruitPostId: postId,
+            recruitTitle: "모집글",
+            startSource: "recruit_post",
+          };
+
+          navigate(`/chat/${chatRoom.roomId}`, {
+            state: {
+              chatDetail,
+              chatRoom,
+            },
+          });
+        },
+      },
+    );
+  };
 
   const bookmarkButton = (
     <button
@@ -41,11 +88,12 @@ function PostDetailBottomBar({ postId, isOwner }: PostDetailBottomBarProps) {
 
   return (
     <MatchActionBar
+      disabledMessage={isCreatingChatRoom ? "채팅방 생성 중..." : undefined}
       leadingElement={bookmarkButton}
       matchRate={88}
       matchHighlights={["청소 빈도", "수면 습관"]}
       onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
-      onChatConfirm={() => navigate("/chat")}
+      onChatConfirm={handleChatConfirm}
     />
   );
 }

@@ -88,7 +88,12 @@ function PostDetailContent() {
         </div>
       </main>
 
-      <PostDetailBottomBar postId={postId} isOwner={post.isOwner} />
+      <PostDetailBottomBar
+        postId={postId}
+        isOwner={post.isOwner}
+        targetUserId={post.author.authorId}
+        targetUsername={post.author.username}
+      />
     </div>
   );
 }
