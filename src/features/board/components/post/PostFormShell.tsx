@@ -10,7 +10,8 @@ import {
 import type { RoommatePreference } from "@/constants";
 import type { PostWriteFormValues } from "@/features/board/schemas";
 import type { BasicTagCategory } from "@/features/board/types";
-import { usePostWriteForm, useUserTags } from "@/features/board/hooks";
+import { usePostWriteForm } from "@/features/board/hooks";
+import { useUserTags } from "@/features/user/hooks";
 
 import {
   BasicTagList,
