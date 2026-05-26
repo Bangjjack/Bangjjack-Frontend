@@ -21,7 +21,8 @@ function RoommateListContent() {
   const { data: post, isLoading, isError } = usePostDetail(postId);
   const [selectedUserId, setSelectedUserId] = useState<number | null>(() => {
     const userId = searchParams.get("userId");
-    return userId ? Number(userId) : null;
+    const parsed = Number(userId);
+    return userId && Number.isInteger(parsed) ? parsed : null;
   });
   const { isBookmarked, isOwner, toggle } = useBookmarkToggle(postId);
 
@@ -86,8 +87,7 @@ function RoommateListContent() {
                 members={members}
                 selectedNickname={selectedMember?.nickname}
                 onMemberClick={(member) => {
-                  const found = post.members.find((m) => m.username === member.nickname);
-                  setSelectedUserId(found?.userId ?? null);
+                  setSelectedUserId(member.seed);
                 }}
               />
             </div>
