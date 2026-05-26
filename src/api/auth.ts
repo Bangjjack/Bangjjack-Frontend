@@ -7,7 +7,9 @@ export type AuthTokenRequest = {
 
 export type AuthTokenResponse = {
   accessToken: string;
+  isChecklistRegistered: boolean;
   isOnboarded: boolean;
+  isRoommatePreferenceRegistered: boolean;
   userId: number;
   username: string;
 };

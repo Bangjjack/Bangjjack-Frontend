@@ -9,6 +9,8 @@ import { useAuthStore } from "@/stores/authStore";
 
 const DEFAULT_LOGIN_ERROR_MESSAGE = "로그인에 실패했습니다.";
 
+const getAuthRedirectPath = (isOnboarded: boolean) => (isOnboarded ? "/home" : "/onboarding");
+
 const getLoginErrorMessage = (error: unknown) => {
   if (isAxiosError<ApiResponse<null>>(error)) {
     return error.response?.data.message ?? DEFAULT_LOGIN_ERROR_MESSAGE;
@@ -22,15 +24,26 @@ export default function LoginCallbackPage() {
   const [searchParams] = useSearchParams();
   const hasExchangedCode = useRef(false);
   const code = searchParams.get("code");
-  const { mutate: exchangeAuthToken } = useExchangeAuthToken();
   const setAuth = useAuthStore((state) => state.setAuth);
+  const isOnboardingCompleted = useAuthStore((state) => state.isOnboardingCompleted);
+  const { mutate: exchangeAuthToken } = useExchangeAuthToken({
+    onSuccess: (authSession) => {
+      setAuth(authSession);
+      navigate(getAuthRedirectPath(authSession.isOnboarded), { replace: true });
+    },
+    onError: (error) => {
+      const loginErrorMessage = getLoginErrorMessage(error);
+
+      navigate("/login", { replace: true, state: { loginErrorMessage } });
+    },
+  });
 
   useEffect(() => {
     if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
       hasExchangedCode.current = true;
-      navigate("/home", { replace: true });
+      navigate(getAuthRedirectPath(isOnboardingCompleted), { replace: true });
     }
-  }, [navigate]);
+  }, [isOnboardingCompleted, navigate]);
 
   useEffect(() => {
     const exchangeCode = () => {
@@ -49,20 +62,7 @@ export default function LoginCallbackPage() {
 
       hasExchangedCode.current = true;
 
-      exchangeAuthToken(
-        { code },
-        {
-          onSuccess: ({ accessToken, isOnboarded, userId, username }) => {
-            setAuth(accessToken, userId, username, isOnboarded);
-            navigate("/home", { replace: true });
-          },
-          onError: (error) => {
-            const loginErrorMessage = getLoginErrorMessage(error);
-
-            navigate("/login", { replace: true, state: { loginErrorMessage } });
-          },
-        },
-      );
+      exchangeAuthToken({ code });
     };
 
     exchangeCode();

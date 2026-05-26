@@ -1,9 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { exchangeAuthToken } from "@/api";
+import { exchangeAuthToken, type AuthTokenResponse } from "@/api";
 
-export const useExchangeAuthToken = () => {
+type UseExchangeAuthTokenOptions = {
+  onError?: (error: Error) => void;
+  onSuccess?: (authTokenResponse: AuthTokenResponse) => void;
+};
+
+export const useExchangeAuthToken = (options?: UseExchangeAuthTokenOptions) => {
   return useMutation({
     mutationFn: exchangeAuthToken,
+    onError: options?.onError,
+    onSuccess: options?.onSuccess,
   });
 };
