@@ -1,7 +1,7 @@
 import type { PostMemberLifestyleChecklist } from "@/features/board/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 
-const BEDTIME_LABEL: Record<string, string> = {
+export const BEDTIME_LABEL: Record<string, string> = {
   BEFORE_22: "22시 이전",
   "22_TO_24": "22~24시",
   "24_TO_2": "24~2시",
@@ -9,7 +9,7 @@ const BEDTIME_LABEL: Record<string, string> = {
   IRREGULAR: "불규칙",
 };
 
-const WAKE_UP_TIME_LABEL: Record<string, string> = {
+export const WAKE_UP_TIME_LABEL: Record<string, string> = {
   BEFORE_6: "6시 이전",
   "6_TO_8": "6~8시",
   "8_TO_10": "8~10시",
@@ -17,7 +17,7 @@ const WAKE_UP_TIME_LABEL: Record<string, string> = {
   IRREGULAR: "불규칙",
 };
 
-const SLEEP_HABITS_LABEL: Record<string, string> = {
+export const SLEEP_HABITS_LABEL: Record<string, string> = {
   NONE: "없음",
   TOSSING: "뒤척임",
   SNORING: "코골이",
@@ -25,33 +25,33 @@ const SLEEP_HABITS_LABEL: Record<string, string> = {
   FREQUENT_WAKING: "자주 깸",
 };
 
-const CLEANING_CYCLE_LABEL: Record<string, string> = {
+export const CLEANING_CYCLE_LABEL: Record<string, string> = {
   ALMOST_DAILY: "거의 매일",
   ONCE_TWICE_WEEKLY: "주 1~2회",
   SOMETIMES: "가끔",
   RARELY: "거의 안 함",
 };
 
-const DORM_STAY_TIME_LABEL: Record<string, string> = {
+export const DORM_STAY_TIME_LABEL: Record<string, string> = {
   MOSTLY_OUTSIDE: "대부분 밖에",
   HALF: "절반 정도",
   MOSTLY_INSIDE: "대부분 기숙사 안에",
 };
 
-const CALL_HABIT_LABEL: Record<string, string> = {
+export const CALL_HABIT_LABEL: Record<string, string> = {
   INSIDE_OK: "기숙사 내부 가능",
   OUTSIDE_ONLY: "밖에서만",
   QUIET: "소곤소곤",
 };
 
-const INDOOR_TEMPERATURE_LABEL: Record<string, string> = {
+export const INDOOR_TEMPERATURE_LABEL: Record<string, string> = {
   SENSITIVE_TO_HEAT: "더위 잘 탐",
   SENSITIVE_TO_COLD: "추위 잘 탐",
   BOTH_SENSITIVE: "둘 다 예민",
   NOT_SENSITIVE: "둔감한 편",
 };
 
-const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
+export const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
   VERY_INSENSITIVE: "둔감한 편",
   SLIGHTLY_INSENSITIVE: "약간 둔감",
   MODERATE: "보통",
@@ -59,7 +59,7 @@ const NOISE_SENSITIVITY_LABEL: Record<string, string> = {
   VERY_SENSITIVE: "예민한 편",
 };
 
-const SMOKING_LABEL: Record<string, string> = {
+export const SMOKING_LABEL: Record<string, string> = {
   NON_SMOKER: "비흡연",
   SMOKER: "연초",
   E_CIGARETTE: "전자 담배",
