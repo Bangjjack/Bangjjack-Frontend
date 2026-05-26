@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Card, Header } from "@/components/ui";
@@ -17,8 +17,12 @@ function RoommateListContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack();
 
+  const [searchParams] = useSearchParams();
   const { data: post, isLoading, isError } = usePostDetail(postId);
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+  const [selectedUserId, setSelectedUserId] = useState<number | null>(() => {
+    const userId = searchParams.get("userId");
+    return userId ? Number(userId) : null;
+  });
   const { isBookmarked, isOwner, toggle } = useBookmarkToggle(postId);
 
   if (!id || isNaN(postId)) {
