@@ -24,6 +24,7 @@ export type {
   PostDetail,
   PostListItem,
   PostListData,
+  PostMatchRateData,
 } from "./post";
 
 export type {

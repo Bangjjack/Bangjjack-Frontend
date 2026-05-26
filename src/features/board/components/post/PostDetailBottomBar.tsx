@@ -48,6 +48,7 @@ function PostDetailBottomBar({
 
   return (
     <MatchActionBar
+      postId={postId}
       leadingElement={bookmarkButton}
       matchRate={matchRate}
       matchHighlights={matchHighlights}

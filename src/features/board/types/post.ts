@@ -79,6 +79,13 @@ type PostListData = {
   hasNext: boolean;
 };
 
+/** 매칭률 조회 응답 data */
+type PostMatchRateData = {
+  matchRate: number;
+  matchedAttributes: string[];
+  recommendedTopics: string[];
+};
+
 export type {
   ChecklistField,
   PostAuthor,
@@ -88,4 +95,5 @@ export type {
   PostDetail,
   PostListItem,
   PostListData,
+  PostMatchRateData,
 };

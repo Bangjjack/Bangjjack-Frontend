@@ -9,25 +9,25 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui";
 
 interface MatchAlertDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   matchRate: number;
   matchHighlights: string[];
   onConfirm: () => void;
-  children: React.ReactNode;
 }
 
 function MatchAlertDialog({
+  open,
+  onOpenChange,
   matchRate,
   matchHighlights,
   onConfirm,
-  children,
 }: MatchAlertDialogProps) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
+    <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
