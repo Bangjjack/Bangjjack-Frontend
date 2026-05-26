@@ -27,7 +27,7 @@ export const SLEEP_HABITS_LABEL: Record<string, string> = {
 
 export const CLEANING_CYCLE_LABEL: Record<string, string> = {
   ALMOST_DAILY: "거의 매일",
-  ONCE_TWICE_WEEKLY: "주 1~2회",
+  ONCE_OR_TWICE_A_WEEK: "주 1~2회",
   SOMETIMES: "가끔",
   RARELY: "거의 안 함",
 };
