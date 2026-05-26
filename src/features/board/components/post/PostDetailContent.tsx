@@ -90,8 +90,6 @@ function PostDetailContent() {
 
       <PostDetailBottomBar
         postId={postId}
-        recruitTags={recruitTags}
-        recruitTitle={post.title}
         isOwner={post.isOwner}
         targetUserId={post.author.authorId}
         targetUsername={post.author.username}

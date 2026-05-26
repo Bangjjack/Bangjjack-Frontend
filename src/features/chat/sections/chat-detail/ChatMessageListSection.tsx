@@ -1,5 +1,7 @@
 import { useEffect, useRef } from "react";
 
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, SEMESTER_LABEL } from "@/constants";
+import { usePostDetail } from "@/features/board/hooks";
 import { ChatMatchCard, ChatMessageList } from "@/features/chat/components";
 import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 
@@ -66,8 +68,19 @@ function ChatMessageListSection({
     void onLoadPreviousMessages?.();
   };
 
-  const recruitTitle =
-    chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
+  const recruitPostId =
+    chatDetail.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
+  const { data: recruitPost } = usePostDetail(recruitPostId ?? 0);
+  const recruitTitle = recruitPostId
+    ? (recruitPost?.title ?? chatDetail.recruitTitle ?? "모집글")
+    : undefined;
+  const profileSummary = recruitPost
+    ? [
+        SEMESTER_LABEL[recruitPost.semester] ?? recruitPost.semester,
+        DORMITORY_LABEL[recruitPost.dormitory] ?? recruitPost.dormitory,
+        ROOM_SIZE_LABEL[recruitPost.roomSize] ?? recruitPost.roomSize,
+      ]
+    : chatDetail.profileSummary;
 
   return (
     <section
@@ -81,7 +94,7 @@ function ChatMessageListSection({
           matchRate={chatDetail.matchRate}
           onProfileClick={onProfileClick}
           onRecruitClick={onRecruitClick}
-          profileSummary={chatDetail.profileSummary}
+          profileSummary={profileSummary}
           recruitTitle={recruitTitle}
         />
 
