@@ -61,8 +61,7 @@ function PostChecklistContent() {
   }, [checklistData, originalAnswers]);
 
   const isDirty =
-    originalAnswers !== null &&
-    JSON.stringify(answers) !== JSON.stringify(originalAnswers);
+    originalAnswers !== null && JSON.stringify(answers) !== JSON.stringify(originalAnswers);
 
   function handleSingleSelect(key: LifestyleSingleFieldKey, value: string) {
     setAnswers((prev) => ({

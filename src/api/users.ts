@@ -13,6 +13,9 @@ export const getUserChecklist = async (): Promise<UserChecklistData> => {
 };
 
 export const updateUserChecklist = async (body: UserChecklistData): Promise<UserChecklistData> => {
-  const { data } = await apiClient.patch<ApiResponse<UserChecklistData>>("/users/me/checklist", body);
+  const { data } = await apiClient.patch<ApiResponse<UserChecklistData>>(
+    "/users/me/checklist",
+    body,
+  );
   return data.data;
 };
