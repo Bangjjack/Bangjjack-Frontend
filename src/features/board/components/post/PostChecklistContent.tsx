@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { isAxiosError } from "axios";
 
 import { Button, ChipQuestionSection, Header } from "@/components/ui";
 import { toast } from "@/components/ui";
 import { LIFESTYLE_MULTI_QUESTIONS, LIFESTYLE_SINGLE_QUESTIONS } from "@/constants";
 import type { LifestyleMultiFieldKey, LifestyleSingleFieldKey } from "@/constants";
 import { useGoBack } from "@/hooks";
+import { useCreatePost, useUpdatePost } from "@/features/board/hooks";
+import { useUpdateUserChecklist, useUserChecklist } from "@/features/user/hooks";
+import { mapFormToCreatePostRequest } from "@/features/board/utils";
+import { apiChecklistToFormState, formStateToApiChecklist } from "@/features/board/utils";
 import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 type ChecklistState = Record<string, string | string[]>;
@@ -36,11 +41,28 @@ function isAllAnswered(state: ChecklistState): boolean {
 
 function PostChecklistContent() {
   const navigate = useNavigate();
-  const handleBackClick = useGoBack("/board/write");
-  const { draft, clearDraft } = usePostWriteDraftStore();
+  const { draft, postId, clearDraft } = usePostWriteDraftStore();
+  const handleBackClick = useGoBack(postId ? `/board/${postId}/edit` : "/board/write");
 
-  // TODO: 실제 API 연동 시 온보딩에서 저장한 사용자 데이터를 초기값으로 로드
+  const { data: checklistData } = useUserChecklist();
+  const { mutate: createPost, isPending: isCreatePending } = useCreatePost();
+  const { mutate: updatePost, isPending: isUpdatePending } = useUpdatePost(postId ?? 0);
+  const { mutate: updateChecklist, isPending: isChecklistPending } = useUpdateUserChecklist();
+
   const [answers, setAnswers] = useState<ChecklistState>(getInitialState);
+  const [originalAnswers, setOriginalAnswers] = useState<ChecklistState | null>(null);
+
+  useEffect(() => {
+    if (checklistData && originalAnswers === null) {
+      const loaded = apiChecklistToFormState(checklistData);
+      setAnswers(loaded);
+      setOriginalAnswers(loaded);
+    }
+  }, [checklistData, originalAnswers]);
+
+  const isDirty =
+    originalAnswers !== null &&
+    JSON.stringify(answers) !== JSON.stringify(originalAnswers);
 
   function handleSingleSelect(key: LifestyleSingleFieldKey, value: string) {
     setAnswers((prev) => ({
@@ -59,15 +81,54 @@ function PostChecklistContent() {
     });
   }
 
+  function submitPost() {
+    if (!draft) return;
+    const postBody = mapFormToCreatePostRequest(draft);
+
+    if (postId) {
+      updatePost(postBody, {
+        onSuccess: () => {
+          clearDraft();
+          toast.success("게시글이 수정되었어요");
+          navigate(`/board/${postId}`);
+        },
+        onError: () => {
+          toast.error("게시글 수정에 실패했어요");
+        },
+      });
+    } else {
+      createPost(postBody, {
+        onSuccess: (data) => {
+          clearDraft();
+          toast.success("게시글이 등록되었어요");
+          navigate(data.postId ? `/board/${data.postId}` : "/board");
+        },
+        onError: (error) => {
+          if (isAxiosError(error) && error.response?.status === 409) {
+            toast.error("이미 작성한 게시글이 있어요");
+          } else {
+            toast.error("게시글 등록에 실패했어요");
+          }
+        },
+      });
+    }
+  }
+
   function handleSubmit() {
-    // TODO: API 호출 — draft + answers를 서버에 전송하고, 생성된 게시글 ID로 이동
-    void draft;
-    clearDraft();
-    toast.success("게시글이 등록되었어요");
-    navigate("/board");
+    if (isDirty) {
+      updateChecklist(formStateToApiChecklist(answers), {
+        onSuccess: submitPost,
+        onError: () => {
+          toast.error("체크리스트 수정에 실패했어요");
+        },
+      });
+    } else {
+      submitPost();
+    }
   }
 
   const isValid = isAllAnswered(answers);
+  const isPending = isCreatePending || isUpdatePending || isChecklistPending;
 
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
@@ -119,8 +180,8 @@ function PostChecklistContent() {
       </div>
 
       <div className="absolute inset-x-0 bottom-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
-        <Button className="w-full" disabled={!isValid} onClick={handleSubmit}>
-          등록하기
+        <Button className="w-full" disabled={!isValid || isPending} onClick={handleSubmit}>
+          {postId ? "수정하기" : "등록하기"}
         </Button>
       </div>
     </div>
