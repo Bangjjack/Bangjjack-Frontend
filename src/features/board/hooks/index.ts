@@ -8,3 +8,4 @@ export { usePostList } from "./usePostList";
 export { usePostWriteForm } from "./usePostWriteForm";
 export { useRemoveBookmark } from "./useRemoveBookmark";
 export { useUpdatePost } from "./useUpdatePost";
+export { useUserTags } from "./useUserTags";

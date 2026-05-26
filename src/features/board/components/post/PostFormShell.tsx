@@ -1,10 +1,16 @@
 import { Controller } from "react-hook-form";
 
 import { Button, Header, Textarea } from "@/components/ui";
-import { HABIT_CATEGORIES } from "@/constants";
+import {
+  DORMITORY_LABEL,
+  HABIT_CATEGORIES,
+  ROOMMATE_PREFERENCE_LABEL,
+  SEMESTER_LABEL,
+} from "@/constants";
+import type { RoommatePreference } from "@/constants";
 import type { PostWriteFormValues } from "@/features/board/schemas";
 import type { BasicTagCategory } from "@/features/board/types";
-import { usePostWriteForm } from "@/features/board/hooks";
+import { usePostWriteForm, useUserTags } from "@/features/board/hooks";
 
 import {
   BasicTagList,
@@ -12,40 +18,6 @@ import {
   HabitSelectList,
   WriteCard,
 } from "@/features/board/components/shared";
-
-// TODO: API 연동 시 실제 유저 데이터로 교체
-const BASIC_TAG_CATEGORIES: BasicTagCategory[] = [
-  {
-    title: "학기",
-    tags: [
-      { label: "학기 (16주)", selected: true },
-      { label: "반기 (25주)", selected: false },
-    ],
-  },
-  {
-    title: "기숙사",
-    tags: [
-      { label: "1 기숙사", selected: true },
-      { label: "2 기숙사", selected: false },
-      { label: "3 기숙사", selected: false },
-    ],
-  },
-  {
-    title: "이런 점을 중요하게 생각해요",
-    tags: [
-      { label: "취침 시간", selected: true },
-      { label: "기상 시간", selected: true },
-      { label: "잠버릇", selected: true },
-      { label: "기숙사 체류 시간", selected: false },
-      { label: "청결 습관", selected: false },
-      { label: "실내 온도", selected: false },
-      { label: "소음 민감도", selected: false },
-      { label: "물건 공유", selected: false },
-      { label: "흡연 여부", selected: false },
-      { label: "통화 습관", selected: false },
-    ],
-  },
-];
 
 const ROOM_TYPE_OPTIONS = ["2인 1실", "3인 1실", "4인 1실"] as const;
 
@@ -69,6 +41,34 @@ function PostFormShell({
   onBackClick,
   isPending = false,
 }: PostFormShellProps) {
+  const { data: userTags } = useUserTags();
+
+  const basicTagCategories: BasicTagCategory[] = userTags
+    ? [
+        {
+          title: "학기",
+          tags: Object.entries(SEMESTER_LABEL).map(([key, label]) => ({
+            label,
+            selected: key === userTags.semester,
+          })),
+        },
+        {
+          title: "기숙사",
+          tags: Object.entries(DORMITORY_LABEL).map(([key, label]) => ({
+            label,
+            selected: key === userTags.dormitory,
+          })),
+        },
+        {
+          title: "이런 점을 중요하게 생각해요",
+          tags: Object.entries(ROOMMATE_PREFERENCE_LABEL).map(([key, label]) => ({
+            label,
+            selected: userTags.roommatePreferences.includes(key as RoommatePreference),
+          })),
+        },
+      ]
+    : [];
+
   const {
     control,
     handleSubmit,
@@ -192,7 +192,7 @@ function PostFormShell({
               <span className="typo-caption2 text-text-caption">해당 정보는 수정할 수 없어요</span>
             </div>
 
-            <BasicTagList categories={BASIC_TAG_CATEGORIES} />
+            <BasicTagList categories={basicTagCategories} />
           </WriteCard>
 
           {/* Card 5 - 공동 생활습관 */}
