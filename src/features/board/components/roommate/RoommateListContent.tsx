@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Card, Header } from "@/components/ui";
+import { Button, Card, Header } from "@/components/ui";
 import { ChecklistCard } from "@/features/roommate/components";
 import { useBookmarkToggle, usePostDetail } from "@/features/board/hooks";
 import { computeChecklistMatchStats, mapLifestyleChecklistToEntries } from "@/features/board/utils";
@@ -103,9 +103,16 @@ function RoommateListContent() {
         </div>
       </main>
 
-      <MatchActionBar
-        leadingElement={
-          !isOwner ? (
+      {isOwner ? (
+        <div className="absolute inset-x-0 bottom-0 z-40 flex items-center gap-[10px] bg-bg-primary px-400 pb-9 pt-300">
+          <Button className="flex-1" onClick={() => navigate("/chat")}>
+            채팅 확인하기
+          </Button>
+        </div>
+      ) : (
+        <MatchActionBar
+          postId={postId}
+          leadingElement={
             <button
               type="button"
               aria-label={isBookmarked ? "북마크 해제" : "북마크"}
@@ -118,13 +125,13 @@ function RoommateListContent() {
                 <BookmarkIcon className="size-[30px]" />
               )}
             </button>
-          ) : undefined
-        }
-        matchRate={matchRate}
-        matchHighlights={matchHighlights}
-        onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
-        onChatConfirm={() => navigate("/chat")}
-      />
+          }
+          matchRate={matchRate}
+          matchHighlights={matchHighlights}
+          onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+          onChatConfirm={() => navigate("/chat")}
+        />
+      )}
     </div>
   );
 }
