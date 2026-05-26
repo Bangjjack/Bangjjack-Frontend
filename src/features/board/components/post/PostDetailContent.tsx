@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { Header } from "@/components/ui";
-import { useFadeInOnScroll, useGoBack } from "@/hooks";
+import { useFadeInOnScroll } from "@/hooks";
 
 import {
   DORMITORY_LABEL,
@@ -24,9 +24,9 @@ import {
 } from "@/features/board/components/post";
 
 function PostDetailContent() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const postId = Number(id);
-  const handleBackClick = useGoBack("/board");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -78,7 +78,7 @@ function PostDetailContent() {
         showBack
         showMore={post.isOwner}
         title="방 찾기"
-        onBackClick={handleBackClick}
+        onBackClick={() => navigate("/board")}
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
