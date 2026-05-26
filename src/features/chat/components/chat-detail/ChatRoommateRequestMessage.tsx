@@ -38,8 +38,8 @@ function ChatRoommateRequestMessage({
           </span>
         </div>
 
-        <div className="flex flex-col items-start gap-[4px] whitespace-nowrap">
-          <p className="text-[14px] font-semibold leading-[20px] tracking-normal text-text-strong">
+        <div className="flex flex-col items-start gap-[4px] whitespace-normal">
+          <p className="wrap-break-word text-[14px] font-semibold leading-[20px] tracking-normal text-text-strong">
             {requesterName} 님이
             <br />
             룸메이트를 제안했어요!
