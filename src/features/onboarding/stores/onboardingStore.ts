@@ -13,6 +13,7 @@ type OnboardingState = {
 };
 
 const INITIAL_STEP: ActiveOnBoardingStep = "basic-info";
+const ONBOARDING_DRAFT_KEY = "onboardingDraft";
 
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
@@ -27,6 +28,6 @@ export const useOnboardingStore = create<OnboardingState>()(
       setCurrentStep: (currentStep) => set({ currentStep }),
       setFormValues: (formValues) => set({ formValues }),
     }),
-    { name: "onboarding" },
+    { name: ONBOARDING_DRAFT_KEY },
   ),
 );

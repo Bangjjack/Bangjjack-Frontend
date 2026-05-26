@@ -12,6 +12,7 @@ import { CampusSelector } from "./CampusSelector";
 
 type BoardPageContentProps = {
   aiRecommend: boolean;
+  isOnboardingCompleted: boolean;
   onAiRecommendChange: (value: boolean) => void;
   onPostClick?: (id: number) => void;
   onWriteClick?: () => void;

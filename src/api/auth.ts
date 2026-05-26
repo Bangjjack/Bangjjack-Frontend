@@ -7,6 +7,7 @@ export type AuthTokenRequest = {
 
 export type AuthTokenResponse = {
   accessToken: string;
+  isOnboarded: boolean;
   userId: number;
   username: string;
 };

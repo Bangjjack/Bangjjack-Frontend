@@ -16,7 +16,6 @@ export default function LoginCallbackPage() {
 
   useEffect(() => {
     if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
-      console.info("[auth] Already authenticated. Redirecting to /home.");
       hasExchangedCode.current = true;
       navigate("/home", { replace: true });
     }
@@ -25,38 +24,27 @@ export default function LoginCallbackPage() {
   useEffect(() => {
     const exchangeCode = async () => {
       if (localStorage.getItem(ACCESS_TOKEN_KEY)) {
-        console.info("[auth] Access token exists. Skipping auth code exchange.");
         hasExchangedCode.current = true;
         return;
       }
 
       if (!code) {
-        console.warn("[auth] Login callback code is missing. Redirecting to /login.");
         return;
       }
 
       if (hasExchangedCode.current) {
-        console.info("[auth] Auth code exchange already requested. Skipping duplicate request.");
         return;
       }
 
-      console.info("[auth] Starting auth code exchange.");
       hasExchangedCode.current = true;
 
       try {
-        const { accessToken, userId, username } = await exchangeAuthToken({ code });
+        const authTokenResponse = await exchangeAuthToken({ code });
+        const { accessToken, isOnboarded, userId, username } = authTokenResponse;
 
-        console.info("[auth] Auth code exchange succeeded.", {
-          hasAccessToken: Boolean(accessToken),
-          userId,
-          username,
-        });
-
-        setAuth(accessToken, userId, username);
-        console.info("[auth] Auth state saved. Redirecting to /onboarding.");
-        navigate("/onboarding", { replace: true });
-      } catch (error) {
-        console.error("[auth] Auth code exchange failed. Redirecting to /login.", error);
+        setAuth(accessToken, userId, username, isOnboarded);
+        navigate("/home", { replace: true });
+      } catch {
         toast.error("로그인에 실패했습니다.");
         navigate("/login", { replace: true });
       }
