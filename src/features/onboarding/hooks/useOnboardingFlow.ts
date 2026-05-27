@@ -1,43 +1,17 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, type FormEvent } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import {
   NEXT_STEP_MAP,
   PREVIOUS_STEP_MAP,
   SKIP_STEP_MAP,
   getOnBoardingStepMeta,
-  type ActiveOnBoardingStep,
 } from "@/features/onboarding/config/stepConfig";
-import type {
-  LifestyleMultiFieldKey,
-  LifestyleSingleFieldKey,
-  OnBoardingFormValues,
-  OnBoardingPageContentProps,
-  SemesterType,
-} from "@/features/onboarding/types";
-
-function createInitialFormValues(
-  initialValues?: Partial<OnBoardingFormValues>,
-): OnBoardingFormValues {
-  return {
-    birthYear: initialValues?.birthYear ?? "",
-    campus: initialValues?.campus ?? "",
-    callHabit: initialValues?.callHabit ?? null,
-    cleaningCycle: initialValues?.cleaningCycle ?? null,
-    department: initialValues?.department ?? "",
-    dormStayDuration: initialValues?.dormStayDuration ?? null,
-    dormitory: initialValues?.dormitory ?? null,
-    gender: initialValues?.gender ?? null,
-    grade: initialValues?.grade ?? "",
-    indoorTemperature: initialValues?.indoorTemperature ?? null,
-    itemSharingPreference: initialValues?.itemSharingPreference ?? [],
-    noiseSensitivity: initialValues?.noiseSensitivity ?? null,
-    priorityFactors: initialValues?.priorityFactors ?? [],
-    semesterType: initialValues?.semesterType ?? null,
-    sleepTime: initialValues?.sleepTime ?? null,
-    sleepingHabit: initialValues?.sleepingHabit ?? [],
-    smoking: initialValues?.smoking ?? null,
-    wakeUpTime: initialValues?.wakeUpTime ?? null,
-  };
-}
+import { useOnboardingStore } from "@/features/onboarding/stores";
+import type { OnBoardingFormValues, OnBoardingPageContentProps } from "@/features/onboarding/types";
+import {
+  createInitialOnboardingFormValues,
+  mapOnboardingCampusToRequest,
+} from "@/features/onboarding/utils";
 
 function useOnboardingFlow({
   initialValues,
@@ -46,72 +20,28 @@ function useOnboardingFlow({
   progressStates,
   userName = "OO",
 }: OnBoardingPageContentProps) {
-  const [currentStep, setCurrentStep] = useState<ActiveOnBoardingStep>("basic-info");
-  const [formValues, setFormValues] = useState<OnBoardingFormValues>(() =>
-    createInitialFormValues(initialValues),
-  );
+  const currentStep = useOnboardingStore((state) => state.currentStep);
+  const setCurrentStep = useOnboardingStore((state) => state.setCurrentStep);
+  const setStoredFormValues = useOnboardingStore((state) => state.setFormValues);
+  const storedFormValues = useOnboardingStore.getState().formValues;
+  const { control, setValue } = useForm<OnBoardingFormValues>({
+    defaultValues: createInitialOnboardingFormValues({
+      ...initialValues,
+      ...storedFormValues,
+    }),
+  });
+  const formValues = useWatch({ control }) as OnBoardingFormValues;
+
+  useEffect(() => {
+    setStoredFormValues(createInitialOnboardingFormValues(formValues));
+  }, [formValues, setStoredFormValues]);
 
   const defaultCurrentStepMeta = getOnBoardingStepMeta(currentStep, formValues, userName);
   const currentStepMeta = {
     ...defaultCurrentStepMeta,
     progressStates: progressStates ?? defaultCurrentStepMeta.progressStates,
   };
-
-  const handleChangeBasicInfoField = (key: "birthYear" | "grade", value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleChangeSchoolInfoField = (key: "campus" | "department", value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleSelectGender = (gender: NonNullable<OnBoardingFormValues["gender"]>) => {
-    setFormValues((prev) => ({ ...prev, gender }));
-  };
-
-  const handleSelectSemesterType = (semesterType: SemesterType) => {
-    setFormValues((prev) => ({ ...prev, semesterType }));
-  };
-
-  const handleSelectDormitory = (dormitory: string) => {
-    setFormValues((prev) => ({ ...prev, dormitory }));
-  };
-
-  const handleSelectLifestyleSingle = (key: LifestyleSingleFieldKey, value: string) => {
-    setFormValues((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const handleToggleLifestyleMulti = (key: LifestyleMultiFieldKey, value: string) => {
-    setFormValues((prev) => {
-      const nextValues = prev[key].includes(value)
-        ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value];
-
-      return { ...prev, [key]: nextValues };
-    });
-  };
-
-  const handleTogglePriorityFactor = (value: string) => {
-    setFormValues((prev) => {
-      const isSelected = prev.priorityFactors.includes(value);
-
-      if (isSelected) {
-        return {
-          ...prev,
-          priorityFactors: prev.priorityFactors.filter((item) => item !== value),
-        };
-      }
-
-      if (prev.priorityFactors.length >= 3) {
-        return prev;
-      }
-
-      return {
-        ...prev,
-        priorityFactors: [...prev.priorityFactors, value],
-      };
-    });
-  };
+  const selectedCampus = mapOnboardingCampusToRequest(formValues.campus) ?? null;
 
   const handleBack = () => {
     const previousStep = PREVIOUS_STEP_MAP[currentStep];
@@ -153,20 +83,15 @@ function useOnboardingFlow({
   };
 
   return {
+    control,
     currentStep,
     currentStepMeta,
     formValues,
     handleBack,
-    handleChangeBasicInfoField,
-    handleChangeSchoolInfoField,
-    handleSelectDormitory,
-    handleSelectGender,
-    handleSelectLifestyleSingle,
-    handleSelectSemesterType,
     handleSkipCurrentStep,
     handleSubmit,
-    handleToggleLifestyleMulti,
-    handleTogglePriorityFactor,
+    selectedCampus,
+    setValue,
   };
 }
 

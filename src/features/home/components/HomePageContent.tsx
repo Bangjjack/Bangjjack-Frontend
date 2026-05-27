@@ -36,6 +36,7 @@ const MOCK_ROOMMATES = [
 ];
 
 type HomePageContentProps = {
+  isOnboardingCompleted: boolean;
   onMoreRecruitsClick?: () => void;
   onRoommateClick?: (id: string) => void;
   onRecruitClick?: (id: number) => void;
