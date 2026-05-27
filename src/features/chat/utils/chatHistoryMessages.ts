@@ -33,15 +33,6 @@ export function mapHistoryMessageToChatMessage(
   }
 
   if (message.messageType === "APPLICATION_REJECTED") {
-    console.log("[chat] roommate reject sender debug", {
-      applicationId: message.applicationId,
-      currentUserId,
-      messageId: message.messageId,
-      resolvedVariant: isOutgoing ? "sent" : "received",
-      senderId: message.senderId,
-      source: "history",
-    });
-
     return {
       applicationId: message.applicationId,
       dateKey,

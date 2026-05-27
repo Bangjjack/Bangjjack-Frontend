@@ -146,13 +146,7 @@ function useChatComposer({
   ];
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
-    console.log("[chat] appendReceivedMessage called", { receivedMessage, roomId });
-
     if (roomId == null || receivedMessage.roomId !== roomId) {
-      console.log("[chat] appendReceivedMessage skipped by room mismatch", {
-        receivedRoomId: receivedMessage.roomId,
-        roomId,
-      });
       return;
     }
 
@@ -161,9 +155,6 @@ function useChatComposer({
         baseMessages.some((message) => message.id === receivedMessage.messageId) ||
         prev.some((message) => message.id === receivedMessage.messageId)
       ) {
-        console.log("[chat] appendReceivedMessage skipped by duplicated message", {
-          messageId: receivedMessage.messageId,
-        });
         return prev;
       }
 
@@ -184,44 +175,12 @@ function useChatComposer({
       const isApplicationRejectedMessage = receivedMessage.messageType === "APPLICATION_REJECTED";
       const acceptMessageVariant = isOutgoing ? "sent" : "received";
       const rejectMessageVariant = isOutgoing ? "sent" : "received";
-      console.log("[chat] appendReceivedMessage parsed", {
-        isApplicationAcceptedMessage,
-        isApplicationMessage,
-        isApplicationRejectedMessage,
-        isOutgoing,
-        messageType: receivedMessage.messageType,
-      });
 
       if (
         isApplicationMessage &&
         hasRoommateApplicationMessage([...baseMessages, ...prev], isOutgoing)
       ) {
-        console.log("[chat] appendReceivedMessage skipped by existing application bubble", {
-          isOutgoing,
-        });
         return prev;
-      }
-
-      if (isApplicationAcceptedMessage) {
-        console.log("[chat] roommate accept sender debug", {
-          applicationId: receivedMessage.applicationId,
-          currentUserId,
-          messageId: receivedMessage.messageId,
-          resolvedVariant: acceptMessageVariant,
-          senderId: receivedMessage.senderId,
-          source: "websocket",
-        });
-      }
-
-      if (isApplicationRejectedMessage) {
-        console.log("[chat] roommate reject sender debug", {
-          applicationId: receivedMessage.applicationId,
-          currentUserId,
-          messageId: receivedMessage.messageId,
-          resolvedVariant: rejectMessageVariant,
-          senderId: receivedMessage.senderId,
-          source: "websocket",
-        });
       }
 
       const nextMessage: ChatMessage = isApplicationMessage
@@ -260,13 +219,11 @@ function useChatComposer({
                 type: isOutgoing ? "outgoing" : "incoming",
               };
 
-      console.log("[chat] appendReceivedMessage added local message", nextMessage);
       return [...prev, nextMessage];
     });
   };
 
   const handleChatErrorMessage = (errorMessage: ChatErrorMessage) => {
-    console.error("[chat] WebSocket error message received.", errorMessage);
     toast.error(errorMessage.message);
   };
 
@@ -321,26 +278,15 @@ function useChatComposer({
   };
 
   const handleSendInviteRequest = () => {
-    console.log("[chat] roommate invite confirm clicked", {
-      roomId,
-      targetUserId: chatDetail.id,
-      targetUsername: chatDetail.nickname,
-    });
-
     sendRoommateApplication(chatDetail.id, {
       onError: (error) => {
-        console.error("[chat] sendRoommateApplication failed", error);
         toast.error(getApiErrorMessage(error, "룸메이트 요청을 보내지 못했어요."));
       },
       onSuccess: (application) => {
-        console.log("[chat] sendRoommateApplication succeeded", application);
         setLocalMessages((prev) => {
           const currentMessages = [...messages, ...prev];
 
           if (hasRoommateApplicationMessage(currentMessages, true)) {
-            console.log("[chat] invite bubble skipped by existing outgoing application bubble", {
-              application,
-            });
             return prev;
           }
 
@@ -350,10 +296,6 @@ function useChatComposer({
             ? getNextMessageId(currentMessages)
             : application.applicationId;
 
-          console.log("[chat] invite bubble appended", {
-            application,
-            nextMessageId,
-          });
           return [
             ...prev,
             createInviteMessage(nextMessageId, chatDetail.nickname, application.applicationId),
