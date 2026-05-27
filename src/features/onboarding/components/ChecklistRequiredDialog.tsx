@@ -25,9 +25,7 @@ function renderDescription(description: string, highlight?: string) {
   return description.split(highlight).map((part, index, parts) => (
     <span key={index}>
       {part}
-      {index < parts.length - 1 && (
-        <span className="text-brand-primary">{highlight}</span>
-      )}
+      {index < parts.length - 1 && <span className="text-brand-primary">{highlight}</span>}
     </span>
   ));
 }

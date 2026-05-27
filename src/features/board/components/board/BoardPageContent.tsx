@@ -30,7 +30,10 @@ function BoardPageContent({
   const navigate = useNavigate();
   const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
   const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
-  const [checklistDialog, setChecklistDialog] = useState<{ description: string; highlight?: string } | null>(null);
+  const [checklistDialog, setChecklistDialog] = useState<{
+    description: string;
+    highlight?: string;
+  } | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -76,7 +79,10 @@ function BoardPageContent({
               selected={aiRecommend}
               onSelectedChange={(selected) => {
                 if (selected && !isOnboardingCompleted) {
-                  setChecklistDialog({ description: "AI 추천글 정렬 기능을 사용하려면\n내 생활습관 정보가 필요해요", highlight: "AI 추천글 정렬 기능" });
+                  setChecklistDialog({
+                    description: "AI 추천글 정렬 기능을 사용하려면\n내 생활습관 정보가 필요해요",
+                    highlight: "AI 추천글 정렬 기능",
+                  });
                   return;
                 }
                 onAiRecommendChange(selected);
@@ -152,7 +158,10 @@ function BoardPageContent({
       <RoundButton
         onClick={() => {
           if (!isOnboardingCompleted) {
-            setChecklistDialog({ description: "모집글 작성 기능을 사용하려면\n내 생활습관 정보가 필요해요", highlight: "모집글 작성 기능" });
+            setChecklistDialog({
+              description: "모집글 작성 기능을 사용하려면\n내 생활습관 정보가 필요해요",
+              highlight: "모집글 작성 기능",
+            });
             return;
           }
           onWriteClick?.();
