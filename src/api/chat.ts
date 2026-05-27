@@ -11,6 +11,7 @@ import type {
 
 const CHAT_API_PATHS = {
   chatRooms: "/chat-rooms",
+  leaveChatRoom: (roomId: number) => `/chat-rooms/${roomId}/participants/me`,
   messages: (roomId: number) => `/chat-rooms/${roomId}/messages`,
   wsToken: "/auth/ws-token",
 } as const;
@@ -65,4 +66,8 @@ export const getChatMessages = async ({
   );
 
   return data.data;
+};
+
+export const leaveChatRoom = async (roomId: number): Promise<void> => {
+  await apiClient.delete(CHAT_API_PATHS.leaveChatRoom(roomId));
 };
