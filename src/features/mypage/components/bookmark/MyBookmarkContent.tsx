@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 import { Surface } from "@/components/ui";
-import { BookmarkCard } from "@/features/mypage/components/bookmark";
+import { BookmarkCard, BookmarkCardSkeleton } from "@/features/mypage/components/bookmark";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
 import { useMyBookmarks } from "@/features/mypage/hooks";
 import { cn } from "@/lib/cn";
@@ -12,8 +12,10 @@ export interface MyBookmarkContentProps {
 
 const MY_BOOKMARK_EMPTY_MESSAGE = ["아직 북마크한 글이 없어요", "관심 있는 글을 북마크해보세요!"];
 
+const SKELETON_COUNT = 3;
+
 function MyBookmarkContent({ className }: MyBookmarkContentProps) {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useMyBookmarks();
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useMyBookmarks();
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
   const hasBookmarks = posts.length > 0;
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,13 @@ function MyBookmarkContent({ className }: MyBookmarkContentProps) {
         <span className="typo-label1 text-text-placeholder">{posts.length}개</span>
       </div>
 
-      {hasBookmarks ? (
+      {isLoading ? (
+        <div className="flex flex-col">
+          {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
+            <BookmarkCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : hasBookmarks ? (
         <div className="flex flex-col">
           {posts.map((post) => (
             <BookmarkCard key={post.postId} post={post} />
