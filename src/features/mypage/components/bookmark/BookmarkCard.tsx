@@ -3,19 +3,9 @@ import { useState } from "react";
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Tag } from "@/components/ui";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
+import { STATUS_LABEL, STATUS_TAG_COLOR } from "@/features/mypage/components/bookmark/constants";
 import type { BookmarkedPost } from "@/features/mypage/types";
 import { cn } from "@/lib/cn";
-import type { PostStatus } from "@/types";
-
-const STATUS_TAG_COLOR: Record<PostStatus, React.ComponentProps<typeof Tag>["color"]> = {
-  OPEN: "black",
-  CLOSED: "disabled",
-};
-
-const STATUS_LABEL: Record<PostStatus, string> = {
-  OPEN: "모집중",
-  CLOSED: "마감",
-};
 
 interface BookmarkCardProps {
   className?: string;
