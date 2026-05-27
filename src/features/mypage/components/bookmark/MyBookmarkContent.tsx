@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 
 import { Surface } from "@/components/ui";
-import { BookmarkCard } from "@/features/mypage/components/bookmark/BookmarkCard";
+import { BookmarkCard } from "@/features/mypage/components/bookmark";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
-import { useMyBookmarks } from "@/features/mypage/hooks/useMyBookmarks";
+import { useMyBookmarks } from "@/features/mypage/hooks";
 import { cn } from "@/lib/cn";
 
 export interface MyBookmarkContentProps {
