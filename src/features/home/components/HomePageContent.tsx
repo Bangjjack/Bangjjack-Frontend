@@ -1,10 +1,15 @@
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import { RoundButton } from "@/components/ui";
 import { RecruitCard } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
+import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { useHomePostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/utils";
 import { useDragScroll, useFadeInOnScroll } from "@/hooks";
 import { cn } from "@/lib/cn";
+import { useAuthStore } from "@/stores/authStore";
+import { OnboardingPromptSection } from "./OnboardingPromptSection";
 import { RoommateProfileCard } from "./RoommateProfileCard";
 
 // TODO: API 연동 시 제거
@@ -36,7 +41,7 @@ const MOCK_ROOMMATES = [
 ];
 
 type HomePageContentProps = {
-  isOnboardingCompleted: boolean;
+  onChecklistClick?: () => void;
   onMoreRecruitsClick?: () => void;
   onRoommateClick?: (id: string) => void;
   onRecruitClick?: (id: number) => void;
@@ -44,11 +49,15 @@ type HomePageContentProps = {
 };
 
 function HomePageContent({
+  onChecklistClick,
   onMoreRecruitsClick,
   onRoommateClick,
   onRecruitClick,
   onRecruitCreateClick,
 }: HomePageContentProps) {
+  const isOnboardingCompleted = useAuthStore((state) => state.isOnboardingCompleted);
+  const navigate = useNavigate();
+  const [showChecklistDialog, setShowChecklistDialog] = useState(false);
   const { ref: emblaRef, handlers } = useDragScroll();
   const recruitListRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -57,30 +66,42 @@ function HomePageContent({
 
   return (
     <div className="flex flex-col gap-600">
-      <RoundButton onClick={onRecruitCreateClick} />
+      <RoundButton
+        onClick={() => {
+          if (!isOnboardingCompleted) {
+            setShowChecklistDialog(true);
+            return;
+          }
+          onRecruitCreateClick?.();
+        }}
+      />
       {/* 추천 룸메이트 */}
       <section>
         <h2 className="typo-h4 py-2.5 text-text-strong">추천 룸메이트</h2>
 
-        <div className="relative">
-          {/* Embla viewport */}
-          <div ref={emblaRef} className="overflow-hidden" {...handlers}>
-            {/* Embla container */}
-            <div className="flex gap-[12px]">
-              {MOCK_ROOMMATES.map(({ id, ...roommate }) => (
-                <RoommateProfileCard
-                  key={id}
-                  className="min-w-0 shrink-0"
-                  onClick={() => onRoommateClick?.(id)}
-                  {...roommate}
-                />
-              ))}
+        {isOnboardingCompleted ? (
+          <div className="relative">
+            {/* Embla viewport */}
+            <div ref={emblaRef} className="overflow-hidden" {...handlers}>
+              {/* Embla container */}
+              <div className="flex gap-[12px]">
+                {MOCK_ROOMMATES.map(({ id, ...roommate }) => (
+                  <RoommateProfileCard
+                    key={id}
+                    className="min-w-0 shrink-0"
+                    onClick={() => onRoommateClick?.(id)}
+                    {...roommate}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* 오른쪽 "더 있음" 힌트 */}
-          <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-bg-primary to-transparent" />
-        </div>
+            {/* 오른쪽 "더 있음" 힌트 */}
+            <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-bg-primary to-transparent" />
+          </div>
+        ) : (
+          <OnboardingPromptSection onChecklistClick={onChecklistClick} />
+        )}
       </section>
 
       {/* 이런 방은 어때요? */}
@@ -129,6 +150,16 @@ function HomePageContent({
           </div>
         )}
       </section>
+
+      <ChecklistRequiredDialog
+        description={"모집글 작성 기능을 사용하려면\n내 생활습관 정보가 필요해요"}
+        open={showChecklistDialog}
+        onOpenChange={setShowChecklistDialog}
+        onConfirm={() => {
+          setShowChecklistDialog(false);
+          navigate("/mypage/profile");
+        }}
+      />
     </div>
   );
 }
