@@ -24,13 +24,20 @@ interface UseChatComposerParams {
   roomId?: number;
 }
 
-function createInviteMessage(
-  id: number,
-  recipientName: string,
-  applicationId?: number,
-): ChatMessage {
+function createInviteMessage({
+  applicationId,
+  createdAt,
+  id,
+  recipientName,
+}: {
+  applicationId?: number;
+  createdAt: string;
+  id: number;
+  recipientName: string;
+}): ChatMessage {
   return {
     applicationId,
+    ...formatMessageDateLabel(createdAt),
     id,
     recipientName,
     type: "roommate_invite",
@@ -185,7 +192,12 @@ function useChatComposer({
 
       const nextMessage: ChatMessage = isApplicationMessage
         ? isOutgoing
-          ? createInviteMessage(receivedMessage.messageId, chatDetail.nickname)
+          ? createInviteMessage({
+              applicationId: receivedMessage.applicationId,
+              createdAt: receivedMessage.createdAt,
+              id: receivedMessage.messageId,
+              recipientName: chatDetail.nickname,
+            })
           : {
               applicationId: receivedMessage.applicationId,
               ...formatMessageDateLabel(receivedMessage.createdAt),
@@ -298,7 +310,12 @@ function useChatComposer({
 
           return [
             ...prev,
-            createInviteMessage(nextMessageId, chatDetail.nickname, application.applicationId),
+            createInviteMessage({
+              applicationId: application.applicationId,
+              createdAt: application.createdAt,
+              id: nextMessageId,
+              recipientName: chatDetail.nickname,
+            }),
           ];
         });
         closeInviteSheet();
