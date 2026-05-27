@@ -13,7 +13,24 @@ export type SendRoommateApplicationResponse = {
   status: RoommateApplicationStatus;
 };
 
+export type ProcessRoommateApplicationRequest = {
+  applicationId: number;
+  status: Extract<RoommateApplicationStatus, "ACCEPTED" | "REJECTED">;
+};
+
+export type ProcessRoommateApplicationResponse = {
+  applicantId: number;
+  applicationId: number;
+  chatRoomId: number;
+  currentGroupMemberCount: number;
+  groupId: number;
+  postId: number;
+  processedAt: string;
+  status: RoommateApplicationStatus;
+};
+
 const APPLICATION_API_PATHS = {
+  processRoommateApplication: (applicationId: number) => `/applications/${applicationId}`,
   sendRoommateApplication: (userId: number) => `/users/${userId}/applications`,
 } as const;
 
@@ -25,6 +42,18 @@ export const sendRoommateApplication = async (
     APPLICATION_API_PATHS.sendRoommateApplication(userId),
   );
   console.log("[applications] sendRoommateApplication response", data);
+
+  return data.data;
+};
+
+export const processRoommateApplication = async ({
+  applicationId,
+  status,
+}: ProcessRoommateApplicationRequest): Promise<ProcessRoommateApplicationResponse> => {
+  const { data } = await apiClient.patch<ApiResponse<ProcessRoommateApplicationResponse>>(
+    APPLICATION_API_PATHS.processRoommateApplication(applicationId),
+    { status },
+  );
 
   return data.data;
 };

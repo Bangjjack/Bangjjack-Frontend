@@ -15,7 +15,9 @@ export type ChatMessageListSectionProps = {
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
   onReportClick?: () => void;
-  onRoommateRequestAccept?: () => void;
+  onRoommateRequestAccept?: (applicationId?: number) => void;
+  onRoommateRequestReject?: (applicationId?: number) => void;
+  isProcessingRoommateRequest?: boolean;
 };
 
 function ChatMessageListSection({
@@ -28,7 +30,9 @@ function ChatMessageListSection({
   onProfileClick,
   onRecruitClick,
   onReportClick,
+  isProcessingRoommateRequest,
   onRoommateRequestAccept,
+  onRoommateRequestReject,
 }: ChatMessageListSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const previousScrollHeightRef = useRef(0);
@@ -107,7 +111,9 @@ function ChatMessageListSection({
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
           onCancelInviteRequest={onCancelInviteRequest}
+          isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
+          onRoommateRequestReject={onRoommateRequestReject}
         />
       </div>
     </section>

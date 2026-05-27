@@ -149,6 +149,7 @@ function useChatComposer({
         ? isOutgoing
           ? createInviteMessage(receivedMessage.messageId, chatDetail.nickname)
           : {
+              applicationId: receivedMessage.applicationId,
               ...formatMessageDateLabel(receivedMessage.createdAt),
               id: receivedMessage.messageId,
               requesterName: chatDetail.nickname,

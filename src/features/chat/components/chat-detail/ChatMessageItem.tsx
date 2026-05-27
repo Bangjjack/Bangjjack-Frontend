@@ -16,7 +16,9 @@ export type ChatMessageItemProps = {
   messages: ChatMessage[];
   messageIndex: number;
   onCancelInviteRequest: (messageId: number) => void;
-  onRoommateRequestAccept?: () => void;
+  onRoommateRequestAccept?: (applicationId?: number) => void;
+  onRoommateRequestReject?: (applicationId?: number) => void;
+  isProcessingRoommateRequest?: boolean;
 };
 
 export function ChatMessageItem({
@@ -29,7 +31,9 @@ export function ChatMessageItem({
   messages,
   messageIndex,
   onCancelInviteRequest,
+  isProcessingRoommateRequest,
   onRoommateRequestAccept,
+  onRoommateRequestReject,
 }: ChatMessageItemProps) {
   if (message.type === "roommate_request") {
     return (
@@ -37,8 +41,10 @@ export function ChatMessageItem({
         <RoommateRequestMessageItem
           avatarImageUrl={avatarImageUrl}
           avatarSeed={avatarSeed}
+          isProcessing={isProcessingRoommateRequest}
           message={message}
           onAccept={onRoommateRequestAccept}
+          onReject={onRoommateRequestReject}
         />
       </ChatMessageWrapper>
     );
@@ -73,12 +79,16 @@ function RoommateRequestMessageItem({
   avatarImageUrl,
   avatarSeed,
   message,
+  isProcessing,
   onAccept,
+  onReject,
 }: {
   avatarImageUrl?: string | null;
   avatarSeed: number;
+  isProcessing?: boolean;
   message: Extract<ChatMessage, { type: "roommate_request" }>;
-  onAccept?: () => void;
+  onAccept?: (applicationId?: number) => void;
+  onReject?: (applicationId?: number) => void;
 }) {
   return (
     <div className="flex w-full items-end gap-200">
@@ -88,7 +98,12 @@ function RoommateRequestMessageItem({
         seed={avatarSeed}
         size={36}
       />
-      <ChatRoommateRequestMessage onAccept={onAccept} requesterName={message.requesterName} />
+      <ChatRoommateRequestMessage
+        isProcessing={isProcessing}
+        onAccept={() => onAccept?.(message.applicationId)}
+        onReject={() => onReject?.(message.applicationId)}
+        requesterName={message.requesterName}
+      />
       {message.sentAt ? (
         <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
           {message.sentAt}

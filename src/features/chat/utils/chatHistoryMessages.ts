@@ -12,6 +12,7 @@ export function mapHistoryMessageToChatMessage(
   if (message.messageType === "APPLICATION_SENT") {
     if (isOutgoing) {
       return {
+        applicationId: message.applicationId,
         dateKey,
         dateLabel,
         id: message.messageId,
@@ -21,6 +22,7 @@ export function mapHistoryMessageToChatMessage(
     }
 
     return {
+      applicationId: message.applicationId,
       dateKey,
       dateLabel,
       id: message.messageId,

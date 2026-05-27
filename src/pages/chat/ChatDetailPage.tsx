@@ -15,7 +15,8 @@ const EMPTY_CHAT_DETAIL: ChatDetail = {
 };
 
 export default function ChatDetailPage() {
-  const { chatDetail, composer, messageList, navigation } = useChatDetailPage();
+  const { chatDetail, composer, isProcessingRoommateRequest, messageList, navigation } =
+    useChatDetailPage();
   const activeChatDetail = chatDetail ?? EMPTY_CHAT_DETAIL;
 
   const {
@@ -73,7 +74,9 @@ export default function ChatDetailPage() {
         onProfileClick={navigation.onProfileClick}
         onRecruitClick={navigation.onRecruitClick}
         onReportClick={navigation.onReportClick}
+        isProcessingRoommateRequest={isProcessingRoommateRequest}
         onRoommateRequestAccept={navigation.onRoommateRequestAccept}
+        onRoommateRequestReject={navigation.onRoommateRequestReject}
       />
 
       <ChatInputSection

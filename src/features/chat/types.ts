@@ -127,6 +127,7 @@ export type ChatSendMessagePayload = {
 };
 
 export type ChatReceivedMessage = {
+  applicationId?: number;
   content: string;
   createdAt: string;
   messageId: number;
@@ -136,6 +137,7 @@ export type ChatReceivedMessage = {
 };
 
 export type ChatMessageHistoryItem = {
+  applicationId?: number;
   content: string;
   createdAt: string;
   messageId: number;

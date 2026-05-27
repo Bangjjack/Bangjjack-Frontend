@@ -1,9 +1,12 @@
+import { isAxiosError } from "axios";
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
+import type { ApiResponse } from "@/api";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
+import { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessRoommateApplication";
 import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
@@ -26,8 +29,10 @@ export type ChatDetailPageState = {
     onProfileClick?: () => void;
     onRecruitClick?: () => void;
     onReportClick?: () => void;
-    onRoommateRequestAccept?: () => void;
+    onRoommateRequestAccept?: (applicationId?: number) => void;
+    onRoommateRequestReject?: (applicationId?: number) => void;
   };
+  isProcessingRoommateRequest: boolean;
 };
 
 type ChatDetailLocationState = {
@@ -79,11 +84,21 @@ function getCurrentUserIdFromChatRoom(
   return viewerUserId ?? fallbackUserId;
 }
 
+function getApiErrorMessage(error: unknown, fallbackMessage: string) {
+  if (!isAxiosError<ApiResponse<null>>(error)) {
+    return fallbackMessage;
+  }
+
+  return error.response?.data.message ?? fallbackMessage;
+}
+
 function useChatDetailPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { chatId } = useParams();
   const authUserId = useAuthStore((state) => state.userId);
+  const { isPending: isProcessingRoommateRequest, mutate: processRoommateApplication } =
+    useProcessRoommateApplication();
 
   const parsedChatId = Number(chatId);
   const locationState =
@@ -147,6 +162,48 @@ function useChatDetailPage() {
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
+  const handleRoommateRequestAccept = (applicationId?: number) => {
+    if (applicationId == null) {
+      toast.error("룸메이트 신청 정보를 확인할 수 없어요.");
+      return;
+    }
+
+    processRoommateApplication(
+      { applicationId, status: "ACCEPTED" },
+      {
+        onError: (error) => {
+          toast.error(getApiErrorMessage(error, "룸메이트 신청 수락에 실패했어요."));
+        },
+        onSuccess: () => {
+          toast.success("룸메이트 신청을 수락했어요.");
+
+          if (chatDetail) {
+            navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } });
+          }
+        },
+      },
+    );
+  };
+
+  const handleRoommateRequestReject = (applicationId?: number) => {
+    if (applicationId == null) {
+      toast.error("룸메이트 신청 정보를 확인할 수 없어요.");
+      return;
+    }
+
+    processRoommateApplication(
+      { applicationId, status: "REJECTED" },
+      {
+        onError: (error) => {
+          toast.error(getApiErrorMessage(error, "룸메이트 신청 거절에 실패했어요."));
+        },
+        onSuccess: () => {
+          toast.success("룸메이트 신청을 거절했어요.");
+        },
+      },
+    );
+  };
+
   const currentUserId = chatDetail
     ? getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId)
     : authUserId;
@@ -170,6 +227,7 @@ function useChatDetailPage() {
       isLoadingPreviousMessages,
       onLoadPreviousMessages: fetchPreviousMessages,
     },
+    isProcessingRoommateRequest,
     navigation: {
       onBack: () => navigate("/chat"),
       onProfileClick: chatDetail ? () => navigate(`/roommate/${chatDetail.id}`) : undefined,
@@ -177,9 +235,8 @@ function useChatDetailPage() {
       onReportClick: chatDetail
         ? () => navigate(`/roommate/${chatDetail.id}/matching-report`)
         : undefined,
-      onRoommateRequestAccept: chatDetail
-        ? () => navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } })
-        : undefined,
+      onRoommateRequestAccept: chatDetail ? handleRoommateRequestAccept : undefined,
+      onRoommateRequestReject: chatDetail ? handleRoommateRequestReject : undefined,
     },
   };
 

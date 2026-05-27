@@ -5,5 +5,6 @@ export { useChatRooms } from "@/features/chat/hooks/useChatRooms";
 export { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 export { useCreateChatRoom } from "@/features/chat/hooks/useCreateChatRoom";
 export { useIssueChatWsToken } from "@/features/chat/hooks/useIssueChatWsToken";
+export { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessRoommateApplication";
 export { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 export { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
