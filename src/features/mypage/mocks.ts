@@ -4,7 +4,6 @@ import type {
   MyActivityRoomMock,
   MyActivityTabId,
   MyActivityTabMock,
-  MyBookmarkPostMock,
   MyChecklistSectionMock,
   MyRecruitPostMock,
 } from "@/features/mypage/types";
@@ -51,35 +50,6 @@ export const MY_ACTIVITY_MATCHES: MyActivityMatchMock[] = [
     matchRate: 92,
     name: "이나연",
     tags: ["아침형", "조용한 편", "비흡연"],
-  },
-];
-
-export const MY_BOOKMARK_POSTS: MyBookmarkPostMock[] = [
-  {
-    currentMembers: "2/4",
-    id: 1,
-    roomType: "4인실",
-    status: "open",
-    statusLabel: "2/4",
-    title: "컴공 4학년 반기 룸메 구해요",
-    weeks: 16,
-  },
-  {
-    currentMembers: "1/2",
-    id: 2,
-    roomType: "2인실",
-    status: "open",
-    statusLabel: "1/2",
-    title: "조용한 룸메 구합니다",
-    weeks: 25,
-  },
-  {
-    id: 3,
-    roomType: "2인실",
-    status: "closed",
-    statusLabel: "마감",
-    title: "조용한 룸메 구합니다",
-    weeks: 25,
   },
 ];
 

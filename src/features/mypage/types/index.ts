@@ -1,7 +1,30 @@
+import type { Dormitory, PostStatus, RoomSize } from "@/types";
+
+export interface BookmarkedPost {
+  postId: number;
+  title: string;
+  description: string;
+  dormitory: Dormitory;
+  roomSize: RoomSize;
+  recruitMemberCount: number;
+  status: PostStatus;
+  bookmarkedAt: string;
+}
+
+export interface BookmarkedPostsData {
+  content: BookmarkedPost[];
+  hasNext: boolean;
+}
+
+export interface GetBookmarksParams {
+  page?: number;
+  size?: number;
+  sort?: string[];
+}
+
 export type MyChecklistSelectionType = "single" | "multi";
 export type MyActivityTabId = "posts" | "rooms" | "matches";
 export type MyActivityRoomStatus = "joined";
-export type MyBookmarkPostStatus = "open" | "closed";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
 
@@ -63,16 +86,6 @@ export interface MyActivityRoomMock {
   status: MyActivityRoomStatus;
   statusLabel: string;
   title: string;
-}
-
-export interface MyBookmarkPostMock {
-  currentMembers?: string;
-  id: number;
-  roomType: string;
-  status: MyBookmarkPostStatus;
-  statusLabel: string;
-  title: string;
-  weeks: number;
 }
 
 export interface MyChecklistSectionMock {
