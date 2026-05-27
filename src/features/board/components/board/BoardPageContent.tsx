@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Chip, RoundButton, toast } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { RecruitCard } from "@/components";
+import { RecruitCard, RecruitCardSkeleton } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/board/constants";
 import type { RoomFilter } from "@/features/board/constants";
@@ -110,6 +110,12 @@ function BoardPageContent({
         {isError ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="typo-body2 text-text-caption">게시글을 불러오지 못했어요</p>
+          </div>
+        ) : isFetching && posts.length === 0 ? (
+          <div className="flex flex-col gap-[10px]">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <RecruitCardSkeleton key={i} />
+            ))}
           </div>
         ) : !isFetching && posts.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">

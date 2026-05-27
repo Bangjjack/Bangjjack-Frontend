@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { RoundButton } from "@/components/ui";
-import { RecruitCard } from "@/components";
+import { RecruitCard, RecruitCardSkeleton } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { useHomePostList } from "@/features/board/hooks";
@@ -61,7 +61,7 @@ function HomePageContent({
   const { ref: emblaRef, handlers } = useDragScroll();
   const recruitListRef = useFadeInOnScroll<HTMLDivElement>();
 
-  const { data, isError } = useHomePostList();
+  const { data, isLoading, isError } = useHomePostList();
   const posts = data?.content ?? [];
 
   return (
@@ -127,6 +127,12 @@ function HomePageContent({
           <p className="typo-body2 py-4 text-center text-text-caption">
             게시글을 불러오지 못했어요
           </p>
+        ) : isLoading ? (
+          <div className="flex flex-col gap-2.5">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <RecruitCardSkeleton key={i} />
+            ))}
+          </div>
         ) : (
           <div ref={recruitListRef} className="flex flex-col gap-2.5">
             {posts.map((post) => {
