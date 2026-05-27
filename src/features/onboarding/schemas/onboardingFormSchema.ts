@@ -21,8 +21,8 @@ const onboardingFormSchema = z.object({
   dormitory: requiredSelectionSchema,
   gender: requiredSelectionSchema,
   grade: requiredTextSchema,
+  departmentId: z.number().int().nonnegative().nullable(),
   indoorTemperature: requiredSelectionSchema,
-  itemSharingPreference: z.array(requiredTextSchema),
   noiseSensitivity: requiredSelectionSchema,
   priorityFactors: z.array(requiredTextSchema).length(3),
   semesterType: requiredSelectionSchema,
@@ -38,12 +38,17 @@ const basicInfoStepSchema = onboardingFormSchema.pick({
   grade: true,
 });
 
-const schoolInfoStepSchema = onboardingFormSchema.pick({
-  campus: true,
-  department: true,
-  dormitory: true,
-  semesterType: true,
-});
+const schoolInfoStepSchema = onboardingFormSchema
+  .pick({
+    campus: true,
+    department: true,
+    departmentId: true,
+    dormitory: true,
+    semesterType: true,
+  })
+  .refine((value) => value.departmentId !== null, {
+    message: "Required department",
+  });
 
 const lifestyleStepSchema = onboardingFormSchema.pick({
   callHabit: true,
@@ -78,9 +83,13 @@ function isPriorityStepComplete(selectedFactors: string[]) {
 }
 
 export {
+  basicInfoStepSchema,
   isBasicInfoStepComplete,
   isLifestyleStepComplete,
   isPriorityStepComplete,
   isSchoolInfoStepComplete,
+  lifestyleStepSchema,
   onboardingFormSchema,
+  priorityStepSchema,
+  schoolInfoStepSchema,
 };

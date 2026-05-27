@@ -7,11 +7,13 @@ import {
   OnBoardingPriorityStep,
   OnBoardingSchoolInfoStep,
 } from "@/features/onboarding/components/steps";
+import { useDepartments } from "@/features/onboarding/hooks";
 import { useOnboardingFlow } from "@/features/onboarding/hooks/useOnboardingFlow";
 import type { OnBoardingPageContentProps } from "@/features/onboarding/types";
 
 function OnBoardingPageContent({
   initialValues,
+  isSubmitting = false,
   onBack,
   onNext,
   progressStates,
@@ -21,18 +23,13 @@ function OnBoardingPageContent({
   const {
     currentStep,
     currentStepMeta,
+    control,
     formValues,
     handleBack,
-    handleChangeBasicInfoField,
-    handleChangeSchoolInfoField,
-    handleSelectDormitory,
-    handleSelectGender,
-    handleSelectLifestyleSingle,
-    handleSelectSemesterType,
     handleSkipCurrentStep,
     handleSubmit,
-    handleToggleLifestyleMulti,
-    handleTogglePriorityFactor,
+    selectedCampus,
+    setValue,
   } = useOnboardingFlow({
     initialValues,
     onBack,
@@ -40,6 +37,11 @@ function OnBoardingPageContent({
     progressStates,
     userName,
   });
+  const {
+    data: departments = [],
+    isError: isDepartmentsError,
+    isLoading: isDepartmentsLoading,
+  } = useDepartments(selectedCampus);
 
   const handleHeaderAction = () => {
     if (currentStep === "lifestyle" || currentStep === "preferences") {
@@ -54,7 +56,7 @@ function OnBoardingPageContent({
     <>
       <form onSubmit={handleSubmit}>
         <OnBoardingLayout
-          actionDisabled={!currentStepMeta.isComplete}
+          actionDisabled={!currentStepMeta.isComplete || isSubmitting}
           actionLabel={currentStepMeta.actionLabel}
           description={currentStepMeta.description}
           footerDescription={currentStepMeta.footerDescription}
@@ -70,34 +72,28 @@ function OnBoardingPageContent({
           title={currentStepMeta.title}
         >
           {currentStep === "basic-info" ? (
-            <OnBoardingBasicInfoStep
-              values={formValues}
-              onFieldChange={handleChangeBasicInfoField}
-              onGenderChange={handleSelectGender}
-            />
+            <OnBoardingBasicInfoStep control={control} values={formValues} />
           ) : null}
 
           {currentStep === "school-info" ? (
             <OnBoardingSchoolInfoStep
+              departments={departments}
+              isDepartmentsError={isDepartmentsError}
+              isDepartmentsLoading={isDepartmentsLoading}
+              control={control}
+              setValue={setValue}
               values={formValues}
-              onFieldChange={handleChangeSchoolInfoField}
-              onDormitoryChange={handleSelectDormitory}
-              onSemesterTypeChange={handleSelectSemesterType}
             />
           ) : null}
 
           {currentStep === "lifestyle" ? (
-            <OnBoardingLifestyleStep
-              values={formValues}
-              onSingleSelectChange={handleSelectLifestyleSingle}
-              onMultiSelectChange={handleToggleLifestyleMulti}
-            />
+            <OnBoardingLifestyleStep control={control} values={formValues} />
           ) : null}
 
           {currentStep === "preferences" ? (
             <OnBoardingPriorityStep
+              control={control}
               selectedFactors={formValues.priorityFactors}
-              onToggleFactor={handleTogglePriorityFactor}
             />
           ) : null}
         </OnBoardingLayout>
