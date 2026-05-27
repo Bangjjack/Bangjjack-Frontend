@@ -1,15 +1,19 @@
 import { StatusBadge } from "@/features/mypage/components/StatusBadge";
-import type { MyBookmarkPostMock } from "@/features/mypage/types";
+import type { PostStatus } from "@/types";
+
+const STATUS_LABEL: Record<PostStatus, string> = {
+  OPEN: "모집중",
+  CLOSED: "마감",
+};
 
 interface BookmarkPostStatusBadgeProps {
-  status: MyBookmarkPostMock["status"];
-  statusLabel: string;
+  status: PostStatus;
 }
 
-function BookmarkPostStatusBadge({ status, statusLabel }: BookmarkPostStatusBadgeProps) {
-  const isClosed = status === "closed";
+function BookmarkPostStatusBadge({ status }: BookmarkPostStatusBadgeProps) {
+  const isClosed = status === "CLOSED";
 
-  return <StatusBadge variant={isClosed ? "closed" : "active"}>{statusLabel}</StatusBadge>;
+  return <StatusBadge variant={isClosed ? "closed" : "active"}>{STATUS_LABEL[status]}</StatusBadge>;
 }
 
 export { BookmarkPostStatusBadge };

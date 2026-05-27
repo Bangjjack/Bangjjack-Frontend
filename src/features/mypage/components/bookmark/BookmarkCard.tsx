@@ -1,14 +1,14 @@
 import { useState } from "react";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { BookmarkPostStatusBadge } from "@/features/mypage/components/bookmark/BookmarkPostStatusBadge";
+import type { BookmarkedPost } from "@/features/mypage/types";
 import { cn } from "@/lib/cn";
-
-import type { MyBookmarkPostMock } from "@/features/mypage/types";
 
 interface BookmarkCardProps {
   className?: string;
-  post: MyBookmarkPostMock;
+  post: BookmarkedPost;
 }
 
 function BookmarkCard({ className, post }: BookmarkCardProps) {
@@ -28,13 +28,13 @@ function BookmarkCard({ className, post }: BookmarkCardProps) {
             {post.title}
           </h3>
           <p className="truncate text-xs font-medium leading-normal text-text-disabled">
-            {post.weeks}주 · {post.roomType}
+            {DORMITORY_LABEL[post.dormitory]} · {ROOM_SIZE_LABEL[post.roomSize]}
           </p>
         </div>
       </div>
 
       <div className="flex shrink-0 items-center justify-end gap-2.5">
-        <BookmarkPostStatusBadge status={post.status} statusLabel={post.statusLabel} />
+        <BookmarkPostStatusBadge status={post.status} />
         <button
           aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
           className="flex size-6 shrink-0 cursor-pointer items-center justify-center text-brand-primary"
