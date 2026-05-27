@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { removeBookmark } from "@/api/bookmarks";
 import { postQueryKeys } from "@/features/board/queries";
 import type { PostDetail } from "@/features/board/types";
+import { mypageQueryKeys } from "@/features/mypage/queries";
 
 export const useRemoveBookmark = () => {
   const queryClient = useQueryClient();
@@ -22,6 +23,7 @@ export const useRemoveBookmark = () => {
     },
     onSettled: (_data, _err, postId) => {
       queryClient.invalidateQueries({ queryKey: postQueryKeys.detail(postId) });
+      queryClient.invalidateQueries({ queryKey: mypageQueryKeys.bookmarks() });
     },
   });
 };
