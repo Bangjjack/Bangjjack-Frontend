@@ -2,8 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 
 import { saveOnboardingPreference } from "@/api";
 
-export const useSaveOnboardingPreference = () => {
+type UseSaveOnboardingPreferenceOptions = {
+  onError?: (error: Error) => void;
+};
+
+export const useSaveOnboardingPreference = (options?: UseSaveOnboardingPreferenceOptions) => {
   return useMutation({
     mutationFn: saveOnboardingPreference,
+    onError: options?.onError,
   });
 };

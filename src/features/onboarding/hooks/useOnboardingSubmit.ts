@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 
 import { useRegistrationStatus } from "@/features/auth";
 import { useSaveOnboarding } from "@/features/onboarding/hooks/useSaveOnboarding";
@@ -23,6 +23,12 @@ type OnboardingSubmitResult = {
   isChecklistRegistered?: boolean;
   isOnboarded: boolean;
   isRoommatePreferenceRegistered?: boolean;
+};
+
+type SubmitContext = {
+  alreadySavedMessages: string[];
+  shouldStopSubmit: boolean;
+  submitResult: OnboardingSubmitResult;
 };
 
 function getOnboardingErrorMessage(error: unknown) {
@@ -54,11 +60,62 @@ function useOnboardingSubmit({
   onError,
   onSuccess,
 }: UseOnboardingSubmitOptions = {}) {
-  const { mutateAsync: saveOnboarding, isPending } = useSaveOnboarding();
+  const submitContextRef = useRef<SubmitContext | null>(null);
+  const { mutateAsync: saveOnboarding, isPending } = useSaveOnboarding({
+    onError: (error) => {
+      const submitContext = submitContextRef.current;
+
+      if (!submitContext) {
+        return;
+      }
+
+      if (isAxiosError(error) && error.response?.status === 409) {
+        submitContext.alreadySavedMessages.push(getOnboardingErrorMessage(error));
+        return;
+      }
+
+      submitContext.shouldStopSubmit = true;
+      onError?.(getOnboardingErrorMessage(error));
+    },
+  });
   const { mutateAsync: saveOnboardingChecklist, isPending: isChecklistPending } =
-    useSaveOnboardingChecklist();
+    useSaveOnboardingChecklist({
+      onError: (error) => {
+        const submitContext = submitContextRef.current;
+
+        if (!submitContext) {
+          return;
+        }
+
+        if (isAxiosError(error) && error.response?.status === 409) {
+          submitContext.alreadySavedMessages.push(getChecklistErrorMessage(error));
+          submitContext.submitResult.isChecklistRegistered = true;
+          return;
+        }
+
+        submitContext.shouldStopSubmit = true;
+        onError?.(getChecklistErrorMessage(error));
+      },
+    });
   const { mutateAsync: saveOnboardingPreference, isPending: isPreferencePending } =
-    useSaveOnboardingPreference();
+    useSaveOnboardingPreference({
+      onError: (error) => {
+        const submitContext = submitContextRef.current;
+
+        if (!submitContext) {
+          return;
+        }
+
+        if (isAxiosError(error) && error.response?.status === 409) {
+          submitContext.alreadySavedMessages.push(getPreferenceErrorMessage(error));
+          submitContext.submitResult.isRoommatePreferenceRegistered = true;
+          return;
+        }
+
+        submitContext.shouldStopSubmit = true;
+        onError?.(getPreferenceErrorMessage(error));
+      },
+    });
   const { data: registrationStatus } = useRegistrationStatus();
   const resetOnboarding = useOnboardingStore((state) => state.reset);
 
@@ -88,17 +145,23 @@ function useOnboardingSubmit({
       const submitResult: OnboardingSubmitResult = {
         isOnboarded: true,
       };
+      const submitContext: SubmitContext = {
+        alreadySavedMessages,
+        shouldStopSubmit: false,
+        submitResult,
+      };
+
+      submitContextRef.current = submitContext;
 
       if (!registrationStatus?.isOnboarded) {
-        try {
-          await saveOnboarding(body);
-        } catch (error) {
-          if (isAxiosError(error) && error.response?.status === 409) {
-            alreadySavedMessages.push(getOnboardingErrorMessage(error));
-          } else {
-            onError?.(getOnboardingErrorMessage(error));
-            return;
-          }
+        await saveOnboarding(body).then(
+          () => undefined,
+          () => undefined,
+        );
+
+        if (submitContext.shouldStopSubmit) {
+          submitContextRef.current = null;
+          return;
         }
       }
 
@@ -106,17 +169,16 @@ function useOnboardingSubmit({
         if (registrationStatus?.isChecklistRegistered) {
           submitResult.isChecklistRegistered = true;
         } else {
-          try {
-            await saveOnboardingChecklist(checklistResult.value);
-            submitResult.isChecklistRegistered = true;
-          } catch (error) {
-            if (isAxiosError(error) && error.response?.status === 409) {
-              alreadySavedMessages.push(getChecklistErrorMessage(error));
+          await saveOnboardingChecklist(checklistResult.value).then(
+            () => {
               submitResult.isChecklistRegistered = true;
-            } else {
-              onError?.(getChecklistErrorMessage(error));
-              return;
-            }
+            },
+            () => undefined,
+          );
+
+          if (submitContext.shouldStopSubmit) {
+            submitContextRef.current = null;
+            return;
           }
         }
       }
@@ -125,21 +187,21 @@ function useOnboardingSubmit({
         if (registrationStatus?.isRoommatePreferenceRegistered) {
           submitResult.isRoommatePreferenceRegistered = true;
         } else {
-          try {
-            await saveOnboardingPreference(preferenceResult.value);
-            submitResult.isRoommatePreferenceRegistered = true;
-          } catch (error) {
-            if (isAxiosError(error) && error.response?.status === 409) {
-              alreadySavedMessages.push(getPreferenceErrorMessage(error));
+          await saveOnboardingPreference(preferenceResult.value).then(
+            () => {
               submitResult.isRoommatePreferenceRegistered = true;
-            } else {
-              onError?.(getPreferenceErrorMessage(error));
-              return;
-            }
+            },
+            () => undefined,
+          );
+
+          if (submitContext.shouldStopSubmit) {
+            submitContextRef.current = null;
+            return;
           }
         }
       }
 
+      submitContextRef.current = null;
       resetOnboarding();
       if (alreadySavedMessages.length > 0) {
         onAlreadySaved?.(alreadySavedMessages, submitResult);
