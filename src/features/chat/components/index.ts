@@ -5,6 +5,8 @@ export type { ChatMessageListProps } from "@/features/chat/components/chat-detai
 export { ChatInputMenu } from "@/features/chat/components/chat-detail/ChatInputMenu";
 export type { ChatInputMenuProps } from "@/features/chat/components/chat-detail/ChatInputMenu";
 export type { ChatInputMenuAction } from "@/features/chat/types";
+export { ChatRoommateAcceptMessage } from "@/features/chat/components/chat-detail/ChatRoommateAcceptMessage";
+export type { ChatRoommateAcceptMessageProps } from "@/features/chat/components/chat-detail/ChatRoommateAcceptMessage";
 export { ChatRoomLeaveSheet } from "@/features/chat/components/chat-detail/ChatRoomLeaveSheet";
 export type { ChatRoomLeaveSheetProps } from "@/features/chat/components/chat-detail/ChatRoomLeaveSheet";
 export { ChatRoommateInviteSheet } from "@/features/chat/components/chat-detail/ChatRoommateInviteSheet";

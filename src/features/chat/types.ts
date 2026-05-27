@@ -67,11 +67,23 @@ export type ChatRoommateRejectMessageData = {
   variant: "received" | "sent";
 };
 
+export type ChatRoommateAcceptMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
+  id: number;
+  partnerName: string;
+  sentAt?: string;
+  type: "roommate_accept";
+  variant: "received" | "sent";
+};
+
 export type ChatMessage =
   | ChatTextMessage
   | ChatRoommateRequestMessageData
   | ChatRoommateInviteMessageData
-  | ChatRoommateRejectMessageData;
+  | ChatRoommateRejectMessageData
+  | ChatRoommateAcceptMessageData;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 

@@ -108,6 +108,7 @@ function ChatMessageListSection({
         <ChatMessageList
           avatarSeed={chatDetail.id}
           avatarImageUrl={chatDetail.profileImage}
+          chatDetail={chatDetail}
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
           onCancelInviteRequest={onCancelInviteRequest}

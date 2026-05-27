@@ -54,6 +54,19 @@ export function mapHistoryMessageToChatMessage(
     };
   }
 
+  if (message.messageType === "APPLICATION_ACCEPTED") {
+    return {
+      applicationId: message.applicationId,
+      dateKey,
+      dateLabel,
+      id: message.messageId,
+      partnerName,
+      sentAt: formatMessageTime(message.createdAt),
+      type: "roommate_accept",
+      variant: isOutgoing ? "sent" : "received",
+    };
+  }
+
   return {
     dateKey,
     dateLabel,

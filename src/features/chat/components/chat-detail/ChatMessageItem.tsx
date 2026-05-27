@@ -1,15 +1,17 @@
 import { ProfileAvatar } from "@/components/ui";
+import { ChatRoommateAcceptMessage } from "@/features/chat/components/chat-detail/ChatRoommateAcceptMessage";
 import { ChatRoommateInviteMessage } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessage";
 import { ChatRoommateRejectMessage } from "@/features/chat/components/chat-detail/ChatRoommateRejectMessage";
 import { ChatRoommateRequestMessage } from "@/features/chat/components/chat-detail/ChatRoommateRequestMessage";
 import { ChatMessageWrapper } from "@/features/chat/components/chat-detail/ChatMessageWrapper";
-import type { ChatMessage, ChatTextMessage } from "@/features/chat/types";
+import type { ChatDetail, ChatMessage, ChatTextMessage } from "@/features/chat/types";
 import { shouldShowMessageTime } from "@/features/chat/utils/chatMessageGrouping";
 import { cn } from "@/lib/cn";
 
 export type ChatMessageItemProps = {
   avatarImageUrl?: string | null;
   avatarSeed: number;
+  chatDetail: ChatDetail;
   compactSpacing: boolean;
   dateBadgeLabel?: string | null;
   isFirst: boolean;
@@ -25,6 +27,7 @@ export type ChatMessageItemProps = {
 export function ChatMessageItem({
   avatarImageUrl,
   avatarSeed,
+  chatDetail,
   compactSpacing,
   dateBadgeLabel,
   isFirst,
@@ -71,6 +74,19 @@ export function ChatMessageItem({
     );
   }
 
+  if (message.type === "roommate_accept") {
+    return (
+      <ChatMessageWrapper dateBadgeLabel={dateBadgeLabel} isFirst={isFirst}>
+        <RoommateAcceptMessageItem
+          avatarImageUrl={avatarImageUrl}
+          avatarSeed={avatarSeed}
+          chatDetail={chatDetail}
+          message={message}
+        />
+      </ChatMessageWrapper>
+    );
+  }
+
   return (
     <ChatMessageWrapper
       compactSpacing={compactSpacing}
@@ -85,6 +101,51 @@ export function ChatMessageItem({
         showMessageTime={shouldShowMessageTime(messages, messageIndex)}
       />
     </ChatMessageWrapper>
+  );
+}
+
+function RoommateAcceptMessageItem({
+  avatarImageUrl,
+  avatarSeed,
+  chatDetail,
+  message,
+}: {
+  avatarImageUrl?: string | null;
+  avatarSeed: number;
+  chatDetail: ChatDetail;
+  message: Extract<ChatMessage, { type: "roommate_accept" }>;
+}) {
+  const isSent = message.variant === "sent";
+
+  return (
+    <div className={cn("flex w-full items-end gap-200", isSent && "justify-end")}>
+      {!isSent ? (
+        <ProfileAvatar
+          className="shrink-0 self-end"
+          imageUrl={avatarImageUrl}
+          seed={avatarSeed}
+          size={36}
+        />
+      ) : null}
+
+      {isSent && message.sentAt ? (
+        <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
+          {message.sentAt}
+        </span>
+      ) : null}
+
+      <ChatRoommateAcceptMessage
+        chatDetail={chatDetail}
+        partnerName={message.partnerName}
+        variant={message.variant}
+      />
+
+      {!isSent && message.sentAt ? (
+        <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
+          {message.sentAt}
+        </span>
+      ) : null}
+    </div>
   );
 }
 

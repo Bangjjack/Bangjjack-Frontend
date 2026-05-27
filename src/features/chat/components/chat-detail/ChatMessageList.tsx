@@ -1,5 +1,5 @@
 import { ChatMessageItem } from "@/features/chat/components/chat-detail/ChatMessageItem";
-import type { ChatMessage } from "@/features/chat/types";
+import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 import {
   getMessageDateBadgeLabels,
   isSameMessageTimeGroupWithPrevious,
@@ -8,6 +8,7 @@ import {
 export type ChatMessageListProps = {
   avatarImageUrl?: string | null;
   avatarSeed: number;
+  chatDetail: ChatDetail;
   fallbackDateLabel: string;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
@@ -19,6 +20,7 @@ export type ChatMessageListProps = {
 export function ChatMessageList({
   avatarImageUrl,
   avatarSeed,
+  chatDetail,
   fallbackDateLabel,
   messages,
   onCancelInviteRequest,
@@ -35,6 +37,7 @@ export function ChatMessageList({
           key={message.id}
           avatarImageUrl={avatarImageUrl}
           avatarSeed={avatarSeed}
+          chatDetail={chatDetail}
           compactSpacing={isSameMessageTimeGroupWithPrevious(messages, index)}
           dateBadgeLabel={dateBadgeLabels[index]}
           isFirst={index === 0}
