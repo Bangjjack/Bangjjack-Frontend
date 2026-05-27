@@ -16,7 +16,8 @@ function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardPro
     <Card className="gap-400 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
       <button
         type="button"
-        className="flex cursor-pointer flex-col gap-100 text-left"
+        className="flex flex-col gap-100 text-left"
+        disabled={members.length === 0}
         onClick={() => navigate(`/board/${postId}/roommates`)}
       >
         <h3 className="typo-title1 text-text-strong">룸메이트 목록</h3>
@@ -31,6 +32,7 @@ function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardPro
           seed: m.userId,
           isHost: m.role === "LEADER",
         }))}
+        onMemberClick={(member) => navigate(`/board/${postId}/roommates?userId=${member.seed}`)}
       />
     </Card>
   );

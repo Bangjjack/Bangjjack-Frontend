@@ -36,10 +36,10 @@ function Tag({ className, color, rank, children, ...props }: TagProps) {
         )}
         {...props}
       >
-        <span className="flex size-[15px] shrink-0 items-center justify-center rounded-full bg-brand-primary text-[9px] font-bold leading-none text-white">
-          {rank}
+        <span className="flex size-[15px] shrink-0 items-center justify-center rounded-full bg-brand-primary text-white">
+          <span className="text-[9px] font-bold leading-none">{rank}</span>
         </span>
-        <span className="typo-label1 text-text-label">{children}</span>
+        <span className="typo-label1 leading-none text-text-label">{children}</span>
       </span>
     );
   }

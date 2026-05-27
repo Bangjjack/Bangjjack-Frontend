@@ -8,12 +8,32 @@ type PostAuthor = {
   profileImage: string;
 };
 
+/** 생활습관 체크리스트 단일 필드 */
+type ChecklistField<T = string> = {
+  value: T;
+  matched: boolean;
+};
+
+/** 룸메이트 생활습관 체크리스트 */
+type PostMemberLifestyleChecklist = {
+  bedtime: ChecklistField;
+  wakeUpTime: ChecklistField;
+  sleepHabits: ChecklistField<string[]>;
+  cleaningCycle: ChecklistField;
+  dormStayTime: ChecklistField;
+  callHabit: ChecklistField;
+  indoorTemperature: ChecklistField;
+  noiseSensitivity: ChecklistField;
+  smoking: ChecklistField;
+};
+
 /** 룸메이트 멤버 */
 type PostMember = {
   userId: number;
   username: string;
   profileImage: string;
   role: MemberRole;
+  lifestyleChecklist: PostMemberLifestyleChecklist;
 };
 
 /** 룸메이트 우선순위 */
@@ -59,11 +79,21 @@ type PostListData = {
   hasNext: boolean;
 };
 
+/** 매칭률 조회 응답 data */
+type PostMatchRateData = {
+  matchRate: number;
+  matchedAttributes: string[];
+  recommendedTopics: string[];
+};
+
 export type {
+  ChecklistField,
   PostAuthor,
   PostMember,
+  PostMemberLifestyleChecklist,
   PostRoommatePreference,
   PostDetail,
   PostListItem,
   PostListData,
+  PostMatchRateData,
 };

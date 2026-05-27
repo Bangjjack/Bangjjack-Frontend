@@ -7,4 +7,5 @@ export const postQueryKeys = {
   preview: () => [...postQueryKeys.all, "preview"] as const,
   details: () => [...postQueryKeys.all, "detail"] as const,
   detail: (id: number) => [...postQueryKeys.details(), id] as const,
+  matchRate: (id: number) => [...postQueryKeys.all, "matchRate", id] as const,
 };

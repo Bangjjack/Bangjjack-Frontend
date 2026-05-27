@@ -5,6 +5,7 @@ import type {
   GetPostsParams,
   PostDetail,
   PostListData,
+  PostMatchRateData,
   UpdatePostRequest,
 } from "@/features/board/types";
 
@@ -30,5 +31,12 @@ export const updatePost = async (postId: number, body: UpdatePostRequest): Promi
 
 export const deletePost = async (postId: number): Promise<string> => {
   const { data } = await apiClient.delete<ApiResponse<string>>(`/posts/${postId}`);
+  return data.data;
+};
+
+export const getPostMatchRate = async (postId: number): Promise<PostMatchRateData> => {
+  const { data } = await apiClient.get<ApiResponse<PostMatchRateData>>(
+    `/posts/${postId}/match-rate`,
+  );
   return data.data;
 };
