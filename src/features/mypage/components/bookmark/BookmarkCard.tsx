@@ -1,10 +1,21 @@
 import { useState } from "react";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
+import { Tag } from "@/components/ui";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
-import { BookmarkPostStatusBadge } from "@/features/mypage/components/bookmark/BookmarkPostStatusBadge";
 import type { BookmarkedPost } from "@/features/mypage/types";
 import { cn } from "@/lib/cn";
+import type { PostStatus } from "@/types";
+
+const STATUS_TAG_COLOR: Record<PostStatus, React.ComponentProps<typeof Tag>["color"]> = {
+  OPEN: "black",
+  CLOSED: "disabled",
+};
+
+const STATUS_LABEL: Record<PostStatus, string> = {
+  OPEN: "모집중",
+  CLOSED: "마감",
+};
 
 interface BookmarkCardProps {
   className?: string;
@@ -34,7 +45,7 @@ function BookmarkCard({ className, post }: BookmarkCardProps) {
       </div>
 
       <div className="flex shrink-0 items-center justify-end gap-2.5">
-        <BookmarkPostStatusBadge status={post.status} />
+        <Tag color={STATUS_TAG_COLOR[post.status]}>{STATUS_LABEL[post.status]}</Tag>
         <button
           aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
           className="flex size-6 shrink-0 cursor-pointer items-center justify-center text-brand-primary"
