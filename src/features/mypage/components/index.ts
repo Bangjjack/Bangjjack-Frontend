@@ -8,13 +8,11 @@ export { MyChecklistContent } from "@/features/mypage/components/checklist/MyChe
 export type { MyChecklistContentProps } from "@/features/mypage/components/checklist/MyChecklistContent";
 export { MyActivityContent } from "@/features/mypage/components/MyActivityContent";
 export type { MyActivityContentProps } from "@/features/mypage/components/MyActivityContent";
-export { MyBookmarkContent } from "@/features/mypage/components/bookmark/MyBookmarkContent";
-export type { MyBookmarkContentProps } from "@/features/mypage/components/bookmark/MyBookmarkContent";
-export { StatusBadge } from "@/features/mypage/components/StatusBadge";
+export { BookmarkCard, MyBookmarkContent } from "@/features/mypage/components/bookmark";
 export type {
-  StatusBadgeProps,
-  StatusBadgeVariant,
-} from "@/features/mypage/components/StatusBadge";
+  BookmarkCardProps,
+  MyBookmarkContentProps,
+} from "@/features/mypage/components/bookmark";
 export { MyChecklistChipSection } from "@/features/mypage/components/checklist/MyChecklistChipSection";
 export type { MyChecklistChipSectionProps } from "@/features/mypage/components/checklist/MyChecklistChipSection";
 export { MyProfileEditContent } from "@/features/mypage/components/MyProfileEditContent";

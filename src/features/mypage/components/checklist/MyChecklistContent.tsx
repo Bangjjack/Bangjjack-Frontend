@@ -1,6 +1,6 @@
 import { ChevronLeftIcon } from "@/assets/icons";
 import { Button, ChipQuestionSection } from "@/components/ui";
-import { useMyChecklistEditor } from "@/features/mypage/hooks/useMyChecklistEditor";
+import { useMyChecklistEditor } from "@/features/mypage/hooks";
 import { cn } from "@/lib/cn";
 
 export interface MyChecklistContentProps {
