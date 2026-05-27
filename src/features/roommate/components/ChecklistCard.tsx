@@ -6,13 +6,14 @@ import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 type ChecklistCardProps = {
   items: ChecklistEntry[];
   nickname: string;
+  hideMatchStatus?: boolean;
 };
 
-function ChecklistCard({ items, nickname }: ChecklistCardProps) {
+function ChecklistCard({ items, nickname, hideMatchStatus = false }: ChecklistCardProps) {
   return (
     <div className="flex flex-col gap-[10px] rounded-medium bg-bg-secondary px-400 py-450">
       <div className="flex flex-col gap-600">
-        <div className="flex items-center gap-[6px]">
+        <div className="flex items-start gap-[6px]">
           <CheckIcon
             aria-hidden="true"
             className="size-[20px] shrink-0 text-brand-primary [&_path]:stroke-current"
@@ -24,7 +25,7 @@ function ChecklistCard({ items, nickname }: ChecklistCardProps) {
           {items.map((item) => (
             <ChecklistItem
               key={item.id}
-              isMatched={item.isMatched}
+              isMatched={hideMatchStatus ? true : item.isMatched}
               label={item.label}
               value={item.value}
             />
@@ -32,10 +33,12 @@ function ChecklistCard({ items, nickname }: ChecklistCardProps) {
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-[6px] px-[6px] py-100">
-        <span className="size-[6px] rounded-full bg-state-error-2" aria-hidden="true" />
-        <span className="typo-title4 text-icon-alternative">불일치</span>
-      </div>
+      {!hideMatchStatus && (
+        <div className="flex items-center justify-end gap-[6px] px-[6px] py-100">
+          <span className="size-[6px] rounded-full bg-state-error-2" aria-hidden="true" />
+          <span className="typo-title4 text-icon-alternative">불일치</span>
+        </div>
+      )}
     </div>
   );
 }

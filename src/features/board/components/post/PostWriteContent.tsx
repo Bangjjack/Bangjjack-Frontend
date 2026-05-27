@@ -1,49 +1,28 @@
 import { useNavigate } from "react-router";
-import { isAxiosError } from "axios";
 
-import { toast } from "@/components/ui";
 import { useGoBack } from "@/hooks";
 import type { PostWriteFormValues } from "@/features/board/schemas";
-import { useCreatePost } from "@/features/board/hooks";
-import { mapFormToCreatePostRequest } from "@/features/board/utils";
-// import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
+import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 import { PostFormShell } from "./PostFormShell";
 
 function PostWriteContent() {
   const navigate = useNavigate();
   const handleBackClick = useGoBack("/board");
-  const { mutate: createPost, isPending } = useCreatePost();
-  // const { draft, setDraft, clearDraft } = usePostWriteDraftStore();
+  const { draft, setDraft } = usePostWriteDraftStore();
 
   function handleSubmit(data: PostWriteFormValues) {
-    const body = mapFormToCreatePostRequest(data);
-    createPost(body, {
-      onSuccess: (data) => {
-        toast.success("게시글이 등록되었어요");
-        navigate(data.postId ? `/board/${data.postId}` : "/board");
-      },
-      onError: (error) => {
-        if (isAxiosError(error) && error.response?.status === 409) {
-          toast.error("이미 작성한 게시글이 있어요");
-        } else {
-          toast.error("게시글 등록에 실패했어요");
-        }
-      },
-    });
-    // 체크리스트 확인 화면 (추후 복원)
-    // setDraft(data);
-    // navigate("/board/write/checklist");
+    setDraft(data, null);
+    navigate("/board/write/checklist");
   }
 
   return (
     <PostFormShell
       headerTitle="룸메이트 모집하기"
-      submitLabel="등록하기"
-      // defaultValues={draft ?? undefined}
+      submitLabel="다음"
+      defaultValues={draft ?? undefined}
       onSubmit={handleSubmit}
       onBackClick={handleBackClick}
-      isPending={isPending}
     />
   );
 }

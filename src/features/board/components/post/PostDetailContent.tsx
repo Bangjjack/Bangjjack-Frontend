@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { Header } from "@/components/ui";
-import { useFadeInOnScroll, useGoBack } from "@/hooks";
-
-import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/constants";
-import { usePostDetail } from "@/features/board/hooks";
-import { mapSharedLifestyleToHabits } from "@/features/board/utils";
-
+import {
+  DORMITORY_LABEL,
+  MEMBER_ROLE,
+  ROOM_SIZE_LABEL,
+  ROOM_SIZE_MAX,
+  SEMESTER_LABEL,
+} from "@/constants";
 import {
   PostActionMenu,
   PostDetailBottomBar,
@@ -16,11 +17,14 @@ import {
   PostDetailRoommatesCard,
   PostDetailTagsCard,
 } from "@/features/board/components/post";
+import { usePostDetail } from "@/features/board/hooks";
+import { computeChecklistMatchStats, mapSharedLifestyleToHabits } from "@/features/board/utils";
+import { useFadeInOnScroll } from "@/hooks";
 
 function PostDetailContent() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const postId = Number(id);
-  const handleBackClick = useGoBack("/board");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -54,6 +58,12 @@ function PostDetailContent() {
   const currentMembers = maxMembers - post.recruitMemberCount;
   const isClosed = currentMembers === maxMembers;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
+
+  const leader = post.members.find((member) => member.role === MEMBER_ROLE.LEADER);
+  const { matchHighlights, matchRate } = leader
+    ? computeChecklistMatchStats(leader.lifestyleChecklist)
+    : { matchHighlights: [], matchRate: 0 };
+
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
     DORMITORY_LABEL[post.dormitory] ?? post.dormitory,
@@ -66,33 +76,35 @@ function PostDetailContent() {
         showBack
         showMore={post.isOwner}
         title="방 찾기"
-        onBackClick={handleBackClick}
+        onBackClick={() => navigate("/board")}
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
-      <PostActionMenu postId={id} isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(false)} />
+      <PostActionMenu isOpen={isMenuOpen} postId={id} onToggle={() => setIsMenuOpen(false)} />
 
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
         <div ref={fadeInRef} className="flex flex-col gap-300 px-400">
           <PostDetailInfoCard
-            title={post.title}
-            isClosed={isClosed}
-            currentMembers={currentMembers}
-            maxMembers={maxMembers}
             author={post.author}
             createdAt={post.createdAt}
+            currentMembers={currentMembers}
+            isClosed={isClosed}
+            maxMembers={maxMembers}
+            title={post.title}
           />
           <PostDetailDescriptionCard description={post.description} recruitTags={recruitTags} />
           <PostDetailTagsCard habits={habits} roommatePreference={post.roommatePreference} />
-          <PostDetailRoommatesCard postId={postId} members={post.members} />
+          <PostDetailRoommatesCard members={post.members} postId={postId} />
         </div>
       </main>
 
       <PostDetailBottomBar
-        postId={postId}
         isOwner={post.isOwner}
-        targetUserId={post.author.authorId}
+        matchHighlights={matchHighlights}
+        matchRate={matchRate}
+        postId={postId}
         targetProfileImage={post.author.profileImage}
+        targetUserId={post.author.authorId}
         targetUsername={post.author.username}
       />
     </div>
