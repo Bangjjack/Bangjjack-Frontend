@@ -3,14 +3,6 @@ import { useLocation, useNavigate, useParams } from "react-router";
 
 import { SharedLifeGuideContent, type ChatDetail } from "@/features/chat";
 
-type SharedLifeGuideChatDetail = ChatDetail & Required<Pick<ChatDetail, "age" | "department">>;
-
-function hasSharedLifeGuideData(
-  chatDetail: ChatDetail | undefined,
-): chatDetail is SharedLifeGuideChatDetail {
-  return chatDetail?.age !== undefined && chatDetail.department !== undefined;
-}
-
 function getChatDetailFromState(state: unknown) {
   return typeof state === "object" && state !== null && "chatDetail" in state
     ? (state as { chatDetail?: ChatDetail }).chatDetail
@@ -26,12 +18,12 @@ export default function ChatSharedLifeGuidePage() {
   const chatDetail = getChatDetailFromState(location.state);
 
   useEffect(() => {
-    if (!hasSharedLifeGuideData(chatDetail)) {
+    if (!chatDetail) {
       navigate("/chat", { replace: true });
     }
   }, [chatDetail, navigate]);
 
-  if (!hasSharedLifeGuideData(chatDetail)) {
+  if (!chatDetail) {
     return null;
   }
 
@@ -42,6 +34,7 @@ export default function ChatSharedLifeGuidePage() {
       department={chatDetail.department}
       matchRate={chatDetail.matchRate}
       nickname={chatDetail.nickname}
+      profileImage={chatDetail.profileImage}
       onBack={() => navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: location.state })}
       onContinueChat={() => navigate(`/chat/${parsedChatId}`, { state: location.state })}
       onGoHome={() => navigate("/home")}

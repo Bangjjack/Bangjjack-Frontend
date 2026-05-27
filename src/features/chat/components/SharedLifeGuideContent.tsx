@@ -14,11 +14,13 @@ import {
 import type { ChatUserProfile } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-export interface SharedLifeGuideContentProps extends Required<
-  Pick<ChatUserProfile, "age" | "department" | "matchRate" | "nickname">
-> {
+export interface SharedLifeGuideContentProps
+  extends
+    Required<Pick<ChatUserProfile, "matchRate" | "nickname">>,
+    Pick<ChatUserProfile, "age" | "department"> {
   avatarSeed?: number;
   className?: string;
+  profileImage?: string | null;
   onBack: () => void;
   onContinueChat: () => void;
   onGoHome: () => void;
@@ -31,6 +33,7 @@ function SharedLifeGuideContent({
   department,
   matchRate,
   nickname,
+  profileImage,
   onBack,
   onContinueChat,
   onGoHome,
@@ -44,15 +47,18 @@ function SharedLifeGuideContent({
           <div className="flex min-w-0 items-center gap-2.5">
             <ProfileAvatar
               className="shrink-0 border border-brand-primary"
+              imageUrl={profileImage}
               seed={avatarSeed}
               size={70}
             />
             <div className="min-w-0">
               <h1 className="truncate typo-title2 text-neutral-black">{nickname}</h1>
               <div className="flex min-w-0 items-center gap-1.5 typo-caption2 text-text-alternative">
-                <span className="shrink-0">{age}세</span>
-                <span aria-hidden="true" className="h-3 w-px shrink-0 bg-border-strong" />
-                <span className="truncate">{department}</span>
+                {age ? <span className="shrink-0">{age}세</span> : null}
+                {age && department ? (
+                  <span aria-hidden="true" className="h-3 w-px shrink-0 bg-border-strong" />
+                ) : null}
+                {department ? <span className="truncate">{department}</span> : null}
               </div>
             </div>
           </div>
