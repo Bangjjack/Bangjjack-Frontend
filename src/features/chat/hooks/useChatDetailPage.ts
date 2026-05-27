@@ -6,6 +6,7 @@ import type { ApiResponse } from "@/api";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
+import { useLeaveChatRoom } from "@/features/chat/hooks/useLeaveChatRoom";
 import { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessRoommateApplication";
 import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
@@ -24,10 +25,12 @@ export type ChatDetailPageState = {
     isLoadingPreviousMessages?: boolean;
     onLoadPreviousMessages?: () => void | Promise<unknown>;
   };
+  isLeavingChatRoom: boolean;
   navigation: {
     onBack: () => void;
     onProfileClick?: () => void;
     onRecruitClick?: () => void;
+    onLeaveChatRoom?: () => void;
     onReportClick?: () => void;
     onRoommateRequestAccept?: (applicationId?: number) => void;
     onRoommateRequestReject?: (applicationId?: number) => void;
@@ -97,6 +100,7 @@ function useChatDetailPage() {
   const location = useLocation();
   const { chatId } = useParams();
   const authUserId = useAuthStore((state) => state.userId);
+  const { isPending: isLeavingChatRoom, mutate: leaveChatRoom } = useLeaveChatRoom();
   const { isPending: isProcessingRoommateRequest, mutate: processRoommateApplication } =
     useProcessRoommateApplication();
 
@@ -160,6 +164,23 @@ function useChatDetailPage() {
     }
 
     navigate(`/board/${chatDetail.recruitPostId}`);
+  };
+
+  const handleLeaveChatRoom = () => {
+    if (Number.isNaN(parsedChatId)) {
+      toast.error("채팅방 정보를 확인할 수 없어요.");
+      return;
+    }
+
+    leaveChatRoom(parsedChatId, {
+      onError: (error) => {
+        toast.error(getApiErrorMessage(error, "채팅방을 나가지 못했어요."));
+      },
+      onSuccess: () => {
+        toast.success("채팅방을 나갔어요.");
+        navigate("/chat", { replace: true });
+      },
+    });
   };
 
   const handleRoommateRequestAccept = (applicationId?: number) => {
@@ -227,9 +248,11 @@ function useChatDetailPage() {
       isLoadingPreviousMessages,
       onLoadPreviousMessages: fetchPreviousMessages,
     },
+    isLeavingChatRoom,
     isProcessingRoommateRequest,
     navigation: {
       onBack: () => navigate("/chat"),
+      onLeaveChatRoom: chatDetail ? handleLeaveChatRoom : undefined,
       onProfileClick: chatDetail ? () => navigate(`/roommate/${chatDetail.id}`) : undefined,
       onRecruitClick: chatDetail ? handleRecruitClick : undefined,
       onReportClick: chatDetail

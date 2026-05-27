@@ -34,6 +34,7 @@ export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
 export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";
 export { default as LightbulbIcon } from "@/assets/icons/ic-lightbulb.svg?react";
 export { default as SlidersHorizontalIcon } from "@/assets/icons/ic-sliders-horizontal.svg?react";
+export { default as SquareArrowRightExitIcon } from "@/assets/icons/ic-square-arrow-right-exit.svg?react";
 export { default as SoapDispenserDropletIcon } from "@/assets/icons/ic-soap-dispenser-droplet.svg?react";
 export { default as ThermometerIcon } from "@/assets/icons/ic-thermometer.svg?react";
 export { default as WindIcon } from "@/assets/icons/ic-wind.svg?react";

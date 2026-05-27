@@ -60,6 +60,6 @@ export {
   BottomSheetClose,
   BottomSheetContent,
 } from "@/components/ui/bottom-sheet";
-export type { BottomSheetProps } from "@/components/ui/bottom-sheet";
+export type { BottomSheetContentVariant, BottomSheetProps } from "@/components/ui/bottom-sheet";
 export { Dropdown, DropdownTrigger, DropdownContent, DropdownItem } from "@/components/ui/dropdown";
 export type { DropdownProps } from "@/components/ui/dropdown";

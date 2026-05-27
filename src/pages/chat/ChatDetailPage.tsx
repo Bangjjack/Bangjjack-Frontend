@@ -15,16 +15,24 @@ const EMPTY_CHAT_DETAIL: ChatDetail = {
 };
 
 export default function ChatDetailPage() {
-  const { chatDetail, composer, isProcessingRoommateRequest, messageList, navigation } =
-    useChatDetailPage();
+  const {
+    chatDetail,
+    composer,
+    isLeavingChatRoom,
+    isProcessingRoommateRequest,
+    messageList,
+    navigation,
+  } = useChatDetailPage();
   const activeChatDetail = chatDetail ?? EMPTY_CHAT_DETAIL;
 
   const {
     closeInputMenu,
     closeInviteSheet,
+    closeLeaveSheet,
     completeInputMenuClose,
     draftMessage,
     handleCancelInviteRequest,
+    handleConfirmLeaveChatRoom,
     handleInputMenuAction,
     handleSendInviteRequest,
     handleSubmitMessage,
@@ -32,6 +40,7 @@ export default function ChatDetailPage() {
     inputMenuOpen,
     isSendingInviteRequest,
     inviteSheetOpen,
+    leaveSheetOpen,
     messages,
     setDraftMessage,
     toggleInputMenu,
@@ -39,6 +48,7 @@ export default function ChatDetailPage() {
     chatDetail: activeChatDetail,
     currentUserId: composer.currentUserId,
     initialMessages: composer.initialMessages,
+    onLeaveChatRoom: navigation.onLeaveChatRoom,
     roomId: composer.roomId,
   });
 
@@ -84,12 +94,16 @@ export default function ChatDetailPage() {
         draftMessage={draftMessage}
         inputMenuClosing={inputMenuClosing}
         inputMenuOpen={inputMenuOpen}
+        isLeavingChatRoom={isLeavingChatRoom}
         isSendingInviteRequest={isSendingInviteRequest}
         inviteSheetOpen={inviteSheetOpen}
+        leaveSheetOpen={leaveSheetOpen}
         onCloseInputMenu={closeInputMenu}
         onCloseInviteSheet={closeInviteSheet}
+        onCloseLeaveSheet={closeLeaveSheet}
         onCompleteInputMenuClose={completeInputMenuClose}
         onInputMenuAction={handleInputMenuAction}
+        onLeaveChatRoom={handleConfirmLeaveChatRoom}
         onSendInviteRequest={handleSendInviteRequest}
         onSubmitMessage={handleSubmitMessage}
         onToggleInputMenu={toggleInputMenu}

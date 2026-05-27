@@ -63,7 +63,7 @@ export type ChatMessage =
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
-export type ChatInputMenuAction = "invite";
+export type ChatInputMenuAction = "invite" | "leave";
 
 export type ChatRoomCategory = "APPLICATION";
 

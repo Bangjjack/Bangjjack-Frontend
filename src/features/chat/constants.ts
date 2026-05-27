@@ -1,6 +1,13 @@
 import type { ComponentType, SVGProps } from "react";
 
-import { FanIcon, MoonIcon, BrushCleaningIcon, ThermometerIcon, UsersIcon } from "@/assets/icons";
+import {
+  FanIcon,
+  MoonIcon,
+  BrushCleaningIcon,
+  SquareArrowRightExitIcon,
+  ThermometerIcon,
+  UsersIcon,
+} from "@/assets/icons";
 import type { ChatInputMenuItem, ChatTab } from "@/features/chat/types";
 
 export const CHAT_TAB_CATEGORY = {
@@ -42,6 +49,14 @@ export const CHAT_INPUT_MENU_ITEMS: ChatInputMenuItem[] = [
     iconClassName: "text-brand-primary",
     id: "invite",
     title: "룸메이트 초대 요청",
+  },
+  {
+    description: "대화 내역을 다시 확인하기 어려워요",
+    icon: SquareArrowRightExitIcon,
+    iconBackgroundClassName: "bg-state-error-light",
+    iconClassName: "text-state-error",
+    id: "leave",
+    title: "채팅방 나가기",
   },
 ];
 

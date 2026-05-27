@@ -1,5 +1,9 @@
 import { ChatInputBar } from "@/components/ui";
-import { ChatInputMenu, ChatRoommateInviteSheet } from "@/features/chat/components";
+import {
+  ChatInputMenu,
+  ChatRoomLeaveSheet,
+  ChatRoommateInviteSheet,
+} from "@/features/chat/components";
 import type { ChatDetail, ChatInputMenuAction } from "@/features/chat/types";
 
 export type ChatInputSectionProps = {
@@ -7,12 +11,16 @@ export type ChatInputSectionProps = {
   draftMessage: string;
   inputMenuClosing: boolean;
   inputMenuOpen: boolean;
+  isLeavingChatRoom?: boolean;
   isSendingInviteRequest?: boolean;
   inviteSheetOpen: boolean;
+  leaveSheetOpen: boolean;
   onCloseInputMenu: () => void;
   onCloseInviteSheet: () => void;
+  onCloseLeaveSheet: () => void;
   onCompleteInputMenuClose: () => void;
   onInputMenuAction: (action: ChatInputMenuAction) => void;
+  onLeaveChatRoom?: () => void;
   onSendInviteRequest: () => void;
   onSubmitMessage: () => void;
   onToggleInputMenu: () => void;
@@ -24,12 +32,16 @@ function ChatInputSection({
   draftMessage,
   inputMenuClosing,
   inputMenuOpen,
+  isLeavingChatRoom = false,
   isSendingInviteRequest = false,
   inviteSheetOpen,
+  leaveSheetOpen,
   onCloseInputMenu,
   onCloseInviteSheet,
+  onCloseLeaveSheet,
   onCompleteInputMenuClose,
   onInputMenuAction,
+  onLeaveChatRoom,
   onSendInviteRequest,
   onSubmitMessage,
   onToggleInputMenu,
@@ -83,6 +95,16 @@ function ChatInputSection({
         confirmDisabled={isSendingInviteRequest}
         onCancel={onCloseInviteSheet}
         onConfirm={onSendInviteRequest}
+      />
+
+      <ChatRoomLeaveSheet
+        confirmDisabled={isLeavingChatRoom}
+        open={leaveSheetOpen}
+        onCancel={onCloseLeaveSheet}
+        onConfirm={() => {
+          onCloseLeaveSheet();
+          onLeaveChatRoom?.();
+        }}
       />
     </>
   );

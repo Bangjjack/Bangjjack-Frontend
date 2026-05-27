@@ -20,6 +20,7 @@ interface UseChatComposerParams {
   chatDetail: ChatDetail;
   currentUserId?: number | null;
   initialMessages?: ChatMessage[];
+  onLeaveChatRoom?: () => void;
   roomId?: number;
 }
 
@@ -62,11 +63,13 @@ function useChatComposer({
   chatDetail,
   currentUserId,
   initialMessages,
+  onLeaveChatRoom,
   roomId,
 }: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const [draftMessage, setDraftMessage] = useState("");
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
+  const [leaveSheetOpen, setLeaveSheetOpen] = useState(false);
   const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
   const {
     closeInputMenu,
@@ -185,8 +188,16 @@ function useChatComposer({
     setInviteSheetOpen(false);
   };
 
+  const closeLeaveSheet = () => {
+    setLeaveSheetOpen(false);
+  };
+
   const openInviteSheet = () => {
     setInviteSheetOpen(true);
+  };
+
+  const openLeaveSheet = () => {
+    setLeaveSheetOpen(true);
   };
 
   const handleSubmitMessage = () => {
@@ -280,16 +291,28 @@ function useChatComposer({
 
     if (action === "invite") {
       openInviteSheet();
+      return;
     }
+
+    if (action === "leave") {
+      openLeaveSheet();
+    }
+  };
+
+  const handleConfirmLeaveChatRoom = () => {
+    closeLeaveSheet();
+    onLeaveChatRoom?.();
   };
 
   return {
     closeInputMenu,
     closeInviteSheet,
+    closeLeaveSheet,
     completeInputMenuClose,
     connectionStatus,
     draftMessage,
     handleCancelInviteRequest,
+    handleConfirmLeaveChatRoom,
     handleInputMenuAction,
     handleSendInviteRequest,
     handleSubmitMessage,
@@ -297,6 +320,7 @@ function useChatComposer({
     inputMenuOpen,
     isSendingInviteRequest,
     inviteSheetOpen,
+    leaveSheetOpen,
     messages,
     setDraftMessage,
     toggleInputMenu,
