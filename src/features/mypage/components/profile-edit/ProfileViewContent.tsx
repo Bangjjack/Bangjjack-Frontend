@@ -68,7 +68,7 @@ function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; ni
   return (
     <section className="flex flex-col gap-2.5 rounded-medium bg-bg-secondary px-400 py-450">
       <div className="flex flex-col gap-600">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-start gap-1.5">
           <CheckIcon
             aria-hidden="true"
             className="size-400 shrink-0 text-brand-primary [&_path]:stroke-current"

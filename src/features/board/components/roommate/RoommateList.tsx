@@ -16,6 +16,11 @@ interface RoommateListProps {
 function RoommateList({ members, selectedNickname, onMemberClick }: RoommateListProps) {
   return (
     <div className="flex flex-col items-start gap-[8px] self-stretch rounded-[10px] border border-border-normal bg-white px-[10px] py-[14px]">
+      {members.length === 0 ? (
+        <div className="flex w-full items-center justify-center py-500">
+          <span className="typo-body2 text-text-caption">아직 참여한 룸메이트가 없어요</span>
+        </div>
+      ) : null}
       {members.map((member) => {
         const isSelected = selectedNickname === member.nickname;
 

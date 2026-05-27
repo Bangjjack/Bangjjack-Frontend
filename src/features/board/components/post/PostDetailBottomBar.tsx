@@ -8,9 +8,16 @@ import { MatchActionBar } from "@/features/board/components/roommate";
 interface PostDetailBottomBarProps {
   postId: number;
   isOwner: boolean;
+  matchRate?: number;
+  matchHighlights?: string[];
 }
 
-function PostDetailBottomBar({ postId, isOwner }: PostDetailBottomBarProps) {
+function PostDetailBottomBar({
+  postId,
+  isOwner,
+  matchRate = 0,
+  matchHighlights = [],
+}: PostDetailBottomBarProps) {
   const navigate = useNavigate();
   const { isBookmarked, toggle } = useBookmarkToggle(postId);
 
@@ -41,9 +48,10 @@ function PostDetailBottomBar({ postId, isOwner }: PostDetailBottomBarProps) {
 
   return (
     <MatchActionBar
+      postId={postId}
       leadingElement={bookmarkButton}
-      matchRate={88}
-      matchHighlights={["청소 빈도", "수면 습관"]}
+      matchRate={matchRate}
+      matchHighlights={matchHighlights}
       onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
       onChatConfirm={() => navigate("/chat")}
     />

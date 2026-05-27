@@ -16,12 +16,15 @@ export type {
 } from "@/types";
 
 export type {
+  ChecklistField,
   PostAuthor,
   PostMember,
+  PostMemberLifestyleChecklist,
   PostRoommatePreference,
   PostDetail,
   PostListItem,
   PostListData,
+  PostMatchRateData,
 } from "./post";
 
 export type {
