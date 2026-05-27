@@ -2,21 +2,60 @@ import { useEffect } from "react";
 import { useLocation } from "react-router";
 import { Button, toast } from "@/components/ui";
 import { BangjjackTitleIcon, GoogleIcon, LogoLoginIcon } from "@/assets/icons";
+import { LOGIN_ERROR_MESSAGE_KEY } from "@/constants";
 import { getGoogleLoginUrl } from "@/features/auth";
+
+type LoginLocationState = {
+  from?: unknown;
+  loginErrorMessage?: string;
+};
 
 export default function LoginPage() {
   const location = useLocation();
-  const redirectFrom = location.state?.from;
+  const locationState = location.state as LoginLocationState | null;
+  const redirectFrom = locationState?.from;
+  const loginErrorMessage = locationState?.loginErrorMessage;
 
   const handleGoogleLogin = () => {
     window.location.assign(getGoogleLoginUrl());
   };
 
   useEffect(() => {
-    if (redirectFrom) {
-      toast.error("로그인이 필요합니다.");
+    const storedLoginErrorMessage = sessionStorage.getItem(LOGIN_ERROR_MESSAGE_KEY);
+
+    if (storedLoginErrorMessage) {
+      const toastTimer = window.setTimeout(() => {
+        sessionStorage.removeItem(LOGIN_ERROR_MESSAGE_KEY);
+        toast.error(storedLoginErrorMessage);
+      }, 0);
+
+      return () => {
+        window.clearTimeout(toastTimer);
+      };
     }
-  }, [redirectFrom]);
+
+    if (loginErrorMessage) {
+      const toastTimer = window.setTimeout(() => {
+        toast.error(loginErrorMessage);
+      }, 0);
+
+      return () => {
+        window.clearTimeout(toastTimer);
+      };
+    }
+
+    if (redirectFrom) {
+      const toastTimer = window.setTimeout(() => {
+        toast.error("로그인이 필요합니다.");
+      }, 0);
+
+      return () => {
+        window.clearTimeout(toastTimer);
+      };
+    }
+
+    return undefined;
+  }, [loginErrorMessage, redirectFrom]);
 
   return (
     <div className="min-h-dvh bg-neutral-50">
