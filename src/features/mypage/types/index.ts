@@ -37,6 +37,7 @@ export type {
   ProfileForm,
   ProfileViewContentProps,
 } from "@/features/mypage/types/myProfileEditContent.types";
+export type { MyProfileChecklistFieldMeta } from "@/features/mypage/types/myProfileEditData.types";
 
 export interface MyActivityMatchMock {
   actions: MyRecruitPostActionMock[];

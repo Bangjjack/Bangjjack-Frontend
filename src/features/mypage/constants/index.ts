@@ -10,3 +10,12 @@ export {
   SELECT_TRIGGER_CLASS_NAME,
   WAVE_BACKGROUND_CLASS_NAME,
 } from "@/features/mypage/constants/myProfileEditContent.constants";
+export {
+  DORMITORY_LABEL,
+  MY_PROFILE_CAMPUS_LABEL,
+  MY_PROFILE_CHECKLIST_FIELD_META,
+  MY_PROFILE_DORMITORY_FALLBACK,
+  MY_PROFILE_GENDER_LABEL,
+  ROOMMATE_PREFERENCE_LABEL,
+  SEMESTER_LABEL,
+} from "@/features/mypage/constants/myProfileEditLabels.constants";

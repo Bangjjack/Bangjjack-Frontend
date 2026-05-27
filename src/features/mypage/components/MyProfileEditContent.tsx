@@ -16,10 +16,9 @@ import {
   MY_PROFILE_EDIT_FORM_ID,
   WAVE_BACKGROUND_CLASS_NAME,
 } from "@/features/mypage/constants";
-import { MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
+import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
-import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import { cn } from "@/lib/cn";
 
 function MyProfileEditContent({
@@ -28,16 +27,19 @@ function MyProfileEditContent({
   onChecklistClick,
   onEditClick,
 }: MyProfileEditContentProps) {
+  const {
+    checklistItems,
+    defaultProfileForm,
+    importanceItems: apiImportanceItems,
+    isLoading,
+  } = useMyProfileEditData();
   const [isEditing, setIsEditing] = useState(false);
-  const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>(
-    MY_PROFILE_EDIT_DEFAULT_VALUES,
-  );
-  const [checklistItems] = useState<ChecklistEntry[]>([]);
+  const [savedProfileForm, setSavedProfileForm] = useState<MyProfileEditFormValues | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
-  const [importanceItems, setImportanceItems] = useState<string[]>(
-    checklistItems.length > 0 ? MY_PROFILE_IMPORTANCE_ITEMS : [],
-  );
+  const [savedImportanceItems, setSavedImportanceItems] = useState<string[] | null>(null);
+  const profileForm = savedProfileForm ?? defaultProfileForm;
+  const importanceItems = savedImportanceItems ?? apiImportanceItems;
   const {
     control,
     handleSubmit,
@@ -67,7 +69,7 @@ function MyProfileEditContent({
   }
 
   function submitProfileForm(values: MyProfileEditFormValues) {
-    setProfileForm(values);
+    setSavedProfileForm(values);
     setIsEditing(false);
   }
 
@@ -84,12 +86,14 @@ function MyProfileEditContent({
   }
 
   function toggleImportanceItem(item: string) {
-    setImportanceItems((prev) => {
-      if (prev.includes(item)) {
-        return prev.filter((value) => value !== item);
+    setSavedImportanceItems((prev) => {
+      const currentItems = prev ?? importanceItems;
+
+      if (currentItems.includes(item)) {
+        return currentItems.filter((value) => value !== item);
       }
 
-      return [...prev, item];
+      return [...currentItems, item];
     });
   }
 
@@ -158,7 +162,7 @@ function MyProfileEditContent({
       <div className="absolute bottom-0 left-0 right-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
         <Button
           className="w-full cursor-pointer"
-          disabled={isEditing && !isValid}
+          disabled={isLoading || (isEditing && !isValid)}
           onClick={isEditing ? handleSubmit(submitProfileForm) : handleEditButtonClick}
           type="button"
           variant={isEditing ? "black" : "default"}

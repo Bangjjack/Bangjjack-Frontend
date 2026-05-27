@@ -5,7 +5,7 @@ import type {
   OnboardingPreferenceRequestValues,
   OnboardingRequestValues,
 } from "@/features/onboarding/schemas";
-import type { UserChecklistData, UserTagsData } from "@/features/user/types";
+import type { UserChecklistData, UserProfileData, UserTagsData } from "@/features/user/types";
 
 export const saveOnboarding = async (body: OnboardingRequestValues): Promise<string> => {
   const { data } = await apiClient.patch<ApiResponse<string>>("/users/onboarding", body);
@@ -33,6 +33,11 @@ export const getUserTags = async (): Promise<UserTagsData> => {
 
 export const getUserChecklist = async (): Promise<UserChecklistData> => {
   const { data } = await apiClient.get<ApiResponse<UserChecklistData>>("/users/me/checklist");
+  return data.data;
+};
+
+export const getUserProfile = async (): Promise<UserProfileData> => {
+  const { data } = await apiClient.get<ApiResponse<UserProfileData>>("/users/me/profile");
   return data.data;
 };
 

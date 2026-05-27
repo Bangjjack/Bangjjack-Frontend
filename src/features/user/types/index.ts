@@ -16,4 +16,19 @@ type UserChecklistData = {
   smoking: string;
 };
 
-export type { UserTagsData, UserChecklistData };
+type UserProfileData = {
+  username: string;
+  email: string;
+  birthYear: number;
+  gender: string;
+  campus: string;
+  departmentId: number;
+  departmentName: string;
+  grade: number;
+  semester: string;
+  dormitory: string;
+  checklist: UserChecklistData | null;
+  roommatePreferences: string[];
+};
+
+export type { UserTagsData, UserChecklistData, UserProfileData };
