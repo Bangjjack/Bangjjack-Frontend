@@ -32,7 +32,10 @@ export type ChatDetailPageState = {
     onRecruitClick?: () => void;
     onLeaveChatRoom?: () => void;
     onReportClick?: () => void;
-    onRoommateRequestAccept?: (applicationId?: number) => void;
+    onRoommateRequestAccept?: (
+      applicationId?: number,
+      options?: { onSuccess?: (processedAt?: string) => void },
+    ) => void;
     onRoommateRequestReject?: (applicationId?: number) => void;
   };
   isProcessingRoommateRequest: boolean;
@@ -183,7 +186,10 @@ function useChatDetailPage() {
     });
   };
 
-  const handleRoommateRequestAccept = (applicationId?: number) => {
+  const handleRoommateRequestAccept = (
+    applicationId?: number,
+    options?: { onSuccess?: (processedAt?: string) => void },
+  ) => {
     if (applicationId == null) {
       toast.error("룸메이트 신청 정보를 확인할 수 없어요.");
       return;
@@ -195,7 +201,8 @@ function useChatDetailPage() {
         onError: (error) => {
           toast.error(getApiErrorMessage(error, "룸메이트 신청 수락에 실패했어요."));
         },
-        onSuccess: () => {
+        onSuccess: (application) => {
+          options?.onSuccess?.(application.processedAt);
           toast.success("룸메이트 신청을 수락했어요.");
 
           if (chatDetail) {

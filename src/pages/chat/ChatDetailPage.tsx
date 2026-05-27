@@ -34,6 +34,7 @@ export default function ChatDetailPage() {
     handleCancelInviteRequest,
     handleConfirmLeaveChatRoom,
     handleInputMenuAction,
+    handleRoommateRequestAccept,
     handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,
@@ -49,6 +50,7 @@ export default function ChatDetailPage() {
     currentUserId: composer.currentUserId,
     initialMessages: composer.initialMessages,
     onLeaveChatRoom: navigation.onLeaveChatRoom,
+    onRoommateRequestAccept: navigation.onRoommateRequestAccept,
     roomId: composer.roomId,
   });
 
@@ -85,7 +87,7 @@ export default function ChatDetailPage() {
         onRecruitClick={navigation.onRecruitClick}
         onReportClick={navigation.onReportClick}
         isProcessingRoommateRequest={isProcessingRoommateRequest}
-        onRoommateRequestAccept={navigation.onRoommateRequestAccept}
+        onRoommateRequestAccept={handleRoommateRequestAccept}
         onRoommateRequestReject={navigation.onRoommateRequestReject}
       />
 

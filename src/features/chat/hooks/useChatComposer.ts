@@ -21,6 +21,10 @@ interface UseChatComposerParams {
   currentUserId?: number | null;
   initialMessages?: ChatMessage[];
   onLeaveChatRoom?: () => void;
+  onRoommateRequestAccept?: (
+    applicationId?: number,
+    options?: { onSuccess?: (processedAt?: string) => void },
+  ) => void;
   roomId?: number;
 }
 
@@ -119,6 +123,7 @@ function useChatComposer({
   currentUserId,
   initialMessages,
   onLeaveChatRoom,
+  onRoommateRequestAccept,
   roomId,
 }: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
@@ -337,6 +342,41 @@ function useChatComposer({
     }
   };
 
+  const appendAcceptedRequestMessage = (applicationId?: number, processedAt?: string) => {
+    const createdAt = processedAt ?? new Date().toISOString();
+
+    setLocalMessages((prev) => {
+      const currentMessages = [...messages, ...prev];
+      const hasAcceptedApplication = currentMessages.some(
+        (message) =>
+          message.type === "roommate_accept" &&
+          applicationId != null &&
+          message.applicationId === applicationId,
+      );
+
+      if (hasAcceptedApplication) {
+        return prev;
+      }
+
+      return [
+        ...prev,
+        createAcceptMessage({
+          applicationId,
+          createdAt,
+          id: getNextMessageId(currentMessages),
+          partnerName: chatDetail.nickname,
+          variant: "sent",
+        }),
+      ];
+    });
+  };
+
+  const handleRoommateRequestAccept = (applicationId?: number) => {
+    onRoommateRequestAccept?.(applicationId, {
+      onSuccess: (processedAt) => appendAcceptedRequestMessage(applicationId, processedAt),
+    });
+  };
+
   const handleInputMenuAction = (action: ChatInputMenuAction) => {
     completeInputMenuClose();
 
@@ -364,6 +404,7 @@ function useChatComposer({
     draftMessage,
     handleCancelInviteRequest,
     handleConfirmLeaveChatRoom,
+    handleRoommateRequestAccept,
     handleInputMenuAction,
     handleSendInviteRequest,
     handleSubmitMessage,
