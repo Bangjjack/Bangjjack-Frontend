@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 import { ACCESS_TOKEN_KEY, ONBOARDING_COMPLETED_KEY, USER_ID_KEY, USERNAME_KEY } from "@/constants";
+import type { AuthTokenResponse } from "@/features/auth";
 
 interface AuthState {
   userId: number | null;
@@ -12,12 +13,7 @@ interface AuthState {
   clearAuth: () => void;
 }
 
-type AuthSession = {
-  accessToken: string;
-  isOnboarded: boolean;
-  userId: number;
-  username: string;
-};
+type AuthSession = Pick<AuthTokenResponse, "accessToken" | "isOnboarded" | "userId" | "username">;
 
 function getStoredUserId() {
   const storedUserId = localStorage.getItem(USER_ID_KEY);

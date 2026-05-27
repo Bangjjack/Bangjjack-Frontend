@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { exchangeAuthToken, type AuthTokenResponse } from "@/api";
+import { exchangeAuthToken } from "@/api";
+import type { AuthTokenResponse } from "@/features/auth/types";
 
 type UseExchangeAuthTokenOptions = {
   onError?: (error: Error) => void;
