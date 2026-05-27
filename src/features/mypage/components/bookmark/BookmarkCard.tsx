@@ -1,12 +1,11 @@
-import { useState } from "react";
-
 import { useNavigate } from "react-router";
 
-import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
+import { BookmarkFilledIcon } from "@/assets/icons";
 import { Tag } from "@/components/ui";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { STATUS_LABEL, STATUS_TAG_COLOR } from "@/features/mypage/components/bookmark/constants";
 import type { BookmarkedPost } from "@/features/mypage/types";
+import { useRemoveBookmark } from "@/features/board/hooks";
 import { cn } from "@/lib/cn";
 
 interface BookmarkCardProps {
@@ -16,8 +15,7 @@ interface BookmarkCardProps {
 
 function BookmarkCard({ className, post }: BookmarkCardProps) {
   const navigate = useNavigate();
-  const [isBookmarked, setIsBookmarked] = useState(true);
-  const BookmarkToggleIcon = isBookmarked ? BookmarkFilledIcon : BookmarkIcon;
+  const { mutate: removeBookmark } = useRemoveBookmark();
 
   return (
     <article
@@ -41,15 +39,15 @@ function BookmarkCard({ className, post }: BookmarkCardProps) {
       <div className="flex shrink-0 items-center justify-end gap-2.5">
         <Tag color={STATUS_TAG_COLOR[post.status]}>{STATUS_LABEL[post.status]}</Tag>
         <button
-          aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
+          aria-label="북마크 해제"
           className="flex size-6 shrink-0 cursor-pointer items-center justify-center text-brand-primary"
           onClick={(e) => {
             e.stopPropagation();
-            setIsBookmarked((current) => !current);
+            removeBookmark(post.postId);
           }}
           type="button"
         >
-          <BookmarkToggleIcon aria-hidden="true" className="size-6" />
+          <BookmarkFilledIcon aria-hidden="true" className="size-6" />
         </button>
       </div>
     </article>

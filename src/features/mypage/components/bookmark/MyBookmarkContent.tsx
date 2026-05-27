@@ -10,7 +10,7 @@ export interface MyBookmarkContentProps {
   className?: string;
 }
 
-const MY_BOOKMARK_EMPTY_MESSAGE = ["아직 북마크한 글이 없어요.", "관심 있는 글을 북마크해보세요!"];
+const MY_BOOKMARK_EMPTY_MESSAGE = ["아직 북마크한 글이 없어요", "관심 있는 글을 북마크해보세요!"];
 
 function MyBookmarkContent({ className }: MyBookmarkContentProps) {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useMyBookmarks();
