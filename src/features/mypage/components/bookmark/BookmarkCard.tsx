@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { BookmarkFilledIcon } from "@/assets/icons";
 import { Tag } from "@/components/ui";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
-import { STATUS_LABEL, STATUS_TAG_COLOR } from "@/features/mypage/components/bookmark/constants";
+import { STATUS_LABEL, STATUS_TAG_COLOR } from "@/features/mypage/components/bookmark";
 import type { BookmarkedPost } from "@/features/mypage/types";
 import { useRemoveBookmark } from "@/features/board/hooks";
 import { cn } from "@/lib/cn";
