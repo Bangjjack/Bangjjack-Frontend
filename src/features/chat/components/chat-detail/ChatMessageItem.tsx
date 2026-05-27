@@ -159,7 +159,7 @@ function TextMessageItem({
 
       {!isOutgoing ? (
         <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-br-2xl bg-bg-secondary px-300 py-300">
-          <p className="whitespace-pre-wrap break-words typo-caption2 text-text-alternative">
+          <p className="whitespace-pre-wrap wrap-break-word typo-caption2 text-text-alternative">
             {message.text}
           </p>
         </div>
@@ -171,7 +171,7 @@ function TextMessageItem({
 
       {isOutgoing ? (
         <div className="max-w-55 rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl bg-brand-primary px-300 py-300">
-          <p className="whitespace-pre-wrap break-words typo-caption2 text-text-on-primary">
+          <p className="whitespace-pre-wrap wrap-break-word typo-caption2 text-text-on-primary">
             {message.text}
           </p>
         </div>
