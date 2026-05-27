@@ -1,5 +1,6 @@
 import { ProfileAvatar } from "@/components/ui";
 import { ChatRoommateInviteMessage } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessage";
+import { ChatRoommateRejectMessage } from "@/features/chat/components/chat-detail/ChatRoommateRejectMessage";
 import { ChatRoommateRequestMessage } from "@/features/chat/components/chat-detail/ChatRoommateRequestMessage";
 import { ChatMessageWrapper } from "@/features/chat/components/chat-detail/ChatMessageWrapper";
 import type { ChatMessage, ChatTextMessage } from "@/features/chat/types";
@@ -58,6 +59,18 @@ export function ChatMessageItem({
     );
   }
 
+  if (message.type === "roommate_reject") {
+    return (
+      <ChatMessageWrapper dateBadgeLabel={dateBadgeLabel} isFirst={isFirst}>
+        <RoommateRejectMessageItem
+          avatarImageUrl={avatarImageUrl}
+          avatarSeed={avatarSeed}
+          message={message}
+        />
+      </ChatMessageWrapper>
+    );
+  }
+
   return (
     <ChatMessageWrapper
       compactSpacing={compactSpacing}
@@ -72,6 +85,45 @@ export function ChatMessageItem({
         showMessageTime={shouldShowMessageTime(messages, messageIndex)}
       />
     </ChatMessageWrapper>
+  );
+}
+
+function RoommateRejectMessageItem({
+  avatarImageUrl,
+  avatarSeed,
+  message,
+}: {
+  avatarImageUrl?: string | null;
+  avatarSeed: number;
+  message: Extract<ChatMessage, { type: "roommate_reject" }>;
+}) {
+  const isSent = message.variant === "sent";
+
+  return (
+    <div className={cn("flex w-full items-end gap-200", isSent && "justify-end")}>
+      {!isSent ? (
+        <ProfileAvatar
+          className="shrink-0 self-end"
+          imageUrl={avatarImageUrl}
+          seed={avatarSeed}
+          size={36}
+        />
+      ) : null}
+
+      {isSent && message.sentAt ? (
+        <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
+          {message.sentAt}
+        </span>
+      ) : null}
+
+      <ChatRoommateRejectMessage partnerName={message.partnerName} variant={message.variant} />
+
+      {!isSent && message.sentAt ? (
+        <span className="shrink-0 whitespace-nowrap typo-caption4 text-text-disabled">
+          {message.sentAt}
+        </span>
+      ) : null}
+    </div>
   );
 }
 

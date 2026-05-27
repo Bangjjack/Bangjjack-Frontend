@@ -32,6 +32,28 @@ export function mapHistoryMessageToChatMessage(
     };
   }
 
+  if (message.messageType === "APPLICATION_REJECTED") {
+    console.log("[chat] roommate reject sender debug", {
+      applicationId: message.applicationId,
+      currentUserId,
+      messageId: message.messageId,
+      resolvedVariant: isOutgoing ? "sent" : "received",
+      senderId: message.senderId,
+      source: "history",
+    });
+
+    return {
+      applicationId: message.applicationId,
+      dateKey,
+      dateLabel,
+      id: message.messageId,
+      partnerName,
+      sentAt: formatMessageTime(message.createdAt),
+      type: "roommate_reject",
+      variant: isOutgoing ? "sent" : "received",
+    };
+  }
+
   return {
     dateKey,
     dateLabel,
@@ -61,7 +83,9 @@ export function mapHistoryMessagesToChatMessages(
   currentUserId: number | null,
   partnerName: string,
 ) {
-  return messages
-    .toSorted(compareHistoryMessageByCreatedAt)
-    .map((message) => mapHistoryMessageToChatMessage(message, currentUserId, partnerName));
+  const sortedMessages = messages.toSorted(compareHistoryMessageByCreatedAt);
+
+  return sortedMessages.map((message) =>
+    mapHistoryMessageToChatMessage(message, currentUserId, partnerName),
+  );
 }

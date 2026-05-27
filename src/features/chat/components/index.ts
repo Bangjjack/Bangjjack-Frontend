@@ -11,6 +11,8 @@ export { ChatRoommateInviteSheet } from "@/features/chat/components/chat-detail/
 export type { ChatRoommateInviteSheetProps } from "@/features/chat/components/chat-detail/ChatRoommateInviteSheet";
 export { ChatRoommateInviteMessage } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessage";
 export type { ChatRoommateInviteMessageProps } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessage";
+export { ChatRoommateRejectMessage } from "@/features/chat/components/chat-detail/ChatRoommateRejectMessage";
+export type { ChatRoommateRejectMessageProps } from "@/features/chat/components/chat-detail/ChatRoommateRejectMessage";
 export { ChatRoommateConfirmedContent } from "@/features/chat/components/chat-confirmed/ChatRoommateConfirmedContent";
 export type { ChatRoommateConfirmedContentProps } from "@/features/chat/components/chat-confirmed/ChatRoommateConfirmedContent";
 export { SharedLifeGuideContent } from "@/features/chat/components/SharedLifeGuideContent";

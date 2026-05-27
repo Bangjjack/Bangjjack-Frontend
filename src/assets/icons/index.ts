@@ -2,6 +2,7 @@ export { default as BangjjackTitleIcon } from "@/assets/icons/bangjjack-title.sv
 export { default as GoogleIcon } from "@/assets/icons/google.svg?react";
 export { default as CircleAlertIcon } from "@/assets/icons/ic-circle-alert.svg?react";
 export { default as CircleCheckIcon } from "@/assets/icons/ic-circle-check.svg?react";
+export { default as CircleErrorIcon } from "@/assets/icons/ic-circle-error.svg?react";
 export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
 export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?react";

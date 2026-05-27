@@ -37,6 +37,30 @@ function createInviteMessage(
   };
 }
 
+function createRejectMessage({
+  applicationId,
+  createdAt,
+  id,
+  partnerName,
+  variant,
+}: {
+  applicationId?: number;
+  createdAt: string;
+  id: number;
+  partnerName: string;
+  variant: "received" | "sent";
+}): ChatMessage {
+  return {
+    applicationId,
+    ...formatMessageDateLabel(createdAt),
+    id,
+    partnerName,
+    sentAt: formatMessageTime(createdAt),
+    type: "roommate_reject",
+    variant,
+  };
+}
+
 function getNextMessageId(messages: ChatMessage[]) {
   return Math.max(0, ...messages.map((message) => message.id)) + 1;
 }
@@ -132,8 +156,11 @@ function useChatComposer({
       }
 
       const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
+      const isApplicationRejectedMessage = receivedMessage.messageType === "APPLICATION_REJECTED";
+      const rejectMessageVariant = isOutgoing ? "sent" : "received";
       console.log("[chat] appendReceivedMessage parsed", {
         isApplicationMessage,
+        isApplicationRejectedMessage,
         isOutgoing,
         messageType: receivedMessage.messageType,
       });
@@ -148,6 +175,17 @@ function useChatComposer({
         return prev;
       }
 
+      if (isApplicationRejectedMessage) {
+        console.log("[chat] roommate reject sender debug", {
+          applicationId: receivedMessage.applicationId,
+          currentUserId,
+          messageId: receivedMessage.messageId,
+          resolvedVariant: rejectMessageVariant,
+          senderId: receivedMessage.senderId,
+          source: "websocket",
+        });
+      }
+
       const nextMessage: ChatMessage = isApplicationMessage
         ? isOutgoing
           ? createInviteMessage(receivedMessage.messageId, chatDetail.nickname)
@@ -159,14 +197,22 @@ function useChatComposer({
               sentAt: formatMessageTime(receivedMessage.createdAt),
               type: "roommate_request",
             }
-        : {
-            ...formatMessageDateLabel(receivedMessage.createdAt),
-            id: receivedMessage.messageId,
-            messageType: receivedMessage.messageType,
-            sentAt: formatMessageTime(receivedMessage.createdAt),
-            text: receivedMessage.content,
-            type: isOutgoing ? "outgoing" : "incoming",
-          };
+        : isApplicationRejectedMessage
+          ? createRejectMessage({
+              applicationId: receivedMessage.applicationId,
+              createdAt: receivedMessage.createdAt,
+              id: receivedMessage.messageId,
+              partnerName: chatDetail.nickname,
+              variant: rejectMessageVariant,
+            })
+          : {
+              ...formatMessageDateLabel(receivedMessage.createdAt),
+              id: receivedMessage.messageId,
+              messageType: receivedMessage.messageType,
+              sentAt: formatMessageTime(receivedMessage.createdAt),
+              text: receivedMessage.content,
+              type: isOutgoing ? "outgoing" : "incoming",
+            };
 
       console.log("[chat] appendReceivedMessage added local message", nextMessage);
       return [...prev, nextMessage];
