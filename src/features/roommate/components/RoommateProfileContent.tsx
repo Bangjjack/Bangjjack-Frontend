@@ -120,6 +120,7 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
 
       {/* Bottom action buttons */}
       <MatchActionBar
+        postId={roommateId ?? 0}
         matchRate={88}
         matchHighlights={["청소 빈도", "수면 습관"]}
         onMatchConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}

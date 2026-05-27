@@ -1,10 +1,11 @@
 import { useNavigate, useParams } from "react-router";
 
-import { Button, toast } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { useGoBack } from "@/hooks";
 import type { PostWriteFormValues } from "@/features/board/schemas";
-import { usePostDetail, useUpdatePost } from "@/features/board/hooks";
-import { mapFormToCreatePostRequest, mapPostDetailToFormValues } from "@/features/board/utils";
+import { usePostDetail } from "@/features/board/hooks";
+import { mapPostDetailToFormValues } from "@/features/board/utils";
+import { usePostWriteDraftStore } from "@/features/board/stores/postWriteDraftStore";
 
 import { PostFormShell } from "./PostFormShell";
 
@@ -15,7 +16,7 @@ function PostEditContent() {
   const handleBackClick = useGoBack(id ? `/board/${id}` : "/board");
 
   const { data: post, isLoading, isError } = usePostDetail(postId);
-  const { mutate: update, isPending } = useUpdatePost(postId);
+  const { setDraft } = usePostWriteDraftStore();
 
   if (!id || isNaN(postId)) return null;
 
@@ -41,26 +42,17 @@ function PostEditContent() {
   const defaultValues = mapPostDetailToFormValues(post);
 
   function handleSubmit(data: PostWriteFormValues) {
-    const body = mapFormToCreatePostRequest(data);
-    update(body, {
-      onSuccess: () => {
-        toast.success("게시글이 수정되었어요");
-        navigate(`/board/${id}`);
-      },
-      onError: () => {
-        toast.error("게시글 수정에 실패했어요");
-      },
-    });
+    setDraft(data, postId);
+    navigate("/board/write/checklist");
   }
 
   return (
     <PostFormShell
       headerTitle="게시글 수정하기"
-      submitLabel="수정하기"
+      submitLabel="다음으로"
       defaultValues={defaultValues}
       onSubmit={handleSubmit}
       onBackClick={handleBackClick}
-      isPending={isPending}
     />
   );
 }

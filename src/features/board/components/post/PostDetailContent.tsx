@@ -1,12 +1,18 @@
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 import { Header } from "@/components/ui";
-import { useFadeInOnScroll, useGoBack } from "@/hooks";
+import { useFadeInOnScroll } from "@/hooks";
 
-import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL } from "@/constants";
+import {
+  DORMITORY_LABEL,
+  MEMBER_ROLE,
+  ROOM_SIZE_LABEL,
+  ROOM_SIZE_MAX,
+  SEMESTER_LABEL,
+} from "@/constants";
 import { usePostDetail } from "@/features/board/hooks";
-import { mapSharedLifestyleToHabits } from "@/features/board/utils";
+import { computeChecklistMatchStats, mapSharedLifestyleToHabits } from "@/features/board/utils";
 
 import {
   PostActionMenu,
@@ -18,9 +24,9 @@ import {
 } from "@/features/board/components/post";
 
 function PostDetailContent() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const postId = Number(id);
-  const handleBackClick = useGoBack("/board");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -54,6 +60,12 @@ function PostDetailContent() {
   const currentMembers = maxMembers - post.recruitMemberCount;
   const isClosed = currentMembers === maxMembers;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
+
+  const leader = post.members.find((m) => m.role === MEMBER_ROLE.LEADER);
+  const { matchRate, matchHighlights } = leader
+    ? computeChecklistMatchStats(leader.lifestyleChecklist)
+    : { matchRate: 0, matchHighlights: [] };
+
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
     DORMITORY_LABEL[post.dormitory] ?? post.dormitory,
@@ -66,7 +78,7 @@ function PostDetailContent() {
         showBack
         showMore={post.isOwner}
         title="방 찾기"
-        onBackClick={handleBackClick}
+        onBackClick={() => navigate("/board")}
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
@@ -88,7 +100,12 @@ function PostDetailContent() {
         </div>
       </main>
 
-      <PostDetailBottomBar postId={postId} isOwner={post.isOwner} />
+      <PostDetailBottomBar
+        postId={postId}
+        isOwner={post.isOwner}
+        matchRate={matchRate}
+        matchHighlights={matchHighlights}
+      />
     </div>
   );
 }
