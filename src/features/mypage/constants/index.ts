@@ -19,3 +19,8 @@ export {
   ROOMMATE_PREFERENCE_LABEL,
   SEMESTER_LABEL,
 } from "@/features/mypage/constants/myProfileEditLabels.constants";
+export {
+  MY_JOINED_ROOM_ACTIONS,
+  MY_JOINED_ROOM_EMPTY_MESSAGE,
+  MY_JOINED_ROOM_ERROR_MESSAGE,
+} from "@/features/mypage/constants/myActivityRoom.constants";

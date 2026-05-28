@@ -1,23 +1,76 @@
 import { CircleAlertIcon } from "@/assets/icons";
 import { JoinedRoomCard } from "@/features/mypage/components/activity/JoinedRoomCard";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
-import { MY_ACTIVITY_ROOMS } from "@/features/mypage/mocks";
+import {
+  MY_JOINED_ROOM_ACTIONS,
+  MY_JOINED_ROOM_EMPTY_MESSAGE,
+  MY_JOINED_ROOM_ERROR_MESSAGE,
+} from "@/features/mypage/constants";
+import { useMyRoommateGroups } from "@/features/roommate-group";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
+import { useAuthStore } from "@/stores/authStore";
 
-const MY_JOINED_ROOM_EMPTY_MESSAGE = ["아직 소속된 방이 없어요", "마음에 드는 방에 참여해보세요!"];
+import type { MyActivityRoomMemberMock, MyActivityRoomMock } from "@/features/mypage/types";
+import type { MyRoommateGroup, RoommateGroupMember } from "@/features/roommate-group";
+import { parseDisplayName } from "@/lib/parseDisplayName";
+
+const mapMember = (
+  member: RoommateGroupMember,
+  currentUserId: number | null,
+): MyActivityRoomMemberMock => {
+  if (member.role === "LEADER") {
+    return {
+      id: member.userId,
+      isHost: true,
+      isMe: member.userId === currentUserId ? true : undefined,
+      name: parseDisplayName(member.username),
+    };
+  }
+
+  return {
+    id: member.userId,
+    name: parseDisplayName(member.username),
+  };
+};
+
+const mapRoommateGroupToActivityRoom = (
+  group: MyRoommateGroup,
+  currentUserId: number | null,
+): MyActivityRoomMock => ({
+  actions: MY_JOINED_ROOM_ACTIONS,
+  dormitory: DORMITORY_LABEL[group.dormitory] ?? group.dormitory,
+  id: group.groupId,
+  members: group.members.map((member) => mapMember(member, currentUserId)),
+  roomType: ROOM_SIZE_LABEL[group.roomSize] ?? group.roomSize,
+  status: "joined",
+  statusLabel: `${group.currentMemberCount} / ${group.totalCapacity}`,
+  title: group.postTitle,
+});
 
 function MyActivityRoomList() {
-  const hostRooms = MY_ACTIVITY_ROOMS.filter((room) =>
-    room.members?.some((member) => member.isHost === true && member.isMe === true),
-  );
-  const handleRoomActionClick = () => {
-    // TODO: 방 상세보기/방 나가기 기능 추후 추가 예정
-  };
+  const userId = useAuthStore((state) => state.userId);
+  const { data: roommateGroups = [], isError, isLoading } = useMyRoommateGroups();
+  const joinedRooms = roommateGroups.map((group) => mapRoommateGroupToActivityRoom(group, userId));
+
+  const handleRoomActionClick = () => {};
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-400">
+        <MyPageEmptyState messages={["Loading..."]} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <MyPageEmptyState messages={MY_JOINED_ROOM_ERROR_MESSAGE} />;
+  }
 
   return (
     <div className="flex flex-col gap-400">
       <div className="flex flex-col gap-400">
-        {hostRooms.length > 0 ? (
-          hostRooms.map((room) => (
+        {joinedRooms.length > 0 ? (
+          joinedRooms.map((room) => (
             <JoinedRoomCard key={room.id} onActionClick={handleRoomActionClick} room={room} />
           ))
         ) : (
@@ -25,7 +78,7 @@ function MyActivityRoomList() {
         )}
       </div>
 
-      {hostRooms.length > 0 ? <RoomLimitNotice /> : null}
+      {joinedRooms.length > 0 ? <RoomLimitNotice /> : null}
     </div>
   );
 }
