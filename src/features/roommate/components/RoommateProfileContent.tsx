@@ -40,6 +40,17 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
     : [];
   const avatarSeed = profile?.id ?? nickname.length;
 
+  if (isError) {
+    return (
+      <div className="flex h-dvh flex-col bg-bg-primary">
+        <Header showBack title="룸메이트 추천" onBackClick={handleBackClick} />
+        <main className="flex flex-1 items-center justify-center">
+          <p className="typo-body1 text-text-caption">프로필을 불러오지 못했어요</p>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
       {/* Fixed header - transparent, overlays wave */}
@@ -62,56 +73,46 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
             <ProfileAvatar size={100} seed={avatarSeed} />
           </div>
 
-          {isError && (
-            <p className="typo-body1 py-400 text-center text-text-caption">
-              프로필을 불러오지 못했어요
-            </p>
-          )}
-
-          {!isError && (
-            <>
-              {/* Profile info */}
-              <div className="flex flex-col gap-[6px] px-100 pt-300">
-                {isLoading ? (
-                  <div className="h-[28px] w-[120px] animate-pulse rounded bg-neutral-200" />
-                ) : (
-                  <h2 className="typo-title1 text-text-strong">{nickname}</h2>
-                )}
-                <div className="flex items-center gap-[6px]">
-                  {isLoading ? (
-                    <div className="h-[18px] w-[160px] animate-pulse rounded bg-neutral-200" />
-                  ) : (
+          {/* Profile info */}
+          <div className="flex flex-col gap-[6px] px-100 pt-300">
+            {isLoading ? (
+              <div className="h-[28px] w-[120px] animate-pulse rounded bg-neutral-200" />
+            ) : (
+              <h2 className="typo-title1 text-text-strong">{nickname}</h2>
+            )}
+            <div className="flex items-center gap-[6px]">
+              {isLoading ? (
+                <div className="h-[18px] w-[160px] animate-pulse rounded bg-neutral-200" />
+              ) : (
+                <>
+                  {grade !== undefined && (
                     <>
-                      {grade !== undefined && (
-                        <>
-                          <span className="typo-label2 text-text-alternative">{grade}학년</span>
-                          <span aria-hidden="true" className="h-[12px] w-px bg-neutral-300" />
-                        </>
-                      )}
-                      <span className="typo-label2 text-text-alternative">{age}세</span>
+                      <span className="typo-label2 text-text-alternative">{grade}학년</span>
                       <span aria-hidden="true" className="h-[12px] w-px bg-neutral-300" />
-                      <span className="typo-label2 text-text-alternative">{department}</span>
                     </>
                   )}
-                </div>
-              </div>
+                  <span className="typo-label2 text-text-alternative">{age}세</span>
+                  <span aria-hidden="true" className="h-[12px] w-px bg-neutral-300" />
+                  <span className="typo-label2 text-text-alternative">{department}</span>
+                </>
+              )}
+            </div>
+          </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-[6px] px-100 pb-300">
-                {tags.map((tag) => (
-                  <Tag key={tag} color="black">
-                    {tag}
-                  </Tag>
-                ))}
-              </div>
+          {/* Tags */}
+          <div className="flex flex-wrap gap-[6px] px-100 pb-300">
+            {tags.map((tag) => (
+              <Tag key={tag} color="black">
+                {tag}
+              </Tag>
+            ))}
+          </div>
 
-              {/* Importance section */}
-              {importanceItems.length > 0 && <ImportanceSection items={importanceItems} />}
+          {/* Importance section */}
+          {importanceItems.length > 0 && <ImportanceSection items={importanceItems} />}
 
-              {/* Checklist */}
-              {checklist.length > 0 && <ChecklistCard items={checklist} nickname={nickname} />}
-            </>
-          )}
+          {/* Checklist */}
+          {checklist.length > 0 && <ChecklistCard items={checklist} nickname={nickname} />}
         </div>
       </main>
 
