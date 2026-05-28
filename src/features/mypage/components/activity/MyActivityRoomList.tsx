@@ -130,7 +130,7 @@ function MyActivityRoomList() {
           )}
         </div>
 
-        {joinedRooms.length > 0 ? <RoomLimitNotice /> : null}
+        {joinedRooms.length >= 2 ? <RoomLimitNotice count={joinedRooms.length} /> : null}
       </div>
 
       <AlertDialog open={confirmTarget !== null} onOpenChange={(open) => !open && setConfirmTarget(null)}>
@@ -164,7 +164,7 @@ function MyActivityRoomList() {
   );
 }
 
-function RoomLimitNotice() {
+function RoomLimitNotice({ count }: { count: number }) {
   return (
     <div className="flex w-full flex-col gap-2.5 rounded-medium border border-dashed border-border-strong px-300 py-300">
       <div className="flex items-center gap-100">
@@ -172,15 +172,15 @@ function RoomLimitNotice() {
           aria-hidden="true"
           className="size-400 shrink-0 text-state-error"
         />
-        <p className="typo-button2 text-state-error">신청 한도에 도달했어요</p>
+        <p className="typo-button2 text-state-error">방 참여 한도에 도달했어요</p>
       </div>
 
       <div className="flex flex-col gap-100 typo-caption2 text-text-caption">
         <p>
-          이미 <strong className="font-semibold text-text-strong">소속된 방이 1개</strong> 있어요.
+          이미 <strong className="font-semibold text-text-strong">소속된 방이 {count}개</strong> 있어요.
         </p>
         <p>
-          다른 방에 참여하려면 현재 소속을{" "}
+          새로운 방에 참여하려면 기존 방 중 하나를{" "}
           <strong className="font-semibold text-text-strong">먼저 나가야</strong> 해요.
         </p>
       </div>
