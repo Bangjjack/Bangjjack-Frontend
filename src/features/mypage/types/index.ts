@@ -23,7 +23,7 @@ export interface GetBookmarksParams {
 }
 
 export type MyChecklistSelectionType = "single" | "multi";
-export type MyActivityTabId = "posts" | "rooms" | "matches";
+export type MyActivityTabId = "posts" | "rooms";
 export type MyActivityRoomVariant = "leader" | "member";
 export type MyActivityRoomStatus = "joined";
 export type MyRecruitPostStatus = "open" | "closed";

@@ -1,7 +1,6 @@
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import type {
   MyActivityMatchMock,
-  MyActivityRoomMock,
   MyActivityTabId,
   MyActivityTabMock,
   MyChecklistSectionMock,
@@ -15,29 +14,6 @@ export const MY_ACTIVITY_ACTIVE_TAB_ID: MyActivityTabId = "posts";
 export const MY_ACTIVITY_TABS: MyActivityTabMock[] = [
   { id: "posts", label: "내가 쓴 모집글" },
   { id: "rooms", label: "소속된 방" },
-  { id: "matches", label: "1:1 매칭" },
-];
-
-export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
-  {
-    actions: [
-      { id: "detail", label: "모집글 상세 보기", tone: "neutral" },
-      { id: "leave", label: "방 나가기", tone: "primary" },
-    ],
-    dormitory: "1 기숙사",
-    id: 1,
-    members: [
-      { id: 1, isHost: true, isMe: true, name: "최다인" },
-      { id: 2, name: "김지수" },
-      { id: 3, name: "박서연" },
-    ],
-    postId: 1,
-    roomType: "3인 1실",
-    status: "joined",
-    statusLabel: "3 / 3",
-    title: "컴공 4학년 룸메 구해요",
-    variant: "leader",
-  },
 ];
 
 export const MY_ACTIVITY_MATCHES: MyActivityMatchMock[] = [
@@ -111,17 +87,6 @@ export const MY_PROFILE = {
 } as const;
 
 export const MY_PROFILE_SEMESTER_OPTIONS = ["학기 (16주)", "반기 (25주)"] as const;
-
-export const MY_PROFILE_IMPORTANCE_ITEMS = ["기상 시간", "흡연 여부", "취침 시간"];
-
-export const MY_PROFILE_BASIC_INFO = [
-  { label: "이메일", value: "~~~~@gachon.ac.kr" },
-  { label: "출생년도", value: "2003" },
-  { label: "성별", value: "여성" },
-  { label: "캠퍼스", value: "글로벌 캠퍼스" },
-  { label: "학기", value: "학기(16주)" },
-  { label: "기숙사", value: "3 기숙사" },
-] as const;
 
 export const MY_PROFILE_CHECKLIST = [
   { id: "sleep-time", label: "취침 시간", value: "24~2시", isMatched: true },
