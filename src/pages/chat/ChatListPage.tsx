@@ -9,6 +9,7 @@ import {
   formatChatRoomMessage,
   formatChatRoomTime,
   getChatRoomImportanceTags,
+  useChatRoomListRealtime,
   useChatRooms,
 } from "@/features/chat";
 import type { ChatDetail, ChatRoom, ChatRoomListItem, ChatTab } from "@/features/chat";
@@ -41,6 +42,7 @@ export default function ChatListPage() {
   const [activeTab, setActiveTab] = useState<ChatTab>("all");
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  useChatRoomListRealtime();
   const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isPending } = useChatRooms(
     {
       category: CHAT_TAB_CATEGORY[activeTab],

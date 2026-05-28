@@ -13,6 +13,7 @@ export {
   useChatComposer,
   useChatDetailPage,
   useChatMessages,
+  useChatRoomListRealtime,
   useChatRooms,
   useChatWebSocket,
   useCreateChatRoom,
