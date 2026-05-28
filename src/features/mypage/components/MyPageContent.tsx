@@ -37,7 +37,7 @@ function MyPageContent({
         age={profileAge}
         department={profileDepartment}
         imageUrl={profileImageUrl}
-        name={profileName}
+        name={parseDisplayName(profileName)}
         onClick={onProfileClick}
       />
       <MyPageActionCard
