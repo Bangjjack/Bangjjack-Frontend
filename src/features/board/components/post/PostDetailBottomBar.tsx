@@ -5,6 +5,7 @@ import { Button, toast } from "@/components/ui";
 import { MatchActionBar } from "@/features/board/components/roommate";
 import { useBookmarkToggle } from "@/features/board/hooks";
 import { useCreateChatRoom, type ChatDetail } from "@/features/chat";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 interface PostDetailBottomBarProps {
   isOwner: boolean;
@@ -42,7 +43,7 @@ function PostDetailBottomBar({
             id: targetUserId,
             matchRate,
             messages: [],
-            nickname: targetUsername,
+            nickname: parseDisplayName(targetUsername),
             profileImage: targetProfileImage,
             profileSummary: matchHighlights,
             recruitPostId: postId,

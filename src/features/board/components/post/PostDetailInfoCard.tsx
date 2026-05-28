@@ -1,6 +1,7 @@
 import { Card, ProfileAvatar, Tag } from "@/components/ui";
 import { formatRelativeTime } from "@/features/board/utils";
 import type { PostAuthor } from "@/features/board/types";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 interface PostDetailInfoCardProps {
   title: string;
@@ -31,7 +32,9 @@ function PostDetailInfoCard({
 
         <div className="flex items-center gap-200">
           <ProfileAvatar size={24} seed={author.authorId} />
-          <span className="typo-caption1 text-text-caption">{author.username}</span>
+          <span className="typo-caption1 text-text-caption">
+            {parseDisplayName(author.username)}
+          </span>
           <span className="typo-caption2 ml-auto text-text-disabled">
             {formatRelativeTime(createdAt)}
           </span>

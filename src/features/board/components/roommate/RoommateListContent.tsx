@@ -8,6 +8,7 @@ import { useBookmarkToggle, usePostDetail } from "@/features/board/hooks";
 import { useAuthStore } from "@/stores/authStore";
 import { computeChecklistMatchStats, mapLifestyleChecklistToEntries } from "@/features/board/utils";
 import { useGoBack } from "@/hooks";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 import { MatchActionBar } from "./MatchActionBar";
 import { RoommateList } from "./RoommateList";
@@ -56,7 +57,7 @@ function RoommateListContent() {
   const selectedPostMember = post.members.find((m) => m.userId === effectiveUserId) ?? null;
 
   const members = post.members.map((m) => ({
-    nickname: m.username,
+    nickname: parseDisplayName(m.username),
     seed: m.userId,
     isHost: m.role === "LEADER",
   }));

@@ -3,6 +3,8 @@ import { MyPageMenuSection } from "@/features/mypage/components/MyPageMenuSectio
 import { MyPageProfileCard } from "@/features/mypage/components/MyPageProfileCard";
 import { MY_PROFILE } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
+import { useAuthStore } from "@/stores/authStore";
 
 export interface MyPageContentProps {
   className?: string;
@@ -19,12 +21,14 @@ function MyPageContent({
   onChecklistClick,
   onProfileClick,
 }: MyPageContentProps) {
+  const username = useAuthStore((state) => state.username);
+
   return (
     <div className={cn("flex flex-col gap-400 pt-400", className)}>
       <MyPageProfileCard
         age={MY_PROFILE.age}
         department={MY_PROFILE.department}
-        name={MY_PROFILE.name}
+        name={username ? parseDisplayName(username) : MY_PROFILE.name}
         onClick={onProfileClick}
       />
       <MyPageActionCard
