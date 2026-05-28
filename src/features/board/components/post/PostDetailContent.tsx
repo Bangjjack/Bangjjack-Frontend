@@ -87,6 +87,7 @@ function PostDetailContent() {
             currentMembers={currentMembers}
             isClosed={isClosed}
             maxMembers={maxMembers}
+            onAuthorClick={() => navigate(`/roommate/${post.author.authorId}`)}
             title={post.title}
           />
           <PostDetailDescriptionCard description={post.description} recruitTags={recruitTags} />

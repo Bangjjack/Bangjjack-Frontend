@@ -12,9 +12,15 @@ interface RoommateListProps {
   members: Member[];
   selectedNickname?: string;
   onMemberClick?: (member: Member) => void;
+  onProfileClick?: (member: Member) => void;
 }
 
-function RoommateList({ members, selectedNickname, onMemberClick }: RoommateListProps) {
+function RoommateList({
+  members,
+  selectedNickname,
+  onMemberClick,
+  onProfileClick,
+}: RoommateListProps) {
   return (
     <div className="flex flex-col items-start gap-[8px] self-stretch rounded-[10px] border border-border-normal bg-white px-[10px] py-[14px]">
       {members.length === 0 ? (
@@ -36,7 +42,16 @@ function RoommateList({ members, selectedNickname, onMemberClick }: RoommateList
             onClick={() => onMemberClick?.(member)}
           >
             <div className="flex items-center gap-200">
-              <ProfileAvatar size={24} imageUrl={member.profileImage} seed={member.seed} />
+              <button
+                type="button"
+                className="flex shrink-0 items-center"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onProfileClick?.(member);
+                }}
+              >
+                <ProfileAvatar size={24} imageUrl={member.profileImage} seed={member.seed} />
+              </button>
               <span
                 className={cn(
                   "typo-title3",

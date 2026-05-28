@@ -90,9 +90,8 @@ function RoommateListContent() {
               <RoommateList
                 members={members}
                 selectedNickname={selectedMember?.nickname}
-                onMemberClick={(member) => {
-                  setSelectedUserId(member.seed);
-                }}
+                onMemberClick={(member) => setSelectedUserId(member.seed)}
+                onProfileClick={(member) => navigate(`/roommate/${member.seed}`)}
               />
             </div>
           </Card>

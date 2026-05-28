@@ -35,6 +35,7 @@ function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardPro
           profileImage: m.profileImage,
         }))}
         onMemberClick={(member) => navigate(`/board/${postId}/roommates?userId=${member.seed}`)}
+        onProfileClick={(member) => navigate(`/roommate/${member.seed}`)}
       />
     </Card>
   );
