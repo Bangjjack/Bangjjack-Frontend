@@ -35,3 +35,5 @@ export type {
   PostListFilterParams,
   GetPostsParams,
 } from "./postRequest";
+
+export type { BoardPageContentProps, PostListProps, RecommendedPostListProps } from "./postList";
