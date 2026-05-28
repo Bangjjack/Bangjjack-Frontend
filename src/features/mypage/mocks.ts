@@ -4,7 +4,6 @@ import type {
   MyActivityTabId,
   MyActivityTabMock,
   MyChecklistSectionMock,
-  MyRecruitPostMock,
 } from "@/features/mypage/types";
 
 export const MY_ACTIVITY_ACTIVE_TAB_ID: MyActivityTabId = "posts";
@@ -26,47 +25,6 @@ export const MY_ACTIVITY_MATCHES: MyActivityMatchMock[] = [
     matchRate: 92,
     name: "이나연",
     tags: ["아침형", "조용한 편", "비흡연"],
-  },
-];
-
-export const MY_RECRUIT_POST_EMPTY_MESSAGE = [
-  "아직 작성된 글이 없어요",
-  "먼저 내 룸메이트를 모집해봐요!",
-];
-
-export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
-  {
-    actions: [
-      { id: "edit", label: "수정하기", tone: "neutral" },
-      { id: "applications", label: "삭제하기", tone: "primary" },
-    ],
-    description:
-      "깔끔한 편이고 조용한 성격입니다.\n서로 적당한 거리감 유지하면서 편하게 지낼분 찾아요",
-    dormitory: "2기숙사",
-    id: 1,
-    roomType: "2인 1실",
-    stats: [
-      { id: "current-members", label: "현재 인원", value: "2" },
-    ],
-    status: "open",
-    statusLabel: "1/2",
-    title: "글캠 기숙사 2인실 룸메 구해요!",
-  },
-  {
-    actions: [
-      { id: "detail", label: "상세 보기", tone: "neutral" },
-      { id: "delete", label: "삭제하기", tone: "dark" },
-    ],
-    description: "4인실 한 자리 남았습니다!\n아침형 인간이고 청결 중요하게 생각해요.",
-    dormitory: "3기숙사",
-    id: 2,
-    roomType: "4인 1실",
-    stats: [
-      { id: "current-members", label: "현재 인원", value: "-" },
-    ],
-    status: "closed",
-    statusLabel: "마감",
-    title: "글캠 기숙사 4인실 룸메 구해요!",
   },
 ];
 

@@ -1,5 +1,16 @@
 import type { Dormitory, PostStatus, RoomSize } from "@/types";
 
+export interface MyPost {
+  postId: number;
+  title: string;
+  description: string;
+  dormitory: Dormitory;
+  roomSize: RoomSize;
+  totalMemberCount: number;
+  currentMemberCount: number;
+  isClosed: boolean;
+}
+
 export interface BookmarkedPost {
   postId: number;
   title: string;
@@ -103,26 +114,8 @@ export interface MyChecklistSectionMock {
   title: string;
 }
 
-export interface MyRecruitPostStatMock {
-  id: string;
-  label: string;
-  value: string;
-}
-
 export interface MyRecruitPostActionMock {
   id: string;
   label: string;
   tone: MyRecruitPostActionTone;
-}
-
-export interface MyRecruitPostMock {
-  actions: MyRecruitPostActionMock[];
-  description: string;
-  dormitory: string;
-  id: number;
-  roomType: string;
-  stats: MyRecruitPostStatMock[];
-  status: MyRecruitPostStatus;
-  statusLabel: string;
-  title: string;
 }
