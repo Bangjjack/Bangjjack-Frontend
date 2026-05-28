@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router";
 import { Chip, RoundButton, toast } from "@/components/ui";
 import { cn } from "@/lib/cn";
-import { RecruitCard } from "@/components";
+import { RecruitCard, RecruitCardSkeleton } from "@/components";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/board/constants";
 import type { RoomFilter } from "@/features/board/constants";
+import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { usePostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/features/board/utils";
 import { useFadeInOnScroll } from "@/hooks";
@@ -20,12 +22,18 @@ type BoardPageContentProps = {
 
 function BoardPageContent({
   aiRecommend,
+  isOnboardingCompleted,
   onAiRecommendChange,
   onPostClick,
   onWriteClick,
 }: BoardPageContentProps) {
+  const navigate = useNavigate();
   const [selectedCampus, setSelectedCampus] = useState<string | null>(null);
   const [roomFilter, setRoomFilter] = useState<RoomFilter | null>(null);
+  const [checklistDialog, setChecklistDialog] = useState<{
+    description: string;
+    highlight?: string;
+  } | null>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -70,6 +78,13 @@ function BoardPageContent({
               variant="neutral"
               selected={aiRecommend}
               onSelectedChange={(selected) => {
+                if (selected && !isOnboardingCompleted) {
+                  setChecklistDialog({
+                    description: "AI 추천글 정렬 기능을 사용하려면\n내 생활습관 정보가 필요해요",
+                    highlight: "AI 추천글 정렬 기능",
+                  });
+                  return;
+                }
                 onAiRecommendChange(selected);
                 if (selected) toast.success("AI 추천순으로 정렬했어요");
               }}
@@ -101,6 +116,12 @@ function BoardPageContent({
         {isError ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="typo-body2 text-text-caption">게시글을 불러오지 못했어요</p>
+          </div>
+        ) : isFetching && posts.length === 0 ? (
+          <div className="flex flex-col gap-[10px]">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <RecruitCardSkeleton key={i} />
+            ))}
           </div>
         ) : !isFetching && posts.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">
@@ -134,7 +155,31 @@ function BoardPageContent({
       </div>
 
       {/* 룸메이트 모집하기 버튼 */}
-      <RoundButton onClick={onWriteClick} />
+      <RoundButton
+        onClick={() => {
+          if (!isOnboardingCompleted) {
+            setChecklistDialog({
+              description: "모집글 작성 기능을 사용하려면\n내 생활습관 정보가 필요해요",
+              highlight: "모집글 작성 기능",
+            });
+            return;
+          }
+          onWriteClick?.();
+        }}
+      />
+
+      <ChecklistRequiredDialog
+        description={checklistDialog?.description ?? ""}
+        highlight={checklistDialog?.highlight}
+        open={checklistDialog !== null}
+        onOpenChange={(open) => {
+          if (!open) setChecklistDialog(null);
+        }}
+        onConfirm={() => {
+          setChecklistDialog(null);
+          navigate("/mypage/profile");
+        }}
+      />
     </>
   );
 }

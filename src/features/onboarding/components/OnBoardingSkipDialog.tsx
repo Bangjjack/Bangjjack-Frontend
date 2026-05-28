@@ -1,4 +1,3 @@
-import { CircleAlertIcon } from "@/assets/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -6,6 +5,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogHeader,
+  AlertDialogIcon,
   AlertDialogTitle,
 } from "@/components/ui";
 
@@ -26,9 +26,7 @@ function OnBoardingSkipDialog({
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="px-7 py-[24px]">
         <AlertDialogHeader className="gap-400">
-          <div className="flex justify-center">
-            <CircleAlertIcon className="size-14" />
-          </div>
+          <AlertDialogIcon />
           <AlertDialogTitle className="typo-title1">정말 건너뛸까요?</AlertDialogTitle>
           <AlertDialogDescription className="typo-caption1 whitespace-pre-line">
             체크리스트를 등록하지 않으면{"\n"}룸메이트 매칭이 불가능해요
