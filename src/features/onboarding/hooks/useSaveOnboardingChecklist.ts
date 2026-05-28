@@ -14,7 +14,7 @@ export const useSaveOnboardingChecklist = (options?: UseSaveOnboardingChecklistO
     mutationFn: saveOnboardingChecklist,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userQueryKeys.checklist() });
-      queryClient.invalidateQueries({ queryKey: userQueryKeys.profile() });
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.myProfile() });
     },
     onError: options?.onError,
   });

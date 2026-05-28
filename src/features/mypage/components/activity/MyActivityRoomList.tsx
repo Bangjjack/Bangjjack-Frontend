@@ -10,7 +10,11 @@ import { useMyRoommateGroups } from "@/features/roommate-group";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { useAuthStore } from "@/stores/authStore";
 
-import type { MyActivityRoomMemberMock, MyActivityRoomMock } from "@/features/mypage/types";
+import type {
+  MyActivityRoomMemberMock,
+  MyActivityRoomMock,
+  MyActivityRoomVariant,
+} from "@/features/mypage/types";
 import type { MyRoommateGroup, RoommateGroupMember } from "@/features/roommate-group";
 import { parseDisplayName } from "@/lib/parseDisplayName";
 
@@ -18,34 +22,53 @@ const mapMember = (
   member: RoommateGroupMember,
   currentUserId: number | null,
 ): MyActivityRoomMemberMock => {
+  const isMe = member.userId === currentUserId;
+
   if (member.role === "LEADER") {
     return {
       id: member.userId,
       isHost: true,
-      isMe: member.userId === currentUserId ? true : undefined,
+      isMe: isMe ? true : undefined,
       name: parseDisplayName(member.username),
+      profileImage: member.profileImage,
     };
   }
 
   return {
     id: member.userId,
+    isMe: isMe ? true : undefined,
     name: parseDisplayName(member.username),
+    profileImage: member.profileImage,
   };
+};
+
+const getRoomVariant = (
+  members: RoommateGroupMember[],
+  currentUserId: number | null,
+): MyActivityRoomVariant => {
+  const currentMember = members.find((member) => member.userId === currentUserId);
+
+  return currentMember?.role === "LEADER" ? "leader" : "member";
 };
 
 const mapRoommateGroupToActivityRoom = (
   group: MyRoommateGroup,
   currentUserId: number | null,
-): MyActivityRoomMock => ({
-  actions: MY_JOINED_ROOM_ACTIONS,
-  dormitory: DORMITORY_LABEL[group.dormitory] ?? group.dormitory,
-  id: group.groupId,
-  members: group.members.map((member) => mapMember(member, currentUserId)),
-  roomType: ROOM_SIZE_LABEL[group.roomSize] ?? group.roomSize,
-  status: "joined",
-  statusLabel: `${group.currentMemberCount} / ${group.totalCapacity}`,
-  title: group.postTitle,
-});
+): MyActivityRoomMock => {
+  const variant = getRoomVariant(group.members, currentUserId);
+
+  return {
+    actions: MY_JOINED_ROOM_ACTIONS[variant],
+    dormitory: DORMITORY_LABEL[group.dormitory] ?? group.dormitory,
+    id: group.groupId,
+    members: group.members.map((member) => mapMember(member, currentUserId)),
+    roomType: ROOM_SIZE_LABEL[group.roomSize] ?? group.roomSize,
+    status: "joined",
+    statusLabel: `${group.currentMemberCount} / ${group.totalCapacity}`,
+    title: group.postTitle,
+    variant,
+  };
+};
 
 function MyActivityRoomList() {
   const userId = useAuthStore((state) => state.userId);

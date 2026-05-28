@@ -17,18 +17,22 @@ function RoommateMemberList({ className, members }: RoommateMemberListProps) {
       )}
     >
       {members.map((member) => {
-        const isCurrentUserHost = member.isHost === true && member.isMe === true;
-
         return (
           <div
             key={member.id}
             className="flex min-h-6 items-center justify-between overflow-hidden px-100 py-0.5"
           >
             <div className="flex min-w-0 items-center gap-1.5">
-              <ProfileAvatar className="shrink-0" seed={member.id} size={24} variant="orange" />
+              <ProfileAvatar
+                className="shrink-0"
+                imageUrl={member.profileImage}
+                seed={member.id}
+                size={24}
+                variant="orange"
+              />
               <span className="typo-body2 truncate text-text-strong">
                 {member.name}
-                {isCurrentUserHost ? " (나)" : ""}
+                {member.isMe ? " (나)" : ""}
               </span>
             </div>
 

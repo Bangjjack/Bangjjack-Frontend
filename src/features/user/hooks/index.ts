@@ -1,3 +1,4 @@
+export { useMyProfile } from "./useMyProfile";
 export { useUpdateUserChecklist } from "./useUpdateUserChecklist";
 export { useUserChecklist } from "./useUserChecklist";
 export { useUserProfile } from "./useUserProfile";

@@ -24,6 +24,7 @@ export interface GetBookmarksParams {
 
 export type MyChecklistSelectionType = "single" | "multi";
 export type MyActivityTabId = "posts" | "rooms" | "matches";
+export type MyActivityRoomVariant = "leader" | "member";
 export type MyActivityRoomStatus = "joined";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
@@ -59,13 +60,15 @@ type MyActivityRoomHostMemberMock = {
   isHost: true;
   isMe?: boolean;
   name: string;
+  profileImage?: string | null;
 };
 
 type MyActivityRoomRegularMemberMock = {
   id: number;
   isHost?: false;
-  isMe?: never;
+  isMe?: boolean;
   name: string;
+  profileImage?: string | null;
 };
 
 export type MyActivityRoomMemberMock =
@@ -87,6 +90,7 @@ export interface MyActivityRoomMock {
   status: MyActivityRoomStatus;
   statusLabel: string;
   title: string;
+  variant: MyActivityRoomVariant;
 }
 
 export interface MyChecklistSectionMock {

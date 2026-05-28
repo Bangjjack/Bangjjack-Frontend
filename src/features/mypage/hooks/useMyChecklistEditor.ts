@@ -8,7 +8,7 @@ import {
   mapMyChecklistSectionsToRequest,
 } from "@/features/mypage/utils";
 import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks";
-import { useUpdateUserChecklist, useUserProfile } from "@/features/user/hooks";
+import { useMyProfile, useUpdateUserChecklist } from "@/features/user/hooks";
 
 function formatChecklistUpdatedDate(date: Date) {
   return new Intl.DateTimeFormat("ko-KR", {
@@ -45,7 +45,7 @@ function updateChecklistSelection(
 }
 
 function useMyChecklistEditor(initialEditing = false) {
-  const { data: userProfile, isLoading: isProfileLoading } = useUserProfile();
+  const { data: userProfile, isLoading: isProfileLoading } = useMyProfile();
   const { mutate: createChecklist, isPending: isCreatePending } = useSaveOnboardingChecklist();
   const { mutate: updateChecklist, isPending: isUpdatePending } = useUpdateUserChecklist();
   const profileSections = createMyChecklistSections(userProfile?.checklist ?? null);

@@ -4,10 +4,10 @@ import {
   mapRoommatePreferencesToLabels,
   mapUserProfileToFormValues,
 } from "@/features/mypage/utils";
-import { useUserProfile } from "@/features/user/hooks";
+import { useMyProfile } from "@/features/user/hooks";
 
 function useMyProfileEditData() {
-  const { data: userProfile, isLoading } = useUserProfile();
+  const { data: userProfile, isLoading } = useMyProfile();
   const apiProfileForm = userProfile ? mapUserProfileToFormValues(userProfile) : null;
 
   return {

@@ -35,6 +35,7 @@ export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
     status: "joined",
     statusLabel: "3 / 3",
     title: "컴공 4학년 룸메 구해요",
+    variant: "leader",
   },
 ];
 
