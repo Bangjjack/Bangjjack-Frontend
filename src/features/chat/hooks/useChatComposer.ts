@@ -1,7 +1,5 @@
 import { useRef, useState } from "react";
-import { isAxiosError } from "axios";
 
-import type { ApiResponse } from "@/api";
 import { toast } from "@/components/ui";
 import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
@@ -15,6 +13,7 @@ import type {
   ChatRoommateInviteMessageData,
 } from "@/features/chat/types";
 import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
@@ -108,14 +107,6 @@ function hasRoommateApplicationMessage(messages: ChatMessage[], isOutgoing: bool
   return messages.some((message) =>
     isOutgoing ? message.type === "roommate_invite" : message.type === "roommate_request",
   );
-}
-
-function getApiErrorMessage(error: unknown, fallbackMessage: string) {
-  if (!isAxiosError<ApiResponse<null>>(error)) {
-    return fallbackMessage;
-  }
-
-  return error.response?.data.message ?? fallbackMessage;
 }
 
 function useChatComposer({

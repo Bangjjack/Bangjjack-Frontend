@@ -1,8 +1,6 @@
-import { isAxiosError } from "axios";
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
-import type { ApiResponse } from "@/api";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
@@ -11,6 +9,7 @@ import { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessR
 import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { useAuthStore } from "@/stores/authStore";
 
 export type ChatDetailPageState = {
@@ -88,14 +87,6 @@ function getCurrentUserIdFromChatRoom(
   const viewerUserId = participantUserIds.find((userId) => userId !== targetUserId);
 
   return viewerUserId ?? fallbackUserId;
-}
-
-function getApiErrorMessage(error: unknown, fallbackMessage: string) {
-  if (!isAxiosError<ApiResponse<null>>(error)) {
-    return fallbackMessage;
-  }
-
-  return error.response?.data.message ?? fallbackMessage;
 }
 
 function useChatDetailPage() {
