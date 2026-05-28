@@ -34,10 +34,8 @@ function MyProfileEditContent({
   const parsedName = username ? parseDisplayName(username) : MY_PROFILE_EDIT_DEFAULT_VALUES.name;
 
   const [isEditing, setIsEditing] = useState(false);
-  const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>({
-    ...MY_PROFILE_EDIT_DEFAULT_VALUES,
-    name: parsedName,
-  });
+  const [submittedForm, setSubmittedForm] = useState<MyProfileEditFormValues | null>(null);
+  const profileForm = submittedForm ?? { ...MY_PROFILE_EDIT_DEFAULT_VALUES, name: parsedName };
   const [checklistItems] = useState<ChecklistEntry[]>([]);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
@@ -73,7 +71,7 @@ function MyProfileEditContent({
   }
 
   function submitProfileForm(values: MyProfileEditFormValues) {
-    setProfileForm(values);
+    setSubmittedForm(values);
     setIsEditing(false);
   }
 

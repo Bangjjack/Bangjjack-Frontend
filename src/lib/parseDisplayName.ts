@@ -1,5 +1,6 @@
 function parseDisplayName(username: string): string {
-  return username.split("/")[0] ?? username;
+  const first = username.split("/")[0]?.trim();
+  return first || username;
 }
 
 export { parseDisplayName };
