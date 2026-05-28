@@ -11,6 +11,7 @@ import {
 import type { MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import type { UserChecklistData, UserProfileData } from "@/features/user/types";
+import type { Campus } from "@/types";
 
 function mapUserProfileToFormValues(profile: UserProfileData): MyProfileEditFormValues {
   return {
@@ -52,4 +53,15 @@ function mapRoommatePreferencesToLabels(preferences: string[]) {
   );
 }
 
-export { mapChecklistToEntries, mapRoommatePreferencesToLabels, mapUserProfileToFormValues };
+function mapMyProfileCampusToRequest(campus: string): Campus | null {
+  const campusEntry = Object.entries(MY_PROFILE_CAMPUS_LABEL).find(([, label]) => label === campus);
+
+  return (campusEntry?.[0] as Campus | undefined) ?? null;
+}
+
+export {
+  mapChecklistToEntries,
+  mapMyProfileCampusToRequest,
+  mapRoommatePreferencesToLabels,
+  mapUserProfileToFormValues,
+};

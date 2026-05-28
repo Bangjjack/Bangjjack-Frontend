@@ -53,6 +53,7 @@ function MyProfileEditContent({
     control,
     handleSubmit,
     reset,
+    setValue,
     trigger,
     formState: { isValid },
   } = useForm<MyProfileEditFormValues>({
@@ -150,7 +151,7 @@ function MyProfileEditContent({
               id={MY_PROFILE_EDIT_FORM_ID}
               onSubmit={handleSubmit(submitProfileForm)}
             >
-              <ProfileEditFields control={control} />
+              <ProfileEditFields control={control} setValue={setValue} />
               <ChecklistEditLink
                 hasChecklist={checklistItems.length > 0}
                 onClick={onChecklistClick}

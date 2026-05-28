@@ -1,9 +1,8 @@
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 
 import { Button, Chip, Input, SelectField } from "@/components/ui";
 import {
   CAMPUS_OPTIONS,
-  DEPARTMENT_OPTIONS,
   DORMITORY_OPTIONS,
   GENDER_OPTIONS,
   GRADE_OPTIONS,
@@ -12,9 +11,25 @@ import {
 } from "@/features/mypage/constants";
 import { MY_PROFILE_SEMESTER_OPTIONS } from "@/features/mypage/mocks";
 import type { ProfileEditFieldsProps } from "@/features/mypage/types";
+import { mapMyProfileCampusToRequest } from "@/features/mypage/utils";
+import { useDepartments } from "@/features/onboarding/hooks";
 import { cn } from "@/lib/cn";
 
-function ProfileEditFields({ control }: ProfileEditFieldsProps) {
+function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
+  const selectedCampus = useWatch({ control, name: "campus" });
+  const selectedCampusForRequest = mapMyProfileCampusToRequest(selectedCampus);
+  const {
+    data: departments = [],
+    isError: isDepartmentsError,
+    isLoading: isDepartmentsLoading,
+  } = useDepartments(selectedCampusForRequest);
+  const departmentOptions = departments.map((department) => department.name);
+  const departmentPlaceholder = isDepartmentsError
+    ? "학과를 불러오지 못했어요"
+    : isDepartmentsLoading
+      ? "학과를 불러오는 중이에요"
+      : PROFILE_PLACEHOLDER.department;
+
   return (
     <section className="flex flex-col gap-300 rounded-medium bg-bg-secondary px-300 py-500">
       <div className="flex items-center gap-2.5 pb-1.5">
@@ -94,7 +109,10 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
             <SelectField
               ariaLabel="캠퍼스"
               fieldClassName="gap-0"
-              onChange={field.onChange}
+              onChange={(value) => {
+                field.onChange(value);
+                setValue("department", "", { shouldDirty: true, shouldValidate: true });
+              }}
               options={CAMPUS_OPTIONS}
               placeholder={PROFILE_PLACEHOLDER.campus}
               triggerClassName={SELECT_TRIGGER_CLASS_NAME}
@@ -158,8 +176,8 @@ function ProfileEditFields({ control }: ProfileEditFieldsProps) {
                 className="min-w-0 flex-1"
                 fieldClassName="gap-0"
                 onChange={field.onChange}
-                options={DEPARTMENT_OPTIONS}
-                placeholder={PROFILE_PLACEHOLDER.department}
+                options={departmentOptions}
+                placeholder={departmentPlaceholder}
                 triggerClassName={SELECT_TRIGGER_CLASS_NAME}
                 value={field.value}
               />
