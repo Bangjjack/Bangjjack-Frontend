@@ -30,9 +30,16 @@ export type ProcessRoommateApplicationResponse = {
 };
 
 const APPLICATION_API_PATHS = {
+  cancelRoommateApplication: (applicationId: number) => `/applications/${applicationId}/cancel`,
   processRoommateApplication: (applicationId: number) => `/applications/${applicationId}`,
   sendRoommateApplication: (userId: number) => `/users/${userId}/applications`,
 } as const;
+
+export const cancelRoommateApplication = async (applicationId: number): Promise<void> => {
+  await apiClient.patch<ApiResponse<string>>(
+    APPLICATION_API_PATHS.cancelRoommateApplication(applicationId),
+  );
+};
 
 export const sendRoommateApplication = async (
   userId: number,

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
+import { useCancelRoommateApplication } from "@/features/chat/hooks/useCancelRoommateApplication";
 import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
@@ -59,6 +60,7 @@ function useChatComposer({
     inputMenuOpen,
     toggleInputMenu,
   } = useInputMenuState();
+  const { mutate: cancelRoommateApplication } = useCancelRoommateApplication();
   const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
     useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
@@ -247,11 +249,20 @@ function useChatComposer({
 
     const canceledInvite = messages.find(isCanceledInviteMessage);
 
-    setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
-
-    if (canceledInvite) {
-      toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
+    if (!canceledInvite?.applicationId) {
+      toast.error("룸메이트 요청 정보를 확인할 수 없어요.");
+      return;
     }
+
+    cancelRoommateApplication(canceledInvite.applicationId, {
+      onError: (error) => {
+        toast.error(getApiErrorMessage(error, "룸메이트 요청 취소에 실패했어요."));
+      },
+      onSuccess: () => {
+        setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
+        toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
+      },
+    });
   };
 
   const appendAcceptedRequestMessage = (applicationId?: number, processedAt?: string) => {
