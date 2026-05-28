@@ -14,8 +14,15 @@ function MyChecklistContent({
   initialEditing = false,
   onBack,
 }: MyChecklistContentProps) {
-  const { handleEditButtonClick, handleOptionToggle, isEditing, lastUpdated, visibleSections } =
-    useMyChecklistEditor(initialEditing);
+  const {
+    handleEditButtonClick,
+    handleOptionToggle,
+    isEditing,
+    isSaveDisabled,
+    isSaving,
+    lastUpdated,
+    visibleSections,
+  } = useMyChecklistEditor(initialEditing);
 
   return (
     <div className={cn("-mx-400 flex min-h-full flex-col bg-bg-primary", className)}>
@@ -32,11 +39,12 @@ function MyChecklistContent({
 
         <Button
           className="h-11 cursor-pointer rounded-medium px-400 py-2.5 typo-button1"
+          disabled={isSaveDisabled}
           onClick={handleEditButtonClick}
           type="button"
           variant={isEditing ? "black" : "default"}
         >
-          {isEditing ? "저장하기" : "수정하기"}
+          {isSaving ? "저장 중" : isEditing ? "저장하기" : "수정하기"}
         </Button>
       </header>
 

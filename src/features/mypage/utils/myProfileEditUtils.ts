@@ -8,10 +8,19 @@ import {
   ROOMMATE_PREFERENCE_LABEL,
   SEMESTER_LABEL,
 } from "@/features/mypage/constants";
+import type { MyChecklistSectionMock } from "@/features/mypage/types";
+import {
+  onboardingChecklistRequestSchema,
+  type OnboardingChecklistRequestValues,
+} from "@/features/onboarding/schemas";
 import type { MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import type { UserChecklistData, UserProfileData } from "@/features/user/types";
 import type { Campus } from "@/types";
+
+type ChecklistRequestMappingResult =
+  | { status: "invalid"; error: string }
+  | { status: "valid"; value: OnboardingChecklistRequestValues };
 
 function mapUserProfileToFormValues(profile: UserProfileData): MyProfileEditFormValues {
   return {
@@ -59,8 +68,105 @@ function mapMyProfileCampusToRequest(campus: string): Campus | null {
   return (campusEntry?.[0] as Campus | undefined) ?? null;
 }
 
+function createMyChecklistSections(checklist: UserChecklistData | null): MyChecklistSectionMock[] {
+  return MY_PROFILE_CHECKLIST_FIELD_META.map(({ id, label, valueLabel }) => {
+    const value = checklist?.[id];
+    const values = Array.isArray(value) ? value : value ? [value] : [];
+
+    return {
+      id,
+      helperText: id === "sleepHabits" ? "복수 선택" : undefined,
+      options: Object.values(valueLabel),
+      selectedOptions: values.map((item) => valueLabel[item] ?? item),
+      selectionType: id === "sleepHabits" ? "multi" : "single",
+      title: label,
+    };
+  });
+}
+
+function getChecklistValueByLabel(
+  section: MyChecklistSectionMock | undefined,
+  valueLabel: Record<string, string>,
+) {
+  const selectedOption = section?.selectedOptions[0];
+
+  if (!selectedOption) {
+    return undefined;
+  }
+
+  return Object.entries(valueLabel).find(([, label]) => label === selectedOption)?.[0];
+}
+
+function getChecklistValuesByLabel(
+  section: MyChecklistSectionMock | undefined,
+  valueLabel: Record<string, string>,
+) {
+  return (
+    section?.selectedOptions
+      .map(
+        (selectedOption) =>
+          Object.entries(valueLabel).find(([, label]) => label === selectedOption)?.[0],
+      )
+      .filter((value): value is string => Boolean(value)) ?? []
+  );
+}
+
+function mapMyChecklistSectionsToRequest(
+  sections: MyChecklistSectionMock[],
+): ChecklistRequestMappingResult {
+  const sectionMap = new Map(sections.map((section) => [section.id, section]));
+  const fieldMetaMap = new Map(MY_PROFILE_CHECKLIST_FIELD_META.map((meta) => [meta.id, meta]));
+  const payload = {
+    bedtime: getChecklistValueByLabel(
+      sectionMap.get("bedtime"),
+      fieldMetaMap.get("bedtime")?.valueLabel ?? {},
+    ),
+    wakeUpTime: getChecklistValueByLabel(
+      sectionMap.get("wakeUpTime"),
+      fieldMetaMap.get("wakeUpTime")?.valueLabel ?? {},
+    ),
+    sleepHabits: getChecklistValuesByLabel(
+      sectionMap.get("sleepHabits"),
+      fieldMetaMap.get("sleepHabits")?.valueLabel ?? {},
+    ),
+    cleaningCycle: getChecklistValueByLabel(
+      sectionMap.get("cleaningCycle"),
+      fieldMetaMap.get("cleaningCycle")?.valueLabel ?? {},
+    ),
+    dormStayTime: getChecklistValueByLabel(
+      sectionMap.get("dormStayTime"),
+      fieldMetaMap.get("dormStayTime")?.valueLabel ?? {},
+    ),
+    callHabit: getChecklistValueByLabel(
+      sectionMap.get("callHabit"),
+      fieldMetaMap.get("callHabit")?.valueLabel ?? {},
+    ),
+    indoorTemperature: getChecklistValueByLabel(
+      sectionMap.get("indoorTemperature"),
+      fieldMetaMap.get("indoorTemperature")?.valueLabel ?? {},
+    ),
+    noiseSensitivity: getChecklistValueByLabel(
+      sectionMap.get("noiseSensitivity"),
+      fieldMetaMap.get("noiseSensitivity")?.valueLabel ?? {},
+    ),
+    smoking: getChecklistValueByLabel(
+      sectionMap.get("smoking"),
+      fieldMetaMap.get("smoking")?.valueLabel ?? {},
+    ),
+  };
+  const parsed = onboardingChecklistRequestSchema.safeParse(payload);
+
+  if (!parsed.success) {
+    return { status: "invalid", error: "생활 습관 체크리스트를 모두 선택해 주세요" };
+  }
+
+  return { status: "valid", value: parsed.data };
+}
+
 export {
+  createMyChecklistSections,
   mapChecklistToEntries,
+  mapMyChecklistSectionsToRequest,
   mapMyProfileCampusToRequest,
   mapRoommatePreferencesToLabels,
   mapUserProfileToFormValues,
