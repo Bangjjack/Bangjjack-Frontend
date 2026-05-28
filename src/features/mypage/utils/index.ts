@@ -1,6 +1,7 @@
 export {
   createMyChecklistSections,
   mapChecklistToEntries,
+  mapFormToProfileRequest,
   mapMyChecklistSectionsToRequest,
   mapMyProfileCampusToRequest,
   mapRoommatePreferencesToLabels,

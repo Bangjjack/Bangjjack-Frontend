@@ -3,7 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { waveImage } from "@/assets/images";
-import { Button, Header } from "@/components/ui";
+import { Button, Header, toast } from "@/components/ui";
 import {
   ChecklistEditLink,
   ImportanceEditSection,
@@ -19,6 +19,8 @@ import {
 import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
+import { mapFormToProfileRequest } from "@/features/mypage/utils";
+import { useUpdateUserProfile } from "@/features/user/hooks";
 import { cn } from "@/lib/cn";
 import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
@@ -38,6 +40,7 @@ function MyProfileEditContent({
     isLoading,
     profileImageUrl: apiProfileImageUrl,
   } = useMyProfileEditData();
+  const { mutate: updateUserProfile, isPending: isUpdating } = useUpdateUserProfile();
   const [isEditing, setIsEditing] = useState(false);
   const [savedProfileForm, setSavedProfileForm] = useState<MyProfileEditFormValues | null>(null);
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
@@ -79,8 +82,16 @@ function MyProfileEditContent({
   }
 
   function submitProfileForm(values: MyProfileEditFormValues) {
-    setSavedProfileForm(values);
-    setIsEditing(false);
+    const request = mapFormToProfileRequest(values, importanceItems);
+    if (!request) return;
+
+    updateUserProfile(request, {
+      onSuccess: () => {
+        setSavedProfileForm(values);
+        setIsEditing(false);
+        toast.success("프로필이 수정되었어요");
+      },
+    });
   }
 
   function updateProfileImage(file: File) {
@@ -172,7 +183,7 @@ function MyProfileEditContent({
       <div className="absolute bottom-0 left-0 right-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
         <Button
           className="w-full cursor-pointer"
-          disabled={isLoading || (isEditing && !isValid)}
+          disabled={isLoading || isUpdating || (isEditing && !isValid)}
           onClick={isEditing ? handleSubmit(submitProfileForm) : handleEditButtonClick}
           type="button"
           variant={isEditing ? "black" : "default"}

@@ -1,13 +1,12 @@
 import type { RoommatePreference } from "@/constants";
+import { DORMITORY_LABEL, ROOMMATE_PREFERENCE_LABEL, SEMESTER_LABEL } from "@/constants";
 import {
-  DORMITORY_LABEL,
   MY_PROFILE_CAMPUS_LABEL,
   MY_PROFILE_CHECKLIST_FIELD_META,
   MY_PROFILE_DORMITORY_FALLBACK,
   MY_PROFILE_GENDER_LABEL,
-  ROOMMATE_PREFERENCE_LABEL,
-  SEMESTER_LABEL,
 } from "@/features/mypage/constants";
+import type { UpdateUserProfileRequest } from "@/features/user/types";
 import type { MyChecklistSectionMock } from "@/features/mypage/types";
 import {
   onboardingChecklistRequestSchema,
@@ -27,12 +26,46 @@ function mapUserProfileToFormValues(profile: UserProfileData): MyProfileEditForm
     birthYear: String(profile.birthYear),
     campus: MY_PROFILE_CAMPUS_LABEL[profile.campus] ?? profile.campus,
     department: profile.departmentName,
+    departmentId: profile.departmentId,
     dormitory: DORMITORY_LABEL[profile.dormitory] ?? MY_PROFILE_DORMITORY_FALLBACK,
     email: profile.email,
     gender: MY_PROFILE_GENDER_LABEL[profile.gender] ?? profile.gender,
     grade: String(profile.grade) as MyProfileEditFormValues["grade"],
     name: profile.username,
     semester: SEMESTER_LABEL[profile.semester] ?? profile.semester,
+  };
+}
+
+function reverseLookup(record: Record<string, string>, label: string): string | undefined {
+  return Object.entries(record).find(([, v]) => v === label)?.[0];
+}
+
+function mapFormToProfileRequest(
+  values: MyProfileEditFormValues,
+  importanceItems: string[],
+): UpdateUserProfileRequest | null {
+  const campus = reverseLookup(MY_PROFILE_CAMPUS_LABEL, values.campus);
+  const gender = reverseLookup(MY_PROFILE_GENDER_LABEL, values.gender);
+  const semester = reverseLookup(SEMESTER_LABEL, values.semester);
+  const dormitory = reverseLookup(DORMITORY_LABEL, values.dormitory);
+
+  if (!campus || !gender || !semester || !dormitory || !values.departmentId) {
+    return null;
+  }
+
+  const preferences = importanceItems
+    .map((label) => reverseLookup(ROOMMATE_PREFERENCE_LABEL, label))
+    .filter((v): v is string => Boolean(v));
+
+  return {
+    birthYear: Number(values.birthYear),
+    campus,
+    departmentId: values.departmentId,
+    dormitory,
+    gender,
+    grade: Number(values.grade),
+    preferences,
+    semester,
   };
 }
 
@@ -166,6 +199,7 @@ function mapMyChecklistSectionsToRequest(
 export {
   createMyChecklistSections,
   mapChecklistToEntries,
+  mapFormToProfileRequest,
   mapMyChecklistSectionsToRequest,
   mapMyProfileCampusToRequest,
   mapRoommatePreferencesToLabels,

@@ -175,7 +175,11 @@ function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
                 ariaLabel="학과"
                 className="min-w-0 flex-1"
                 fieldClassName="gap-0"
-                onChange={field.onChange}
+                onChange={(name) => {
+                  field.onChange(name);
+                  const dept = departments.find((d) => d.name === name);
+                  setValue("departmentId", dept?.departmentId ?? null);
+                }}
                 options={departmentOptions}
                 placeholder={departmentPlaceholder}
                 triggerClassName={SELECT_TRIGGER_CLASS_NAME}

@@ -60,4 +60,15 @@ type UserProfile = {
   lifestyleChecklist: UserLifestyleChecklist;
 };
 
-export type { UserTagsData, UserChecklistData, UserProfileData, UserLifestyleChecklist, UserProfile };
+type UpdateUserProfileRequest = {
+  birthYear: number;
+  campus: string;
+  departmentId: number;
+  dormitory: string;
+  gender: string;
+  grade: number;
+  preferences: string[];
+  semester: string;
+};
+
+export type { UserTagsData, UserChecklistData, UserProfileData, UserLifestyleChecklist, UserProfile, UpdateUserProfileRequest };
