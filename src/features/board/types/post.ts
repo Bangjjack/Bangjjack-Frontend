@@ -79,11 +79,44 @@ type PostListData = {
   hasNext: boolean;
 };
 
+type MatchRateFeature = {
+  key: string;
+  label: string;
+  description: string;
+};
+
+type MatchRateMismatchedFeature = MatchRateFeature & {
+  advice: string;
+};
+
+type MatchRateConversationStarter = {
+  key: string;
+  starter: string;
+  subtitle: string;
+};
+
+type MatchRateInfluentialFeature = {
+  key: string;
+  label: string;
+};
+
 /** 매칭률 조회 응답 data */
 type PostMatchRateData = {
   matchRate: number;
-  matchedAttributes: string[];
-  recommendedTopics: string[];
+  counts: {
+    matched: number;
+    mismatched: number;
+    total: number;
+  };
+  matchedFeatures: MatchRateFeature[];
+  mismatchedFeatures: MatchRateMismatchedFeature[];
+  conversationStarters: MatchRateConversationStarter[];
+  topInfluentialFeatures: MatchRateInfluentialFeature[];
+  summaryComment: {
+    brief: string;
+    positive: string;
+    caution: string;
+  };
 };
 
 /** AI 추천 모집글 아이템 */
@@ -110,5 +143,9 @@ export type {
   PostListItem,
   PostListData,
   PostMatchRateData,
+  MatchRateFeature,
+  MatchRateMismatchedFeature,
+  MatchRateConversationStarter,
+  MatchRateInfluentialFeature,
   RecommendedPostItem,
 };

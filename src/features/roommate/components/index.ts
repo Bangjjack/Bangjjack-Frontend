@@ -15,5 +15,10 @@ export type {
   MatchedItemsCardProps,
   MatchedItem,
 } from "@/features/roommate/components/MatchedItemsCard";
+export { MismatchedItemsCard } from "@/features/roommate/components/MismatchedItemsCard";
+export type {
+  MismatchedItemsCardProps,
+  MismatchedItem,
+} from "@/features/roommate/components/MismatchedItemsCard";
 export { AiCommentCard } from "@/features/roommate/components/AiCommentCard";
 export type { AiCommentCardProps } from "@/features/roommate/components/AiCommentCard";

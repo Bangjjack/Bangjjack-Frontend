@@ -63,7 +63,7 @@ function MatchActionBar({
     if (result.data) {
       setApiMatchData({
         matchRate: result.data.matchRate,
-        matchHighlights: result.data.matchedAttributes,
+        matchHighlights: result.data.topInfluentialFeatures.map((f) => f.label),
       });
     }
     setDialogTarget("match");
