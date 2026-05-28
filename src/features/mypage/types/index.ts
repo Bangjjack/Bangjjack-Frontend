@@ -86,6 +86,7 @@ export interface MyActivityRoomMock {
   dormitory: string;
   id: number;
   members?: MyActivityRoomMemberMock[];
+  postId: number;
   roomType: string;
   status: MyActivityRoomStatus;
   statusLabel: string;

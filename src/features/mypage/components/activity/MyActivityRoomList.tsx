@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { CircleAlertIcon } from "@/assets/icons";
 import { JoinedRoomCard } from "@/features/mypage/components/activity/JoinedRoomCard";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
@@ -11,6 +12,7 @@ import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { useAuthStore } from "@/stores/authStore";
 
 import type {
+  MyActivityRoomActionMock,
   MyActivityRoomMemberMock,
   MyActivityRoomMock,
   MyActivityRoomVariant,
@@ -62,6 +64,7 @@ const mapRoommateGroupToActivityRoom = (
     dormitory: DORMITORY_LABEL[group.dormitory] ?? group.dormitory,
     id: group.groupId,
     members: group.members.map((member) => mapMember(member, currentUserId)),
+    postId: group.postId,
     roomType: ROOM_SIZE_LABEL[group.roomSize] ?? group.roomSize,
     status: "joined",
     statusLabel: `${group.currentMemberCount} / ${group.totalCapacity}`,
@@ -75,7 +78,13 @@ function MyActivityRoomList() {
   const { data: roommateGroups = [], isError, isLoading } = useMyRoommateGroups();
   const joinedRooms = roommateGroups.map((group) => mapRoommateGroupToActivityRoom(group, userId));
 
-  const handleRoomActionClick = () => {};
+  const navigate = useNavigate();
+
+  const handleRoomActionClick = (action: MyActivityRoomActionMock, room: MyActivityRoomMock) => {
+    if (action.id === "detail") {
+      navigate(`/board/${room.postId}`);
+    }
+  };
 
   if (isLoading) {
     return (

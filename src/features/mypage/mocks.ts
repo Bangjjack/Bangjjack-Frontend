@@ -31,6 +31,7 @@ export const MY_ACTIVITY_ROOMS: MyActivityRoomMock[] = [
       { id: 2, name: "김지수" },
       { id: 3, name: "박서연" },
     ],
+    postId: 1,
     roomType: "3인 1실",
     status: "joined",
     statusLabel: "3 / 3",
