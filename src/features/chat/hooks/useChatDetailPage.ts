@@ -12,6 +12,7 @@ import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/feat
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
 import { getApiErrorMessage } from "@/lib/api-error";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
 
 export type ChatDetailPageState = {
@@ -66,7 +67,7 @@ function mapChatRoomListItemToChatDetail(chatRoom: ChatRoomListItem): ChatDetail
     id: chatRoom.partnerId,
     matchRate: 0,
     messages: [],
-    nickname: chatRoom.partnerName,
+    nickname: parseDisplayName(chatRoom.partnerName),
     profileSummary: getChatRoomImportanceTags(chatRoom),
     profileImage: chatRoom.partnerProfileImage,
     startSource: "ai_recommendation",

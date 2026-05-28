@@ -1,6 +1,7 @@
 import { BottomNav, Header } from "@/components/ui";
 import type { HeaderProps } from "@/components/ui";
 import { useGoBack } from "@/hooks/useGoBack";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
 import type { BottomNavIcon } from "@/types/bottomNav";
 import { matchPath, Outlet, useLocation } from "react-router";
@@ -91,7 +92,7 @@ export default function MainPage() {
       <Header
         {...routeConfig.header}
         onBackClick={handleBackClick}
-        userName={username ?? undefined}
+        userName={username ? parseDisplayName(username) : undefined}
       />
       <main
         className={

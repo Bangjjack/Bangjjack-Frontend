@@ -4,6 +4,8 @@ import { MyPageProfileCard } from "@/features/mypage/components/MyPageProfileCar
 import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { MY_PROFILE } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
+import { useAuthStore } from "@/stores/authStore";
 
 export interface MyPageContentProps {
   className?: string;
@@ -21,7 +23,8 @@ function MyPageContent({
   onProfileClick,
 }: MyPageContentProps) {
   const { defaultProfileForm, profileImageUrl } = useMyProfileEditData();
-  const profileName = defaultProfileForm.name || MY_PROFILE.name;
+  const username = useAuthStore((state) => state.username);
+  const profileName = defaultProfileForm.name || (username ? parseDisplayName(username) : MY_PROFILE.name);
   const profileDepartment = defaultProfileForm.department || MY_PROFILE.department;
   const birthYear = Number(defaultProfileForm.birthYear);
   const profileAge = Number.isFinite(birthYear)

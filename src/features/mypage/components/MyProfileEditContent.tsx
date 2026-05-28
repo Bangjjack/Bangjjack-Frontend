@@ -20,6 +20,8 @@ import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
+import { useAuthStore } from "@/stores/authStore";
 
 function MyProfileEditContent({
   className,
@@ -27,6 +29,8 @@ function MyProfileEditContent({
   onChecklistClick,
   onEditClick,
 }: MyProfileEditContentProps) {
+  const username = useAuthStore((state) => state.username);
+  const parsedName = username ? parseDisplayName(username) : MY_PROFILE_EDIT_DEFAULT_VALUES.name;
   const {
     checklistItems,
     defaultProfileForm,
@@ -39,7 +43,10 @@ function MyProfileEditContent({
   const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
   const [savedImportanceItems, setSavedImportanceItems] = useState<string[] | null>(null);
-  const profileForm = savedProfileForm ?? defaultProfileForm;
+  const profileForm = savedProfileForm ?? {
+    ...defaultProfileForm,
+    name: defaultProfileForm.name || parsedName,
+  };
   const profileImageUrl = profilePreviewUrl ?? apiProfileImageUrl;
   const importanceItems = savedImportanceItems ?? apiImportanceItems;
   const {
@@ -49,7 +56,7 @@ function MyProfileEditContent({
     trigger,
     formState: { isValid },
   } = useForm<MyProfileEditFormValues>({
-    defaultValues: MY_PROFILE_EDIT_DEFAULT_VALUES,
+    defaultValues: { ...MY_PROFILE_EDIT_DEFAULT_VALUES, name: parsedName },
     mode: "onChange",
     resolver: zodResolver(myProfileEditSchema),
   });
