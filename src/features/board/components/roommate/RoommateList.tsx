@@ -5,6 +5,7 @@ interface Member {
   nickname: string;
   seed: number;
   isHost?: boolean;
+  profileImage?: string | null;
 }
 
 interface RoommateListProps {
@@ -35,7 +36,7 @@ function RoommateList({ members, selectedNickname, onMemberClick }: RoommateList
             onClick={() => onMemberClick?.(member)}
           >
             <div className="flex items-center gap-200">
-              <ProfileAvatar size={24} seed={member.seed} />
+              <ProfileAvatar size={24} imageUrl={member.profileImage} seed={member.seed} />
               <span
                 className={cn(
                   "typo-title3",

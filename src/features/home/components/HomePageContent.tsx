@@ -1,49 +1,23 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { RoundButton } from "@/components/ui";
+import { Button, RoundButton } from "@/components/ui";
 import { RecruitCard, RecruitCardSkeleton } from "@/components";
-import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SMOKING_LABEL } from "@/constants";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { useHomePostList } from "@/features/board/hooks";
-import { formatRelativeTime } from "@/utils";
+import { useRecommendedRoommates } from "@/features/home/hooks";
+import { formatRelativeTime, getAgeFromBirthYear, parseDepartmentName } from "@/utils";
 import { useDragScroll, useFadeInOnScroll } from "@/hooks";
 import { cn } from "@/lib/cn";
 import { useAuthStore } from "@/stores/authStore";
 import { OnboardingPromptSection } from "./OnboardingPromptSection";
 import { RoommateProfileCard } from "./RoommateProfileCard";
-
-// TODO: API 연동 시 제거
-const MOCK_ROOMMATES = [
-  {
-    id: "roommate-1",
-    nickname: "무구정광대다라니경",
-    age: 20,
-    department: "컴퓨터공학과",
-    matchRate: 78,
-    tags: ["얼리버드", "집순이", "비흡연"],
-  },
-  {
-    id: "roommate-2",
-    nickname: "햄무라비법전",
-    age: 21,
-    department: "경영학과",
-    matchRate: 78,
-    tags: ["올빼미형", "밖순이", "비흡연"],
-  },
-  {
-    id: "roommate-3",
-    nickname: "냠냠",
-    age: 21,
-    department: "경영학과",
-    matchRate: 78,
-    tags: ["올빼미형", "밖순이", "비흡연"],
-  },
-];
+import { RoommateProfileCardSkeleton } from "./RoommateProfileCardSkeleton";
 
 type HomePageContentProps = {
   onChecklistClick?: () => void;
   onMoreRecruitsClick?: () => void;
-  onRoommateClick?: (id: string) => void;
+  onRoommateClick?: (id: number) => void;
   onRecruitClick?: (id: number) => void;
   onRecruitCreateClick?: () => void;
 };
@@ -64,6 +38,13 @@ function HomePageContent({
   const { data, isLoading, isError } = useHomePostList();
   const posts = data?.content ?? [];
 
+  const {
+    data: roommates,
+    isLoading: isRoommatesLoading,
+    isError: isRoommatesError,
+    refetch: refetchRoommates,
+  } = useRecommendedRoommates();
+
   return (
     <div className="flex flex-col gap-600">
       <RoundButton
@@ -80,25 +61,56 @@ function HomePageContent({
         <h2 className="typo-h4 py-2.5 text-text-strong">추천 룸메이트</h2>
 
         {isOnboardingCompleted ? (
-          <div className="relative">
-            {/* Embla viewport */}
-            <div ref={emblaRef} className="overflow-hidden" {...handlers}>
-              {/* Embla container */}
-              <div className="flex gap-[12px]">
-                {MOCK_ROOMMATES.map(({ id, ...roommate }) => (
-                  <RoommateProfileCard
-                    key={id}
-                    className="min-w-0 shrink-0"
-                    onClick={() => onRoommateClick?.(id)}
-                    {...roommate}
-                  />
-                ))}
-              </div>
+          isRoommatesError ? (
+            <div className="flex flex-col items-center gap-3 py-4">
+              <p className="typo-body2 text-center text-text-caption">
+                추천 룸메이트를 불러오지 못했어요
+              </p>
+              <Button variant="ghost" size="sm" onClick={() => refetchRoommates()}>
+                다시 매칭하기
+              </Button>
             </div>
+          ) : (
+            <div className="relative">
+              {/* Embla viewport */}
+              <div ref={emblaRef} className="overflow-hidden" {...handlers}>
+                {/* Embla container */}
+                <div className="flex gap-[12px]">
+                  {isRoommatesLoading ? (
+                    Array.from({ length: 3 }).map((_, i) => <RoommateProfileCardSkeleton key={i} />)
+                  ) : roommates && roommates.length > 0 ? (
+                    roommates.map((roommate) => {
+                      const tags = [
+                        DORMITORY_LABEL[roommate.dormitory] ?? roommate.dormitory,
+                        SMOKING_LABEL[roommate.smoking] ?? roommate.smoking,
+                      ];
 
-            {/* 오른쪽 "더 있음" 힌트 */}
-            <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-bg-primary to-transparent" />
-          </div>
+                      return (
+                        <RoommateProfileCard
+                          key={roommate.userId}
+                          className="min-w-0 shrink-0"
+                          nickname={roommate.username}
+                          age={getAgeFromBirthYear(roommate.birthYear)}
+                          department={parseDepartmentName(roommate.departmentName)}
+                          matchRate={roommate.matchRate}
+                          profileImage={roommate.profileImage}
+                          tags={tags}
+                          onClick={() => onRoommateClick?.(roommate.userId)}
+                        />
+                      );
+                    })
+                  ) : (
+                    <p className="typo-body2 w-full py-4 text-center text-text-caption">
+                      추천 룸메이트가 없어요
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* 오른쪽 "더 있음" 힌트 */}
+              <div className="pointer-events-none absolute right-0 top-0 h-full w-12 bg-linear-to-l from-bg-primary to-transparent" />
+            </div>
+          )
         ) : (
           <OnboardingPromptSection onChecklistClick={onChecklistClick} />
         )}

@@ -3,9 +3,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserProfile } from "@/api";
 import { userQueryKeys } from "@/features/user/queries";
 
-export const useUserProfile = () => {
+export const useUserProfile = (userId: number) => {
   return useQuery({
-    queryKey: userQueryKeys.profile(),
-    queryFn: getUserProfile,
+    queryKey: userQueryKeys.profile(userId),
+    queryFn: () => getUserProfile(userId),
+    enabled: !!userId,
   });
 };

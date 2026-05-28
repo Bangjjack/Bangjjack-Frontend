@@ -1,3 +1,6 @@
+import type { Semester, Dormitory } from "@/types";
+import type { RoommatePreference } from "@/constants";
+
 type UserTagsData = {
   semester: string;
   dormitory: string;
@@ -32,4 +35,29 @@ type UserProfileData = {
   roommatePreferences: string[];
 };
 
-export type { UserTagsData, UserChecklistData, UserProfileData };
+type UserLifestyleChecklist = {
+  bedtime: { value: string; matched: boolean };
+  wakeUpTime: { value: string; matched: boolean };
+  sleepHabits: { value: string[]; matched: boolean };
+  cleaningCycle: { value: string; matched: boolean };
+  dormStayTime: { value: string; matched: boolean };
+  callHabit: { value: string; matched: boolean };
+  indoorTemperature: { value: string; matched: boolean };
+  noiseSensitivity: { value: string; matched: boolean };
+  smoking: { value: string; matched: boolean };
+};
+
+type UserProfile = {
+  userId: number;
+  profileImage: string;
+  username: string;
+  grade: number;
+  birthYear: number;
+  departmentName: string;
+  semester: Semester;
+  dormitory: Dormitory;
+  roommatePreferences: RoommatePreference[];
+  lifestyleChecklist: UserLifestyleChecklist;
+};
+
+export type { UserTagsData, UserChecklistData, UserProfileData, UserLifestyleChecklist, UserProfile };

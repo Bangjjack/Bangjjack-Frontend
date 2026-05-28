@@ -1,5 +1,5 @@
 import { CheckIcon } from "@/assets/icons";
-import { Card, Separator, Tag } from "@/components/ui";
+import { Card, Separator, TagSelected } from "@/components/ui";
 import { ROOMMATE_PREFERENCE_LABEL } from "@/constants";
 import { HabitList } from "@/features/board/components/shared";
 import type { Habit, PostRoommatePreference } from "@/features/board/types";
@@ -31,9 +31,9 @@ function PostDetailTagsCard({ habits, roommatePreference }: PostDetailTagsCardPr
             </div>
             <div className="flex flex-wrap gap-[6px]">
               {priorities.map((pref, index) => (
-                <Tag key={pref} rank={index + 1}>
+                <TagSelected key={pref} rank={index + 1} variant="neutral">
                   {ROOMMATE_PREFERENCE_LABEL[pref] ?? pref}
-                </Tag>
+                </TagSelected>
               ))}
             </div>
           </div>

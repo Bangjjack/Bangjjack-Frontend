@@ -4,3 +4,4 @@ export type { UseCounterOptions } from "@/hooks/useCounter";
 export { useDragScroll } from "@/hooks/useDragScroll";
 export { useFadeInOnScroll } from "@/hooks/useFadeInOnScroll";
 export { useGoBack } from "@/hooks/useGoBack";
+export { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
