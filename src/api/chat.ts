@@ -28,9 +28,7 @@ export const issueChatWsToken = async (): Promise<IssueChatWsTokenResponse> => {
 };
 
 export const createChatRoom = async (body: CreateChatRoomRequest): Promise<ChatRoom> => {
-  console.log("[chat] createChatRoom request", body);
   const { data } = await apiClient.post<ApiResponse<ChatRoom>>(CHAT_API_PATHS.chatRooms, body);
-  console.log("[chat] createChatRoom response", data);
   return data.data;
 };
 
