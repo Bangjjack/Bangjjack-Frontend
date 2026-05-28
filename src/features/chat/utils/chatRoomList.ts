@@ -60,9 +60,13 @@ function getFirstThreeTags(tags?: string[] | null) {
 }
 
 export function getChatRoomImportanceTags(chatRoom: ChatRoomListItem) {
-  const directTags = getFirstThreeTags(
-    chatRoom.partnerImportanceTags ?? chatRoom.importanceTags ?? chatRoom.priorityFactors,
-  );
+  const directTagSources = [
+    chatRoom.partnerImportanceTags,
+    chatRoom.importanceTags,
+    chatRoom.priorityFactors,
+  ];
+  const directTags =
+    directTagSources.map(getFirstThreeTags).find((tags) => tags.length > 0) ?? [];
 
   if (directTags.length > 0) {
     return directTags;
