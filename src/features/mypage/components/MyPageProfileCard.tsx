@@ -5,11 +5,12 @@ import { cn } from "@/lib/cn";
 export interface MyPageProfileCardProps {
   age: number;
   department: string;
+  imageUrl?: string | null;
   name: string;
   onClick?: () => void;
 }
 
-function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCardProps) {
+function MyPageProfileCard({ age, department, imageUrl, name, onClick }: MyPageProfileCardProps) {
   return (
     <Surface
       variant="default"
@@ -32,7 +33,7 @@ function MyPageProfileCard({ age, department, name, onClick }: MyPageProfileCard
       tabIndex={onClick ? 0 : undefined}
     >
       <div className="flex min-w-0 items-center gap-300">
-        <ProfileAvatar seed={name.length} size={48} />
+        <ProfileAvatar imageUrl={imageUrl} seed={name.length} size={48} />
 
         <div className="flex min-w-0 flex-col justify-center gap-100">
           <h2 className="typo-title2 text-text-strong">{name}</h2>

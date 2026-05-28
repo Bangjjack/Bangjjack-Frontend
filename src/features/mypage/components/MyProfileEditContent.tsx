@@ -32,13 +32,15 @@ function MyProfileEditContent({
     defaultProfileForm,
     importanceItems: apiImportanceItems,
     isLoading,
+    profileImageUrl: apiProfileImageUrl,
   } = useMyProfileEditData();
   const [isEditing, setIsEditing] = useState(false);
   const [savedProfileForm, setSavedProfileForm] = useState<MyProfileEditFormValues | null>(null);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
   const [savedImportanceItems, setSavedImportanceItems] = useState<string[] | null>(null);
   const profileForm = savedProfileForm ?? defaultProfileForm;
+  const profileImageUrl = profilePreviewUrl ?? apiProfileImageUrl;
   const importanceItems = savedImportanceItems ?? apiImportanceItems;
   const {
     control,
@@ -55,11 +57,11 @@ function MyProfileEditContent({
 
   useEffect(() => {
     return () => {
-      if (profileImageUrl) {
-        URL.revokeObjectURL(profileImageUrl);
+      if (profilePreviewUrl) {
+        URL.revokeObjectURL(profilePreviewUrl);
       }
     };
-  }, [profileImageUrl]);
+  }, [profilePreviewUrl]);
 
   function handleEditButtonClick() {
     reset(profileForm);
@@ -76,7 +78,7 @@ function MyProfileEditContent({
   function updateProfileImage(file: File) {
     const nextImageUrl = URL.createObjectURL(file);
 
-    setProfileImageUrl((prev) => {
+    setProfilePreviewUrl((prev) => {
       if (prev) {
         URL.revokeObjectURL(prev);
       }

@@ -18,6 +18,7 @@ function useMyProfileEditData() {
       ? mapRoommatePreferencesToLabels(userProfile.roommatePreferences)
       : [],
     isLoading,
+    profileImageUrl: userProfile?.profileImage ?? null,
   };
 }
 

@@ -19,6 +19,7 @@ type UserChecklistData = {
 type UserProfileData = {
   username: string;
   email: string;
+  profileImage?: string | null;
   birthYear: number;
   gender: string;
   campus: string;
