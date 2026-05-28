@@ -138,3 +138,5 @@ export const SHARED_LIFE_CONVERSATION_TOPICS: ConversationTopic[] = [
     title: "같이 하고 싶은 것들을 공유해요.",
   },
 ];
+
+export const CHAT_ROOM_LIST_DEFAULT_CATEGORY = "all" as const;
