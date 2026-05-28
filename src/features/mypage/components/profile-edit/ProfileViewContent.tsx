@@ -3,6 +3,7 @@ import { IconBadge, TagSelected } from "@/components/ui";
 import { ChecklistItem } from "@/features/roommate/components";
 import type { ProfileViewContentProps } from "@/features/mypage/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 function ProfileViewContent({
   checklistItems,
@@ -11,7 +12,7 @@ function ProfileViewContent({
   values,
 }: ProfileViewContentProps) {
   const basicInfoItems = [
-    { label: "이름", value: values.name },
+    { label: "이름", value: parseDisplayName(values.name) },
     { label: "이메일", value: values.email },
     { label: "출생년도", value: values.birthYear },
     { label: "성별", value: values.gender },
@@ -73,7 +74,7 @@ function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; ni
             aria-hidden="true"
             className="size-400 shrink-0 text-brand-primary [&_path]:stroke-current"
           />
-          <h2 className="typo-title2 min-w-0 text-text-strong">{nickname} 님의 체크리스트</h2>
+          <h2 className="typo-title2 min-w-0 text-text-strong">{parseDisplayName(nickname)} 님의 체크리스트</h2>
         </div>
 
         <div className="flex flex-col gap-1.5">
