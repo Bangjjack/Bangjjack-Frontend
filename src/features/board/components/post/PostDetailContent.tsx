@@ -15,6 +15,7 @@ import {
   PostDetailDescriptionCard,
   PostDetailInfoCard,
   PostDetailRoommatesCard,
+  PostDetailSkeleton,
   PostDetailTagsCard,
 } from "@/features/board/components/post";
 import { usePostDetail } from "@/features/board/hooks";
@@ -39,11 +40,7 @@ function PostDetailContent() {
   }
 
   if (isLoading) {
-    return (
-      <div className="flex h-dvh items-center justify-center bg-bg-primary">
-        <span className="typo-body2 text-text-caption">로딩 중...</span>
-      </div>
-    );
+    return <PostDetailSkeleton />;
   }
 
   if (isError || !post) {

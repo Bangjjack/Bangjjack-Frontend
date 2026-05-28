@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router";
 
 import {
   AlertDialog,
@@ -9,7 +10,9 @@ import {
   toast,
 } from "@/components/ui";
 import { usePostMatchRate } from "@/features/board/hooks";
+import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { MatchAlertDialog } from "@/features/board/components/roommate/MatchAlertDialog";
+import { useAuthStore } from "@/stores/authStore";
 
 type DialogTarget = "match" | "chat" | null;
 
@@ -33,8 +36,11 @@ function MatchActionBar({
   onMatchConfirm,
 }: MatchActionBarProps) {
   const isDisabled = !!disabledMessage;
+  const isOnboardingCompleted = useAuthStore((state) => state.isOnboardingCompleted);
+  const navigate = useNavigate();
 
   const [dialogTarget, setDialogTarget] = useState<DialogTarget>(null);
+  const [showChecklistDialog, setShowChecklistDialog] = useState(false);
   const [apiMatchData, setApiMatchData] = useState<{
     matchRate: number;
     matchHighlights: string[];
@@ -45,6 +51,10 @@ function MatchActionBar({
   const currentMatchData = apiMatchData ?? { matchRate, matchHighlights };
 
   async function handleMatchClick() {
+    if (!isOnboardingCompleted) {
+      setShowChecklistDialog(true);
+      return;
+    }
     const result = await refetch();
     if (result.isError) {
       toast.error("매칭률 정보를 불러오지 못했어요");
@@ -57,6 +67,14 @@ function MatchActionBar({
       });
     }
     setDialogTarget("match");
+  }
+
+  function handleChatClick() {
+    if (!isOnboardingCompleted) {
+      setShowChecklistDialog(true);
+      return;
+    }
+    setDialogTarget("chat");
   }
 
   function handleConfirm() {
@@ -90,12 +108,21 @@ function MatchActionBar({
             >
               매칭하기
             </Button>
-            <Button className="flex-1" onClick={() => setDialogTarget("chat")}>
+            <Button className="flex-1" onClick={handleChatClick}>
               채팅하기
             </Button>
           </>
         )}
       </div>
+
+      <ChecklistRequiredDialog
+        open={showChecklistDialog}
+        onOpenChange={setShowChecklistDialog}
+        onConfirm={() => {
+          setShowChecklistDialog(false);
+          navigate("/mypage/profile");
+        }}
+      />
 
       <MatchAlertDialog
         open={dialogTarget !== null}

@@ -40,7 +40,7 @@ function Header({
         <header className="px-400 pb-400 pt-9">
           <h1 className="typo-h3 text-text-strong">
             <span className="text-text-primary-alternative">{userName}</span>
-            <span>{"님 안녕하세요"}</span>
+            <span>{"님 안녕하세요!"}</span>
           </h1>
         </header>
       </div>

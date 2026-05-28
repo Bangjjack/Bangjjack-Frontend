@@ -2,6 +2,7 @@ export { PostActionMenu, type PostActionMenuProps } from "./PostActionMenu";
 export { PostChecklistContent } from "./PostChecklistContent";
 export { PostDetailBottomBar } from "./PostDetailBottomBar";
 export { PostDetailContent } from "./PostDetailContent";
+export { PostDetailSkeleton } from "./PostDetailSkeleton";
 export { PostDetailDescriptionCard } from "./PostDetailDescriptionCard";
 export { PostDetailInfoCard } from "./PostDetailInfoCard";
 export { PostDetailRoommatesCard } from "./PostDetailRoommatesCard";
