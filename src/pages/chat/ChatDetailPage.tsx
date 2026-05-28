@@ -89,6 +89,8 @@ export default function ChatDetailPage() {
         isProcessingRoommateRequest={isProcessingRoommateRequest}
         onRoommateRequestAccept={handleRoommateRequestAccept}
         onRoommateRequestReject={navigation.onRoommateRequestReject}
+        profileSummary={messageList.profileSummary}
+        recruitTitle={messageList.recruitTitle}
       />
 
       <ChatInputSection

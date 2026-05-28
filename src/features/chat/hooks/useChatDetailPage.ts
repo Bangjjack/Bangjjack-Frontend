@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, SEMESTER_LABEL } from "@/constants";
+import { usePostDetail } from "@/features/board/hooks";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
@@ -23,6 +25,8 @@ export type ChatDetailPageState = {
     hasPreviousMessages?: boolean;
     isLoadingPreviousMessages?: boolean;
     onLoadPreviousMessages?: () => void | Promise<unknown>;
+    profileSummary: string[];
+    recruitTitle?: string;
   };
   isLeavingChatRoom: boolean;
   navigation: {
@@ -114,6 +118,9 @@ function useChatDetailPage() {
   const chatDetail =
     locationState?.chatDetail ??
     (chatRoomFromList ? mapChatRoomListItemToChatDetail(chatRoomFromList) : undefined);
+  const recruitPostId =
+    chatDetail?.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
+  const { data: recruitPost } = usePostDetail(recruitPostId);
   const activeChatRoom =
     locationState?.chatRoom ??
     (chatRoomFromList ? mapChatRoomListItemToChatRoom(chatRoomFromList) : undefined);
@@ -233,6 +240,16 @@ function useChatDetailPage() {
         chatDetail?.nickname ?? "",
       )
     : undefined;
+  const recruitTitle = recruitPostId
+    ? (recruitPost?.title ?? chatDetail?.recruitTitle ?? "모집글")
+    : undefined;
+  const profileSummary = recruitPost
+    ? [
+        SEMESTER_LABEL[recruitPost.semester] ?? recruitPost.semester,
+        DORMITORY_LABEL[recruitPost.dormitory] ?? recruitPost.dormitory,
+        ROOM_SIZE_LABEL[recruitPost.roomSize] ?? recruitPost.roomSize,
+      ]
+    : (chatDetail?.profileSummary ?? []);
 
   const pageState: ChatDetailPageState = {
     chatDetail,
@@ -245,6 +262,8 @@ function useChatDetailPage() {
       hasPreviousMessages,
       isLoadingPreviousMessages,
       onLoadPreviousMessages: fetchPreviousMessages,
+      profileSummary,
+      recruitTitle,
     },
     isLeavingChatRoom,
     isProcessingRoommateRequest,

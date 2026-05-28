@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 
-import { DORMITORY_LABEL, ROOM_SIZE_LABEL, SEMESTER_LABEL } from "@/constants";
-import { usePostDetail } from "@/features/board/hooks";
 import { ChatMatchCard, ChatMessageList } from "@/features/chat/components";
 import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 
@@ -17,6 +15,8 @@ export type ChatMessageListSectionProps = {
   onReportClick?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
+  profileSummary: string[];
+  recruitTitle?: string;
   isProcessingRoommateRequest?: boolean;
 };
 
@@ -33,6 +33,8 @@ function ChatMessageListSection({
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
+  profileSummary,
+  recruitTitle,
 }: ChatMessageListSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const previousScrollHeightRef = useRef(0);
@@ -73,20 +75,6 @@ function ChatMessageListSection({
     shouldRestoreScrollPositionRef.current = true;
     void onLoadPreviousMessages?.();
   };
-
-  const recruitPostId =
-    chatDetail.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
-  const { data: recruitPost } = usePostDetail(recruitPostId);
-  const recruitTitle = recruitPostId
-    ? (recruitPost?.title ?? chatDetail.recruitTitle ?? "모집글")
-    : undefined;
-  const profileSummary = recruitPost
-    ? [
-        SEMESTER_LABEL[recruitPost.semester] ?? recruitPost.semester,
-        DORMITORY_LABEL[recruitPost.dormitory] ?? recruitPost.dormitory,
-        ROOM_SIZE_LABEL[recruitPost.roomSize] ?? recruitPost.roomSize,
-      ]
-    : chatDetail.profileSummary;
 
   return (
     <section
