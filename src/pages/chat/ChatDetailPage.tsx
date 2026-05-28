@@ -95,23 +95,31 @@ export default function ChatDetailPage() {
 
       <ChatInputSection
         chatDetail={chatDetail}
-        draftMessage={draftMessage}
-        inputMenuClosing={inputMenuClosing}
-        inputMenuOpen={inputMenuOpen}
-        isLeavingChatRoom={isLeavingChatRoom}
-        isSendingInviteRequest={isSendingInviteRequest}
-        inviteSheetOpen={inviteSheetOpen}
-        leaveSheetOpen={leaveSheetOpen}
-        onCloseInputMenu={closeInputMenu}
-        onCloseInviteSheet={closeInviteSheet}
-        onCloseLeaveSheet={closeLeaveSheet}
-        onCompleteInputMenuClose={completeInputMenuClose}
-        onInputMenuAction={handleInputMenuAction}
-        onLeaveChatRoom={handleConfirmLeaveChatRoom}
-        onSendInviteRequest={handleSendInviteRequest}
-        onSubmitMessage={handleSubmitMessage}
-        onToggleInputMenu={toggleInputMenu}
-        onUpdateDraftMessage={setDraftMessage}
+        composer={{
+          draftMessage,
+          onSubmitMessage: handleSubmitMessage,
+          onToggleInputMenu: toggleInputMenu,
+          onUpdateDraftMessage: setDraftMessage,
+        }}
+        inputMenu={{
+          isClosing: inputMenuClosing,
+          isOpen: inputMenuOpen,
+          onAction: handleInputMenuAction,
+          onClose: closeInputMenu,
+          onCompleteClose: completeInputMenuClose,
+        }}
+        inviteSheet={{
+          isSendingInviteRequest,
+          onClose: closeInviteSheet,
+          onSendInviteRequest: handleSendInviteRequest,
+          open: inviteSheetOpen,
+        }}
+        leaveSheet={{
+          isLeavingChatRoom,
+          onClose: closeLeaveSheet,
+          onLeaveChatRoom: handleConfirmLeaveChatRoom,
+          open: leaveSheetOpen,
+        }}
       />
     </div>
   );
