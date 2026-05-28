@@ -5,6 +5,7 @@ import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
 import { Button, Card, Header } from "@/components/ui";
 import { ChecklistCard } from "@/features/roommate/components";
 import { useBookmarkToggle, usePostDetail } from "@/features/board/hooks";
+import { useAuthStore } from "@/stores/authStore";
 import { computeChecklistMatchStats, mapLifestyleChecklistToEntries } from "@/features/board/utils";
 import { useGoBack } from "@/hooks";
 
@@ -25,6 +26,7 @@ function RoommateListContent() {
     return userId && Number.isInteger(parsed) ? parsed : null;
   });
   const { isBookmarked, isOwner, toggle } = useBookmarkToggle(postId);
+  const currentUserId = useAuthStore((state) => state.userId);
 
   if (!id || isNaN(postId)) {
     return (
@@ -97,7 +99,7 @@ function RoommateListContent() {
             <ChecklistCard
               items={checklist}
               nickname={selectedMember.nickname}
-              hideMatchStatus={isOwner}
+              hideMatchStatus={effectiveUserId === currentUserId}
             />
           )}
         </div>
