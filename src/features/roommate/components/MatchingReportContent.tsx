@@ -23,6 +23,7 @@ type MatchingReportContentProps = {
 
 function MatchingReportContent({
   postId,
+  roommateId,
   targetUserId,
   targetUsername,
   targetProfileImage,
@@ -33,11 +34,13 @@ function MatchingReportContent({
 
   const { data, isLoading, isError, refetch } = usePostMatchRate(postId ?? 0, !!postId);
 
+  const effectiveTargetUserId = targetUserId ?? roommateId;
+
   function handleMatchClick() {
-    if (!targetUserId) return;
+    if (!effectiveTargetUserId) return;
 
     createChatRoom(
-      { targetUserId },
+      { targetUserId: effectiveTargetUserId },
       {
         onError: () => {
           toast.error("채팅방을 생성하지 못했어요.");
@@ -45,7 +48,7 @@ function MatchingReportContent({
         onSuccess: (chatRoom) => {
           const chatDetail: ChatDetail = {
             dateLabel: "",
-            id: targetUserId,
+            id: effectiveTargetUserId,
             matchRate: data?.matchRate ?? 0,
             messages: [],
             nickname: parseDisplayName(targetUsername ?? ""),
@@ -147,7 +150,7 @@ function MatchingReportContent({
       <div className="absolute inset-x-0 bottom-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
         <Button
           className="w-full"
-          disabled={!targetUserId || isCreatingChatRoom}
+          disabled={!effectiveTargetUserId || isCreatingChatRoom}
           onClick={handleMatchClick}
         >
           매칭하기

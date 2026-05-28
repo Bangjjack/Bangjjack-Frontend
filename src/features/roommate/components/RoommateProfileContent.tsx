@@ -125,14 +125,14 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
         onMatchConfirm={() =>
           navigate(`/roommate/${roommateId}/matching-report`, {
             state: {
-              targetUsername: userProfile?.username,
-              targetProfileImage: userProfile?.profileImage,
+              targetUsername: userProfile?.username ?? profile?.nickname,
+              targetProfileImage: userProfile?.profileImage ?? profile?.profileImage,
             },
           })
         }
         targetUserId={roommateId ?? 0}
-        targetUsername={userProfile?.username ?? ""}
-        targetProfileImage={userProfile?.profileImage ?? null}
+        targetUsername={userProfile?.username ?? profile?.nickname ?? ""}
+        targetProfileImage={userProfile?.profileImage ?? profile?.profileImage ?? null}
       />
     </div>
   );

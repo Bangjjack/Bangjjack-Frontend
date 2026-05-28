@@ -115,6 +115,7 @@ function RoommateListContent() {
       ) : (
         <MatchActionBar
           postId={postId}
+          disabledMessage={effectiveUserId === null ? "룸메이트를 선택해주세요" : undefined}
           leadingElement={
             <button
               type="button"

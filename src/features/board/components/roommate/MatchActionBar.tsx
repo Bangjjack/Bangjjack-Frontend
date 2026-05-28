@@ -17,7 +17,7 @@ import { useCreateChatRoom } from "@/features/chat";
 import type { ChatDetail } from "@/features/chat";
 import { parseDisplayName } from "@/lib/parseDisplayName";
 
-type DialogTarget = "match" | "chat" | null;
+type DialogTarget = "match" | null;
 
 type MatchActionBarProps = {
   disabledMessage?: string;
@@ -82,44 +82,39 @@ function MatchActionBar({
       setShowChecklistDialog(true);
       return;
     }
-    setDialogTarget("chat");
+    createChatRoom(
+      { targetUserId },
+      {
+        onError: () => {
+          toast.error("채팅방을 생성하지 못했어요.");
+        },
+        onSuccess: (chatRoom) => {
+          const chatDetail: ChatDetail = {
+            dateLabel: "",
+            id: targetUserId,
+            matchRate: currentMatchData.matchRate,
+            messages: [],
+            nickname: parseDisplayName(targetUsername),
+            profileImage: targetProfileImage,
+            profileSummary: currentMatchData.matchHighlights,
+            recruitPostId: postId,
+            startSource: "recruit_post",
+          };
+
+          navigate(`/chat/${chatRoom.roomId}`, {
+            state: {
+              chatDetail,
+              chatRoom,
+            },
+          });
+        },
+      },
+    );
   }
 
   function handleConfirm() {
-    if (dialogTarget === "match") {
-      setDialogTarget(null);
-      onMatchConfirm();
-    } else {
-      setDialogTarget(null);
-      createChatRoom(
-        { targetUserId },
-        {
-          onError: () => {
-            toast.error("채팅방을 생성하지 못했어요.");
-          },
-          onSuccess: (chatRoom) => {
-            const chatDetail: ChatDetail = {
-              dateLabel: "",
-              id: targetUserId,
-              matchRate: currentMatchData.matchRate,
-              messages: [],
-              nickname: parseDisplayName(targetUsername),
-              profileImage: targetProfileImage,
-              profileSummary: currentMatchData.matchHighlights,
-              recruitPostId: postId,
-              startSource: "recruit_post",
-            };
-
-            navigate(`/chat/${chatRoom.roomId}`, {
-              state: {
-                chatDetail,
-                chatRoom,
-              },
-            });
-          },
-        },
-      );
-    }
+    setDialogTarget(null);
+    onMatchConfirm();
   }
 
   return (
