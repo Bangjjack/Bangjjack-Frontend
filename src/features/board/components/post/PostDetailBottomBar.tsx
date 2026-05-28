@@ -1,32 +1,71 @@
 import { useNavigate } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button } from "@/components/ui";
-import { useBookmarkToggle } from "@/features/board/hooks";
+import { Button, toast } from "@/components/ui";
 import { MatchActionBar } from "@/features/board/components/roommate";
+import { useBookmarkToggle } from "@/features/board/hooks";
+import { useCreateChatRoom, type ChatDetail } from "@/features/chat";
 
 interface PostDetailBottomBarProps {
-  postId: number;
   isOwner: boolean;
-  matchRate?: number;
   matchHighlights?: string[];
+  matchRate?: number;
+  postId: number;
+  targetProfileImage?: string | null;
+  targetUserId: number;
+  targetUsername: string;
 }
 
 function PostDetailBottomBar({
-  postId,
   isOwner,
-  matchRate = 0,
   matchHighlights = [],
+  matchRate = 0,
+  postId,
+  targetProfileImage,
+  targetUserId,
+  targetUsername,
 }: PostDetailBottomBarProps) {
   const navigate = useNavigate();
   const { isBookmarked, toggle } = useBookmarkToggle(postId);
+  const { isPending: isCreatingChatRoom, mutate: createChatRoom } = useCreateChatRoom();
+
+  const handleChatConfirm = () => {
+    createChatRoom(
+      { targetUserId },
+      {
+        onError: () => {
+          toast.error("채팅방을 생성하지 못했어요.");
+        },
+        onSuccess: (chatRoom) => {
+          const chatDetail: ChatDetail = {
+            dateLabel: "",
+            id: targetUserId,
+            matchRate,
+            messages: [],
+            nickname: targetUsername,
+            profileImage: targetProfileImage,
+            profileSummary: matchHighlights,
+            recruitPostId: postId,
+            startSource: "recruit_post",
+          };
+
+          navigate(`/chat/${chatRoom.roomId}`, {
+            state: {
+              chatDetail,
+              chatRoom,
+            },
+          });
+        },
+      },
+    );
+  };
 
   const bookmarkButton = (
     <button
-      type="button"
       aria-label={isBookmarked ? "북마크 해제" : "북마크"}
       className="flex size-[30px] shrink-0 items-center justify-center"
       onClick={toggle}
+      type="button"
     >
       {isBookmarked ? (
         <BookmarkFilledIcon className="size-[30px] text-brand-primary" />
@@ -48,12 +87,13 @@ function PostDetailBottomBar({
 
   return (
     <MatchActionBar
-      postId={postId}
+      disabledMessage={isCreatingChatRoom ? "채팅방 생성 중..." : undefined}
       leadingElement={bookmarkButton}
-      matchRate={matchRate}
       matchHighlights={matchHighlights}
+      matchRate={matchRate}
+      onChatConfirm={handleChatConfirm}
       onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
-      onChatConfirm={() => navigate("/chat")}
+      postId={postId}
     />
   );
 }

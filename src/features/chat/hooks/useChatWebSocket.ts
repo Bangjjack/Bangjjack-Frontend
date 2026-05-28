@@ -3,37 +3,43 @@ import { useEffect, useRef, useState } from "react";
 import {
   createChatWebSocketUrls,
   isChatErrorMessage,
+  isChatReadReceiptMessage,
   isChatReceivedMessage,
   useIssueChatWsToken,
 } from "@/features/chat";
 import type {
+  ChatClientMessagePayload,
   ChatConnectionStatus,
   ChatErrorMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
-  ChatSendMessagePayload,
 } from "@/features/chat";
 
 type UseChatWebSocketParams = {
   enabled?: boolean;
   onErrorMessage?: (message: ChatErrorMessage) => void;
   onMessage?: (message: ChatReceivedMessage) => void;
+  onReadReceipt?: (message: ChatReadReceiptMessage) => void;
 };
 
 export const useChatWebSocket = ({
   enabled = true,
   onErrorMessage,
   onMessage,
+  onReadReceipt,
 }: UseChatWebSocketParams) => {
   const socketRef = useRef<WebSocket | null>(null);
   const onErrorMessageRef = useRef(onErrorMessage);
   const onMessageRef = useRef(onMessage);
+  const onReadReceiptRef = useRef(onReadReceipt);
   const [status, setStatus] = useState<ChatConnectionStatus>("idle");
   const { mutateAsync: issueWsToken } = useIssueChatWsToken();
 
   useEffect(() => {
     onErrorMessageRef.current = onErrorMessage;
     onMessageRef.current = onMessage;
-  }, [onErrorMessage, onMessage]);
+    onReadReceiptRef.current = onReadReceipt;
+  }, [onErrorMessage, onMessage, onReadReceipt]);
 
   useEffect(() => {
     if (!enabled) {
@@ -54,23 +60,16 @@ export const useChatWebSocket = ({
         return;
       }
 
-      console.info("[chat] Connecting WebSocket.", { url: webSocketUrl });
       socket = new WebSocket(webSocketUrl);
       socketRef.current = socket;
-      bindSocketEvents(socket, webSocketUrl, urls, index);
+      bindSocketEvents(socket, urls, index);
     };
 
-    const bindSocketEvents = (
-      nextSocket: WebSocket,
-      webSocketUrl: string,
-      urls: string[],
-      index: number,
-    ) => {
+    const bindSocketEvents = (nextSocket: WebSocket, urls: string[], index: number) => {
       let hasOpened = false;
 
       nextSocket.onopen = () => {
         hasOpened = true;
-        console.info("[chat] WebSocket connected.", { url: webSocketUrl });
         setStatus("open");
       };
 
@@ -79,42 +78,33 @@ export const useChatWebSocket = ({
 
         try {
           parsedMessage = JSON.parse(String(event.data));
-        } catch (error) {
-          console.error("[chat] Failed to parse WebSocket message.", error);
+        } catch {
           return;
         }
 
         if (isChatErrorMessage(parsedMessage)) {
-          console.error("[chat] WebSocket server error.", parsedMessage);
           onErrorMessageRef.current?.(parsedMessage);
           return;
         }
 
         if (isChatReceivedMessage(parsedMessage)) {
-          console.info("[chat] WebSocket message received.", parsedMessage);
           onMessageRef.current?.(parsedMessage);
+          return;
+        }
+
+        if (isChatReadReceiptMessage(parsedMessage)) {
+          onReadReceiptRef.current?.(parsedMessage);
         }
       };
 
-      nextSocket.onerror = () => {
-        console.error("[chat] WebSocket connection error.", { url: webSocketUrl });
-      };
+      nextSocket.onerror = () => {};
 
-      nextSocket.onclose = (event) => {
-        console.info("[chat] WebSocket closed.", {
-          code: event.code,
-          reason: event.reason,
-          url: webSocketUrl,
-          wasClean: event.wasClean,
-        });
-
+      nextSocket.onclose = () => {
         if (!isActive) {
           return;
         }
 
         if (!hasOpened && urls[index + 1]) {
-          const fallbackUrl = urls[index + 1];
-          console.info("[chat] Retrying WebSocket with fallback URL.", { url: fallbackUrl });
           connectSocket(urls, index + 1);
           return;
         }
@@ -140,8 +130,7 @@ export const useChatWebSocket = ({
         }
 
         connectSocket(webSocketUrls, 0);
-      } catch (error) {
-        console.error("[chat] Failed to connect WebSocket.", error);
+      } catch {
         setStatus("error");
       }
     };
@@ -158,15 +147,11 @@ export const useChatWebSocket = ({
     };
   }, [enabled, issueWsToken]);
 
-  const sendMessage = (payload: ChatSendMessagePayload) => {
+  const sendMessage = (payload: ChatClientMessagePayload) => {
     if (socketRef.current?.readyState !== WebSocket.OPEN) {
-      console.warn("[chat] Cannot send message because WebSocket is not open.", {
-        readyState: socketRef.current?.readyState,
-      });
       return false;
     }
 
-    console.info("[chat] Sending WebSocket message.", payload);
     socketRef.current.send(JSON.stringify(payload));
     return true;
   };

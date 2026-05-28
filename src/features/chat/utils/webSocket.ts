@@ -1,6 +1,7 @@
 import { WS_BASE_URL } from "@/constants";
 import type {
   ChatErrorMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
   ChatServerMessageType,
 } from "@/features/chat/types";
@@ -42,12 +43,29 @@ export const isChatReceivedMessage = (value: unknown): value is ChatReceivedMess
   const message = value as Partial<ChatReceivedMessage>;
 
   return (
+    message.type === "CHAT_MESSAGE" &&
     typeof message.messageId === "number" &&
     typeof message.roomId === "number" &&
     typeof message.senderId === "number" &&
     typeof message.content === "string" &&
     isChatServerMessageType(message.messageType) &&
     typeof message.createdAt === "string"
+  );
+};
+
+export const isChatReadReceiptMessage = (value: unknown): value is ChatReadReceiptMessage => {
+  if (typeof value !== "object" || value == null) {
+    return false;
+  }
+
+  const message = value as Partial<ChatReadReceiptMessage>;
+
+  return (
+    message.type === "READ_RECEIPT" &&
+    typeof message.roomId === "number" &&
+    typeof message.readerId === "number" &&
+    typeof message.lastReadMessageId === "number" &&
+    typeof message.readAt === "string"
   );
 };
 

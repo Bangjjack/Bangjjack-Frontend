@@ -1,28 +1,87 @@
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, SEMESTER_LABEL } from "@/constants";
+import { usePostDetail } from "@/features/board/hooks";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
-import { useCreateChatRoom } from "@/features/chat/hooks/useCreateChatRoom";
-import { CHAT_DETAILS } from "@/features/chat/mocks";
-import type { ChatDetail, ChatMessage, ChatRoom } from "@/features/chat/types";
+import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
+import { useLeaveChatRoom } from "@/features/chat/hooks/useLeaveChatRoom";
+import { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessRoommateApplication";
+import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
+import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
+import { getApiErrorMessage } from "@/lib/api-error";
 import { useAuthStore } from "@/stores/authStore";
 
-export type ChatDetailPageProps = {
-  chatDetail: ChatDetail;
-  className?: string;
-  currentUserId?: number | null;
-  hasPreviousMessages?: boolean;
-  initialMessages?: ChatMessage[];
-  isLoadingPreviousMessages?: boolean;
-  roomId?: number;
-  onBack: () => void;
-  onLoadPreviousMessages?: () => void | Promise<unknown>;
-  onProfileClick?: () => void;
-  onRecruitClick?: () => void;
-  onRoommateRequestAccept?: () => void;
+export type ChatDetailPageState = {
+  chatDetail?: ChatDetail;
+  composer: {
+    currentUserId?: number | null;
+    initialPartnerLastReadMessageId?: number | null;
+    initialMessages?: ChatMessage[];
+    roomId?: number;
+  };
+  messageList: {
+    hasPreviousMessages?: boolean;
+    isLoadingPreviousMessages?: boolean;
+    onLoadPreviousMessages?: () => void | Promise<unknown>;
+    profileSummary: string[];
+    recruitTitle?: string;
+  };
+  isLeavingChatRoom: boolean;
+  navigation: {
+    onBack: () => void;
+    onProfileClick?: () => void;
+    onRecruitClick?: () => void;
+    onLeaveChatRoom?: () => void;
+    onReportClick?: () => void;
+    onRoommateRequestAccept?: (
+      applicationId?: number,
+      options?: { onSuccess?: (processedAt?: string) => void },
+    ) => void;
+    onRoommateRequestReject?: (applicationId?: number) => void;
+  };
+  isProcessingRoommateRequest: boolean;
 };
+
+type ChatDetailLocationState = {
+  chatDetail: ChatDetail;
+  chatRoom: ChatRoom;
+};
+
+function isChatDetailLocationState(state: unknown): state is ChatDetailLocationState {
+  return (
+    typeof state === "object" &&
+    state !== null &&
+    "chatDetail" in state &&
+    "chatRoom" in state &&
+    typeof (state as ChatDetailLocationState).chatRoom.roomId === "number"
+  );
+}
+
+function mapChatRoomListItemToChatDetail(chatRoom: ChatRoomListItem): ChatDetail {
+  return {
+    dateLabel: "",
+    id: chatRoom.partnerId,
+    matchRate: 0,
+    messages: [],
+    nickname: chatRoom.partnerName,
+    profileSummary: getChatRoomImportanceTags(chatRoom),
+    profileImage: chatRoom.partnerProfileImage,
+    startSource: "ai_recommendation",
+  };
+}
+
+function mapChatRoomListItemToChatRoom(chatRoom: ChatRoomListItem): ChatRoom {
+  return {
+    createdAt: chatRoom.lastMessageAt ?? "",
+    isNewRoom: false,
+    participants: [{ userId: chatRoom.partnerId }],
+    roomId: chatRoom.roomId,
+    roomType: "DIRECT",
+  };
+}
 
 function getCurrentUserIdFromChatRoom(
   chatRoom: ChatRoom | undefined,
@@ -37,18 +96,35 @@ function getCurrentUserIdFromChatRoom(
 
 function useChatDetailPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { chatId } = useParams();
   const authUserId = useAuthStore((state) => state.userId);
+  const { isPending: isLeavingChatRoom, mutate: leaveChatRoom } = useLeaveChatRoom();
+  const { isPending: isProcessingRoommateRequest, mutate: processRoommateApplication } =
+    useProcessRoommateApplication();
 
   const parsedChatId = Number(chatId);
-  const chatDetail = Number.isNaN(parsedChatId) ? undefined : CHAT_DETAILS[parsedChatId];
+  const locationState =
+    isChatDetailLocationState(location.state) && location.state.chatRoom.roomId === parsedChatId
+      ? location.state
+      : undefined;
   const {
-    data: chatRoom,
-    isError: isCreateChatRoomError,
-    isPending: isCreatingChatRoom,
-    isSuccess: isCreateChatRoomSuccess,
-    mutate: createChatRoom,
-  } = useCreateChatRoom();
+    data: chatRoomsData,
+    isError: isChatRoomsError,
+    isPending: isChatRoomsPending,
+  } = useChatRooms();
+  const chatRoomFromList = chatRoomsData?.rooms.find(
+    (chatRoom) => chatRoom.roomId === parsedChatId,
+  );
+  const chatDetail =
+    locationState?.chatDetail ??
+    (chatRoomFromList ? mapChatRoomListItemToChatDetail(chatRoomFromList) : undefined);
+  const recruitPostId =
+    chatDetail?.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
+  const { data: recruitPost } = usePostDetail(recruitPostId);
+  const activeChatRoom =
+    locationState?.chatRoom ??
+    (chatRoomFromList ? mapChatRoomListItemToChatRoom(chatRoomFromList) : undefined);
   const {
     data: chatMessagesData,
     fetchNextPage: fetchPreviousMessages,
@@ -56,27 +132,27 @@ function useChatDetailPage() {
     isError: isChatMessagesError,
     isFetchingNextPage: isLoadingPreviousMessages,
   } = useChatMessages({
-    roomId: chatRoom?.roomId,
+    roomId: Number.isNaN(parsedChatId) ? undefined : parsedChatId,
   });
 
   useEffect(() => {
-    if (!chatDetail) {
+    if (Number.isNaN(parsedChatId)) {
       navigate("/chat", { replace: true });
       return;
     }
 
-    if (chatRoom || isCreatingChatRoom || isCreateChatRoomSuccess) {
+    if (chatDetail || isChatRoomsPending) {
       return;
     }
 
-    createChatRoom({ targetUserId: chatDetail.id });
-  }, [chatDetail, chatRoom, createChatRoom, isCreateChatRoomSuccess, isCreatingChatRoom, navigate]);
+    navigate("/chat", { replace: true });
+  }, [chatDetail, isChatRoomsPending, navigate, parsedChatId]);
 
   useEffect(() => {
-    if (isCreateChatRoomError) {
+    if (isChatRoomsError) {
       toast.error("채팅방을 불러오지 못했습니다.");
     }
-  }, [isCreateChatRoomError]);
+  }, [isChatRoomsError]);
 
   useEffect(() => {
     if (isChatMessagesError) {
@@ -84,38 +160,129 @@ function useChatDetailPage() {
     }
   }, [isChatMessagesError]);
 
-  if (!chatDetail) {
-    return null;
-  }
-
   const handleRecruitClick = () => {
-    if (!chatDetail.recruitPostId) {
+    if (!chatDetail?.recruitPostId) {
       return;
     }
 
     navigate(`/board/${chatDetail.recruitPostId}`);
   };
 
-  const currentUserId = getCurrentUserIdFromChatRoom(chatRoom, chatDetail.id, authUserId);
-  const initialMessages = chatMessagesData
-    ? mapHistoryMessagesToChatMessages(chatMessagesData.messages, currentUserId)
-    : undefined;
+  const handleLeaveChatRoom = () => {
+    if (Number.isNaN(parsedChatId)) {
+      toast.error("채팅방 정보를 확인할 수 없어요.");
+      return;
+    }
 
-  const contentProps: ChatDetailPageProps = {
-    chatDetail,
-    currentUserId,
-    hasPreviousMessages,
-    initialMessages,
-    isLoadingPreviousMessages,
-    roomId: chatRoom?.roomId,
-    onBack: () => navigate("/chat"),
-    onLoadPreviousMessages: fetchPreviousMessages,
-    onProfileClick: () => navigate(`/roommate/${chatDetail.id}`),
-    onRecruitClick: handleRecruitClick,
-    onRoommateRequestAccept: () => navigate(`/chat/${chatDetail.id}/roommate-confirmed`),
+    leaveChatRoom(parsedChatId, {
+      onError: (error) => {
+        toast.error(getApiErrorMessage(error, "채팅방을 나가지 못했어요."));
+      },
+      onSuccess: () => {
+        toast.success("채팅방을 나갔어요.");
+        navigate("/chat", { replace: true });
+      },
+    });
   };
 
-  return contentProps;
+  const handleRoommateRequestAccept = (
+    applicationId?: number,
+    options?: { onSuccess?: (processedAt?: string) => void },
+  ) => {
+    if (applicationId == null) {
+      toast.error("룸메이트 신청 정보를 확인할 수 없어요.");
+      return;
+    }
+
+    processRoommateApplication(
+      { applicationId, status: "ACCEPTED" },
+      {
+        onError: (error) => {
+          toast.error(getApiErrorMessage(error, "룸메이트 신청 수락에 실패했어요."));
+        },
+        onSuccess: (application) => {
+          options?.onSuccess?.(application.processedAt);
+          toast.success("룸메이트 신청을 수락했어요.");
+
+          if (chatDetail) {
+            navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: { chatDetail } });
+          }
+        },
+      },
+    );
+  };
+
+  const handleRoommateRequestReject = (applicationId?: number) => {
+    if (applicationId == null) {
+      toast.error("룸메이트 신청 정보를 확인할 수 없어요.");
+      return;
+    }
+
+    processRoommateApplication(
+      { applicationId, status: "REJECTED" },
+      {
+        onError: (error) => {
+          toast.error(getApiErrorMessage(error, "룸메이트 신청 거절에 실패했어요."));
+        },
+        onSuccess: () => {
+          toast.success("룸메이트 신청을 거절했어요.");
+        },
+      },
+    );
+  };
+
+  const currentUserId = chatDetail
+    ? getCurrentUserIdFromChatRoom(activeChatRoom, chatDetail.id, authUserId)
+    : authUserId;
+  const initialMessages = chatMessagesData
+    ? mapHistoryMessagesToChatMessages(
+        chatMessagesData.messages,
+        currentUserId,
+        chatDetail?.nickname ?? "",
+      )
+    : undefined;
+  const recruitTitle = recruitPostId
+    ? (recruitPost?.title ?? chatDetail?.recruitTitle ?? "모집글")
+    : undefined;
+  const profileSummary = recruitPost
+    ? [
+        SEMESTER_LABEL[recruitPost.semester] ?? recruitPost.semester,
+        DORMITORY_LABEL[recruitPost.dormitory] ?? recruitPost.dormitory,
+        ROOM_SIZE_LABEL[recruitPost.roomSize] ?? recruitPost.roomSize,
+      ]
+    : (chatDetail?.profileSummary ?? []);
+
+  const pageState: ChatDetailPageState = {
+    chatDetail,
+    composer: {
+      currentUserId,
+      initialPartnerLastReadMessageId: chatMessagesData?.partnerLastReadMessageId,
+      initialMessages,
+      roomId: Number.isNaN(parsedChatId) || !chatDetail ? undefined : parsedChatId,
+    },
+    messageList: {
+      hasPreviousMessages,
+      isLoadingPreviousMessages,
+      onLoadPreviousMessages: fetchPreviousMessages,
+      profileSummary,
+      recruitTitle,
+    },
+    isLeavingChatRoom,
+    isProcessingRoommateRequest,
+    navigation: {
+      onBack: () => navigate("/chat"),
+      onLeaveChatRoom: chatDetail ? handleLeaveChatRoom : undefined,
+      onProfileClick: chatDetail ? () => navigate(`/roommate/${chatDetail.id}`) : undefined,
+      onRecruitClick: chatDetail ? handleRecruitClick : undefined,
+      onReportClick: chatDetail
+        ? () => navigate(`/roommate/${chatDetail.id}/matching-report`)
+        : undefined,
+      onRoommateRequestAccept: chatDetail ? handleRoommateRequestAccept : undefined,
+      onRoommateRequestReject: chatDetail ? handleRoommateRequestReject : undefined,
+    },
+  };
+
+  return pageState;
 }
 
 export { useChatDetailPage };

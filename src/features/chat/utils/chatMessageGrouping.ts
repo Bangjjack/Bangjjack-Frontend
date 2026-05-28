@@ -4,13 +4,8 @@ export function getMessageDateBadgeLabels(messages: ChatMessage[], fallbackDateL
   let previousDateKey: string | undefined;
 
   return messages.map((message) => {
-    const isTextMessage = message.type === "outgoing" || message.type === "incoming";
-    const messageDateKey = isTextMessage
-      ? (message.dateKey ?? fallbackDateLabel)
-      : fallbackDateLabel;
-    const messageDateLabel = isTextMessage
-      ? (message.dateLabel ?? fallbackDateLabel)
-      : fallbackDateLabel;
+    const messageDateKey = message.dateKey ?? fallbackDateLabel;
+    const messageDateLabel = message.dateLabel ?? fallbackDateLabel;
 
     if (messageDateKey === previousDateKey) {
       return null;

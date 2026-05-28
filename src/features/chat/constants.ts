@@ -1,7 +1,26 @@
 import type { ComponentType, SVGProps } from "react";
 
-import { FanIcon, MoonIcon, BrushCleaningIcon, ThermometerIcon, UsersIcon } from "@/assets/icons";
-import type { ChatInputMenuItem } from "@/features/chat/types";
+import {
+  FanIcon,
+  MoonIcon,
+  BrushCleaningIcon,
+  SquareArrowRightExitIcon,
+  ThermometerIcon,
+  UsersIcon,
+} from "@/assets/icons";
+import type { ChatInputMenuItem, ChatTab } from "@/features/chat/types";
+
+export const CHAT_TAB_CATEGORY = {
+  all: undefined,
+  roommateRequest: "APPLICATION",
+} as const satisfies Record<ChatTab, "APPLICATION" | undefined>;
+
+export const CHAT_TABS: Array<{ key: ChatTab; label: string }> = [
+  { key: "all", label: "전체" },
+  { key: "roommateRequest", label: "룸메이트 요청" },
+];
+
+export const CHAT_HELPER_TEXT = "매칭된 룸메이트에게 먼저 말을 걸어보세요.";
 
 export type GuideChecklistItem = {
   category: string;
@@ -30,6 +49,14 @@ export const CHAT_INPUT_MENU_ITEMS: ChatInputMenuItem[] = [
     iconClassName: "text-brand-primary",
     id: "invite",
     title: "룸메이트 초대 요청",
+  },
+  {
+    description: "대화 내역을 다시 확인하기 어려워요",
+    icon: SquareArrowRightExitIcon,
+    iconBackgroundClassName: "bg-state-error-light",
+    iconClassName: "text-state-error",
+    id: "leave",
+    title: "채팅방 나가기",
   },
 ];
 
@@ -111,3 +138,5 @@ export const SHARED_LIFE_CONVERSATION_TOPICS: ConversationTopic[] = [
     title: "같이 하고 싶은 것들을 공유해요.",
   },
 ];
+
+export const CHAT_ROOM_LIST_DEFAULT_CATEGORY = "all" as const;

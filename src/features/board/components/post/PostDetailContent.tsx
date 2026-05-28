@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { Header } from "@/components/ui";
-import { useFadeInOnScroll } from "@/hooks";
-
 import {
   DORMITORY_LABEL,
   MEMBER_ROLE,
@@ -11,9 +9,6 @@ import {
   ROOM_SIZE_MAX,
   SEMESTER_LABEL,
 } from "@/constants";
-import { usePostDetail } from "@/features/board/hooks";
-import { computeChecklistMatchStats, mapSharedLifestyleToHabits } from "@/features/board/utils";
-
 import {
   PostActionMenu,
   PostDetailBottomBar,
@@ -23,6 +18,9 @@ import {
   PostDetailSkeleton,
   PostDetailTagsCard,
 } from "@/features/board/components/post";
+import { usePostDetail } from "@/features/board/hooks";
+import { computeChecklistMatchStats, mapSharedLifestyleToHabits } from "@/features/board/utils";
+import { useFadeInOnScroll } from "@/hooks";
 
 function PostDetailContent() {
   const navigate = useNavigate();
@@ -58,10 +56,10 @@ function PostDetailContent() {
   const isClosed = currentMembers === maxMembers;
   const habits = mapSharedLifestyleToHabits(post.sharedLifestyle);
 
-  const leader = post.members.find((m) => m.role === MEMBER_ROLE.LEADER);
-  const { matchRate, matchHighlights } = leader
+  const leader = post.members.find((member) => member.role === MEMBER_ROLE.LEADER);
+  const { matchHighlights, matchRate } = leader
     ? computeChecklistMatchStats(leader.lifestyleChecklist)
-    : { matchRate: 0, matchHighlights: [] };
+    : { matchHighlights: [], matchRate: 0 };
 
   const recruitTags = [
     SEMESTER_LABEL[post.semester] ?? post.semester,
@@ -79,29 +77,32 @@ function PostDetailContent() {
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
-      <PostActionMenu postId={id} isOpen={isMenuOpen} onToggle={() => setIsMenuOpen(false)} />
+      <PostActionMenu isOpen={isMenuOpen} postId={id} onToggle={() => setIsMenuOpen(false)} />
 
       <main className="scrollbar-none min-h-0 flex-1 overflow-y-auto pb-[100px] pt-400">
         <div ref={fadeInRef} className="flex flex-col gap-300 px-400">
           <PostDetailInfoCard
-            title={post.title}
-            isClosed={isClosed}
-            currentMembers={currentMembers}
-            maxMembers={maxMembers}
             author={post.author}
             createdAt={post.createdAt}
+            currentMembers={currentMembers}
+            isClosed={isClosed}
+            maxMembers={maxMembers}
+            title={post.title}
           />
           <PostDetailDescriptionCard description={post.description} recruitTags={recruitTags} />
           <PostDetailTagsCard habits={habits} roommatePreference={post.roommatePreference} />
-          <PostDetailRoommatesCard postId={postId} members={post.members} />
+          <PostDetailRoommatesCard members={post.members} postId={postId} />
         </div>
       </main>
 
       <PostDetailBottomBar
-        postId={postId}
         isOwner={post.isOwner}
-        matchRate={matchRate}
         matchHighlights={matchHighlights}
+        matchRate={matchRate}
+        postId={postId}
+        targetProfileImage={post.author.profileImage}
+        targetUserId={post.author.authorId}
+        targetUsername={post.author.username}
       />
     </div>
   );
