@@ -154,8 +154,7 @@ function useChatComposer({
       const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
       const isApplicationAcceptedMessage = receivedMessage.messageType === "APPLICATION_ACCEPTED";
       const isApplicationRejectedMessage = receivedMessage.messageType === "APPLICATION_REJECTED";
-      const acceptMessageVariant = isOutgoing ? "sent" : "received";
-      const rejectMessageVariant = isOutgoing ? "sent" : "received";
+      const messageVariant = isOutgoing ? "sent" : "received";
 
       if (
         isApplicationMessage &&
@@ -187,7 +186,7 @@ function useChatComposer({
               id: receivedMessage.messageId,
               partnerName: chatDetail.nickname,
               type: "roommate_reject",
-              variant: rejectMessageVariant,
+              variant: messageVariant,
             })
           : isApplicationAcceptedMessage
             ? createRoommateResultMessage({
@@ -196,7 +195,7 @@ function useChatComposer({
                 id: receivedMessage.messageId,
                 partnerName: chatDetail.nickname,
                 type: "roommate_accept",
-                variant: acceptMessageVariant,
+                variant: messageVariant,
               })
             : {
                 ...formatMessageDateLabel(receivedMessage.createdAt),
