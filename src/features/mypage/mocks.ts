@@ -62,7 +62,7 @@ export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
   {
     actions: [
       { id: "edit", label: "수정하기", tone: "neutral" },
-      { id: "applications", label: "신청 관리", tone: "primary" },
+      { id: "applications", label: "삭제하기", tone: "primary" },
     ],
     description:
       "깔끔한 편이고 조용한 성격입니다.\n서로 적당한 거리감 유지하면서 편하게 지낼분 찾아요",
@@ -70,8 +70,7 @@ export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
     id: 1,
     roomType: "2인 1실",
     stats: [
-      { id: "current-members", label: "현재 인원", value: "2인" },
-      { id: "pending-applications", label: "신청 대기", value: "1명" },
+      { id: "current-members", label: "현재 인원", value: "2" },
     ],
     status: "open",
     statusLabel: "1/2",
@@ -87,8 +86,7 @@ export const MY_RECRUIT_POSTS: MyRecruitPostMock[] = [
     id: 2,
     roomType: "4인 1실",
     stats: [
-      { id: "current-members", label: "현재 인원", value: "4인" },
-      { id: "pending-applications", label: "신청 대기", value: "-" },
+      { id: "current-members", label: "현재 인원", value: "-" },
     ],
     status: "closed",
     statusLabel: "마감",

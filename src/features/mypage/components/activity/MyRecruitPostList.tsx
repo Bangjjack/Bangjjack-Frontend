@@ -3,6 +3,7 @@ import { ActivityButton } from "@/features/mypage/components/activity/ActivityBu
 import { ActivityStat } from "@/features/mypage/components/activity/ActivityStat";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
 import { MY_RECRUIT_POST_EMPTY_MESSAGE, MY_RECRUIT_POSTS } from "@/features/mypage/mocks";
+import { formatPeopleCount } from "@/features/mypage/utils";
 
 import type { MyRecruitPostMock } from "@/features/mypage/types";
 
@@ -60,7 +61,7 @@ function RecruitPostMemberStat({ label, value }: { label: string; value: string 
   return (
     <div className="flex h-12.5 w-full items-center justify-center gap-200 rounded-medium bg-bg-primary">
       <span className="typo-caption1 text-text-placeholder">{label}</span>
-      <span className="typo-title2 text-text-strong">{value}</span>
+      <span className="typo-title2 text-text-strong">{formatPeopleCount(value)}</span>
     </div>
   );
 }

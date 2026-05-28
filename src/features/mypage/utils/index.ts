@@ -6,3 +6,4 @@ export {
   mapRoommatePreferencesToLabels,
   mapUserProfileToFormValues,
 } from "@/features/mypage/utils/myProfileEditUtils";
+export { formatPeopleCount } from "@/features/mypage/utils/formatPeopleCount";
