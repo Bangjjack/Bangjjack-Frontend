@@ -34,6 +34,7 @@ function ChatMatchCard({
 }: ChatMatchCardProps) {
   const isRecruitCard = Boolean(recruitTitle);
   const title = recruitTitle ?? "추천 대화 주제";
+  const secondaryAction = isRecruitCard ? onRecruitClick : onReportClick;
 
   return (
     <section
@@ -76,7 +77,8 @@ function ChatMatchCard({
           </Button>
           <Button
             className="h-9 cursor-pointer px-300 py-200"
-            onClick={isRecruitCard ? onRecruitClick : onReportClick}
+            disabled={!secondaryAction}
+            onClick={secondaryAction}
             size="sm"
             type="button"
             variant="black"
