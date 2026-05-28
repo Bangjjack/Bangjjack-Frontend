@@ -40,6 +40,7 @@ function BoardPageContent({
     data: recommendedPosts,
     isLoading: isRecommendedLoading,
     isError: isRecommendedError,
+    isSuccess: isRecommendedSuccess,
     fetchStatus: recommendedFetchStatus,
     refetch: refetchRecommended,
   } = useRecommendedPostList({ roomSize: roomSizeParam }, aiRecommend);
@@ -47,7 +48,8 @@ function BoardPageContent({
   useEffect(() => {
     if (recommendedFetchStatus !== "idle") return;
     if (isRecommendedError) toast.error("AI 추천글을 불러오지 못했어요");
-  }, [recommendedFetchStatus, isRecommendedError]);
+    else if (isRecommendedSuccess) toast.success("AI 추천순으로 정렬했어요");
+  }, [recommendedFetchStatus, isRecommendedError, isRecommendedSuccess]);
 
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
 
@@ -77,7 +79,6 @@ function BoardPageContent({
                   return;
                 }
                 onAiRecommendChange(selected);
-                if (selected) toast.success("AI 추천순으로 정렬했어요");
               }}
               className="gap-[6px]"
             >
