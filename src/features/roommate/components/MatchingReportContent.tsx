@@ -62,19 +62,6 @@ function MatchingReportContent({ postId }: MatchingReportContentProps) {
               <MismatchedItemsCard items={data.mismatchedFeatures} />
             )}
 
-            <AiCommentCard>
-              <div className="flex flex-col gap-200">
-                <p className="typo-caption1 whitespace-pre-line text-text-normal">
-                  {data.summaryComment.positive}
-                </p>
-                {data.summaryComment.caution && (
-                  <p className="typo-caption1 whitespace-pre-line text-text-normal">
-                    {data.summaryComment.caution}
-                  </p>
-                )}
-              </div>
-            </AiCommentCard>
-
             {data.conversationStarters.length > 0 && (
               <Card className="gap-[10px] rounded-medium border-0 bg-bg-secondary px-400 py-400 shadow-none">
                 <h3 className="typo-title2 text-text-strong">대화 추천 주제</h3>
@@ -91,6 +78,19 @@ function MatchingReportContent({ postId }: MatchingReportContentProps) {
                 </div>
               </Card>
             )}
+
+            <AiCommentCard>
+              <div className="flex flex-col gap-200">
+                <p className="typo-caption1 whitespace-pre-line text-text-normal">
+                  {data.summaryComment.positive}
+                </p>
+                {data.summaryComment.caution && (
+                  <p className="typo-caption1 whitespace-pre-line text-text-normal">
+                    {data.summaryComment.caution}
+                  </p>
+                )}
+              </div>
+            </AiCommentCard>
           </div>
         )}
       </main>
