@@ -8,6 +8,7 @@ import { ChecklistCard, ImportanceSection } from "@/features/roommate/components
 import { useUserProfile } from "@/features/user/hooks";
 import { useFadeInOnScroll, useGoBack } from "@/hooks";
 import { getAgeFromBirthYear, parseDepartmentName } from "@/utils";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useNavigate } from "react-router";
 
 type RoommateProfileContentProps = {
@@ -22,7 +23,7 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
 
   const { data: userProfile, isLoading, isError } = useUserProfile(roommateId ?? 0);
 
-  const nickname = userProfile?.username ?? profile?.nickname ?? "";
+  const nickname = parseDisplayName(userProfile?.username ?? profile?.nickname ?? "");
   const grade = userProfile?.grade;
   const age = userProfile ? getAgeFromBirthYear(userProfile.birthYear) : (profile?.age ?? 0);
   const department = parseDepartmentName(userProfile?.departmentName ?? profile?.department ?? "");
@@ -57,7 +58,7 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
       <Header
         className="absolute inset-x-0 top-0 z-20"
         showBack
-        title="룸메이트 추천"
+        title="프로필 조회"
         onBackClick={handleBackClick}
       />
 
@@ -69,8 +70,8 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
         {/* Content */}
         <div ref={contentRef} className="flex flex-col gap-300 px-400">
           {/* Profile avatar - overlaps wave by half */}
-          <div className="-mt-[65px] flex flex-col items-start px-[14px]">
-            <ProfileAvatar size={100} seed={avatarSeed} />
+          <div className="-mt-[80px] flex flex-col items-start px-[14px]">
+            <ProfileAvatar size={100} imageUrl={userProfile?.profileImage} seed={avatarSeed} />
           </div>
 
           {/* Profile info */}
