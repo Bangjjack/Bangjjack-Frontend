@@ -91,7 +91,10 @@ function MyActivityRoomList() {
 
   const navigate = useNavigate();
   const { mutate: leaveRoommateGroup } = useLeaveRoommateGroup();
-  const [confirmTarget, setConfirmTarget] = useState<{ roomId: number; type: "withdraw" | "leave" } | null>(null);
+  const [confirmTarget, setConfirmTarget] = useState<{
+    roomId: number;
+    type: "withdraw" | "leave";
+  } | null>(null);
 
   const handleRoomActionClick = (action: MyActivityRoomActionMock, room: MyActivityRoomMock) => {
     if (action.id === "detail") {
@@ -133,7 +136,10 @@ function MyActivityRoomList() {
         {joinedRooms.length >= 2 ? <RoomLimitNotice count={joinedRooms.length} /> : null}
       </div>
 
-      <AlertDialog open={confirmTarget !== null} onOpenChange={(open) => !open && setConfirmTarget(null)}>
+      <AlertDialog
+        open={confirmTarget !== null}
+        onOpenChange={(open) => !open && setConfirmTarget(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <div className="flex justify-center">
@@ -168,16 +174,14 @@ function RoomLimitNotice({ count }: { count: number }) {
   return (
     <div className="flex w-full flex-col gap-2.5 rounded-medium border border-dashed border-border-strong px-300 py-300">
       <div className="flex items-center gap-100">
-        <CircleAlertIcon
-          aria-hidden="true"
-          className="size-400 shrink-0 text-state-error"
-        />
+        <CircleAlertIcon aria-hidden="true" className="size-400 shrink-0 text-state-error" />
         <p className="typo-button2 text-state-error">방 참여 한도에 도달했어요</p>
       </div>
 
       <div className="flex flex-col gap-100 typo-caption2 text-text-caption">
         <p>
-          이미 <strong className="font-semibold text-text-strong">소속된 방이 {count}개</strong> 있어요.
+          이미 <strong className="font-semibold text-text-strong">소속된 방이 {count}개</strong>{" "}
+          있어요.
         </p>
         <p>
           새로운 방에 참여하려면 기존 방 중 하나를{" "}

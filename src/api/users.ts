@@ -5,7 +5,13 @@ import type {
   OnboardingPreferenceRequestValues,
   OnboardingRequestValues,
 } from "@/features/onboarding/schemas";
-import type { UpdateUserProfileRequest, UserChecklistData, UserProfile, UserProfileData, UserTagsData } from "@/features/user/types";
+import type {
+  UpdateUserProfileRequest,
+  UserChecklistData,
+  UserProfile,
+  UserProfileData,
+  UserTagsData,
+} from "@/features/user/types";
 
 export const saveOnboarding = async (body: OnboardingRequestValues): Promise<string> => {
   const { data } = await apiClient.patch<ApiResponse<string>>("/users/onboarding", body);

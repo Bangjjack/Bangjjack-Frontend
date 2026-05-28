@@ -71,4 +71,11 @@ type UpdateUserProfileRequest = {
   semester: string;
 };
 
-export type { UserTagsData, UserChecklistData, UserProfileData, UserLifestyleChecklist, UserProfile, UpdateUserProfileRequest };
+export type {
+  UserTagsData,
+  UserChecklistData,
+  UserProfileData,
+  UserLifestyleChecklist,
+  UserProfile,
+  UpdateUserProfileRequest,
+};

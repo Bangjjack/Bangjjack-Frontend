@@ -60,7 +60,6 @@ function MyChecklistContent({
             title={section.title}
           />
         ))}
-
       </div>
     </div>
   );

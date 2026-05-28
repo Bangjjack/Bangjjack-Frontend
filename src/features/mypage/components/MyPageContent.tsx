@@ -24,7 +24,8 @@ function MyPageContent({
 }: MyPageContentProps) {
   const { defaultProfileForm, profileImageUrl } = useMyProfileEditData();
   const username = useAuthStore((state) => state.username);
-  const profileName = defaultProfileForm.name || (username ? parseDisplayName(username) : MY_PROFILE.name);
+  const profileName =
+    defaultProfileForm.name || (username ? parseDisplayName(username) : MY_PROFILE.name);
   const profileDepartment = defaultProfileForm.department || MY_PROFILE.department;
   const birthYear = Number(defaultProfileForm.birthYear);
   const profileAge = Number.isFinite(birthYear)

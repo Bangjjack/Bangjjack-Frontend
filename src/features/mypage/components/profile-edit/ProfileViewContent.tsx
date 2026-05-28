@@ -74,7 +74,9 @@ function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; ni
             aria-hidden="true"
             className="size-400 shrink-0 text-brand-primary [&_path]:stroke-current"
           />
-          <h2 className="typo-title2 min-w-0 text-text-strong">{parseDisplayName(nickname)} 님의 체크리스트</h2>
+          <h2 className="typo-title2 min-w-0 text-text-strong">
+            {parseDisplayName(nickname)} 님의 체크리스트
+          </h2>
         </div>
 
         <div className="flex flex-col gap-1.5">
