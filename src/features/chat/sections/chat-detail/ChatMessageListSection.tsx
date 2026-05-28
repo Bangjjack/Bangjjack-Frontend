@@ -15,6 +15,7 @@ export type ChatMessageListSectionProps = {
   onReportClick?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
+  partnerLastReadMessageId?: number | null;
   profileSummary: string[];
   recruitTitle?: string;
   isProcessingRoommateRequest?: boolean;
@@ -33,6 +34,7 @@ function ChatMessageListSection({
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
+  partnerLastReadMessageId,
   profileSummary,
   recruitTitle,
 }: ChatMessageListSectionProps) {
@@ -103,6 +105,7 @@ function ChatMessageListSection({
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
           onRoommateRequestReject={onRoommateRequestReject}
+          partnerLastReadMessageId={partnerLastReadMessageId}
         />
       </div>
     </section>

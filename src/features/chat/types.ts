@@ -134,7 +134,7 @@ export type ChatRoomImportancePreference = {
   thirdPriority?: RoommatePreference | string | null;
 };
 
-export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
+export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND" | "READ";
 
 export type ChatServerMessageType =
   | "USER"
@@ -150,6 +150,14 @@ export type ChatSendMessagePayload = {
   type: "SEND";
 };
 
+export type ChatReadMessagePayload = {
+  messageId: number;
+  roomId: number;
+  type: "READ";
+};
+
+export type ChatClientMessagePayload = ChatSendMessagePayload | ChatReadMessagePayload;
+
 export type ChatReceivedMessage = {
   applicationId?: number;
   content: string;
@@ -158,6 +166,15 @@ export type ChatReceivedMessage = {
   messageType?: ChatServerMessageType;
   roomId: number;
   senderId: number;
+  type: "CHAT_MESSAGE";
+};
+
+export type ChatReadReceiptMessage = {
+  lastReadMessageId: number;
+  readAt: string;
+  readerId: number;
+  roomId: number;
+  type: "READ_RECEIPT";
 };
 
 export type ChatMessageHistoryItem = {
@@ -173,6 +190,7 @@ export type ChatMessagesData = {
   hasNext: boolean;
   messages: ChatMessageHistoryItem[];
   nextCursor: number | null;
+  partnerLastReadMessageId?: number | null;
 };
 
 export type GetChatMessagesParams = {

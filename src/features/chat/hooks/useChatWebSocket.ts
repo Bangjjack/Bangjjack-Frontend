@@ -3,37 +3,43 @@ import { useEffect, useRef, useState } from "react";
 import {
   createChatWebSocketUrls,
   isChatErrorMessage,
+  isChatReadReceiptMessage,
   isChatReceivedMessage,
   useIssueChatWsToken,
 } from "@/features/chat";
 import type {
+  ChatClientMessagePayload,
   ChatConnectionStatus,
   ChatErrorMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
-  ChatSendMessagePayload,
 } from "@/features/chat";
 
 type UseChatWebSocketParams = {
   enabled?: boolean;
   onErrorMessage?: (message: ChatErrorMessage) => void;
   onMessage?: (message: ChatReceivedMessage) => void;
+  onReadReceipt?: (message: ChatReadReceiptMessage) => void;
 };
 
 export const useChatWebSocket = ({
   enabled = true,
   onErrorMessage,
   onMessage,
+  onReadReceipt,
 }: UseChatWebSocketParams) => {
   const socketRef = useRef<WebSocket | null>(null);
   const onErrorMessageRef = useRef(onErrorMessage);
   const onMessageRef = useRef(onMessage);
+  const onReadReceiptRef = useRef(onReadReceipt);
   const [status, setStatus] = useState<ChatConnectionStatus>("idle");
   const { mutateAsync: issueWsToken } = useIssueChatWsToken();
 
   useEffect(() => {
     onErrorMessageRef.current = onErrorMessage;
     onMessageRef.current = onMessage;
-  }, [onErrorMessage, onMessage]);
+    onReadReceiptRef.current = onReadReceipt;
+  }, [onErrorMessage, onMessage, onReadReceipt]);
 
   useEffect(() => {
     if (!enabled) {
@@ -83,6 +89,11 @@ export const useChatWebSocket = ({
 
         if (isChatReceivedMessage(parsedMessage)) {
           onMessageRef.current?.(parsedMessage);
+          return;
+        }
+
+        if (isChatReadReceiptMessage(parsedMessage)) {
+          onReadReceiptRef.current?.(parsedMessage);
         }
       };
 
@@ -136,7 +147,7 @@ export const useChatWebSocket = ({
     };
   }, [enabled, issueWsToken]);
 
-  const sendMessage = (payload: ChatSendMessagePayload) => {
+  const sendMessage = (payload: ChatClientMessagePayload) => {
     if (socketRef.current?.readyState !== WebSocket.OPEN) {
       return false;
     }

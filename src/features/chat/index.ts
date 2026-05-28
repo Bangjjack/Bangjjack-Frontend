@@ -23,7 +23,9 @@ export {
 export type {
   ChatDetail,
   ChatConnectionStatus,
+  ChatClientMessagePayload,
   ChatErrorMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
   ChatRoom,
   ChatRoomCategory,
@@ -35,6 +37,7 @@ export type {
 export {
   createChatWebSocketUrls,
   isChatErrorMessage,
+  isChatReadReceiptMessage,
   isChatReceivedMessage,
 } from "@/features/chat/utils/webSocket";
 export { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";

@@ -24,12 +24,17 @@ export const useChatMessages = ({ cursor, roomId, size = 30 }: UseChatMessagesPa
       lastPage.hasNext && lastPage.nextCursor != null ? lastPage.nextCursor : undefined,
     select: (data) => {
       const lastPage = data.pages.at(-1);
+      const partnerLastReadMessageId = Math.max(
+        0,
+        ...data.pages.map((page) => page.partnerLastReadMessageId ?? 0),
+      );
 
       return {
         ...data,
         hasNext: lastPage?.hasNext ?? false,
         messages: data.pages.flatMap((page) => page.messages),
         nextCursor: lastPage?.nextCursor ?? null,
+        partnerLastReadMessageId,
       };
     },
   });

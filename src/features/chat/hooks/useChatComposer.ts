@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
 import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
@@ -9,6 +9,7 @@ import type {
   ChatErrorMessage,
   ChatInputMenuAction,
   ChatMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
   ChatRoommateInviteMessageData,
 } from "@/features/chat/types";
@@ -25,6 +26,7 @@ import { getApiErrorMessage } from "@/lib/api-error";
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
   currentUserId?: number | null;
+  initialPartnerLastReadMessageId?: number | null;
   initialMessages?: ChatMessage[];
   onLeaveChatRoom?: () => void;
   onRoommateRequestAccept?: (
@@ -37,16 +39,19 @@ interface UseChatComposerParams {
 function useChatComposer({
   chatDetail,
   currentUserId,
+  initialPartnerLastReadMessageId,
   initialMessages,
   onLeaveChatRoom,
   onRoommateRequestAccept,
   roomId,
 }: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
+  const sendReadMessageRef = useRef<(messageId: number) => void>(() => {});
   const [draftMessage, setDraftMessage] = useState("");
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
   const [leaveSheetOpen, setLeaveSheetOpen] = useState(false);
   const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
+  const [realtimePartnerLastReadMessageId, setRealtimePartnerLastReadMessageId] = useState(0);
   const {
     closeInputMenu,
     completeInputMenuClose,
@@ -72,11 +77,17 @@ function useChatComposer({
         ),
     ),
   ];
+  const partnerLastReadMessageId = Math.max(
+    initialPartnerLastReadMessageId ?? 0,
+    realtimePartnerLastReadMessageId,
+  );
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
     if (roomId == null || receivedMessage.roomId !== roomId) {
       return;
     }
+
+    sendReadMessageRef.current(receivedMessage.messageId);
 
     setLocalMessages((prev) => {
       if (
@@ -120,11 +131,34 @@ function useChatComposer({
     toast.error(errorMessage.message);
   };
 
+  const handleReadReceiptMessage = (readReceipt: ChatReadReceiptMessage) => {
+    if (roomId == null || readReceipt.roomId !== roomId || readReceipt.readerId === currentUserId) {
+      return;
+    }
+
+    setRealtimePartnerLastReadMessageId((prev) => Math.max(prev, readReceipt.lastReadMessageId));
+  };
+
   const { sendMessage, status: connectionStatus } = useChatWebSocket({
     enabled: roomId != null,
     onErrorMessage: handleChatErrorMessage,
     onMessage: appendReceivedMessage,
+    onReadReceipt: handleReadReceiptMessage,
   });
+
+  useEffect(() => {
+    sendReadMessageRef.current = (messageId: number) => {
+      if (roomId == null || messageId <= 0) {
+        return;
+      }
+
+      sendMessage({
+        messageId,
+        roomId,
+        type: "READ",
+      });
+    };
+  }, [roomId, sendMessage]);
 
   const closeInviteSheet = () => {
     setInviteSheetOpen(false);
@@ -293,6 +327,7 @@ function useChatComposer({
     inviteSheetOpen,
     leaveSheetOpen,
     messages,
+    partnerLastReadMessageId,
     setDraftMessage,
     toggleInputMenu,
   };

@@ -18,6 +18,7 @@ export type ChatDetailPageState = {
   chatDetail?: ChatDetail;
   composer: {
     currentUserId?: number | null;
+    initialPartnerLastReadMessageId?: number | null;
     initialMessages?: ChatMessage[];
     roomId?: number;
   };
@@ -255,6 +256,7 @@ function useChatDetailPage() {
     chatDetail,
     composer: {
       currentUserId,
+      initialPartnerLastReadMessageId: chatMessagesData?.partnerLastReadMessageId,
       initialMessages,
       roomId: Number.isNaN(parsedChatId) || !chatDetail ? undefined : parsedChatId,
     },

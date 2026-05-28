@@ -21,6 +21,7 @@ export type ChatMessageItemProps = {
   onCancelInviteRequest: (messageId: number) => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
+  partnerLastReadMessageId?: number | null;
   isProcessingRoommateRequest?: boolean;
 };
 
@@ -38,6 +39,7 @@ export function ChatMessageItem({
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
+  partnerLastReadMessageId,
 }: ChatMessageItemProps) {
   if (message.type === "roommate_request") {
     return (
@@ -98,6 +100,7 @@ export function ChatMessageItem({
         avatarSeed={avatarSeed}
         compactSpacing={compactSpacing}
         message={message}
+        partnerLastReadMessageId={partnerLastReadMessageId}
         showMessageTime={shouldShowMessageTime(messages, messageIndex)}
       />
     </ChatMessageWrapper>
@@ -248,16 +251,19 @@ function TextMessageItem({
   avatarSeed,
   compactSpacing,
   message,
+  partnerLastReadMessageId,
   showMessageTime,
 }: {
   avatarImageUrl?: string | null;
   avatarSeed: number;
   compactSpacing: boolean;
   message: ChatTextMessage;
+  partnerLastReadMessageId?: number | null;
   showMessageTime: boolean;
 }) {
   const isOutgoing = message.type === "outgoing";
   const showProfile = !isOutgoing && !compactSpacing;
+  const isReadByPartner = isOutgoing && message.id <= (partnerLastReadMessageId ?? 0);
 
   return (
     <div className={cn("flex w-full items-end gap-200", isOutgoing && "justify-end")}>
@@ -278,8 +284,17 @@ function TextMessageItem({
         </div>
       ) : null}
 
-      {showMessageTime ? (
-        <span className="typo-caption4 text-text-disabled">{message.sentAt}</span>
+      {showMessageTime || isReadByPartner ? (
+        <div className="flex shrink-0 flex-col items-end">
+          {isReadByPartner ? (
+            <span className="whitespace-nowrap typo-caption4 text-brand-primary">읽음</span>
+          ) : null}
+          {showMessageTime ? (
+            <span className="whitespace-nowrap typo-caption4 text-text-disabled">
+              {message.sentAt}
+            </span>
+          ) : null}
+        </div>
       ) : null}
 
       {isOutgoing ? (

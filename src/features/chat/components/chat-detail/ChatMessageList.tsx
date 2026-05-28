@@ -14,6 +14,7 @@ export type ChatMessageListProps = {
   onCancelInviteRequest: (messageId: number) => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
+  partnerLastReadMessageId?: number | null;
   isProcessingRoommateRequest?: boolean;
 };
 
@@ -27,6 +28,7 @@ export function ChatMessageList({
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
+  partnerLastReadMessageId,
 }: ChatMessageListProps) {
   const dateBadgeLabels = getMessageDateBadgeLabels(messages, fallbackDateLabel);
 
@@ -48,6 +50,7 @@ export function ChatMessageList({
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
           onRoommateRequestReject={onRoommateRequestReject}
+          partnerLastReadMessageId={partnerLastReadMessageId}
         />
       ))}
     </div>

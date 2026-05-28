@@ -43,11 +43,13 @@ export default function ChatDetailPage() {
     inviteSheetOpen,
     leaveSheetOpen,
     messages,
+    partnerLastReadMessageId,
     setDraftMessage,
     toggleInputMenu,
   } = useChatComposer({
     chatDetail: activeChatDetail,
     currentUserId: composer.currentUserId,
+    initialPartnerLastReadMessageId: composer.initialPartnerLastReadMessageId,
     initialMessages: composer.initialMessages,
     onLeaveChatRoom: navigation.onLeaveChatRoom,
     onRoommateRequestAccept: navigation.onRoommateRequestAccept,
@@ -89,6 +91,7 @@ export default function ChatDetailPage() {
         isProcessingRoommateRequest={isProcessingRoommateRequest}
         onRoommateRequestAccept={handleRoommateRequestAccept}
         onRoommateRequestReject={navigation.onRoommateRequestReject}
+        partnerLastReadMessageId={partnerLastReadMessageId}
         profileSummary={messageList.profileSummary}
         recruitTitle={messageList.recruitTitle}
       />
