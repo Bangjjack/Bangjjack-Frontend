@@ -16,6 +16,7 @@ export type ChatRoommateInviteSheetProps = Pick<
 > & {
   avatarSeed?: number;
   className?: string;
+  confirmDisabled?: boolean;
   lifestyleTags: string[];
   open: boolean;
   onCancel: () => void;
@@ -26,6 +27,7 @@ function ChatRoommateInviteSheet({
   age,
   avatarSeed,
   className,
+  confirmDisabled = false,
   department,
   lifestyleTags,
   nickname,
@@ -93,6 +95,7 @@ function ChatRoommateInviteSheet({
             <BottomSheetClose asChild>
               <Button
                 className="h-9 flex-1 cursor-pointer rounded-medium"
+                disabled={confirmDisabled}
                 size="sm"
                 onClick={() => {
                   confirmedRef.current = true;

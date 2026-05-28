@@ -2,6 +2,7 @@ export { default as BangjjackTitleIcon } from "@/assets/icons/bangjjack-title.sv
 export { default as GoogleIcon } from "@/assets/icons/google.svg?react";
 export { default as CircleAlertIcon } from "@/assets/icons/ic-circle-alert.svg?react";
 export { default as CircleCheckIcon } from "@/assets/icons/ic-circle-check.svg?react";
+export { default as CircleErrorIcon } from "@/assets/icons/ic-circle-error.svg?react";
 export { default as CircleInfoIcon } from "@/assets/icons/ic-circle-info.svg?react";
 export { default as CircleDeleteIcon } from "@/assets/icons/ic-circle-delete.svg?react";
 export { default as CirclePlusIcon } from "@/assets/icons/ic-circle-plus.svg?react";
@@ -34,6 +35,7 @@ export { default as PlusIcon } from "@/assets/icons/ic-plus.svg?react";
 export { default as MinusIcon } from "@/assets/icons/ic-minus.svg?react";
 export { default as LightbulbIcon } from "@/assets/icons/ic-lightbulb.svg?react";
 export { default as SlidersHorizontalIcon } from "@/assets/icons/ic-sliders-horizontal.svg?react";
+export { default as SquareArrowRightExitIcon } from "@/assets/icons/ic-square-arrow-right-exit.svg?react";
 export { default as SoapDispenserDropletIcon } from "@/assets/icons/ic-soap-dispenser-droplet.svg?react";
 export { default as ThermometerIcon } from "@/assets/icons/ic-thermometer.svg?react";
 export { default as WindIcon } from "@/assets/icons/ic-wind.svg?react";

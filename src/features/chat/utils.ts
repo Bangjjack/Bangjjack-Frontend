@@ -1,3 +1,5 @@
+export * from "@/features/chat/utils/chatComposerMessages";
+
 export function formatUnreadCount(count: number) {
   if (count <= 0) {
     return null;

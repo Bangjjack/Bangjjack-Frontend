@@ -1,5 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 
+import type { RoommatePreference } from "@/constants";
+
 export type ChatTab = "all" | "roommateRequest";
 
 export type ChatPreview = {
@@ -16,6 +18,7 @@ export type ChatUserProfile = {
   department?: string;
   matchRate?: number;
   nickname: string;
+  profileImage?: string | null;
 };
 
 export type BaseChatCardProps = {
@@ -35,6 +38,9 @@ export type ChatTextMessage = {
 };
 
 export type ChatRoommateRequestMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
   requesterName: string;
   sentAt?: string;
@@ -42,19 +48,48 @@ export type ChatRoommateRequestMessageData = {
 };
 
 export type ChatRoommateInviteMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
   id: number;
   recipientName: string;
   type: "roommate_invite";
 };
 
+export type ChatRoommateRejectMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
+  id: number;
+  partnerName: string;
+  sentAt?: string;
+  type: "roommate_reject";
+  variant: "received" | "sent";
+};
+
+export type ChatRoommateAcceptMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
+  id: number;
+  partnerName: string;
+  sentAt?: string;
+  type: "roommate_accept";
+  variant: "received" | "sent";
+};
+
 export type ChatMessage =
   | ChatTextMessage
   | ChatRoommateRequestMessageData
-  | ChatRoommateInviteMessageData;
+  | ChatRoommateInviteMessageData
+  | ChatRoommateRejectMessageData
+  | ChatRoommateAcceptMessageData;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
-export type ChatInputMenuAction = "invite";
+export type ChatInputMenuAction = "invite" | "leave";
+
+export type ChatRoomCategory = "APPLICATION";
 
 export type ChatInputMenuItem = {
   description: string;
@@ -93,7 +128,13 @@ export type ChatRoom = {
   roomType: string;
 };
 
-export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND";
+export type ChatRoomImportancePreference = {
+  firstPriority?: RoommatePreference | string | null;
+  secondPriority?: RoommatePreference | string | null;
+  thirdPriority?: RoommatePreference | string | null;
+};
+
+export type ChatClientMessageType = "SUBSCRIBE" | "UNSUBSCRIBE" | "SEND" | "READ";
 
 export type ChatServerMessageType =
   | "USER"
@@ -109,19 +150,39 @@ export type ChatSendMessagePayload = {
   type: "SEND";
 };
 
+export type ChatReadMessagePayload = {
+  messageId: number;
+  roomId: number;
+  type: "READ";
+};
+
+export type ChatClientMessagePayload = ChatSendMessagePayload | ChatReadMessagePayload;
+
 export type ChatReceivedMessage = {
+  applicationId?: number;
+  content: string;
+  createdAt: string;
+  messageId: number;
+  messageType?: ChatServerMessageType;
+  roomId: number;
+  senderId: number;
+  type: "CHAT_MESSAGE";
+};
+
+export type ChatReadReceiptMessage = {
+  lastReadMessageId: number;
+  readAt: string;
+  readerId: number;
+  roomId: number;
+  type: "READ_RECEIPT";
+};
+
+export type ChatMessageHistoryItem = {
+  applicationId?: number;
   content: string;
   createdAt: string;
   messageId: number;
   messageType: ChatServerMessageType;
-  roomId: number;
-  senderId: number;
-};
-
-export type ChatMessageHistoryItem = {
-  content: string;
-  createdAt: string;
-  messageId: number;
   senderId: number;
 };
 
@@ -129,11 +190,39 @@ export type ChatMessagesData = {
   hasNext: boolean;
   messages: ChatMessageHistoryItem[];
   nextCursor: number | null;
+  partnerLastReadMessageId?: number | null;
 };
 
 export type GetChatMessagesParams = {
   cursor?: number;
   roomId: number;
+  size?: number;
+};
+
+export type ChatRoomListItem = {
+  importanceTags?: string[] | null;
+  lastMessage: string | null;
+  lastMessageAt: string | null;
+  partnerId: number;
+  partnerImportanceTags?: string[] | null;
+  partnerName: string;
+  partnerProfileImage: string | null;
+  partnerRoommatePreference?: ChatRoomImportancePreference | null;
+  priorityFactors?: string[] | null;
+  roomId: number;
+  roommatePreference?: ChatRoomImportancePreference | null;
+  unreadCount: number;
+};
+
+export type ChatRoomsData = {
+  hasNext: boolean;
+  nextCursor: string | null;
+  rooms: ChatRoomListItem[];
+};
+
+export type GetChatRoomsParams = {
+  category?: ChatRoomCategory;
+  cursor?: string;
   size?: number;
 };
 

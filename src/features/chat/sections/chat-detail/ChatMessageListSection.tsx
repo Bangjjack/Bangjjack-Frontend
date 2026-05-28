@@ -12,7 +12,13 @@ export type ChatMessageListSectionProps = {
   onLoadPreviousMessages?: () => void | Promise<unknown>;
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
-  onRoommateRequestAccept?: () => void;
+  onReportClick?: () => void;
+  onRoommateRequestAccept?: (applicationId?: number) => void;
+  onRoommateRequestReject?: (applicationId?: number) => void;
+  partnerLastReadMessageId?: number | null;
+  profileSummary: string[];
+  recruitTitle?: string;
+  isProcessingRoommateRequest?: boolean;
 };
 
 function ChatMessageListSection({
@@ -24,7 +30,13 @@ function ChatMessageListSection({
   onLoadPreviousMessages,
   onProfileClick,
   onRecruitClick,
+  onReportClick,
+  isProcessingRoommateRequest,
   onRoommateRequestAccept,
+  onRoommateRequestReject,
+  partnerLastReadMessageId,
+  profileSummary,
+  recruitTitle,
 }: ChatMessageListSectionProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const previousScrollHeightRef = useRef(0);
@@ -66,9 +78,6 @@ function ChatMessageListSection({
     void onLoadPreviousMessages?.();
   };
 
-  const recruitTitle =
-    chatDetail.startSource === "recruit_post" ? (chatDetail.recruitTitle ?? "모집글") : undefined;
-
   return (
     <section
       ref={scrollContainerRef}
@@ -81,16 +90,22 @@ function ChatMessageListSection({
           matchRate={chatDetail.matchRate}
           onProfileClick={onProfileClick}
           onRecruitClick={onRecruitClick}
-          profileSummary={chatDetail.profileSummary}
+          onReportClick={onReportClick}
+          profileSummary={profileSummary}
           recruitTitle={recruitTitle}
         />
 
         <ChatMessageList
           avatarSeed={chatDetail.id}
+          avatarImageUrl={chatDetail.profileImage}
+          chatDetail={chatDetail}
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
           onCancelInviteRequest={onCancelInviteRequest}
+          isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
+          onRoommateRequestReject={onRoommateRequestReject}
+          partnerLastReadMessageId={partnerLastReadMessageId}
         />
       </div>
     </section>

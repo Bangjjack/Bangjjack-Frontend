@@ -3,12 +3,15 @@ import type { ApiResponse } from "@/api/types";
 import type {
   ChatMessagesData,
   ChatRoom,
+  ChatRoomsData,
   CreateChatRoomRequest,
   GetChatMessagesParams,
+  GetChatRoomsParams,
 } from "@/features/chat/types";
 
 const CHAT_API_PATHS = {
   chatRooms: "/chat-rooms",
+  leaveChatRoom: (roomId: number) => `/chat-rooms/${roomId}/participants/me`,
   messages: (roomId: number) => `/chat-rooms/${roomId}/messages`,
   wsToken: "/auth/ws-token",
 } as const;
@@ -29,6 +32,22 @@ export const createChatRoom = async (body: CreateChatRoomRequest): Promise<ChatR
   return data.data;
 };
 
+export const getChatRooms = async ({
+  category,
+  cursor,
+  size = 20,
+}: GetChatRoomsParams = {}): Promise<ChatRoomsData> => {
+  const { data } = await apiClient.get<ApiResponse<ChatRoomsData>>(CHAT_API_PATHS.chatRooms, {
+    params: {
+      category,
+      cursor,
+      size,
+    },
+  });
+
+  return data.data;
+};
+
 export const getChatMessages = async ({
   cursor,
   roomId,
@@ -45,4 +64,8 @@ export const getChatMessages = async ({
   );
 
   return data.data;
+};
+
+export const leaveChatRoom = async (roomId: number): Promise<void> => {
+  await apiClient.delete(CHAT_API_PATHS.leaveChatRoom(roomId));
 };

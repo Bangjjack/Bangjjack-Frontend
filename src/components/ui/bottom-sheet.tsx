@@ -6,6 +6,8 @@ const BottomSheet = DialogPrimitive.Root;
 const BottomSheetTrigger = DialogPrimitive.Trigger;
 const BottomSheetClose = DialogPrimitive.Close;
 
+type BottomSheetContentVariant = "default" | "chatRoomOut";
+
 function BottomSheetPortal(props: React.ComponentProps<typeof DialogPrimitive.Portal>) {
   return <DialogPrimitive.Portal {...props} />;
 }
@@ -28,8 +30,11 @@ function BottomSheetOverlay({
 function BottomSheetContent({
   className,
   children,
+  variant = "default",
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Content>) {
+}: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  variant?: BottomSheetContentVariant;
+}) {
   return (
     <BottomSheetPortal>
       <BottomSheetOverlay />
@@ -37,6 +42,7 @@ function BottomSheetContent({
         className={cn(
           "fixed inset-x-0 bottom-0 z-50 mx-auto flex w-full max-w-(--width-app-shell) flex-col gap-7.5 rounded-t-[20px] bg-white px-500 pb-500 pt-500",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
+          variant === "chatRoomOut" && "gap-8",
           className,
         )}
         {...props}
@@ -51,4 +57,4 @@ function BottomSheetContent({
 type BottomSheetProps = React.ComponentProps<typeof DialogPrimitive.Root>;
 
 export { BottomSheet, BottomSheetTrigger, BottomSheetClose, BottomSheetContent };
-export type { BottomSheetProps };
+export type { BottomSheetContentVariant, BottomSheetProps };
