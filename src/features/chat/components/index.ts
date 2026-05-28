@@ -23,7 +23,10 @@ export { ChatRoommateRequestMessage } from "@/features/chat/components/chat-deta
 export type { ChatRoommateRequestMessageProps } from "@/features/chat/components/chat-detail/ChatRoommateRequestMessage";
 export { ChatMatchCard } from "@/features/chat/components/chat-detail/ChatMatchCard";
 export type { ChatMatchCardProps } from "@/features/chat/components/chat-detail/ChatMatchCard";
-export { ChatListItem } from "@/features/chat/components/chat-list/ChatListItem";
+export {
+  ChatListItem,
+  ChatListItemSkeleton,
+} from "@/features/chat/components/chat-list/ChatListItem";
 export type { ChatListItemProps } from "@/features/chat/components/chat-list/ChatListItem";
 export { MessageCount } from "@/features/chat/components/chat-list/MessageCount";
 export type { MessageCountProps } from "@/features/chat/components/chat-list/MessageCount";
