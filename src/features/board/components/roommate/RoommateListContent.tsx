@@ -132,8 +132,18 @@ function RoommateListContent() {
           }
           matchRate={matchRate}
           matchHighlights={matchHighlights}
-          onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
-          onChatConfirm={() => navigate("/chat")}
+          onMatchConfirm={() =>
+            navigate(`/posts/${postId}/matching-report`, {
+              state: {
+                targetUserId: effectiveUserId,
+                targetUsername: selectedPostMember?.username,
+                targetProfileImage: selectedPostMember?.profileImage,
+              },
+            })
+          }
+          targetUserId={effectiveUserId ?? 0}
+          targetUsername={selectedPostMember?.username ?? ""}
+          targetProfileImage={selectedPostMember?.profileImage ?? null}
         />
       )}
     </div>

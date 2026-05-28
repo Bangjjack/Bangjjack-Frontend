@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router";
 
 import { BookmarkFilledIcon, BookmarkIcon } from "@/assets/icons";
-import { Button, toast } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { MatchActionBar } from "@/features/board/components/roommate";
 import { useBookmarkToggle } from "@/features/board/hooks";
-import { useCreateChatRoom, type ChatDetail } from "@/features/chat";
-import { parseDisplayName } from "@/lib/parseDisplayName";
 
 interface PostDetailBottomBarProps {
   isOwner: boolean;
@@ -28,38 +26,6 @@ function PostDetailBottomBar({
 }: PostDetailBottomBarProps) {
   const navigate = useNavigate();
   const { isBookmarked, toggle } = useBookmarkToggle(postId);
-  const { isPending: isCreatingChatRoom, mutate: createChatRoom } = useCreateChatRoom();
-
-  const handleChatConfirm = () => {
-    createChatRoom(
-      { targetUserId },
-      {
-        onError: () => {
-          toast.error("채팅방을 생성하지 못했어요.");
-        },
-        onSuccess: (chatRoom) => {
-          const chatDetail: ChatDetail = {
-            dateLabel: "",
-            id: targetUserId,
-            matchRate,
-            messages: [],
-            nickname: parseDisplayName(targetUsername),
-            profileImage: targetProfileImage,
-            profileSummary: matchHighlights,
-            recruitPostId: postId,
-            startSource: "recruit_post",
-          };
-
-          navigate(`/chat/${chatRoom.roomId}`, {
-            state: {
-              chatDetail,
-              chatRoom,
-            },
-          });
-        },
-      },
-    );
-  };
 
   const bookmarkButton = (
     <button
@@ -88,13 +54,18 @@ function PostDetailBottomBar({
 
   return (
     <MatchActionBar
-      disabledMessage={isCreatingChatRoom ? "채팅방 생성 중..." : undefined}
       leadingElement={bookmarkButton}
       matchHighlights={matchHighlights}
       matchRate={matchRate}
-      onChatConfirm={handleChatConfirm}
-      onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
+      onMatchConfirm={() =>
+        navigate(`/posts/${postId}/matching-report`, {
+          state: { targetUserId, targetUsername, targetProfileImage },
+        })
+      }
       postId={postId}
+      targetProfileImage={targetProfileImage}
+      targetUserId={targetUserId}
+      targetUsername={targetUsername}
     />
   );
 }
