@@ -36,6 +36,8 @@ export default function ChatRoommateConfirmedPage() {
     return null;
   }
 
+  const effectiveChatId = Number.isFinite(parsedChatId) ? parsedChatId : chatDetail.id;
+
   return (
     <ChatRoommateConfirmedContent
       age={chatDetail.age}
@@ -43,9 +45,9 @@ export default function ChatRoommateConfirmedPage() {
       department={chatDetail.department}
       matchRate={chatDetail.matchRate}
       nickname={chatDetail.nickname}
-      onContinueChat={() => navigate(`/chat/${parsedChatId}`, { state: location.state })}
+      onContinueChat={() => navigate(`/chat/${effectiveChatId}`, { state: location.state })}
       onGuideClick={() =>
-        navigate(`/chat/${parsedChatId}/shared-life-guide`, { state: location.state })
+        navigate(`/chat/${effectiveChatId}/shared-life-guide`, { state: location.state })
       }
       onGoHome={() => navigate("/home")}
     />
