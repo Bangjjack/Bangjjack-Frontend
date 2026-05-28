@@ -7,6 +7,7 @@ export type {
   PostStatus,
   Semester,
   Dormitory,
+  Smoking,
   Campus,
   Recycling,
   PhoneCall,
@@ -25,6 +26,7 @@ export type {
   PostListItem,
   PostListData,
   PostMatchRateData,
+  RecommendedPostItem,
 } from "./post";
 
 export type {

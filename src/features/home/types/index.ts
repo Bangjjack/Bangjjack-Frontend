@@ -1,6 +1,7 @@
 import type { RoommatePreference } from "@/constants";
+import type { Smoking } from "@/types";
 
-export type Smoking = "NON_SMOKER" | "CIGARETTE" | "ELECTRONIC_CIGARETTE";
+export type { Smoking };
 
 export type RecommendedRoommate = {
   userId: number;

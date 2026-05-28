@@ -7,5 +7,6 @@ export { usePostDetail } from "./usePostDetail";
 export { usePostList } from "./usePostList";
 export { usePostMatchRate } from "./usePostMatchRate";
 export { usePostWriteForm } from "./usePostWriteForm";
+export { useRecommendedPostList } from "./useRecommendedPostList";
 export { useRemoveBookmark } from "./useRemoveBookmark";
 export { useUpdatePost } from "./useUpdatePost";

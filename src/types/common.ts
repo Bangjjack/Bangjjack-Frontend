@@ -33,6 +33,9 @@ type Semester = "SIXTEEN_WEEKS" | "TWENTY_FIVE_WEEKS";
 /** 기숙사 */
 type Dormitory = "DORM_1" | "DORM_2" | "DORM_3";
 
+/** 흡연 여부 */
+type Smoking = "NON_SMOKER" | "CIGARETTE" | "ELECTRONIC_CIGARETTE";
+
 /** 캠퍼스 */
 type Campus = "GLOBAL_CAMPUS" | "MEDICAL_CAMPUS";
 
@@ -73,6 +76,7 @@ export type {
   PostStatus,
   Semester,
   Dormitory,
+  Smoking,
   Campus,
   Recycling,
   PhoneCall,

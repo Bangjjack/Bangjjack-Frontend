@@ -7,7 +7,7 @@ import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX } from "@/constants";
 import { CAMPUS_API_MAP, ROOM_FILTER_API_MAP, ROOM_FILTERS } from "@/features/board/constants";
 import type { RoomFilter } from "@/features/board/constants";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
-import { usePostList } from "@/features/board/hooks";
+import { usePostList, useRecommendedPostList } from "@/features/board/hooks";
 import { formatRelativeTime } from "@/features/board/utils";
 import { useFadeInOnScroll } from "@/hooks";
 import { CampusSelector } from "./CampusSelector";
@@ -37,12 +37,21 @@ function BoardPageContent({
   const sentinelRef = useRef<HTMLDivElement>(null);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
+  const roomSizeParam = roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined;
+
   const { data, fetchNextPage, isFetching, isFetchingNextPage, hasNextPage, isError } = usePostList(
     {
       campus: selectedCampus ? CAMPUS_API_MAP[selectedCampus] : undefined,
-      roomSize: roomFilter ? ROOM_FILTER_API_MAP[roomFilter] : undefined,
+      roomSize: roomSizeParam,
     },
+    !aiRecommend,
   );
+
+  const {
+    data: recommendedPosts,
+    isLoading: isRecommendedLoading,
+    isError: isRecommendedError,
+  } = useRecommendedPostList({ roomSize: roomSizeParam });
 
   const posts = data?.pages.flatMap((page) => page.content) ?? [];
 
@@ -113,7 +122,39 @@ function BoardPageContent({
         </div>
 
         {/* 게시글 목록 */}
-        {isError ? (
+        {aiRecommend ? (
+          isRecommendedError ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p className="typo-body2 text-text-caption">추천 게시글을 불러오지 못했어요</p>
+            </div>
+          ) : isRecommendedLoading ? (
+            <div className="flex flex-col gap-[10px]">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <RecruitCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : !recommendedPosts || recommendedPosts.length === 0 ? (
+            <div className="flex flex-1 items-center justify-center">
+              <p className="typo-body2 text-text-caption">해당하는 추천 게시글이 없어요</p>
+            </div>
+          ) : (
+            <div ref={fadeInRef} className="flex flex-col gap-[10px]">
+              {recommendedPosts.map((post) => (
+                <RecruitCard
+                  key={post.postId}
+                  title={post.title}
+                  description={post.description}
+                  currentMembers={post.currentMemberCount}
+                  maxMembers={post.totalMemberCount}
+                  dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
+                  roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
+                  timeAgo={formatRelativeTime(post.createdAt)}
+                  onClick={() => onPostClick?.(post.postId)}
+                />
+              ))}
+            </div>
+          )
+        ) : isError ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="typo-body2 text-text-caption">게시글을 불러오지 못했어요</p>
           </div>
