@@ -32,6 +32,7 @@ function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardPro
           nickname: parseDisplayName(m.username),
           seed: m.userId,
           isHost: m.role === "LEADER",
+          profileImage: m.profileImage,
         }))}
         onMemberClick={(member) => navigate(`/board/${postId}/roommates?userId=${member.seed}`)}
       />

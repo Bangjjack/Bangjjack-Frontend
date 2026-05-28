@@ -60,6 +60,7 @@ function RoommateListContent() {
     nickname: parseDisplayName(m.username),
     seed: m.userId,
     isHost: m.role === "LEADER",
+    profileImage: m.profileImage,
   }));
   const selectedMember = members.find((m) => m.seed === effectiveUserId) ?? null;
 

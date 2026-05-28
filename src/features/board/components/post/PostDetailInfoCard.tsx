@@ -31,7 +31,7 @@ function PostDetailInfoCard({
         </div>
 
         <div className="flex items-center gap-200">
-          <ProfileAvatar size={24} seed={author.authorId} />
+          <ProfileAvatar size={24} imageUrl={author.profileImage} seed={author.authorId} />
           <span className="typo-caption1 text-text-caption">
             {parseDisplayName(author.username)}
           </span>
