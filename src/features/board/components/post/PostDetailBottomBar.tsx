@@ -40,11 +40,11 @@ function PostDetailBottomBar({
           const chatDetail: ChatDetail = {
             dateLabel: "",
             id: targetUserId,
-            matchRate: 0,
+            matchRate,
             messages: [],
             nickname: targetUsername,
             profileImage: targetProfileImage,
-            profileSummary: [],
+            profileSummary: matchHighlights,
             recruitPostId: postId,
             startSource: "recruit_post",
           };
