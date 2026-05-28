@@ -1,16 +1,26 @@
 import { RecruitCard, RecruitCardSkeleton } from "@/components";
+import { Button } from "@/components/ui";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import type { RecommendedPostListProps } from "@/features/board/types";
 import { formatRelativeTime } from "@/features/board/utils";
 import { useFadeInOnScroll } from "@/hooks";
 
-function RecommendedPostList({ posts, isLoading, isError, onPostClick }: RecommendedPostListProps) {
+function RecommendedPostList({
+  posts,
+  isLoading,
+  isError,
+  onRetry,
+  onPostClick,
+}: RecommendedPostListProps) {
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
   if (isError) {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3">
         <p className="typo-body2 text-text-caption">추천 게시글을 불러오지 못했어요</p>
+        <Button variant="ghost" size="sm" onClick={onRetry}>
+          다시 시도하기
+        </Button>
       </div>
     );
   }

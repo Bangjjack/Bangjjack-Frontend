@@ -22,6 +22,7 @@ type RecommendedPostListProps = {
   posts: RecommendedPostItem[] | undefined;
   isLoading: boolean;
   isError: boolean;
+  onRetry?: () => void;
   onPostClick?: (id: number) => void;
 };
 
