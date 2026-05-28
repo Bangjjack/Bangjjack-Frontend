@@ -9,7 +9,6 @@ export const useSendRoommateApplication = () => {
   return useMutation({
     mutationFn: sendRoommateApplication,
     onSuccess: () => {
-      console.log("[chat] sendRoommateApplication succeeded. invalidate chat queries");
       queryClient.invalidateQueries({ queryKey: chatQueryKeys.rooms() });
       queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
     },
