@@ -8,5 +8,5 @@ export { MyBookmarkContent } from "@/features/mypage/components/bookmark/MyBookm
 export type { MyBookmarkContentProps } from "@/features/mypage/components/bookmark/MyBookmarkContent";
 export { MyProfileEditContent } from "@/features/mypage/components/MyProfileEditContent";
 export type { MyProfileEditContentProps } from "@/features/mypage/components/MyProfileEditContent";
-export { MY_CHECKLIST_LAST_UPDATED, MY_CHECKLIST_SECTIONS } from "@/features/mypage/mocks";
+export { MY_CHECKLIST_SECTIONS } from "@/features/mypage/mocks";
 export type { MyChecklistSectionMock, MyChecklistSelectionType } from "@/features/mypage/types";

@@ -7,8 +7,6 @@ import type {
   MyRecruitPostMock,
 } from "@/features/mypage/types";
 
-export const MY_CHECKLIST_LAST_UPDATED = "2026.03.25";
-
 export const MY_ACTIVITY_ACTIVE_TAB_ID: MyActivityTabId = "posts";
 
 export const MY_ACTIVITY_TABS: MyActivityTabMock[] = [

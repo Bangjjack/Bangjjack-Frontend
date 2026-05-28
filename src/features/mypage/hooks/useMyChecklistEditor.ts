@@ -1,7 +1,6 @@
 import { useState } from "react";
 
 import { toast } from "@/components/ui";
-import { MY_CHECKLIST_LAST_UPDATED } from "@/features/mypage/mocks";
 import type { MyChecklistSectionMock } from "@/features/mypage/types";
 import {
   createMyChecklistSections,
@@ -9,17 +8,6 @@ import {
 } from "@/features/mypage/utils";
 import { useSaveOnboardingChecklist } from "@/features/onboarding/hooks";
 import { useMyProfile, useUpdateUserChecklist } from "@/features/user/hooks";
-
-function formatChecklistUpdatedDate(date: Date) {
-  return new Intl.DateTimeFormat("ko-KR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  })
-    .format(date)
-    .replace(/\. /g, ".")
-    .replace(/\.$/, "");
-}
 
 function updateChecklistSelection(
   sections: MyChecklistSectionMock[],
@@ -51,7 +39,6 @@ function useMyChecklistEditor(initialEditing = false) {
   const profileSections = createMyChecklistSections(userProfile?.checklist ?? null);
   const [draftSections, setDraftSections] = useState<MyChecklistSectionMock[] | null>(null);
   const [isEditing, setIsEditing] = useState(initialEditing);
-  const [lastUpdated, setLastUpdated] = useState(MY_CHECKLIST_LAST_UPDATED);
   const isSaving = isCreatePending || isUpdatePending;
   const hasChecklist = userProfile?.checklist != null;
   const editingSections = draftSections ?? profileSections;
@@ -61,7 +48,6 @@ function useMyChecklistEditor(initialEditing = false) {
     isProfileLoading || isSaving || (isEditing && checklistRequest.status === "invalid");
 
   function handleSaveSuccess() {
-    setLastUpdated(formatChecklistUpdatedDate(new Date()));
     setIsEditing(false);
     setDraftSections(null);
     toast.success("체크리스트가 저장되었어요");
@@ -105,7 +91,6 @@ function useMyChecklistEditor(initialEditing = false) {
     isEditing,
     isSaveDisabled,
     isSaving,
-    lastUpdated,
     visibleSections,
   };
 }

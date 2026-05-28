@@ -20,7 +20,6 @@ function MyChecklistContent({
     isEditing,
     isSaveDisabled,
     isSaving,
-    lastUpdated,
     visibleSections,
   } = useMyChecklistEditor(initialEditing);
 
@@ -62,7 +61,6 @@ function MyChecklistContent({
           />
         ))}
 
-        <p className="typo-caption2 text-center text-text-disabled">마지막 수정 {lastUpdated}</p>
       </div>
     </div>
   );
