@@ -57,13 +57,13 @@ function MatchActionBar({
     }
     const result = await refetch();
     if (result.isError) {
-      toast.error("매칭률 정보를 불러오지 못했어요");
+      toast.error("매칭에 실패했어요");
       return;
     }
     if (result.data) {
       setApiMatchData({
         matchRate: result.data.matchRate,
-        matchHighlights: result.data.matchedAttributes,
+        matchHighlights: result.data.topInfluentialFeatures.map((f) => f.label),
       });
     }
     setDialogTarget("match");

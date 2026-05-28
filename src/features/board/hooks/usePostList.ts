@@ -6,7 +6,7 @@ import type { PostListFilterParams } from "@/features/board/types";
 
 const PAGE_SIZE = 20;
 
-export const usePostList = (params: PostListFilterParams) => {
+export const usePostList = (params: PostListFilterParams, enabled = true) => {
   return useInfiniteQuery({
     queryKey: postQueryKeys.list(params),
     queryFn: ({ pageParam }) =>
@@ -19,5 +19,6 @@ export const usePostList = (params: PostListFilterParams) => {
     initialPageParam: 0,
     getNextPageParam: (lastPage, _allPages, lastPageParam) =>
       lastPage.hasNext ? lastPageParam + 1 : undefined,
+    enabled,
   });
 };

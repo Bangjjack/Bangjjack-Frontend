@@ -48,15 +48,7 @@ function RoommateProfileCard({
 
       {/* 프로필 이미지 */}
       <div className="flex w-full items-center justify-center py-200">
-        {profileImage ? (
-          <img
-            src={profileImage}
-            alt={`${nickname} 프로필`}
-            className="size-[70px] rounded-full object-cover"
-          />
-        ) : (
-          <ProfileAvatar size={70} seed={nickname.length} />
-        )}
+        <ProfileAvatar size={70} imageUrl={profileImage} seed={nickname.length} />
       </div>
 
       {/* 닉네임 */}

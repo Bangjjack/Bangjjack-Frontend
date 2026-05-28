@@ -1,5 +1,5 @@
 import type { MemberRole, RoommatePreference } from "@/constants";
-import type { Dormitory, RoomSize, PostStatus, Semester, SharedLifestyle } from "@/types";
+import type { Dormitory, RoomSize, PostStatus, Semester, SharedLifestyle, Smoking } from "@/types";
 
 /** 작성자 정보 */
 type PostAuthor = {
@@ -79,11 +79,58 @@ type PostListData = {
   hasNext: boolean;
 };
 
+type MatchRateFeature = {
+  key: string;
+  label: string;
+  description: string;
+};
+
+type MatchRateMismatchedFeature = MatchRateFeature & {
+  advice: string;
+};
+
+type MatchRateConversationStarter = {
+  key: string;
+  starter: string;
+  subtitle: string;
+};
+
+type MatchRateInfluentialFeature = {
+  key: string;
+  label: string;
+};
+
 /** 매칭률 조회 응답 data */
 type PostMatchRateData = {
   matchRate: number;
-  matchedAttributes: string[];
-  recommendedTopics: string[];
+  counts: {
+    matched: number;
+    mismatched: number;
+    total: number;
+  };
+  matchedFeatures: MatchRateFeature[];
+  mismatchedFeatures: MatchRateMismatchedFeature[];
+  conversationStarters: MatchRateConversationStarter[];
+  topInfluentialFeatures: MatchRateInfluentialFeature[];
+  summaryComment: {
+    brief: string;
+    positive: string;
+    caution: string;
+  };
+};
+
+/** AI 추천 모집글 아이템 */
+type RecommendedPostItem = {
+  postId: number;
+  title: string;
+  description: string;
+  dormitory: Dormitory;
+  roomSize: RoomSize;
+  smoking: Smoking;
+  currentMemberCount: number;
+  totalMemberCount: number;
+  matchRate: number;
+  createdAt: string;
 };
 
 export type {
@@ -96,4 +143,9 @@ export type {
   PostListItem,
   PostListData,
   PostMatchRateData,
+  MatchRateFeature,
+  MatchRateMismatchedFeature,
+  MatchRateConversationStarter,
+  MatchRateInfluentialFeature,
+  RecommendedPostItem,
 };

@@ -22,7 +22,7 @@ function ChatRoommateRejectMessage({ partnerName, variant }: ChatRoommateRejectM
     >
       <div className="flex flex-col gap-300 px-500 pb-400 pt-400">
         <div className="flex items-center gap-100 overflow-hidden">
-          <CircleErrorIcon className="size-3 shrink-0" />
+          <CircleErrorIcon className="size-3 shrink-0 bg-neutral-400" />
           <span className="typo-title4 text-neutral-200">
             {isSent ? "룸메이트 매칭 실패" : "룸메이트 요청 거절"}
           </span>

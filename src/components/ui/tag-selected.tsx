@@ -7,7 +7,7 @@ type TagSelectedProps = TagSelectedBaseProps &
     | {
         rank: number;
         rankClassName?: string;
-        variant?: "default" | "variant2";
+        variant?: "default" | "neutral";
       }
     | {
         rank?: never;
@@ -33,7 +33,7 @@ function TagSelected({
         hasRank ? "gap-100" : "gap-0",
         variant === "default" &&
           "border border-brand-primary bg-brand-primary-light text-text-primary-alternative",
-        variant === "variant2" && "bg-neutral-150 text-text-label",
+        variant === "neutral" && "bg-neutral-150 text-text-label",
         variant === "gray" && "bg-neutral-150 text-text-alternative",
         className,
       )}
@@ -48,8 +48,8 @@ function TagSelected({
       >
         <span
           className={cn(
-            "flex size-3.75 items-center justify-center rounded-full typo-label3 text-neutral-white",
-            variant === "variant2" ? "bg-neutral-800" : "bg-brand-primary",
+            "flex size-3.75 items-center justify-center rounded-full typo-label3 leading-none text-neutral-white",
+            variant === "neutral" ? "bg-text-primary-alternative" : "bg-brand-primary",
             rankClassName,
           )}
         >

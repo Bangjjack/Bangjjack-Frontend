@@ -7,6 +7,7 @@ export type {
   PostStatus,
   Semester,
   Dormitory,
+  Smoking,
   Campus,
   Recycling,
   PhoneCall,
@@ -25,6 +26,7 @@ export type {
   PostListItem,
   PostListData,
   PostMatchRateData,
+  RecommendedPostItem,
 } from "./post";
 
 export type {
@@ -33,3 +35,5 @@ export type {
   PostListFilterParams,
   GetPostsParams,
 } from "./postRequest";
+
+export type { BoardPageContentProps, PostListProps, RecommendedPostListProps } from "./postList";
