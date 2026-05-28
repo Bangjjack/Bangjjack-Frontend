@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { createChatRoom } from "@/api/chat";
+import { createChatRoom } from "@/api";
 import { chatQueryKeys } from "@/features/chat/queries";
 
 export const useCreateChatRoom = () => {
