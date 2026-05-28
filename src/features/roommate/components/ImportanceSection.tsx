@@ -10,7 +10,7 @@ function ImportanceSection({ items }: ImportanceSectionProps) {
       <h3 className="typo-title2 text-text-strong">룸메이트에게 이런 점이 중요해요</h3>
       <div className="flex flex-wrap gap-[6px]">
         {items.map((item, index) => (
-          <TagSelected key={item} rank={index + 1} variant="variant2">
+          <TagSelected key={item} rank={index + 1} variant="neutral">
             {item}
           </TagSelected>
         ))}

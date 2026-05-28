@@ -128,7 +128,7 @@ function ProfileImportanceSection({ items }: { items: string[] }) {
 
       <div className="flex flex-wrap gap-1.5">
         {items.map((item, index) => (
-          <TagSelected key={item} rank={index + 1} variant="variant2">
+          <TagSelected key={item} rank={index + 1} variant="neutral">
             {item}
           </TagSelected>
         ))}
