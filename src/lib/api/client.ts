@@ -37,11 +37,12 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    if (error.response?.status === 401) {
-      // TODO: refresh token API 연동 후 토큰 갱신 로직 추가
-      useAuthStore.getState().clearAuth();
-      window.location.href = "/login";
-    }
+    // if (error.response?.status === 401) {
+    //   // TODO: refresh token API 연동 후 토큰 갱신 로직 추가
+    //   console.error("[interceptor] 401 기타 요청 - clearAuth 실행, URL:", error.config?.url, "현재 localStorage accessToken:", localStorage.getItem(ACCESS_TOKEN_KEY));
+    //   useAuthStore.getState().clearAuth();
+    //   window.location.href = "/login";
+    // }
 
     return Promise.reject(error);
   },
