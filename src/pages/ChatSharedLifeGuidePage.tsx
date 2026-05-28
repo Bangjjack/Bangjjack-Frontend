@@ -27,6 +27,8 @@ export default function ChatSharedLifeGuidePage() {
     return null;
   }
 
+  const targetChatId = Number.isFinite(parsedChatId) ? parsedChatId : chatDetail.id;
+
   return (
     <SharedLifeGuideContent
       age={chatDetail.age}
@@ -35,8 +37,8 @@ export default function ChatSharedLifeGuidePage() {
       matchRate={chatDetail.matchRate}
       nickname={chatDetail.nickname}
       profileImage={chatDetail.profileImage}
-      onBack={() => navigate(`/chat/${parsedChatId}/roommate-confirmed`, { state: location.state })}
-      onContinueChat={() => navigate(`/chat/${parsedChatId}`, { state: location.state })}
+      onBack={() => navigate(`/chat/${targetChatId}/roommate-confirmed`, { state: location.state })}
+      onContinueChat={() => navigate(`/chat/${targetChatId}`, { state: location.state })}
       onGoHome={() => navigate("/home")}
     />
   );

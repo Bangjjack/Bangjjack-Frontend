@@ -65,8 +65,7 @@ export function getChatRoomImportanceTags(chatRoom: ChatRoomListItem) {
     chatRoom.importanceTags,
     chatRoom.priorityFactors,
   ];
-  const directTags =
-    directTagSources.map(getFirstThreeTags).find((tags) => tags.length > 0) ?? [];
+  const directTags = directTagSources.map(getFirstThreeTags).find((tags) => tags.length > 0) ?? [];
 
   if (directTags.length > 0) {
     return directTags;
