@@ -7,7 +7,7 @@ import {
   MY_JOINED_ROOM_EMPTY_MESSAGE,
   MY_JOINED_ROOM_ERROR_MESSAGE,
 } from "@/features/mypage/constants";
-import { useMyRoommateGroups } from "@/features/roommate-group";
+import { useLeaveRoommateGroup, useMyRoommateGroups } from "@/features/roommate-group";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -79,10 +79,14 @@ function MyActivityRoomList() {
   const joinedRooms = roommateGroups.map((group) => mapRoommateGroupToActivityRoom(group, userId));
 
   const navigate = useNavigate();
+  const { mutate: leaveRoommateGroup } = useLeaveRoommateGroup();
 
   const handleRoomActionClick = (action: MyActivityRoomActionMock, room: MyActivityRoomMock) => {
     if (action.id === "detail") {
       navigate(`/board/${room.postId}`);
+    }
+    if (action.id === "leave" || action.id === "withdraw") {
+      leaveRoommateGroup(room.id);
     }
   };
 

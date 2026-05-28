@@ -11,3 +11,7 @@ export const getMyRoommateGroups = async (): Promise<MyRoommateGroup[]> => {
 
   return data.data;
 };
+
+export const leaveRoommateGroup = async (groupId: number): Promise<void> => {
+  await apiClient.delete(`/roommate-groups/${groupId}/members/me`);
+};
