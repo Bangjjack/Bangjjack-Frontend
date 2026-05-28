@@ -16,7 +16,7 @@ function MismatchedItemsCard({ items }: MismatchedItemsCardProps) {
   return (
     <Card className="gap-300 rounded-medium border-0 bg-bg-secondary px-400 py-450 shadow-none">
       <div className="flex items-center gap-[6px]">
-        <DeleteIcon aria-hidden="true" className="size-[16px]" />
+        <DeleteIcon aria-hidden="true" className="size-[16px] text-state-error-2" />
         <h3 className="typo-title2 text-text-strong">다른 점</h3>
       </div>
 

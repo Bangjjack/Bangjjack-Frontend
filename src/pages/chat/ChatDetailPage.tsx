@@ -1,4 +1,4 @@
-import { Header, ProfileAvatar, type HeaderProps } from "@/components/ui";
+import { Header, ProfileAvatar, Skeleton, type HeaderProps } from "@/components/ui";
 import { useChatComposer, useChatDetailPage } from "@/features/chat";
 import { ChatInputSection, ChatMessageListSection } from "@/features/chat/sections";
 import type { ChatDetail } from "@/features/chat/types";
@@ -57,7 +57,25 @@ export default function ChatDetailPage() {
   });
 
   if (!chatDetail) {
-    return null;
+    return (
+      <div className="relative flex h-dvh flex-col overflow-hidden bg-bg-primary">
+        <div className="flex h-14 shrink-0 items-center gap-300 px-400">
+          <Skeleton className="size-6 rounded" />
+          <Skeleton className="size-9 rounded-full" />
+          <Skeleton className="h-5 w-28" />
+        </div>
+        <div className="flex flex-1 flex-col gap-400 overflow-hidden px-400 py-200">
+          <Skeleton className="h-10 w-48 self-start rounded-2xl" />
+          <Skeleton className="h-10 w-40 self-end rounded-2xl" />
+          <Skeleton className="h-10 w-56 self-start rounded-2xl" />
+          <Skeleton className="h-10 w-32 self-end rounded-2xl" />
+          <Skeleton className="h-10 w-44 self-start rounded-2xl" />
+        </div>
+        <div className="shrink-0 px-400 pb-6 pt-200">
+          <Skeleton className="h-12 w-full rounded-full" />
+        </div>
+      </div>
+    );
   }
 
   const headerProps: Pick<

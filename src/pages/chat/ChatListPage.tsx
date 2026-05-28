@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 
 import {
   ChatListItem,
+  ChatListItemSkeleton,
   CHAT_HELPER_TEXT,
   CHAT_TAB_CATEGORY,
   CHAT_TABS,
@@ -97,9 +98,11 @@ export default function ChatListPage() {
             <p className="typo-body2 text-text-caption">채팅방 목록을 불러오지 못했어요.</p>
           </div>
         ) : isPending ? (
-          <div className="flex flex-1 items-center justify-center">
-            <p className="typo-body2 text-text-caption">채팅방 목록을 불러오는 중이에요.</p>
-          </div>
+          <ul className="flex flex-1 flex-col">
+            {Array.from({ length: 5 }, (_, i) => (
+              <ChatListItemSkeleton key={i} />
+            ))}
+          </ul>
         ) : chatRooms.length === 0 ? (
           <div className="flex flex-1 items-center justify-center">
             <p className="typo-body2 text-text-caption">아직 채팅방이 없어요.</p>

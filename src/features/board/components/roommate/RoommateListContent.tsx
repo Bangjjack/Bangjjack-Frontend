@@ -90,9 +90,8 @@ function RoommateListContent() {
               <RoommateList
                 members={members}
                 selectedNickname={selectedMember?.nickname}
-                onMemberClick={(member) => {
-                  setSelectedUserId(member.seed);
-                }}
+                onMemberClick={(member) => setSelectedUserId(member.seed)}
+                onProfileClick={(member) => navigate(`/roommate/${member.seed}`)}
               />
             </div>
           </Card>
@@ -116,6 +115,7 @@ function RoommateListContent() {
       ) : (
         <MatchActionBar
           postId={postId}
+          disabledMessage={effectiveUserId === null ? "룸메이트를 선택해주세요" : undefined}
           leadingElement={
             <button
               type="button"
@@ -132,8 +132,18 @@ function RoommateListContent() {
           }
           matchRate={matchRate}
           matchHighlights={matchHighlights}
-          onMatchConfirm={() => navigate(`/posts/${postId}/matching-report`)}
-          onChatConfirm={() => navigate("/chat")}
+          onMatchConfirm={() =>
+            navigate(`/posts/${postId}/matching-report`, {
+              state: {
+                targetUserId: effectiveUserId,
+                targetUsername: selectedPostMember?.username,
+                targetProfileImage: selectedPostMember?.profileImage,
+              },
+            })
+          }
+          targetUserId={effectiveUserId ?? 0}
+          targetUsername={selectedPostMember?.username ?? ""}
+          targetProfileImage={selectedPostMember?.profileImage ?? null}
         />
       )}
     </div>

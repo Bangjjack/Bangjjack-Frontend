@@ -122,8 +122,17 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
         postId={roommateId ?? 0}
         matchRate={88}
         matchHighlights={["청소 빈도", "수면 습관"]}
-        onMatchConfirm={() => navigate(`/roommate/${roommateId}/matching-report`)}
-        onChatConfirm={() => navigate("/chat")}
+        onMatchConfirm={() =>
+          navigate(`/roommate/${roommateId}/matching-report`, {
+            state: {
+              targetUsername: userProfile?.username ?? profile?.nickname,
+              targetProfileImage: userProfile?.profileImage ?? profile?.profileImage,
+            },
+          })
+        }
+        targetUserId={roommateId ?? 0}
+        targetUsername={userProfile?.username ?? profile?.nickname ?? ""}
+        targetProfileImage={userProfile?.profileImage ?? profile?.profileImage ?? null}
       />
     </div>
   );

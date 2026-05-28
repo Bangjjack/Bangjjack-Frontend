@@ -13,8 +13,11 @@ import { usePostMatchRate } from "@/features/board/hooks";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { MatchAlertDialog } from "@/features/board/components/roommate/MatchAlertDialog";
 import { useAuthStore } from "@/stores/authStore";
+import { useCreateChatRoom } from "@/features/chat";
+import type { ChatDetail } from "@/features/chat";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
-type DialogTarget = "match" | "chat" | null;
+type DialogTarget = "match" | null;
 
 type MatchActionBarProps = {
   disabledMessage?: string;
@@ -22,7 +25,9 @@ type MatchActionBarProps = {
   matchHighlights: string[];
   matchRate: number;
   postId: number;
-  onChatConfirm: () => void;
+  targetUserId: number;
+  targetUsername: string;
+  targetProfileImage?: string | null;
   onMatchConfirm: () => void;
 };
 
@@ -32,7 +37,9 @@ function MatchActionBar({
   matchHighlights,
   matchRate,
   postId,
-  onChatConfirm,
+  targetUserId,
+  targetUsername,
+  targetProfileImage,
   onMatchConfirm,
 }: MatchActionBarProps) {
   const isDisabled = !!disabledMessage;
@@ -47,6 +54,7 @@ function MatchActionBar({
   } | null>(null);
 
   const { refetch, isFetching } = usePostMatchRate(postId);
+  const { mutate: createChatRoom, isPending: isCreatingChatRoom } = useCreateChatRoom();
 
   const currentMatchData = apiMatchData ?? { matchRate, matchHighlights };
 
@@ -74,13 +82,39 @@ function MatchActionBar({
       setShowChecklistDialog(true);
       return;
     }
-    setDialogTarget("chat");
+    createChatRoom(
+      { targetUserId },
+      {
+        onError: () => {
+          toast.error("채팅방을 생성하지 못했어요.");
+        },
+        onSuccess: (chatRoom) => {
+          const chatDetail: ChatDetail = {
+            dateLabel: "",
+            id: targetUserId,
+            matchRate: currentMatchData.matchRate,
+            messages: [],
+            nickname: parseDisplayName(targetUsername),
+            profileImage: targetProfileImage,
+            profileSummary: currentMatchData.matchHighlights,
+            recruitPostId: postId,
+            startSource: "recruit_post",
+          };
+
+          navigate(`/chat/${chatRoom.roomId}`, {
+            state: {
+              chatDetail,
+              chatRoom,
+            },
+          });
+        },
+      },
+    );
   }
 
   function handleConfirm() {
     setDialogTarget(null);
-    if (dialogTarget === "match") onMatchConfirm();
-    else onChatConfirm();
+    onMatchConfirm();
   }
 
   return (
@@ -108,7 +142,7 @@ function MatchActionBar({
             >
               매칭하기
             </Button>
-            <Button className="flex-1" onClick={handleChatClick}>
+            <Button className="flex-1" disabled={isCreatingChatRoom} onClick={handleChatClick}>
               채팅하기
             </Button>
           </>

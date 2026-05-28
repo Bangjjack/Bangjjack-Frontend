@@ -1,4 +1,6 @@
-import { Button, Card, Header } from "@/components/ui";
+import { useNavigate } from "react-router";
+
+import { Button, Card, Header, toast } from "@/components/ui";
 import { usePostMatchRate } from "@/features/board/hooks";
 import {
   AiCommentCard,
@@ -6,17 +8,66 @@ import {
   MismatchedItemsCard,
   MatchRateCard,
 } from "@/features/roommate/components";
+import { useCreateChatRoom } from "@/features/chat";
+import type { ChatDetail } from "@/features/chat";
 import { useGoBack } from "@/hooks";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 type MatchingReportContentProps = {
   postId?: number;
   roommateId?: number;
+  targetUserId?: number;
+  targetUsername?: string;
+  targetProfileImage?: string | null;
 };
 
-function MatchingReportContent({ postId }: MatchingReportContentProps) {
+function MatchingReportContent({
+  postId,
+  roommateId,
+  targetUserId,
+  targetUsername,
+  targetProfileImage,
+}: MatchingReportContentProps) {
   const goBack = useGoBack();
+  const navigate = useNavigate();
+  const { mutate: createChatRoom, isPending: isCreatingChatRoom } = useCreateChatRoom();
 
   const { data, isLoading, isError, refetch } = usePostMatchRate(postId ?? 0, !!postId);
+
+  const effectiveTargetUserId = targetUserId ?? roommateId;
+
+  function handleMatchClick() {
+    if (!effectiveTargetUserId) return;
+
+    createChatRoom(
+      { targetUserId: effectiveTargetUserId },
+      {
+        onError: () => {
+          toast.error("채팅방을 생성하지 못했어요.");
+        },
+        onSuccess: (chatRoom) => {
+          const chatDetail: ChatDetail = {
+            dateLabel: "",
+            id: effectiveTargetUserId,
+            matchRate: data?.matchRate ?? 0,
+            messages: [],
+            nickname: parseDisplayName(targetUsername ?? ""),
+            profileImage: targetProfileImage,
+            profileSummary: data?.topInfluentialFeatures?.map((f) => f.label) ?? [],
+            recruitPostId: postId,
+            startSource: "recruit_post",
+          };
+
+          navigate(`/chat/${chatRoom.roomId}`, {
+            state: {
+              chatDetail,
+              chatRoom,
+            },
+          });
+        },
+      },
+    );
+  }
 
   return (
     <div className="relative flex h-dvh flex-col bg-bg-primary">
@@ -97,7 +148,13 @@ function MatchingReportContent({ postId }: MatchingReportContentProps) {
 
       {/* 하단 버튼 */}
       <div className="absolute inset-x-0 bottom-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
-        <Button className="w-full">매칭하기</Button>
+        <Button
+          className="w-full"
+          disabled={!effectiveTargetUserId || isCreatingChatRoom}
+          onClick={handleMatchClick}
+        >
+          매칭하기
+        </Button>
       </div>
     </div>
   );
