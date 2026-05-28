@@ -1,15 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { createChatRoom } from "@/api";
+import { sendRoommateApplication } from "@/api";
 import { chatQueryKeys } from "@/features/chat/queries";
 
-export const useCreateChatRoom = () => {
+export const useSendRoommateApplication = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createChatRoom,
+    mutationFn: sendRoommateApplication,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: chatQueryKeys.rooms() });
+      queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
     },
   });
 };

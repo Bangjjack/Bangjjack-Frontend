@@ -18,10 +18,12 @@ import {
 export type ChatRoommateRequestMessageProps = {
   onAccept?: () => void;
   onReject?: () => void;
+  isProcessing?: boolean;
   requesterName: string;
 };
 
 function ChatRoommateRequestMessage({
+  isProcessing = false,
   onAccept,
   onReject,
   requesterName,
@@ -38,8 +40,8 @@ function ChatRoommateRequestMessage({
           </span>
         </div>
 
-        <div className="flex flex-col items-start gap-[4px] whitespace-nowrap">
-          <p className="text-[14px] font-semibold leading-[20px] tracking-normal text-text-strong">
+        <div className="flex flex-col items-start gap-100 whitespace-normal">
+          <p className="wrap-break-word typo-button2 tracking-normal text-text-strong">
             {requesterName} 님이
             <br />
             룸메이트를 제안했어요!
@@ -65,10 +67,10 @@ function ChatRoommateRequestMessage({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-500">
-          <AlertDialogCancel className="cursor-pointer" onClick={onReject}>
+          <AlertDialogCancel className="cursor-pointer" disabled={isProcessing} onClick={onReject}>
             거절하기
           </AlertDialogCancel>
-          <AlertDialogAction className="cursor-pointer" onClick={onAccept}>
+          <AlertDialogAction className="cursor-pointer" disabled={isProcessing} onClick={onAccept}>
             수락하기
           </AlertDialogAction>
         </AlertDialogFooter>

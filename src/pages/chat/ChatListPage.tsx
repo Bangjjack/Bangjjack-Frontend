@@ -1,24 +1,69 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 import {
   ChatListItem,
-  CHAT_DETAILS,
   CHAT_HELPER_TEXT,
-  CHAT_PREVIEWS,
+  CHAT_TAB_CATEGORY,
   CHAT_TABS,
+  formatChatRoomMessage,
+  formatChatRoomTime,
+  getChatRoomImportanceTags,
+  useChatRoomListRealtime,
+  useChatRooms,
 } from "@/features/chat";
-import type { ChatTab } from "@/features/chat";
+import type { ChatDetail, ChatRoom, ChatRoomListItem, ChatTab } from "@/features/chat";
 import { cn } from "@/lib/cn";
+
+function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
+  return {
+    dateLabel: "",
+    id: chatRoom.partnerId,
+    matchRate: 0,
+    messages: [],
+    nickname: chatRoom.partnerName,
+    profileSummary: getChatRoomImportanceTags(chatRoom),
+    profileImage: chatRoom.partnerProfileImage,
+    startSource: "ai_recommendation",
+  };
+}
+
+function createChatRoomState(chatRoom: ChatRoomListItem): ChatRoom {
+  return {
+    createdAt: chatRoom.lastMessageAt ?? "",
+    isNewRoom: false,
+    participants: [{ userId: chatRoom.partnerId }],
+    roomId: chatRoom.roomId,
+    roomType: "DIRECT",
+  };
+}
 
 export default function ChatListPage() {
   const [activeTab, setActiveTab] = useState<ChatTab>("all");
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  useChatRoomListRealtime();
+  const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isPending } = useChatRooms(
+    {
+      category: CHAT_TAB_CATEGORY[activeTab],
+    },
+  );
 
-  const filteredChats =
-    activeTab === "all"
-      ? CHAT_PREVIEWS
-      : CHAT_PREVIEWS.filter((chatPreview) => chatPreview.type === activeTab);
+  const chatRooms = data?.rooms ?? [];
+
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && hasNextPage && !isFetchingNextPage) {
+        fetchNextPage();
+      }
+    });
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <div className={cn("flex min-h-full flex-col pt-100")}>
@@ -46,23 +91,42 @@ export default function ChatListPage() {
           })}
         </div>
 
-        <ul className="flex min-h-0 flex-1 flex-col">
-          {filteredChats.map((chatPreview) => {
-            const linkedProfile = CHAT_DETAILS[chatPreview.id];
-
-            return (
+        {isError ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">채팅방 목록을 불러오지 못했어요.</p>
+          </div>
+        ) : isPending ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">채팅방 목록을 불러오는 중이에요.</p>
+          </div>
+        ) : chatRooms.length === 0 ? (
+          <div className="flex flex-1 items-center justify-center">
+            <p className="typo-body2 text-text-caption">아직 채팅방이 없어요.</p>
+          </div>
+        ) : (
+          <ul className="flex min-h-0 flex-1 flex-col">
+            {chatRooms.map((chatRoom) => (
               <ChatListItem
-                key={chatPreview.id}
-                id={chatPreview.id}
-                message={chatPreview.message}
-                nickname={linkedProfile?.nickname ?? chatPreview.nickname}
-                onClick={() => navigate(`/chat/${chatPreview.id}`)}
-                timeLabel={chatPreview.timeLabel}
-                unreadCount={chatPreview.unreadCount}
+                key={chatRoom.roomId}
+                id={chatRoom.partnerId}
+                message={formatChatRoomMessage(chatRoom.lastMessage)}
+                nickname={chatRoom.partnerName}
+                onClick={() =>
+                  navigate(`/chat/${chatRoom.roomId}`, {
+                    state: {
+                      chatDetail: createChatDetailFromRoom(chatRoom),
+                      chatRoom: createChatRoomState(chatRoom),
+                    },
+                  })
+                }
+                profileImageUrl={chatRoom.partnerProfileImage}
+                timeLabel={formatChatRoomTime(chatRoom.lastMessageAt)}
+                unreadCount={chatRoom.unreadCount}
               />
-            );
-          })}
-        </ul>
+            ))}
+            <div ref={sentinelRef} />
+          </ul>
+        )}
       </section>
 
       <p className="pt-300 text-center typo-caption3 text-text-disabled">{CHAT_HELPER_TEXT}</p>

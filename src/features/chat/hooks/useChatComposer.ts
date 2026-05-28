@@ -1,6 +1,7 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { toast } from "@/components/ui";
+import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
 import type {
@@ -8,45 +9,49 @@ import type {
   ChatErrorMessage,
   ChatInputMenuAction,
   ChatMessage,
+  ChatReadReceiptMessage,
   ChatReceivedMessage,
   ChatRoommateInviteMessageData,
-  ChatTextMessage,
 } from "@/features/chat/types";
-import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
+import {
+  createInviteMessage,
+  createReceivedChatMessage,
+  createRoommateResultMessage,
+  getNextMessageId,
+  hasRoommateApplicationMessage,
+  isInviteMessage,
+} from "@/features/chat/utils";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 interface UseChatComposerParams {
   chatDetail: ChatDetail;
   currentUserId?: number | null;
+  initialPartnerLastReadMessageId?: number | null;
   initialMessages?: ChatMessage[];
+  onLeaveChatRoom?: () => void;
+  onRoommateRequestAccept?: (
+    applicationId?: number,
+    options?: { onSuccess?: (processedAt?: string) => void },
+  ) => void;
   roomId?: number;
-}
-
-function createInviteMessage(id: number, recipientName: string): ChatMessage {
-  return {
-    id,
-    recipientName,
-    type: "roommate_invite",
-  };
-}
-
-function getNextMessageId(messages: ChatMessage[]) {
-  return Math.max(0, ...messages.map((message) => message.id)) + 1;
-}
-
-function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessageData {
-  return message.type === "roommate_invite";
 }
 
 function useChatComposer({
   chatDetail,
   currentUserId,
+  initialPartnerLastReadMessageId,
   initialMessages,
+  onLeaveChatRoom,
+  onRoommateRequestAccept,
   roomId,
 }: UseChatComposerParams) {
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
+  const sendReadMessageRef = useRef<(messageId: number) => void>(() => {});
   const [draftMessage, setDraftMessage] = useState("");
   const [inviteSheetOpen, setInviteSheetOpen] = useState(false);
+  const [leaveSheetOpen, setLeaveSheetOpen] = useState(false);
   const [localMessages, setLocalMessages] = useState<ChatMessage[]>([]);
+  const [realtimePartnerLastReadMessageId, setRealtimePartnerLastReadMessageId] = useState(0);
   const {
     closeInputMenu,
     completeInputMenuClose,
@@ -54,18 +59,35 @@ function useChatComposer({
     inputMenuOpen,
     toggleInputMenu,
   } = useInputMenuState();
+  const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
+    useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
   const messages = [
     ...baseMessages,
     ...localMessages.filter(
-      (localMessage) => !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id),
+      (localMessage) =>
+        !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id) &&
+        !(
+          localMessage.type === "roommate_invite" &&
+          hasRoommateApplicationMessage(baseMessages, true)
+        ) &&
+        !(
+          localMessage.type === "roommate_request" &&
+          hasRoommateApplicationMessage(baseMessages, false)
+        ),
     ),
   ];
+  const partnerLastReadMessageId = Math.max(
+    initialPartnerLastReadMessageId ?? 0,
+    realtimePartnerLastReadMessageId,
+  );
 
   const appendReceivedMessage = (receivedMessage: ChatReceivedMessage) => {
     if (roomId == null || receivedMessage.roomId !== roomId) {
       return;
     }
+
+    sendReadMessageRef.current(receivedMessage.messageId);
 
     setLocalMessages((prev) => {
       if (
@@ -87,36 +109,71 @@ function useChatComposer({
         pendingOutgoingMessagesRef.current.splice(pendingMessageIndex, 1);
       }
 
-      const nextMessage: ChatTextMessage = {
-        ...formatMessageDateLabel(receivedMessage.createdAt),
-        id: receivedMessage.messageId,
-        messageType: receivedMessage.messageType,
-        sentAt: formatMessageTime(receivedMessage.createdAt),
-        text: receivedMessage.content,
-        type: isOutgoing ? "outgoing" : "incoming",
-      };
+      const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
+      if (
+        isApplicationMessage &&
+        hasRoommateApplicationMessage([...baseMessages, ...prev], isOutgoing)
+      ) {
+        return prev;
+      }
+
+      const nextMessage = createReceivedChatMessage({
+        isOutgoing,
+        partnerName: chatDetail.nickname,
+        receivedMessage,
+      });
 
       return [...prev, nextMessage];
     });
   };
 
   const handleChatErrorMessage = (errorMessage: ChatErrorMessage) => {
-    console.error("[chat] WebSocket error message received.", errorMessage);
     toast.error(errorMessage.message);
+  };
+
+  const handleReadReceiptMessage = (readReceipt: ChatReadReceiptMessage) => {
+    if (roomId == null || readReceipt.roomId !== roomId || readReceipt.readerId === currentUserId) {
+      return;
+    }
+
+    setRealtimePartnerLastReadMessageId((prev) => Math.max(prev, readReceipt.lastReadMessageId));
   };
 
   const { sendMessage, status: connectionStatus } = useChatWebSocket({
     enabled: roomId != null,
     onErrorMessage: handleChatErrorMessage,
     onMessage: appendReceivedMessage,
+    onReadReceipt: handleReadReceiptMessage,
   });
+
+  useEffect(() => {
+    sendReadMessageRef.current = (messageId: number) => {
+      if (roomId == null || messageId <= 0) {
+        return;
+      }
+
+      sendMessage({
+        messageId,
+        roomId,
+        type: "READ",
+      });
+    };
+  }, [roomId, sendMessage]);
 
   const closeInviteSheet = () => {
     setInviteSheetOpen(false);
   };
 
+  const closeLeaveSheet = () => {
+    setLeaveSheetOpen(false);
+  };
+
   const openInviteSheet = () => {
     setInviteSheetOpen(true);
+  };
+
+  const openLeaveSheet = () => {
+    setLeaveSheetOpen(true);
   };
 
   const handleSubmitMessage = () => {
@@ -148,19 +205,47 @@ function useChatComposer({
   };
 
   const handleSendInviteRequest = () => {
-    setLocalMessages((prev) => [
-      ...prev,
-      createInviteMessage(getNextMessageId(messages), chatDetail.nickname),
-    ]);
-    closeInviteSheet();
-    toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
+    sendRoommateApplication(chatDetail.id, {
+      onError: (error) => {
+        toast.error(getApiErrorMessage(error, "룸메이트 요청을 보내지 못했어요."));
+      },
+      onSuccess: (application) => {
+        setLocalMessages((prev) => {
+          const currentMessages = [...baseMessages, ...prev];
+
+          if (hasRoommateApplicationMessage(currentMessages, true)) {
+            return prev;
+          }
+
+          const nextMessageId = currentMessages.some(
+            (message) => message.id === application.applicationId,
+          )
+            ? getNextMessageId(currentMessages)
+            : application.applicationId;
+
+          return [
+            ...prev,
+            createInviteMessage({
+              applicationId: application.applicationId,
+              createdAt: application.createdAt,
+              id: nextMessageId,
+              recipientName: chatDetail.nickname,
+            }),
+          ];
+        });
+        closeInviteSheet();
+        toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
+      },
+    });
   };
 
   const handleCancelInviteRequest = (messageId: number) => {
-    const canceledInvite = messages.find(
-      (message): message is ChatRoommateInviteMessageData =>
-        message.id === messageId && isInviteMessage(message),
-    );
+    const isCanceledInviteMessage = (
+      message: ChatMessage,
+    ): message is ChatRoommateInviteMessageData =>
+      message.id === messageId && isInviteMessage(message);
+
+    const canceledInvite = messages.find(isCanceledInviteMessage);
 
     setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
 
@@ -169,28 +254,80 @@ function useChatComposer({
     }
   };
 
+  const appendAcceptedRequestMessage = (applicationId?: number, processedAt?: string) => {
+    const createdAt = processedAt ?? new Date().toISOString();
+
+    setLocalMessages((prev) => {
+      const currentMessages = [...messages, ...prev];
+      const hasAcceptedApplication = currentMessages.some(
+        (message) =>
+          message.type === "roommate_accept" &&
+          applicationId != null &&
+          message.applicationId === applicationId,
+      );
+
+      if (hasAcceptedApplication) {
+        return prev;
+      }
+
+      return [
+        ...prev,
+        createRoommateResultMessage({
+          applicationId,
+          createdAt,
+          id: getNextMessageId(currentMessages),
+          partnerName: chatDetail.nickname,
+          type: "roommate_accept",
+          variant: "sent",
+        }),
+      ];
+    });
+  };
+
+  const handleRoommateRequestAccept = (applicationId?: number) => {
+    onRoommateRequestAccept?.(applicationId, {
+      onSuccess: (processedAt) => appendAcceptedRequestMessage(applicationId, processedAt),
+    });
+  };
+
   const handleInputMenuAction = (action: ChatInputMenuAction) => {
     completeInputMenuClose();
 
     if (action === "invite") {
       openInviteSheet();
+      return;
     }
+
+    if (action === "leave") {
+      openLeaveSheet();
+    }
+  };
+
+  const handleConfirmLeaveChatRoom = () => {
+    closeLeaveSheet();
+    onLeaveChatRoom?.();
   };
 
   return {
     closeInputMenu,
     closeInviteSheet,
+    closeLeaveSheet,
     completeInputMenuClose,
     connectionStatus,
     draftMessage,
     handleCancelInviteRequest,
+    handleConfirmLeaveChatRoom,
+    handleRoommateRequestAccept,
     handleInputMenuAction,
     handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,
+    isSendingInviteRequest,
     inviteSheetOpen,
+    leaveSheetOpen,
     messages,
+    partnerLastReadMessageId,
     setDraftMessage,
     toggleInputMenu,
   };

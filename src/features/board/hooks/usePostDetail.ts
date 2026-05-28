@@ -1,13 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { skipToken, useQuery } from "@tanstack/react-query";
 
 import { getPostById } from "@/api/posts";
 
 import { postQueryKeys } from "@/features/board/queries";
 
-export const usePostDetail = (postId: number) => {
+export const usePostDetail = (postId?: number) => {
+  const validPostId = typeof postId === "number" && postId > 0 ? postId : undefined;
+
   return useQuery({
-    queryKey: postQueryKeys.detail(postId),
-    queryFn: () => getPostById(postId),
-    enabled: postId > 0,
+    queryKey: postQueryKeys.detail(validPostId ?? 0),
+    queryFn: validPostId ? () => getPostById(validPostId) : skipToken,
   });
 };

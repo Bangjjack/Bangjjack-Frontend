@@ -1,92 +1,129 @@
 import { Header, ProfileAvatar, type HeaderProps } from "@/components/ui";
-import { type ChatDetailPageProps, useChatComposer, useChatDetailPage } from "@/features/chat";
+import { useChatComposer, useChatDetailPage } from "@/features/chat";
 import { ChatInputSection, ChatMessageListSection } from "@/features/chat/sections";
+import type { ChatDetail } from "@/features/chat/types";
 import { cn } from "@/lib/cn";
 
-function ChatDetailPageContent({
-  chatDetail,
-  className,
-  currentUserId,
-  hasPreviousMessages = false,
-  initialMessages,
-  isLoadingPreviousMessages = false,
-  roomId,
-  onBack,
-  onLoadPreviousMessages,
-  onProfileClick,
-  onRecruitClick,
-  onRoommateRequestAccept,
-}: ChatDetailPageProps) {
+const EMPTY_CHAT_DETAIL: ChatDetail = {
+  dateLabel: "",
+  id: 0,
+  matchRate: 0,
+  messages: [],
+  nickname: "",
+  profileSummary: [],
+  startSource: "ai_recommendation",
+};
+
+export default function ChatDetailPage() {
+  const {
+    chatDetail,
+    composer,
+    isLeavingChatRoom,
+    isProcessingRoommateRequest,
+    messageList,
+    navigation,
+  } = useChatDetailPage();
+  const activeChatDetail = chatDetail ?? EMPTY_CHAT_DETAIL;
+
+  const {
+    closeInputMenu,
+    closeInviteSheet,
+    closeLeaveSheet,
+    completeInputMenuClose,
+    draftMessage,
+    handleCancelInviteRequest,
+    handleConfirmLeaveChatRoom,
+    handleInputMenuAction,
+    handleRoommateRequestAccept,
+    handleSendInviteRequest,
+    handleSubmitMessage,
+    inputMenuClosing,
+    inputMenuOpen,
+    isSendingInviteRequest,
+    inviteSheetOpen,
+    leaveSheetOpen,
+    messages,
+    partnerLastReadMessageId,
+    setDraftMessage,
+    toggleInputMenu,
+  } = useChatComposer({
+    chatDetail: activeChatDetail,
+    currentUserId: composer.currentUserId,
+    initialPartnerLastReadMessageId: composer.initialPartnerLastReadMessageId,
+    initialMessages: composer.initialMessages,
+    onLeaveChatRoom: navigation.onLeaveChatRoom,
+    onRoommateRequestAccept: navigation.onRoommateRequestAccept,
+    roomId: composer.roomId,
+  });
+
+  if (!chatDetail) {
+    return null;
+  }
+
   const headerProps: Pick<
     HeaderProps,
     "onBackClick" | "onProfileClick" | "profileElement" | "showBack" | "showProfile" | "title"
   > = {
-    onBackClick: onBack,
-    onProfileClick,
-    profileElement: <ProfileAvatar seed={chatDetail.id} size={36} />,
+    onBackClick: navigation.onBack,
+    onProfileClick: navigation.onProfileClick,
+    profileElement: (
+      <ProfileAvatar imageUrl={chatDetail.profileImage} seed={chatDetail.id} size={36} />
+    ),
     showBack: true,
     showProfile: true,
     title: chatDetail.nickname,
   };
 
-  const {
-    closeInputMenu,
-    closeInviteSheet,
-    completeInputMenuClose,
-    draftMessage,
-    handleCancelInviteRequest,
-    handleInputMenuAction,
-    handleSendInviteRequest,
-    handleSubmitMessage,
-    inputMenuClosing,
-    inputMenuOpen,
-    inviteSheetOpen,
-    messages,
-    setDraftMessage,
-    toggleInputMenu,
-  } = useChatComposer({ chatDetail, currentUserId, initialMessages, roomId });
-
   return (
-    <div className={cn("relative flex h-dvh overflow-hidden flex-col bg-bg-primary", className)}>
+    <div className={cn("relative flex h-dvh overflow-hidden flex-col bg-bg-primary")}>
       <Header {...headerProps} />
 
       <ChatMessageListSection
         chatDetail={chatDetail}
-        hasPreviousMessages={hasPreviousMessages}
-        isLoadingPreviousMessages={isLoadingPreviousMessages}
+        hasPreviousMessages={messageList.hasPreviousMessages}
+        isLoadingPreviousMessages={messageList.isLoadingPreviousMessages}
         messages={messages}
         onCancelInviteRequest={handleCancelInviteRequest}
-        onLoadPreviousMessages={onLoadPreviousMessages}
-        onProfileClick={onProfileClick}
-        onRecruitClick={onRecruitClick}
-        onRoommateRequestAccept={onRoommateRequestAccept}
+        onLoadPreviousMessages={messageList.onLoadPreviousMessages}
+        onProfileClick={navigation.onProfileClick}
+        onRecruitClick={navigation.onRecruitClick}
+        onReportClick={navigation.onReportClick}
+        isProcessingRoommateRequest={isProcessingRoommateRequest}
+        onRoommateRequestAccept={handleRoommateRequestAccept}
+        onRoommateRequestReject={navigation.onRoommateRequestReject}
+        partnerLastReadMessageId={partnerLastReadMessageId}
+        profileSummary={messageList.profileSummary}
+        recruitTitle={messageList.recruitTitle}
       />
 
       <ChatInputSection
         chatDetail={chatDetail}
-        draftMessage={draftMessage}
-        inputMenuClosing={inputMenuClosing}
-        inputMenuOpen={inputMenuOpen}
-        inviteSheetOpen={inviteSheetOpen}
-        onCloseInputMenu={closeInputMenu}
-        onCloseInviteSheet={closeInviteSheet}
-        onCompleteInputMenuClose={completeInputMenuClose}
-        onInputMenuAction={handleInputMenuAction}
-        onSendInviteRequest={handleSendInviteRequest}
-        onSubmitMessage={handleSubmitMessage}
-        onToggleInputMenu={toggleInputMenu}
-        onUpdateDraftMessage={setDraftMessage}
+        composer={{
+          draftMessage,
+          onSubmitMessage: handleSubmitMessage,
+          onToggleInputMenu: toggleInputMenu,
+          onUpdateDraftMessage: setDraftMessage,
+        }}
+        inputMenu={{
+          isClosing: inputMenuClosing,
+          isOpen: inputMenuOpen,
+          onAction: handleInputMenuAction,
+          onClose: closeInputMenu,
+          onCompleteClose: completeInputMenuClose,
+        }}
+        inviteSheet={{
+          isSendingInviteRequest,
+          onClose: closeInviteSheet,
+          onSendInviteRequest: handleSendInviteRequest,
+          open: inviteSheetOpen,
+        }}
+        leaveSheet={{
+          isLeavingChatRoom,
+          onClose: closeLeaveSheet,
+          onLeaveChatRoom: handleConfirmLeaveChatRoom,
+          open: leaveSheetOpen,
+        }}
       />
     </div>
   );
-}
-
-export default function ChatDetailPage() {
-  const chatDetailPageProps = useChatDetailPage();
-
-  if (!chatDetailPageProps) {
-    return null;
-  }
-
-  return <ChatDetailPageContent key={chatDetailPageProps.chatDetail.id} {...chatDetailPageProps} />;
 }
