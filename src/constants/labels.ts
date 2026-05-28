@@ -20,3 +20,9 @@ export const DORMITORY_LABEL: Record<string, string> = {
   DORM_2: "2 기숙사",
   DORM_3: "3 기숙사",
 };
+
+export const SMOKING_LABEL: Record<string, string> = {
+  NON_SMOKER: "비흡연",
+  CIGARETTE: "연초",
+  ELECTRONIC_CIGARETTE: "전자 담배",
+};

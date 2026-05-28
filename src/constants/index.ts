@@ -25,4 +25,10 @@ export type { RoommatePreference } from "./roommatePreference";
 export { MEMBER_ROLE } from "./memberRole";
 export type { MemberRole } from "./memberRole";
 
-export { ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SEMESTER_LABEL, DORMITORY_LABEL } from "./labels";
+export {
+  ROOM_SIZE_LABEL,
+  ROOM_SIZE_MAX,
+  SEMESTER_LABEL,
+  DORMITORY_LABEL,
+  SMOKING_LABEL,
+} from "./labels";
