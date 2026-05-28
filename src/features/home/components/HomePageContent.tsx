@@ -2,17 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Button, RoundButton } from "@/components/ui";
 import { RecruitCard, RecruitCardSkeleton } from "@/components";
-import {
-  DORMITORY_LABEL,
-  ROOM_SIZE_LABEL,
-  ROOM_SIZE_MAX,
-  SMOKING_LABEL,
-  ROOMMATE_PREFERENCE_LABEL,
-} from "@/constants";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL, ROOM_SIZE_MAX, SMOKING_LABEL } from "@/constants";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { useHomePostList } from "@/features/board/hooks";
 import { useRecommendedRoommates } from "@/features/home/hooks";
-import { formatRelativeTime, getAgeFromBirthYear } from "@/utils";
+import { formatRelativeTime, getAgeFromBirthYear, parseDepartmentName } from "@/utils";
 import { useDragScroll, useFadeInOnScroll } from "@/hooks";
 import { cn } from "@/lib/cn";
 import { useAuthStore } from "@/stores/authStore";
@@ -87,10 +81,8 @@ function HomePageContent({
                   ) : roommates && roommates.length > 0 ? (
                     roommates.map((roommate) => {
                       const tags = [
+                        DORMITORY_LABEL[roommate.dormitory] ?? roommate.dormitory,
                         SMOKING_LABEL[roommate.smoking] ?? roommate.smoking,
-                        ...roommate.roommatePreferences.map(
-                          (pref) => ROOMMATE_PREFERENCE_LABEL[pref] ?? pref,
-                        ),
                       ];
 
                       return (
@@ -99,7 +91,7 @@ function HomePageContent({
                           className="min-w-0 shrink-0"
                           nickname={roommate.username}
                           age={getAgeFromBirthYear(roommate.birthYear)}
-                          department={roommate.departmentName}
+                          department={parseDepartmentName(roommate.departmentName)}
                           matchRate={roommate.matchRate}
                           profileImage={roommate.profileImage}
                           tags={tags}
