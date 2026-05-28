@@ -12,7 +12,14 @@ import type {
   ChatReceivedMessage,
   ChatRoommateInviteMessageData,
 } from "@/features/chat/types";
-import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
+import {
+  createInviteMessage,
+  createReceivedChatMessage,
+  createRoommateResultMessage,
+  getNextMessageId,
+  hasRoommateApplicationMessage,
+  isInviteMessage,
+} from "@/features/chat/utils";
 import { getApiErrorMessage } from "@/lib/api-error";
 
 interface UseChatComposerParams {
@@ -25,66 +32,6 @@ interface UseChatComposerParams {
     options?: { onSuccess?: (processedAt?: string) => void },
   ) => void;
   roomId?: number;
-}
-
-function createInviteMessage({
-  applicationId,
-  createdAt,
-  id,
-  recipientName,
-}: {
-  applicationId?: number;
-  createdAt: string;
-  id: number;
-  recipientName: string;
-}): ChatMessage {
-  return {
-    applicationId,
-    ...formatMessageDateLabel(createdAt),
-    id,
-    recipientName,
-    type: "roommate_invite",
-  };
-}
-
-function createRoommateResultMessage({
-  applicationId,
-  createdAt,
-  id,
-  partnerName,
-  type,
-  variant,
-}: {
-  applicationId?: number;
-  createdAt: string;
-  id: number;
-  partnerName: string;
-  type: "roommate_accept" | "roommate_reject";
-  variant: "received" | "sent";
-}): ChatMessage {
-  return {
-    applicationId,
-    ...formatMessageDateLabel(createdAt),
-    id,
-    partnerName,
-    sentAt: formatMessageTime(createdAt),
-    type,
-    variant,
-  };
-}
-
-function getNextMessageId(messages: ChatMessage[]) {
-  return Math.max(0, ...messages.map((message) => message.id)) + 1;
-}
-
-function isInviteMessage(message: ChatMessage): message is ChatRoommateInviteMessageData {
-  return message.type === "roommate_invite";
-}
-
-function hasRoommateApplicationMessage(messages: ChatMessage[], isOutgoing: boolean) {
-  return messages.some((message) =>
-    isOutgoing ? message.type === "roommate_invite" : message.type === "roommate_request",
-  );
 }
 
 function useChatComposer({
@@ -152,10 +99,6 @@ function useChatComposer({
       }
 
       const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
-      const isApplicationAcceptedMessage = receivedMessage.messageType === "APPLICATION_ACCEPTED";
-      const isApplicationRejectedMessage = receivedMessage.messageType === "APPLICATION_REJECTED";
-      const messageVariant = isOutgoing ? "sent" : "received";
-
       if (
         isApplicationMessage &&
         hasRoommateApplicationMessage([...baseMessages, ...prev], isOutgoing)
@@ -163,48 +106,11 @@ function useChatComposer({
         return prev;
       }
 
-      const nextMessage: ChatMessage = isApplicationMessage
-        ? isOutgoing
-          ? createInviteMessage({
-              applicationId: receivedMessage.applicationId,
-              createdAt: receivedMessage.createdAt,
-              id: receivedMessage.messageId,
-              recipientName: chatDetail.nickname,
-            })
-          : {
-              applicationId: receivedMessage.applicationId,
-              ...formatMessageDateLabel(receivedMessage.createdAt),
-              id: receivedMessage.messageId,
-              requesterName: chatDetail.nickname,
-              sentAt: formatMessageTime(receivedMessage.createdAt),
-              type: "roommate_request",
-            }
-        : isApplicationRejectedMessage
-          ? createRoommateResultMessage({
-              applicationId: receivedMessage.applicationId,
-              createdAt: receivedMessage.createdAt,
-              id: receivedMessage.messageId,
-              partnerName: chatDetail.nickname,
-              type: "roommate_reject",
-              variant: messageVariant,
-            })
-          : isApplicationAcceptedMessage
-            ? createRoommateResultMessage({
-                applicationId: receivedMessage.applicationId,
-                createdAt: receivedMessage.createdAt,
-                id: receivedMessage.messageId,
-                partnerName: chatDetail.nickname,
-                type: "roommate_accept",
-                variant: messageVariant,
-              })
-            : {
-                ...formatMessageDateLabel(receivedMessage.createdAt),
-                id: receivedMessage.messageId,
-                messageType: receivedMessage.messageType,
-                sentAt: formatMessageTime(receivedMessage.createdAt),
-                text: receivedMessage.content,
-                type: isOutgoing ? "outgoing" : "incoming",
-              };
+      const nextMessage = createReceivedChatMessage({
+        isOutgoing,
+        partnerName: chatDetail.nickname,
+        receivedMessage,
+      });
 
       return [...prev, nextMessage];
     });
@@ -300,10 +206,12 @@ function useChatComposer({
   };
 
   const handleCancelInviteRequest = (messageId: number) => {
-    const canceledInvite = messages.find(
-      (message): message is ChatRoommateInviteMessageData =>
-        message.id === messageId && isInviteMessage(message),
-    );
+    const isCanceledInviteMessage = (
+      message: ChatMessage,
+    ): message is ChatRoommateInviteMessageData =>
+      message.id === messageId && isInviteMessage(message);
+
+    const canceledInvite = messages.find(isCanceledInviteMessage);
 
     setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
 
