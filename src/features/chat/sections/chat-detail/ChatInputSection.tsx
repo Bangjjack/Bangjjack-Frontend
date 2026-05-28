@@ -30,7 +30,7 @@ export type ChatInputSectionProps = {
   leaveSheet: {
     isLeavingChatRoom?: boolean;
     onClose: () => void;
-    onLeaveChatRoom?: () => void;
+    onLeaveChatRoom: () => void;
     open: boolean;
   };
 };
@@ -98,7 +98,7 @@ function ChatInputSection({
         onCancel={leaveSheet.onClose}
         onConfirm={() => {
           leaveSheet.onClose();
-          leaveSheet.onLeaveChatRoom?.();
+          leaveSheet.onLeaveChatRoom();
         }}
       />
     </>
