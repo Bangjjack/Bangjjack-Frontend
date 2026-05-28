@@ -14,6 +14,7 @@ import {
 } from "@/features/chat";
 import type { ChatDetail, ChatRoom, ChatRoomListItem, ChatTab } from "@/features/chat";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
   return {
@@ -21,7 +22,7 @@ function createChatDetailFromRoom(chatRoom: ChatRoomListItem): ChatDetail {
     id: chatRoom.partnerId,
     matchRate: 0,
     messages: [],
-    nickname: chatRoom.partnerName,
+    nickname: parseDisplayName(chatRoom.partnerName),
     profileSummary: getChatRoomImportanceTags(chatRoom),
     profileImage: chatRoom.partnerProfileImage,
     startSource: "ai_recommendation",
@@ -110,7 +111,7 @@ export default function ChatListPage() {
                 key={chatRoom.roomId}
                 id={chatRoom.partnerId}
                 message={formatChatRoomMessage(chatRoom.lastMessage)}
-                nickname={chatRoom.partnerName}
+                nickname={parseDisplayName(chatRoom.partnerName)}
                 onClick={() =>
                   navigate(`/chat/${chatRoom.roomId}`, {
                     state: {
