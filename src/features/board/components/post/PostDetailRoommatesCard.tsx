@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Card } from "@/components/ui";
 import { RoommateList } from "@/features/board/components/roommate";
 import type { PostMember } from "@/features/board/types";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 interface PostDetailRoommatesCardProps {
   postId: number;
@@ -28,7 +29,7 @@ function PostDetailRoommatesCard({ postId, members }: PostDetailRoommatesCardPro
 
       <RoommateList
         members={members.map((m) => ({
-          nickname: m.username,
+          nickname: parseDisplayName(m.username),
           seed: m.userId,
           isHost: m.role === "LEADER",
         }))}

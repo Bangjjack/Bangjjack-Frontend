@@ -21,6 +21,8 @@ import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/my
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
+import { useAuthStore } from "@/stores/authStore";
 
 function MyProfileEditContent({
   className,
@@ -28,10 +30,14 @@ function MyProfileEditContent({
   onChecklistClick,
   onEditClick,
 }: MyProfileEditContentProps) {
+  const username = useAuthStore((state) => state.username);
+  const parsedName = username ? parseDisplayName(username) : MY_PROFILE_EDIT_DEFAULT_VALUES.name;
+
   const [isEditing, setIsEditing] = useState(false);
-  const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>(
-    MY_PROFILE_EDIT_DEFAULT_VALUES,
-  );
+  const [profileForm, setProfileForm] = useState<MyProfileEditFormValues>({
+    ...MY_PROFILE_EDIT_DEFAULT_VALUES,
+    name: parsedName,
+  });
   const [checklistItems] = useState<ChecklistEntry[]>([]);
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
@@ -45,7 +51,7 @@ function MyProfileEditContent({
     trigger,
     formState: { isValid },
   } = useForm<MyProfileEditFormValues>({
-    defaultValues: MY_PROFILE_EDIT_DEFAULT_VALUES,
+    defaultValues: { ...MY_PROFILE_EDIT_DEFAULT_VALUES, name: parsedName },
     mode: "onChange",
     resolver: zodResolver(myProfileEditSchema),
   });

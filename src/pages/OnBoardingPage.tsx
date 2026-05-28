@@ -6,6 +6,7 @@ import { authQueryKeys, type AuthRegistrationStatus } from "@/features/auth";
 import { OnBoardingPageContent } from "@/features/onboarding/components";
 import { useOnboardingSubmit } from "@/features/onboarding/hooks";
 import { useGoBack } from "@/hooks/useGoBack";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
 
 export default function OnBoardingPage() {
@@ -58,7 +59,7 @@ export default function OnBoardingPage() {
   return (
     <OnBoardingPageContent
       isSubmitting={isPending}
-      userName={username ?? undefined}
+      userName={username ? parseDisplayName(username) : undefined}
       onBack={handleBack}
       onNext={submit}
     />
