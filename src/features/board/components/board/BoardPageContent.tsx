@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Chip, RoundButton, toast } from "@/components/ui";
 import { cn } from "@/lib/cn";
@@ -45,8 +45,13 @@ function BoardPageContent({
     refetch: refetchRecommended,
   } = useRecommendedPostList({ roomSize: roomSizeParam }, aiRecommend);
 
+  const prevRecommendedFetchStatus = useRef(recommendedFetchStatus);
+
   useEffect(() => {
-    if (recommendedFetchStatus !== "idle") return;
+    const prev = prevRecommendedFetchStatus.current;
+    prevRecommendedFetchStatus.current = recommendedFetchStatus;
+
+    if (prev !== "fetching" || recommendedFetchStatus !== "idle") return;
     if (isRecommendedError) toast.error("AI 추천글을 불러오지 못했어요");
     else if (isRecommendedSuccess) toast.success("AI 추천순으로 정렬했어요");
   }, [recommendedFetchStatus, isRecommendedError, isRecommendedSuccess]);

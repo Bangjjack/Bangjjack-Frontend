@@ -41,7 +41,7 @@ function RoommateProfileContent({ profile, roommateId }: RoommateProfileContentP
     : [];
   const avatarSeed = profile?.id ?? nickname.length;
 
-  if (isError) {
+  if (roommateId !== undefined && isError) {
     return (
       <div className="flex h-dvh flex-col bg-bg-primary">
         <Header showBack title="룸메이트 추천" onBackClick={handleBackClick} />
