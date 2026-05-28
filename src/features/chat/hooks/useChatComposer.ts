@@ -301,7 +301,7 @@ function useChatComposer({
       },
       onSuccess: (application) => {
         setLocalMessages((prev) => {
-          const currentMessages = [...messages, ...prev];
+          const currentMessages = [...baseMessages, ...prev];
 
           if (hasRoommateApplicationMessage(currentMessages, true)) {
             return prev;
