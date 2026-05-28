@@ -8,9 +8,17 @@ export const useLeaveChatRoom = () => {
 
   return useMutation({
     mutationFn: leaveChatRoom,
-    onSuccess: () => {
+    onSuccess: (_, roomId) => {
       queryClient.invalidateQueries({ queryKey: chatQueryKeys.rooms() });
-      queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
+      queryClient.removeQueries({
+        predicate: ({ queryKey }) =>
+          queryKey[0] === chatQueryKeys.all[0] &&
+          queryKey[1] === "messages" &&
+          typeof queryKey[2] === "object" &&
+          queryKey[2] !== null &&
+          "roomId" in queryKey[2] &&
+          queryKey[2].roomId === roomId,
+      });
     },
   });
 };
