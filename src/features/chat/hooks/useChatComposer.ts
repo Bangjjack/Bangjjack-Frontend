@@ -47,17 +47,19 @@ function createInviteMessage({
   };
 }
 
-function createRejectMessage({
+function createRoommateResultMessage({
   applicationId,
   createdAt,
   id,
   partnerName,
+  type,
   variant,
 }: {
   applicationId?: number;
   createdAt: string;
   id: number;
   partnerName: string;
+  type: "roommate_accept" | "roommate_reject";
   variant: "received" | "sent";
 }): ChatMessage {
   return {
@@ -66,31 +68,7 @@ function createRejectMessage({
     id,
     partnerName,
     sentAt: formatMessageTime(createdAt),
-    type: "roommate_reject",
-    variant,
-  };
-}
-
-function createAcceptMessage({
-  applicationId,
-  createdAt,
-  id,
-  partnerName,
-  variant,
-}: {
-  applicationId?: number;
-  createdAt: string;
-  id: number;
-  partnerName: string;
-  variant: "received" | "sent";
-}): ChatMessage {
-  return {
-    applicationId,
-    ...formatMessageDateLabel(createdAt),
-    id,
-    partnerName,
-    sentAt: formatMessageTime(createdAt),
-    type: "roommate_accept",
+    type,
     variant,
   };
 }
@@ -203,19 +181,21 @@ function useChatComposer({
               type: "roommate_request",
             }
         : isApplicationRejectedMessage
-          ? createRejectMessage({
+          ? createRoommateResultMessage({
               applicationId: receivedMessage.applicationId,
               createdAt: receivedMessage.createdAt,
               id: receivedMessage.messageId,
               partnerName: chatDetail.nickname,
+              type: "roommate_reject",
               variant: rejectMessageVariant,
             })
           : isApplicationAcceptedMessage
-            ? createAcceptMessage({
+            ? createRoommateResultMessage({
                 applicationId: receivedMessage.applicationId,
                 createdAt: receivedMessage.createdAt,
                 id: receivedMessage.messageId,
                 partnerName: chatDetail.nickname,
+                type: "roommate_accept",
                 variant: acceptMessageVariant,
               })
             : {
@@ -351,11 +331,12 @@ function useChatComposer({
 
       return [
         ...prev,
-        createAcceptMessage({
+        createRoommateResultMessage({
           applicationId,
           createdAt,
           id: getNextMessageId(currentMessages),
           partnerName: chatDetail.nickname,
+          type: "roommate_accept",
           variant: "sent",
         }),
       ];
