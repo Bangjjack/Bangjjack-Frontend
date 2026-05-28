@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage, ProfileAvatar } from "@/components/ui";
+import { Avatar, AvatarFallback, AvatarImage, ProfileAvatar, Skeleton } from "@/components/ui";
 
 import { MessageCount } from "./MessageCount";
 
@@ -61,4 +61,23 @@ function ChatListItem({
   );
 }
 
-export { ChatListItem };
+function ChatListItemSkeleton() {
+  return (
+    <li>
+      <div className="flex w-full items-center border-b border-border-normal px-300 py-500">
+        <div className="flex min-w-0 flex-1 items-center justify-between gap-400">
+          <div className="flex min-w-0 items-center gap-400">
+            <Skeleton className="size-12 shrink-0 rounded-full" />
+            <div className="flex min-w-0 flex-col gap-100">
+              <Skeleton className="h-[18px] w-24" />
+              <Skeleton className="mt-100 h-[14px] w-36" />
+            </div>
+          </div>
+          <Skeleton className="h-3 w-8 shrink-0" />
+        </div>
+      </div>
+    </li>
+  );
+}
+
+export { ChatListItem, ChatListItemSkeleton };

@@ -85,15 +85,17 @@ function ChatMessageListSection({
       onScroll={handleMessagesScroll}
     >
       <div className="flex flex-col gap-400 px-400 py-200">
-        <ChatMatchCard
-          className="sticky top-200 z-10 shrink-0"
-          matchRate={chatDetail.matchRate}
-          onProfileClick={onProfileClick}
-          onRecruitClick={onRecruitClick}
-          onReportClick={onReportClick}
-          profileSummary={profileSummary}
-          recruitTitle={recruitTitle}
-        />
+        {recruitTitle && (
+          <ChatMatchCard
+            className="sticky top-200 z-10 shrink-0"
+            matchRate={chatDetail.matchRate}
+            onProfileClick={onProfileClick}
+            onRecruitClick={onRecruitClick}
+            onReportClick={onReportClick}
+            profileSummary={profileSummary}
+            recruitTitle={recruitTitle}
+          />
+        )}
 
         <ChatMessageList
           avatarSeed={chatDetail.id}

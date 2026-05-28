@@ -1,5 +1,6 @@
 export {
   ChatListItem,
+  ChatListItemSkeleton,
   ChatRoommateConfirmedContent,
   SharedLifeGuideContent,
 } from "@/features/chat/components";

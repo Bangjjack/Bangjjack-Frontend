@@ -10,6 +10,7 @@ interface PostDetailInfoCardProps {
   maxMembers: number;
   author: PostAuthor;
   createdAt: string;
+  onAuthorClick?: () => void;
 }
 
 function PostDetailInfoCard({
@@ -19,6 +20,7 @@ function PostDetailInfoCard({
   maxMembers,
   author,
   createdAt,
+  onAuthorClick,
 }: PostDetailInfoCardProps) {
   return (
     <Card className="gap-0 rounded-medium border-0 bg-bg-secondary px-450 py-600 shadow-none">
@@ -31,7 +33,9 @@ function PostDetailInfoCard({
         </div>
 
         <div className="flex items-center gap-200">
-          <ProfileAvatar size={24} imageUrl={author.profileImage} seed={author.authorId} />
+          <button type="button" className="flex shrink-0 items-center" onClick={onAuthorClick}>
+            <ProfileAvatar size={24} imageUrl={author.profileImage} seed={author.authorId} />
+          </button>
           <span className="typo-caption1 text-text-caption">
             {parseDisplayName(author.username)}
           </span>
