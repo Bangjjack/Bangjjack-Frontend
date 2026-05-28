@@ -76,7 +76,7 @@ function ChatMessageListSection({
 
   const recruitPostId =
     chatDetail.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
-  const { data: recruitPost } = usePostDetail(recruitPostId ?? 0);
+  const { data: recruitPost } = usePostDetail(recruitPostId);
   const recruitTitle = recruitPostId
     ? (recruitPost?.title ?? chatDetail.recruitTitle ?? "모집글")
     : undefined;
