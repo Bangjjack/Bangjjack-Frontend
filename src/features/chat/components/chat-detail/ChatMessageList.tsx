@@ -11,8 +11,10 @@ export type ChatMessageListProps = {
   chatDetail: ChatDetail;
   fallbackDateLabel: string;
   isCancelingInviteRequest?: boolean;
+  isSendingResendRequest?: boolean;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
+  onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
   partnerLastReadMessageId?: number | null;
@@ -25,8 +27,10 @@ export function ChatMessageList({
   chatDetail,
   fallbackDateLabel,
   isCancelingInviteRequest,
+  isSendingResendRequest,
   messages,
   onCancelInviteRequest,
+  onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
@@ -49,7 +53,9 @@ export function ChatMessageList({
           messages={messages}
           messageIndex={index}
           isCancelingInviteRequest={isCancelingInviteRequest}
+          isSendingResendRequest={isSendingResendRequest}
           onCancelInviteRequest={onCancelInviteRequest}
+          onResendInviteRequest={onResendInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
           onRoommateRequestReject={onRoommateRequestReject}

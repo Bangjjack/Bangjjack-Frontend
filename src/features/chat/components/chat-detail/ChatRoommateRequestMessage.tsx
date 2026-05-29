@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { CheckIcon } from "@/assets/icons";
+import { CheckIcon, CircleErrorIcon } from "@/assets/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,21 +14,66 @@ import {
   AlertDialogTrigger,
   Button,
 } from "@/components/ui";
+import { cn } from "@/lib/cn";
 
-export type ChatRoommateRequestMessageProps = {
+type RequestProps = {
+  type?: "request";
+  isProcessing?: boolean;
   onAccept?: () => void;
   onReject?: () => void;
-  isProcessing?: boolean;
   requesterName: string;
 };
 
-function ChatRoommateRequestMessage({
-  isProcessing = false,
-  onAccept,
-  onReject,
-  requesterName,
-}: ChatRoommateRequestMessageProps) {
+type CancelProps = {
+  type: "cancel";
+  variant: "received" | "sent";
+  partnerName: string;
+  onResend?: () => void;
+};
+
+export type ChatRoommateRequestMessageProps = RequestProps | CancelProps;
+
+function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
   const [open, setOpen] = useState(false);
+
+  if (props.type === "cancel") {
+    const { variant, partnerName, onResend } = props;
+    const isSent = variant === "sent";
+
+    return (
+      <div
+        className={cn(
+          "flex w-55 flex-col items-start gap-300 overflow-hidden rounded-tl-2xl rounded-tr-2xl border border-border-disabled bg-bg-secondary px-500 py-400",
+          isSent ? "rounded-bl-2xl" : "rounded-br-2xl",
+        )}
+      >
+        <div className="flex items-center gap-100 overflow-hidden">
+          <CircleErrorIcon className="size-3 shrink-0 text-neutral-400" />
+          <span className="typo-title4 text-neutral-400">요청 취소됨</span>
+        </div>
+
+        <div className="flex flex-col items-start gap-100 whitespace-normal">
+          <p className="wrap-break-word typo-button2 tracking-normal text-text-strong">
+            {isSent ? `${partnerName} 님께` : `${partnerName} 님이`}
+            <br />
+            보낸 요청을 취소했어요
+          </p>
+          <p className="typo-caption2 text-text-caption">언제든 다시 요청을 보낼 수 있어요</p>
+        </div>
+
+        <Button
+          className="h-9 w-full cursor-pointer rounded-medium"
+          onClick={onResend}
+          size="sm"
+          variant="black"
+        >
+          다시 요청 보내기
+        </Button>
+      </div>
+    );
+  }
+
+  const { isProcessing = false, onAccept, onReject, requesterName } = props;
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>

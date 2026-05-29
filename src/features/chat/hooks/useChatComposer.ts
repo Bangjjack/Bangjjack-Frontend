@@ -65,10 +65,35 @@ function useChatComposer({
   const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
     useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
+  const disabledInviteIds = new Set(
+    localMessages
+      .filter(
+        (m): m is ChatRoommateInviteMessageData => m.type === "roommate_invite" && !!m.disabled,
+      )
+      .map((m) => m.id),
+  );
   const messages = [
-    ...baseMessages,
-    ...localMessages.filter(
-      (localMessage) =>
+    ...baseMessages.filter((baseMessage) => !disabledInviteIds.has(baseMessage.id)),
+    ...localMessages.filter((localMessage) => {
+      if (localMessage.type === "roommate_invite" && localMessage.disabled) {
+        return true;
+      }
+      if (localMessage.type === "roommate_cancel") {
+        if (baseMessages.some((bm) => bm.id === localMessage.id)) {
+          return false;
+        }
+        if (
+          localMessage.applicationId != null &&
+          baseMessages.some(
+            (bm) =>
+              bm.type === "roommate_cancel" && bm.applicationId === localMessage.applicationId,
+          )
+        ) {
+          return false;
+        }
+        return true;
+      }
+      return (
         !baseMessages.some((baseMessage) => baseMessage.id === localMessage.id) &&
         !(
           localMessage.type === "roommate_invite" &&
@@ -77,8 +102,9 @@ function useChatComposer({
         !(
           localMessage.type === "roommate_request" &&
           hasRoommateApplicationMessage(baseMessages, false)
-        ),
-    ),
+        )
+      );
+    }),
   ];
   const partnerLastReadMessageId = Math.max(
     initialPartnerLastReadMessageId ?? 0,
@@ -242,6 +268,44 @@ function useChatComposer({
     });
   };
 
+  const handleResendInviteRequest = () => {
+    if (isSendingInviteRequest) return;
+
+    sendRoommateApplication(chatDetail.id, {
+      onError: (error) => {
+        toast.error(getApiErrorMessage(error, "룸메이트 요청을 보내지 못했어요."));
+      },
+      onSuccess: (application) => {
+        setLocalMessages((prev) => {
+          const cleared = prev.filter(
+            (msg) =>
+              !(msg.type === "roommate_invite" && msg.disabled) && msg.type !== "roommate_cancel",
+          );
+          const currentMessages = [...baseMessages, ...cleared];
+
+          if (hasRoommateApplicationMessage(currentMessages, true)) {
+            return cleared;
+          }
+
+          const nextMessageId = currentMessages.some((msg) => msg.id === application.applicationId)
+            ? getNextMessageId(currentMessages)
+            : application.applicationId;
+
+          return [
+            ...cleared,
+            createInviteMessage({
+              applicationId: application.applicationId,
+              createdAt: application.createdAt,
+              id: nextMessageId,
+              recipientName: chatDetail.nickname,
+            }),
+          ];
+        });
+        toast.success(`${chatDetail.nickname}님께 룸메이트 요청을 보냈어요`);
+      },
+    });
+  };
+
   const handleCancelInviteRequest = (messageId: number) => {
     const isCanceledInviteMessage = (
       message: ChatMessage,
@@ -264,7 +328,21 @@ function useChatComposer({
         toast.error(getApiErrorMessage(error, "룸메이트 요청 취소에 실패했어요."));
       },
       onSuccess: () => {
-        setLocalMessages((prev) => prev.filter((message) => message.id !== messageId));
+        setLocalMessages((prev) => {
+          const now = new Date().toISOString();
+          const currentMessages = [...baseMessages, ...prev];
+          const withoutInvite = prev.filter((msg) => msg.id !== messageId);
+          const disabledInvite: ChatRoommateInviteMessageData = { ...canceledInvite, disabled: true };
+          const cancelMessage = createRoommateResultMessage({
+            applicationId: canceledInvite.applicationId,
+            createdAt: now,
+            id: getNextMessageId(currentMessages),
+            partnerName: canceledInvite.recipientName,
+            type: "roommate_cancel",
+            variant: "sent",
+          });
+          return [...withoutInvite, disabledInvite, cancelMessage];
+        });
         toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
       },
     });
@@ -335,6 +413,7 @@ function useChatComposer({
     handleConfirmLeaveChatRoom,
     handleRoommateRequestAccept,
     handleInputMenuAction,
+    handleResendInviteRequest,
     handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,

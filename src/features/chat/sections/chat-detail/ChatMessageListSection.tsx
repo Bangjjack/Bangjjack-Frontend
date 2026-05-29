@@ -8,12 +8,14 @@ export type ChatMessageListSectionProps = {
   hasPreviousMessages?: boolean;
   isCancelingInviteRequest?: boolean;
   isLoadingPreviousMessages?: boolean;
+  isSendingResendRequest?: boolean;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
   onLoadPreviousMessages?: () => void | Promise<unknown>;
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
   onReportClick?: () => void;
+  onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
   partnerLastReadMessageId?: number | null;
@@ -27,12 +29,14 @@ function ChatMessageListSection({
   hasPreviousMessages = false,
   isCancelingInviteRequest,
   isLoadingPreviousMessages = false,
+  isSendingResendRequest,
   messages,
   onCancelInviteRequest,
   onLoadPreviousMessages,
   onProfileClick,
   onRecruitClick,
   onReportClick,
+  onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
@@ -106,7 +110,9 @@ function ChatMessageListSection({
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
           isCancelingInviteRequest={isCancelingInviteRequest}
+          isSendingResendRequest={isSendingResendRequest}
           onCancelInviteRequest={onCancelInviteRequest}
+          onResendInviteRequest={onResendInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
           onRoommateRequestReject={onRoommateRequestReject}

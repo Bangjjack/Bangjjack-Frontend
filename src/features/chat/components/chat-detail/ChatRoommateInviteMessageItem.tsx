@@ -4,7 +4,7 @@ import type { ChatMessage } from "@/features/chat/types";
 type ChatRoommateInviteMessageItemProps = {
   isCanceling?: boolean;
   message: Extract<ChatMessage, { type: "roommate_invite" }>;
-  onCancel: (messageId: number) => void;
+  onCancel?: (messageId: number) => void;
 };
 
 export function ChatRoommateInviteMessageItem({
@@ -15,8 +15,8 @@ export function ChatRoommateInviteMessageItem({
   return (
     <div className="flex w-full justify-end">
       <ChatRoommateInviteMessage
-        disabled={isCanceling}
-        onCancel={() => onCancel(message.id)}
+        disabled={isCanceling || message.disabled}
+        onCancel={() => onCancel?.(message.id)}
         recipientName={message.recipientName}
       />
     </div>

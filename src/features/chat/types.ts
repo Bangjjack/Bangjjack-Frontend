@@ -51,6 +51,7 @@ export type ChatRoommateInviteMessageData = {
   applicationId?: number;
   dateKey?: string;
   dateLabel?: string;
+  disabled?: boolean;
   id: number;
   recipientName: string;
   type: "roommate_invite";
@@ -78,12 +79,24 @@ export type ChatRoommateAcceptMessageData = {
   variant: "received" | "sent";
 };
 
+export type ChatRoommateCancelMessageData = {
+  applicationId?: number;
+  dateKey?: string;
+  dateLabel?: string;
+  id: number;
+  partnerName: string;
+  sentAt?: string;
+  type: "roommate_cancel";
+  variant: "received" | "sent";
+};
+
 export type ChatMessage =
   | ChatTextMessage
   | ChatRoommateRequestMessageData
   | ChatRoommateInviteMessageData
   | ChatRoommateRejectMessageData
-  | ChatRoommateAcceptMessageData;
+  | ChatRoommateAcceptMessageData
+  | ChatRoommateCancelMessageData;
 
 export type ChatStartSource = "ai_recommendation" | "recruit_post";
 
@@ -141,6 +154,7 @@ export type ChatServerMessageType =
   | "APPLICATION_SENT"
   | "APPLICATION_ACCEPTED"
   | "APPLICATION_REJECTED"
+  | "APPLICATION_CANCELLED"
   | "GROUP_DISBANDED"
   | "SYSTEM";
 

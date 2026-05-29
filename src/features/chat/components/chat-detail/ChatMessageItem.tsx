@@ -1,4 +1,5 @@
 import { ChatRoommateAcceptMessageItem } from "@/features/chat/components/chat-detail/ChatRoommateAcceptMessageItem";
+import { ChatRoommateCancelMessageItem } from "@/features/chat/components/chat-detail/ChatRoommateCancelMessageItem";
 import { ChatRoommateInviteMessageItem } from "@/features/chat/components/chat-detail/ChatRoommateInviteMessageItem";
 import { ChatRoommateRejectMessageItem } from "@/features/chat/components/chat-detail/ChatRoommateRejectMessageItem";
 import { ChatRoommateRequestMessageItem } from "@/features/chat/components/chat-detail/ChatRoommateRequestMessageItem";
@@ -15,10 +16,12 @@ export type ChatMessageItemProps = {
   dateBadgeLabel?: string | null;
   isCancelingInviteRequest?: boolean;
   isFirst: boolean;
+  isSendingResendRequest?: boolean;
   message: ChatMessage;
   messages: ChatMessage[];
   messageIndex: number;
   onCancelInviteRequest: (messageId: number) => void;
+  onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
   partnerLastReadMessageId?: number | null;
@@ -37,6 +40,7 @@ export function ChatMessageItem({
   messages,
   messageIndex,
   onCancelInviteRequest,
+  onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
@@ -89,6 +93,19 @@ export function ChatMessageItem({
           avatarSeed={avatarSeed}
           chatDetail={chatDetail}
           message={message}
+        />
+      </ChatMessageWrapper>
+    );
+  }
+
+  if (message.type === "roommate_cancel") {
+    return (
+      <ChatMessageWrapper dateBadgeLabel={dateBadgeLabel} isFirst={isFirst}>
+        <ChatRoommateCancelMessageItem
+          avatarImageUrl={avatarImageUrl}
+          avatarSeed={avatarSeed}
+          message={message}
+          onResend={onResendInviteRequest}
         />
       </ChatMessageWrapper>
     );
