@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 
 import { Button, Card, Header, toast } from "@/components/ui";
-import { usePostMatchRate } from "@/features/board/hooks";
+import { useMatchReport, usePostMatchRate } from "@/features/board/hooks";
 import {
   AiCommentCard,
   MatchedItemsCard,
@@ -32,7 +32,27 @@ function MatchingReportContent({
   const navigate = useNavigate();
   const { mutate: createChatRoom, isPending: isCreatingChatRoom } = useCreateChatRoom();
 
-  const { data, isLoading, isError, refetch } = usePostMatchRate(postId ?? 0, !!postId);
+  const {
+    data: postData,
+    isLoading: isPostLoading,
+    isError: isPostError,
+    refetch: refetchPost,
+  } = usePostMatchRate(postId ?? 0, !!postId);
+
+  const {
+    data: userData,
+    isLoading: isUserLoading,
+    isError: isUserError,
+    refetch: refetchUser,
+  } = useMatchReport(roommateId ?? 0, !postId && !!roommateId);
+
+  const data = postData ?? userData;
+  const isLoading = isPostLoading || isUserLoading;
+  const isError = isPostError || isUserError;
+  function refetch() {
+    if (postId) refetchPost();
+    else refetchUser();
+  }
 
   const effectiveTargetUserId = targetUserId ?? roommateId;
 

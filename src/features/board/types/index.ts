@@ -18,6 +18,9 @@ export type {
 
 export type {
   ChecklistField,
+  MatchRateConversationStarter,
+  MatchRateFeature,
+  MatchRateMismatchedFeature,
   PostAuthor,
   PostMember,
   PostMemberLifestyleChecklist,
