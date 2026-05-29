@@ -37,6 +37,7 @@ export function ChatMessageItem({
   dateBadgeLabel,
   isCancelingInviteRequest,
   isFirst,
+  isSendingResendRequest,
   message,
   messages,
   messageIndex,
@@ -106,6 +107,7 @@ export function ChatMessageItem({
         <ChatRoommateCancelMessageItem
           avatarImageUrl={avatarImageUrl}
           avatarSeed={avatarSeed}
+          isSendingResendRequest={isSendingResendRequest}
           message={message}
           onResend={onResendInviteRequest}
           onViewProfile={onProfileClick}

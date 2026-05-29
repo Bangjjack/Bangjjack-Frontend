@@ -28,6 +28,7 @@ type CancelProps = {
   type: "cancel";
   variant: "received" | "sent";
   partnerName: string;
+  isResending?: boolean;
   onResend?: () => void;
   onViewProfile?: () => void;
 };
@@ -38,7 +39,7 @@ function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
   const [open, setOpen] = useState(false);
 
   if (props.type === "cancel") {
-    const { variant, partnerName, onResend, onViewProfile } = props;
+    const { variant, partnerName, isResending, onResend, onViewProfile } = props;
     const isSent = variant === "sent";
 
     return (
@@ -66,6 +67,7 @@ function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
 
         <Button
           className="h-9 w-full cursor-pointer rounded-medium"
+          disabled={isSent && isResending}
           onClick={isSent ? onResend : onViewProfile}
           size="sm"
           variant="black"

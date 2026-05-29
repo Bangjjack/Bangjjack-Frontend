@@ -6,6 +6,7 @@ import { cn } from "@/lib/cn";
 type ChatRoommateCancelMessageItemProps = {
   avatarImageUrl?: string | null;
   avatarSeed: number;
+  isSendingResendRequest?: boolean;
   message: Extract<ChatMessage, { type: "roommate_cancel" }>;
   onResend?: () => void;
   onViewProfile?: () => void;
@@ -14,6 +15,7 @@ type ChatRoommateCancelMessageItemProps = {
 export function ChatRoommateCancelMessageItem({
   avatarImageUrl,
   avatarSeed,
+  isSendingResendRequest,
   message,
   onResend,
   onViewProfile,
@@ -41,6 +43,7 @@ export function ChatRoommateCancelMessageItem({
         type="cancel"
         variant={message.variant}
         partnerName={message.partnerName}
+        isResending={isSendingResendRequest}
         onResend={onResend}
         onViewProfile={onViewProfile}
       />
