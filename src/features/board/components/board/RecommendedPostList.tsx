@@ -54,7 +54,7 @@ function RecommendedPostList({
           maxMembers={post.totalMemberCount}
           dormitory={DORMITORY_LABEL[post.dormitory] ?? post.dormitory}
           roomType={ROOM_SIZE_LABEL[post.roomSize] ?? post.roomSize}
-          tags={[SMOKING_LABEL[post.smoking] ?? post.smoking]}
+          tags={post.smoking ? [SMOKING_LABEL[post.smoking] ?? post.smoking] : []}
           matchRate={post.matchRate}
           timeAgo={formatRelativeTime(post.createdAt)}
           onClick={() => onPostClick?.(post.postId)}
