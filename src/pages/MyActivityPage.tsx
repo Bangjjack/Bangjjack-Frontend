@@ -1,5 +1,5 @@
 import { MyActivityContent } from "@/features/mypage";
 
 export default function MyActivityPage() {
-  return <MyActivityContent className="mt-400" />;
+  return <MyActivityContent className="mt-400 h-full" />;
 }

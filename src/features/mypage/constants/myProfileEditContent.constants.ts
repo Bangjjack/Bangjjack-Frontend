@@ -23,6 +23,7 @@ export const MY_PROFILE_EDIT_DEFAULT_VALUES: MyProfileEditFormValues = {
   birthYear: MY_PROFILE.birthYear,
   campus: MY_PROFILE.campus,
   department: MY_PROFILE.department,
+  departmentId: null,
   dormitory: MY_PROFILE.dormitory,
   email: MY_PROFILE.email,
   gender: MY_PROFILE.gender,

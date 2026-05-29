@@ -54,7 +54,7 @@ function ChatRoommateInviteSheet({
           <div className="flex flex-col gap-400">
             <h2 className="typo-h4 text-text-strong">룸메이트 요청 보내기</h2>
             <p className="typo-caption1 whitespace-pre-line text-text-placeholder">
-              아래 상대방에게 룸메이트 초대를 보낼 수 있어요
+              모집글 작성자에게 룸메이트 요청을 보낼 수 있어요
               {"\n"}
               상대방이 수락하면 룸메이트로 확정돼요
             </p>
@@ -101,7 +101,7 @@ function ChatRoommateInviteSheet({
                   confirmedRef.current = true;
                 }}
               >
-                초대 보내기
+                요청 보내기
               </Button>
             </BottomSheetClose>
           </div>
