@@ -10,6 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  toast,
 } from "@/components/ui";
 import { JoinedRoomCard } from "@/features/mypage/components/activity/JoinedRoomCard";
 import { MyPageEmptyState } from "@/features/mypage/components/MyPageEmptyState";
@@ -17,6 +18,7 @@ import {
   MY_JOINED_ROOM_ACTIONS,
   MY_JOINED_ROOM_EMPTY_MESSAGE,
   MY_JOINED_ROOM_ERROR_MESSAGE,
+  MY_JOINED_ROOM_LOADING_MESSAGE,
 } from "@/features/mypage/constants";
 import { useLeaveRoommateGroup, useMyRoommateGroups } from "@/features/roommate-group";
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
@@ -109,28 +111,24 @@ function MyActivityRoomList() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col gap-400">
-        <MyPageEmptyState messages={["Loading..."]} />
-      </div>
-    );
+    return <MyPageEmptyState messages={MY_JOINED_ROOM_LOADING_MESSAGE} />;
   }
 
   if (isError) {
     return <MyPageEmptyState messages={MY_JOINED_ROOM_ERROR_MESSAGE} />;
   }
 
+  if (joinedRooms.length === 0) {
+    return <MyPageEmptyState messages={MY_JOINED_ROOM_EMPTY_MESSAGE} />;
+  }
+
   return (
     <>
       <div className="flex flex-col gap-400">
         <div className="flex flex-col gap-400">
-          {joinedRooms.length > 0 ? (
-            joinedRooms.map((room) => (
-              <JoinedRoomCard key={room.id} onActionClick={handleRoomActionClick} room={room} />
-            ))
-          ) : (
-            <MyPageEmptyState messages={MY_JOINED_ROOM_EMPTY_MESSAGE} />
-          )}
+          {joinedRooms.map((room) => (
+            <JoinedRoomCard key={room.id} onActionClick={handleRoomActionClick} room={room} />
+          ))}
         </div>
 
         {joinedRooms.length >= 2 ? <RoomLimitNotice count={joinedRooms.length} /> : null}
@@ -157,7 +155,22 @@ function MyActivityRoomList() {
           <AlertDialogFooter className="flex-col">
             <AlertDialogAction
               onClick={() => {
-                if (confirmTarget !== null) leaveRoommateGroup(confirmTarget.roomId);
+                if (confirmTarget !== null) {
+                  leaveRoommateGroup(confirmTarget.roomId, {
+                    onSuccess: () =>
+                      toast.success(
+                        confirmTarget.type === "withdraw"
+                          ? "모집이 철회되었어요"
+                          : "방에서 나왔어요",
+                      ),
+                    onError: () =>
+                      toast.error(
+                        confirmTarget.type === "withdraw"
+                          ? "모집 철회에 실패했어요"
+                          : "방 나가기에 실패했어요",
+                      ),
+                  });
+                }
               }}
             >
               {confirmTarget?.type === "withdraw" ? "철회하기" : "나가기"}

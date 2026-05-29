@@ -27,7 +27,7 @@ function MyPageContent({
   const profileName =
     defaultProfileForm.name || (username ? parseDisplayName(username) : MY_PROFILE.name);
   const profileDepartment = defaultProfileForm.department || MY_PROFILE.department;
-  const birthYear = Number(defaultProfileForm.birthYear);
+  const birthYear = parseInt(defaultProfileForm.birthYear, 10);
   const profileAge = Number.isFinite(birthYear)
     ? new Date().getFullYear() - birthYear + 1
     : MY_PROFILE.age;

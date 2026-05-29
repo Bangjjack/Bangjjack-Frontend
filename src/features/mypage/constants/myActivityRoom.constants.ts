@@ -5,6 +5,7 @@ export const MY_JOINED_ROOM_EMPTY_MESSAGE = [
   "룸메이트 요청을 통해 방을 만들어보세요!",
 ];
 export const MY_JOINED_ROOM_ERROR_MESSAGE = ["소속된 방 목록을 불러올 수 없어요."];
+export const MY_JOINED_ROOM_LOADING_MESSAGE = ["소속된 방 목록을 불러오는 중이에요."];
 export const MY_JOINED_ROOM_ACTIONS: Record<MyActivityRoomVariant, MyActivityRoomMock["actions"]> =
   {
     leader: [

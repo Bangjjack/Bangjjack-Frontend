@@ -17,22 +17,10 @@ import {
 } from "@/components/ui";
 import { ActivityButton } from "@/features/mypage/components/activity/ActivityButton";
 import { ActivityTag } from "@/features/mypage/components/activity/ActivityTag";
+import { DORMITORY_LABEL, ROOM_SIZE_LABEL } from "@/constants";
 import { useDeleteMyPost, useMyRecruitPosts } from "@/features/mypage/hooks";
 
 import type { MyPost } from "@/features/mypage/types";
-import type { Dormitory, RoomSize } from "@/types";
-
-const DORMITORY_LABEL: Record<Dormitory, string> = {
-  DORM_1: "1기숙사",
-  DORM_2: "2기숙사",
-  DORM_3: "3기숙사",
-};
-
-const ROOM_SIZE_LABEL: Record<RoomSize, string> = {
-  TWO_PERSON: "2인 1실",
-  THREE_PERSON: "3인 1실",
-  FOUR_PERSON: "4인 1실",
-};
 
 function MyRecruitPostList() {
   const { data: posts, isError } = useMyRecruitPosts();

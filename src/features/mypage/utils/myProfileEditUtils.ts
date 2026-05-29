@@ -49,7 +49,7 @@ function mapFormToProfileRequest(
   const semester = reverseLookup(SEMESTER_LABEL, values.semester);
   const dormitory = reverseLookup(DORMITORY_LABEL, values.dormitory);
 
-  if (!campus || !gender || !semester || !dormitory || !values.departmentId) {
+  if (!campus || !gender || !semester || !dormitory || values.departmentId == null) {
     return null;
   }
 

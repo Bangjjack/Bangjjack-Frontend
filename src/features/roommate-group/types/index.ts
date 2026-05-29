@@ -2,7 +2,7 @@ import type { MemberRole } from "@/constants";
 import type { Dormitory, RoomSize } from "@/types";
 
 export type RoommateGroupMember = {
-  profileImage: string;
+  profileImage: string | null;
   role: MemberRole;
   userId: number;
   username: string;

@@ -112,6 +112,7 @@ function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
               onChange={(value) => {
                 field.onChange(value);
                 setValue("department", "", { shouldDirty: true, shouldValidate: true });
+                setValue("departmentId", null, { shouldDirty: true, shouldValidate: true });
               }}
               options={CAMPUS_OPTIONS}
               placeholder={PROFILE_PLACEHOLDER.campus}

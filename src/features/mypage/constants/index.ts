@@ -23,4 +23,5 @@ export {
   MY_JOINED_ROOM_ACTIONS,
   MY_JOINED_ROOM_EMPTY_MESSAGE,
   MY_JOINED_ROOM_ERROR_MESSAGE,
+  MY_JOINED_ROOM_LOADING_MESSAGE,
 } from "@/features/mypage/constants/myActivityRoom.constants";
