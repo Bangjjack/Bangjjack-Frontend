@@ -1,4 +1,6 @@
-export const ROOM_SIZE_LABEL: Record<string, string> = {
+import type { RoomSize } from "@/types";
+
+export const ROOM_SIZE_LABEL: Record<RoomSize, string> = {
   TWO_PERSON: "2인 1실",
   THREE_PERSON: "3인 1실",
   FOUR_PERSON: "4인 1실",

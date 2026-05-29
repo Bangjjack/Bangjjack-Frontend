@@ -1,6 +1,7 @@
 import { MyPageActionCard } from "@/features/mypage/components/MyPageActionCard";
 import { MyPageMenuSection } from "@/features/mypage/components/MyPageMenuSection";
 import { MyPageProfileCard } from "@/features/mypage/components/MyPageProfileCard";
+import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { MY_PROFILE } from "@/features/mypage/mocks";
 import { cn } from "@/lib/cn";
 import { parseDisplayName } from "@/lib/parseDisplayName";
@@ -21,14 +22,23 @@ function MyPageContent({
   onChecklistClick,
   onProfileClick,
 }: MyPageContentProps) {
+  const { defaultProfileForm, profileImageUrl } = useMyProfileEditData();
   const username = useAuthStore((state) => state.username);
+  const profileName =
+    defaultProfileForm.name || (username ? parseDisplayName(username) : MY_PROFILE.name);
+  const profileDepartment = defaultProfileForm.department || MY_PROFILE.department;
+  const birthYear = parseInt(defaultProfileForm.birthYear, 10);
+  const profileAge = Number.isFinite(birthYear)
+    ? new Date().getFullYear() - birthYear + 1
+    : MY_PROFILE.age;
 
   return (
     <div className={cn("flex flex-col gap-400 pt-400", className)}>
       <MyPageProfileCard
-        age={MY_PROFILE.age}
-        department={MY_PROFILE.department}
-        name={username ? parseDisplayName(username) : MY_PROFILE.name}
+        age={profileAge}
+        department={profileDepartment}
+        imageUrl={profileImageUrl}
+        name={parseDisplayName(profileName)}
         onClick={onProfileClick}
       />
       <MyPageActionCard

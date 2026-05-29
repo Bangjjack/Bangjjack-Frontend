@@ -10,6 +10,7 @@ export const useUpdateUserChecklist = () => {
     mutationFn: updateUserChecklist,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userQueryKeys.checklist() });
+      queryClient.invalidateQueries({ queryKey: userQueryKeys.myProfile() });
     },
   });
 };

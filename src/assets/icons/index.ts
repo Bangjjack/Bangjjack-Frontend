@@ -41,4 +41,5 @@ export { default as ThermometerIcon } from "@/assets/icons/ic-thermometer.svg?re
 export { default as WindIcon } from "@/assets/icons/ic-wind.svg?react";
 export { default as FanIcon } from "@/assets/icons/ic-fan.svg?react";
 export { default as MoonIcon } from "@/assets/icons/ic-moon.svg?react";
+export { default as CrownIcon } from "@/assets/icons/ic-crown.svg?react";
 export { default as DeleteIcon } from "@/assets/icons/ic-delete.svg?react";

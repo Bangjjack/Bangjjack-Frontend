@@ -3,7 +3,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { waveImage } from "@/assets/images";
-import { Button, Header } from "@/components/ui";
+import { Button, Header, toast } from "@/components/ui";
 import {
   ChecklistEditLink,
   ImportanceEditSection,
@@ -16,10 +16,11 @@ import {
   MY_PROFILE_EDIT_FORM_ID,
   WAVE_BACKGROUND_CLASS_NAME,
 } from "@/features/mypage/constants";
-import { MY_PROFILE_IMPORTANCE_ITEMS } from "@/features/mypage/mocks";
+import { useMyProfileEditData } from "@/features/mypage/hooks";
 import { myProfileEditSchema, type MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { MyProfileEditContentProps } from "@/features/mypage/types";
-import type { ChecklistEntry } from "@/features/roommate/types/checklist";
+import { mapFormToProfileRequest } from "@/features/mypage/utils";
+import { useUpdateUserProfile } from "@/features/user/hooks";
 import { cn } from "@/lib/cn";
 import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
@@ -32,20 +33,30 @@ function MyProfileEditContent({
 }: MyProfileEditContentProps) {
   const username = useAuthStore((state) => state.username);
   const parsedName = username ? parseDisplayName(username) : MY_PROFILE_EDIT_DEFAULT_VALUES.name;
-
+  const {
+    checklistItems,
+    defaultProfileForm,
+    importanceItems: apiImportanceItems,
+    isLoading,
+    profileImageUrl: apiProfileImageUrl,
+  } = useMyProfileEditData();
+  const { mutate: updateUserProfile, isPending: isUpdating } = useUpdateUserProfile();
   const [isEditing, setIsEditing] = useState(false);
-  const [submittedForm, setSubmittedForm] = useState<MyProfileEditFormValues | null>(null);
-  const profileForm = submittedForm ?? { ...MY_PROFILE_EDIT_DEFAULT_VALUES, name: parsedName };
-  const [checklistItems] = useState<ChecklistEntry[]>([]);
-  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [savedProfileForm, setSavedProfileForm] = useState<MyProfileEditFormValues | null>(null);
+  const [profilePreviewUrl, setProfilePreviewUrl] = useState<string | null>(null);
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false);
-  const [importanceItems, setImportanceItems] = useState<string[]>(
-    checklistItems.length > 0 ? MY_PROFILE_IMPORTANCE_ITEMS : [],
-  );
+  const [savedImportanceItems, setSavedImportanceItems] = useState<string[] | null>(null);
+  const profileForm = savedProfileForm ?? {
+    ...defaultProfileForm,
+    name: defaultProfileForm.name || parsedName,
+  };
+  const profileImageUrl = profilePreviewUrl ?? apiProfileImageUrl;
+  const importanceItems = savedImportanceItems ?? apiImportanceItems;
   const {
     control,
     handleSubmit,
     reset,
+    setValue,
     trigger,
     formState: { isValid },
   } = useForm<MyProfileEditFormValues>({
@@ -57,11 +68,11 @@ function MyProfileEditContent({
 
   useEffect(() => {
     return () => {
-      if (profileImageUrl) {
-        URL.revokeObjectURL(profileImageUrl);
+      if (profilePreviewUrl) {
+        URL.revokeObjectURL(profilePreviewUrl);
       }
     };
-  }, [profileImageUrl]);
+  }, [profilePreviewUrl]);
 
   function handleEditButtonClick() {
     reset(profileForm);
@@ -71,14 +82,22 @@ function MyProfileEditContent({
   }
 
   function submitProfileForm(values: MyProfileEditFormValues) {
-    setSubmittedForm(values);
-    setIsEditing(false);
+    const request = mapFormToProfileRequest(values, importanceItems);
+    if (!request) return;
+
+    updateUserProfile(request, {
+      onSuccess: () => {
+        setSavedProfileForm(values);
+        setIsEditing(false);
+        toast.success("프로필이 수정되었어요");
+      },
+    });
   }
 
   function updateProfileImage(file: File) {
     const nextImageUrl = URL.createObjectURL(file);
 
-    setProfileImageUrl((prev) => {
+    setProfilePreviewUrl((prev) => {
       if (prev) {
         URL.revokeObjectURL(prev);
       }
@@ -88,12 +107,14 @@ function MyProfileEditContent({
   }
 
   function toggleImportanceItem(item: string) {
-    setImportanceItems((prev) => {
-      if (prev.includes(item)) {
-        return prev.filter((value) => value !== item);
+    setSavedImportanceItems((prev) => {
+      const currentItems = prev ?? importanceItems;
+
+      if (currentItems.includes(item)) {
+        return currentItems.filter((value) => value !== item);
       }
 
-      return [...prev, item];
+      return [...currentItems, item];
     });
   }
 
@@ -141,7 +162,7 @@ function MyProfileEditContent({
               id={MY_PROFILE_EDIT_FORM_ID}
               onSubmit={handleSubmit(submitProfileForm)}
             >
-              <ProfileEditFields control={control} />
+              <ProfileEditFields control={control} setValue={setValue} />
               <ChecklistEditLink
                 hasChecklist={checklistItems.length > 0}
                 onClick={onChecklistClick}
@@ -162,7 +183,7 @@ function MyProfileEditContent({
       <div className="absolute bottom-0 left-0 right-0 z-40 bg-bg-primary px-400 pb-9 pt-300">
         <Button
           className="w-full cursor-pointer"
-          disabled={isEditing && !isValid}
+          disabled={isLoading || isUpdating || (isEditing && !isValid)}
           onClick={isEditing ? handleSubmit(submitProfileForm) : handleEditButtonClick}
           type="button"
           variant={isEditing ? "black" : "default"}

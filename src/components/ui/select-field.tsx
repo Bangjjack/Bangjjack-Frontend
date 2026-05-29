@@ -30,21 +30,24 @@ function SelectField({
   value,
 }: SelectFieldProps) {
   return (
-    <div className={cn("flex flex-col gap-2.75", className ?? "w-full")}>
+    <div className={cn("flex min-w-0 flex-col gap-2.75", className ?? "w-full")}>
       {label ? <h2 className="typo-title1 text-text-strong">{label}</h2> : null}
 
-      <div className={cn("flex items-start gap-2.5", fieldClassName)}>
-        <Dropdown className="flex-1" onChange={onChange} value={value}>
+      <div className={cn("flex min-w-0 items-start gap-2.5", fieldClassName)}>
+        <Dropdown className="min-w-0 flex-1" onChange={onChange} value={value}>
           <DropdownTrigger
             aria-label={ariaLabel ?? label}
-            className={cn("flex w-full items-center gap-2.5", triggerClassName)}
+            className={cn(
+              "flex min-w-0 w-full items-center gap-2.5 overflow-hidden",
+              triggerClassName,
+            )}
             placeholder={placeholder}
           >
             {triggerClassName ? (
               <>
                 <span
                   className={cn(
-                    "flex-1 truncate text-left",
+                    "min-w-0 flex-1 truncate text-left",
                     value ? "text-text-strong" : "text-text-placeholder",
                   )}
                 >
@@ -60,7 +63,7 @@ function SelectField({
 
           <DropdownContent>
             {options.map((option) => (
-              <DropdownItem key={option} value={option}>
+              <DropdownItem key={option} className="truncate" title={option} value={option}>
                 {option}
               </DropdownItem>
             ))}
