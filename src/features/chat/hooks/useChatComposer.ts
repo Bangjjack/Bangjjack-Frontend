@@ -332,7 +332,10 @@ function useChatComposer({
           const now = new Date().toISOString();
           const currentMessages = [...baseMessages, ...prev];
           const withoutInvite = prev.filter((msg) => msg.id !== messageId);
-          const disabledInvite: ChatRoommateInviteMessageData = { ...canceledInvite, disabled: true };
+          const disabledInvite: ChatRoommateInviteMessageData = {
+            ...canceledInvite,
+            disabled: true,
+          };
           const cancelMessage = createRoommateResultMessage({
             applicationId: canceledInvite.applicationId,
             createdAt: now,
