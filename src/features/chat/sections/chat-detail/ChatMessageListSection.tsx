@@ -112,6 +112,7 @@ function ChatMessageListSection({
           isCancelingInviteRequest={isCancelingInviteRequest}
           isSendingResendRequest={isSendingResendRequest}
           onCancelInviteRequest={onCancelInviteRequest}
+          onProfileClick={onProfileClick}
           onResendInviteRequest={onResendInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}

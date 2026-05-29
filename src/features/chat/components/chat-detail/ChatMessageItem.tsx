@@ -21,6 +21,7 @@ export type ChatMessageItemProps = {
   messages: ChatMessage[];
   messageIndex: number;
   onCancelInviteRequest: (messageId: number) => void;
+  onProfileClick?: () => void;
   onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
@@ -40,6 +41,7 @@ export function ChatMessageItem({
   messages,
   messageIndex,
   onCancelInviteRequest,
+  onProfileClick,
   onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
@@ -106,6 +108,7 @@ export function ChatMessageItem({
           avatarSeed={avatarSeed}
           message={message}
           onResend={onResendInviteRequest}
+          onViewProfile={onProfileClick}
         />
       </ChatMessageWrapper>
     );

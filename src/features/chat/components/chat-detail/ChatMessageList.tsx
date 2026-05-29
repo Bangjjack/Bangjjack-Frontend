@@ -14,6 +14,7 @@ export type ChatMessageListProps = {
   isSendingResendRequest?: boolean;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
+  onProfileClick?: () => void;
   onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
@@ -30,6 +31,7 @@ export function ChatMessageList({
   isSendingResendRequest,
   messages,
   onCancelInviteRequest,
+  onProfileClick,
   onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
@@ -55,6 +57,7 @@ export function ChatMessageList({
           isCancelingInviteRequest={isCancelingInviteRequest}
           isSendingResendRequest={isSendingResendRequest}
           onCancelInviteRequest={onCancelInviteRequest}
+          onProfileClick={onProfileClick}
           onResendInviteRequest={onResendInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}

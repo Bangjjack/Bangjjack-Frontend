@@ -8,6 +8,7 @@ type ChatRoommateCancelMessageItemProps = {
   avatarSeed: number;
   message: Extract<ChatMessage, { type: "roommate_cancel" }>;
   onResend?: () => void;
+  onViewProfile?: () => void;
 };
 
 export function ChatRoommateCancelMessageItem({
@@ -15,6 +16,7 @@ export function ChatRoommateCancelMessageItem({
   avatarSeed,
   message,
   onResend,
+  onViewProfile,
 }: ChatRoommateCancelMessageItemProps) {
   const isSent = message.variant === "sent";
 
@@ -40,6 +42,7 @@ export function ChatRoommateCancelMessageItem({
         variant={message.variant}
         partnerName={message.partnerName}
         onResend={onResend}
+        onViewProfile={onViewProfile}
       />
 
       {!isSent && message.sentAt ? (

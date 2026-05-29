@@ -29,6 +29,7 @@ type CancelProps = {
   variant: "received" | "sent";
   partnerName: string;
   onResend?: () => void;
+  onViewProfile?: () => void;
 };
 
 export type ChatRoommateRequestMessageProps = RequestProps | CancelProps;
@@ -37,7 +38,7 @@ function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
   const [open, setOpen] = useState(false);
 
   if (props.type === "cancel") {
-    const { variant, partnerName, onResend } = props;
+    const { variant, partnerName, onResend, onViewProfile } = props;
     const isSent = variant === "sent";
 
     return (
@@ -58,16 +59,18 @@ function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
             <br />
             보낸 요청을 취소했어요
           </p>
-          <p className="typo-caption2 text-text-caption">언제든 다시 요청을 보낼 수 있어요</p>
+          <p className="typo-caption2 text-text-caption">
+            {isSent ? "언제든 다시 요청을 보낼 수 있어요" : "수락 또는 거절이 어려워요"}
+          </p>
         </div>
 
         <Button
           className="h-9 w-full cursor-pointer rounded-medium"
-          onClick={onResend}
+          onClick={isSent ? onResend : onViewProfile}
           size="sm"
           variant="black"
         >
-          다시 요청 보내기
+          {isSent ? "다시 요청 보내기" : "프로필 보기"}
         </Button>
       </div>
     );
