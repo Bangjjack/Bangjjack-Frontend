@@ -43,9 +43,11 @@ function createChatRoomState(chatRoom: ChatRoomListItem): ChatRoom {
 function ChatTabContent({ tab }: { tab: ChatTab }) {
   const navigate = useNavigate();
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isPending } = useChatRooms({
-    category: CHAT_TAB_CATEGORY[tab],
-  });
+  const { data, fetchNextPage, hasNextPage, isError, isFetchingNextPage, isPending } = useChatRooms(
+    {
+      category: CHAT_TAB_CATEGORY[tab],
+    },
+  );
   const chatRooms = data?.rooms ?? [];
 
   useEffect(() => {
