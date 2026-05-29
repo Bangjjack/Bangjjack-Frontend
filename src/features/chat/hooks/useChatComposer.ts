@@ -60,7 +60,8 @@ function useChatComposer({
     inputMenuOpen,
     toggleInputMenu,
   } = useInputMenuState();
-  const { mutate: cancelRoommateApplication } = useCancelRoommateApplication();
+  const { isPending: isCancelingInviteRequest, mutate: cancelRoommateApplication } =
+    useCancelRoommateApplication();
   const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
     useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
@@ -254,6 +255,10 @@ function useChatComposer({
       return;
     }
 
+    if (isCancelingInviteRequest) {
+      return;
+    }
+
     cancelRoommateApplication(canceledInvite.applicationId, {
       onError: (error) => {
         toast.error(getApiErrorMessage(error, "룸메이트 요청 취소에 실패했어요."));
@@ -334,6 +339,7 @@ function useChatComposer({
     handleSubmitMessage,
     inputMenuClosing,
     inputMenuOpen,
+    isCancelingInviteRequest,
     isSendingInviteRequest,
     inviteSheetOpen,
     leaveSheetOpen,

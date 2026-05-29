@@ -14,6 +14,7 @@ export type ChatMessageItemProps = {
   chatDetail: ChatDetail;
   compactSpacing: boolean;
   dateBadgeLabel?: string | null;
+  isCancelingInviteRequest?: boolean;
   isFirst: boolean;
   message: ChatMessage;
   messages: ChatMessage[];
@@ -31,6 +32,7 @@ export function ChatMessageItem({
   chatDetail,
   compactSpacing,
   dateBadgeLabel,
+  isCancelingInviteRequest,
   isFirst,
   message,
   messages,
@@ -59,7 +61,11 @@ export function ChatMessageItem({
   if (message.type === "roommate_invite") {
     return (
       <ChatMessageWrapper dateBadgeLabel={dateBadgeLabel} isFirst={isFirst}>
-        <RoommateInviteMessageItem message={message} onCancel={onCancelInviteRequest} />
+        <RoommateInviteMessageItem
+          isCanceling={isCancelingInviteRequest}
+          message={message}
+          onCancel={onCancelInviteRequest}
+        />
       </ChatMessageWrapper>
     );
   }
@@ -230,15 +236,18 @@ function RoommateRequestMessageItem({
 }
 
 function RoommateInviteMessageItem({
+  isCanceling,
   message,
   onCancel,
 }: {
+  isCanceling?: boolean;
   message: Extract<ChatMessage, { type: "roommate_invite" }>;
   onCancel: (messageId: number) => void;
 }) {
   return (
     <div className="flex w-full justify-end">
       <ChatRoommateInviteMessage
+        disabled={isCanceling}
         onCancel={() => onCancel(message.id)}
         recipientName={message.recipientName}
       />

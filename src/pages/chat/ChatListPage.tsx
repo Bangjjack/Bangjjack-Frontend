@@ -138,6 +138,7 @@ export default function ChatListPage() {
             return (
               <button
                 key={tab.key}
+                id={`tab-${tab.key}`}
                 aria-pressed={isActive}
                 className={cn(
                   "flex flex-1 cursor-pointer items-center justify-center px-300 py-300 transition-colors duration-300",
@@ -160,15 +161,24 @@ export default function ChatListPage() {
               width: `${CHAT_TABS.length * 100}%`,
             }}
           >
-            {CHAT_TABS.map((tab) => (
-              <div
-                key={tab.key}
-                className="flex h-full flex-col overflow-y-auto"
-                style={{ width: `${100 / CHAT_TABS.length}%` }}
-              >
-                <ChatTabContent tab={tab.key} />
-              </div>
-            ))}
+            {CHAT_TABS.map((tab) => {
+              const isActive = activeTab === tab.key;
+
+              return (
+                <div
+                  key={tab.key}
+                  id={`panel-${tab.key}`}
+                  role="tabpanel"
+                  aria-labelledby={`tab-${tab.key}`}
+                  aria-hidden={!isActive}
+                  inert={!isActive}
+                  className="flex h-full flex-col overflow-y-auto"
+                  style={{ width: `${100 / CHAT_TABS.length}%` }}
+                >
+                  <ChatTabContent tab={tab.key} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>

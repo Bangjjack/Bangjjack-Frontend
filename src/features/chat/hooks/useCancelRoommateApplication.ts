@@ -10,6 +10,7 @@ export const useCancelRoommateApplication = () => {
     mutationFn: cancelRoommateApplication,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: chatQueryKeys.rooms() });
+      queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
     },
   });
 };

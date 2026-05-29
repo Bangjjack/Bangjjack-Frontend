@@ -6,6 +6,7 @@ import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 export type ChatMessageListSectionProps = {
   chatDetail: ChatDetail;
   hasPreviousMessages?: boolean;
+  isCancelingInviteRequest?: boolean;
   isLoadingPreviousMessages?: boolean;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
@@ -24,6 +25,7 @@ export type ChatMessageListSectionProps = {
 function ChatMessageListSection({
   chatDetail,
   hasPreviousMessages = false,
+  isCancelingInviteRequest,
   isLoadingPreviousMessages = false,
   messages,
   onCancelInviteRequest,
@@ -103,6 +105,7 @@ function ChatMessageListSection({
           chatDetail={chatDetail}
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
+          isCancelingInviteRequest={isCancelingInviteRequest}
           onCancelInviteRequest={onCancelInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
