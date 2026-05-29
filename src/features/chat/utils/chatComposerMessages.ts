@@ -5,7 +5,7 @@ import type {
 } from "@/features/chat/types";
 import { formatMessageDateLabel, formatMessageTime } from "@/features/chat/utils";
 
-type RoommateResultMessageType = "roommate_accept" | "roommate_reject";
+type RoommateResultMessageType = "roommate_accept" | "roommate_reject" | "roommate_cancel";
 type RoommateResultMessageVariant = "received" | "sent";
 
 export function createInviteMessage({
@@ -137,6 +137,17 @@ export function createReceivedChatMessage({
       id: receivedMessage.messageId,
       partnerName,
       type: "roommate_accept",
+      variant,
+    });
+  }
+
+  if (receivedMessage.messageType === "APPLICATION_CANCELLED") {
+    return createRoommateResultMessage({
+      applicationId: receivedMessage.applicationId,
+      createdAt: receivedMessage.createdAt,
+      id: receivedMessage.messageId,
+      partnerName,
+      type: "roommate_cancel",
       variant,
     });
   }

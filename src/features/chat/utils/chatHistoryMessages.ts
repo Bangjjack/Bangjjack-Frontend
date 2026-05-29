@@ -58,6 +58,19 @@ export function mapHistoryMessageToChatMessage(
     };
   }
 
+  if (message.messageType === "APPLICATION_CANCELLED") {
+    return {
+      applicationId: message.applicationId,
+      dateKey,
+      dateLabel,
+      id: message.messageId,
+      partnerName,
+      sentAt: formatMessageTime(message.createdAt),
+      type: "roommate_cancel",
+      variant: isOutgoing ? "sent" : "received",
+    };
+  }
+
   return {
     dateKey,
     dateLabel,

@@ -1,3 +1,4 @@
+export { useCancelRoommateApplication } from "@/features/chat/hooks/useCancelRoommateApplication";
 export { useChatComposer } from "@/features/chat/hooks/useChatComposer";
 export { useChatDetailPage } from "@/features/chat/hooks/useChatDetailPage";
 export { useChatMessages } from "@/features/chat/hooks/useChatMessages";

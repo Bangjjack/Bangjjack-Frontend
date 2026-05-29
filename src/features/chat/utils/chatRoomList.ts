@@ -7,7 +7,7 @@ function parseChatRoomDate(dateString: string) {
     return new Date(dateString);
   }
 
-  return new Date(`${dateString}Z`);
+  return new Date(`${dateString}+09:00`);
 }
 
 export function formatChatRoomMessage(message: string | null) {

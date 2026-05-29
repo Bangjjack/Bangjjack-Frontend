@@ -6,13 +6,16 @@ import type { ChatDetail, ChatMessage } from "@/features/chat/types";
 export type ChatMessageListSectionProps = {
   chatDetail: ChatDetail;
   hasPreviousMessages?: boolean;
+  isCancelingInviteRequest?: boolean;
   isLoadingPreviousMessages?: boolean;
+  isSendingResendRequest?: boolean;
   messages: ChatMessage[];
   onCancelInviteRequest: (messageId: number) => void;
   onLoadPreviousMessages?: () => void | Promise<unknown>;
   onProfileClick?: () => void;
   onRecruitClick?: () => void;
   onReportClick?: () => void;
+  onResendInviteRequest?: () => void;
   onRoommateRequestAccept?: (applicationId?: number) => void;
   onRoommateRequestReject?: (applicationId?: number) => void;
   partnerLastReadMessageId?: number | null;
@@ -24,13 +27,16 @@ export type ChatMessageListSectionProps = {
 function ChatMessageListSection({
   chatDetail,
   hasPreviousMessages = false,
+  isCancelingInviteRequest,
   isLoadingPreviousMessages = false,
+  isSendingResendRequest,
   messages,
   onCancelInviteRequest,
   onLoadPreviousMessages,
   onProfileClick,
   onRecruitClick,
   onReportClick,
+  onResendInviteRequest,
   isProcessingRoommateRequest,
   onRoommateRequestAccept,
   onRoommateRequestReject,
@@ -103,7 +109,11 @@ function ChatMessageListSection({
           chatDetail={chatDetail}
           fallbackDateLabel={chatDetail.dateLabel}
           messages={messages}
+          isCancelingInviteRequest={isCancelingInviteRequest}
+          isSendingResendRequest={isSendingResendRequest}
           onCancelInviteRequest={onCancelInviteRequest}
+          onProfileClick={onProfileClick}
+          onResendInviteRequest={onResendInviteRequest}
           isProcessingRoommateRequest={isProcessingRoommateRequest}
           onRoommateRequestAccept={onRoommateRequestAccept}
           onRoommateRequestReject={onRoommateRequestReject}

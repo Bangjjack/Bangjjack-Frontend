@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { CheckIcon } from "@/assets/icons";
+import { CheckIcon, CircleErrorIcon } from "@/assets/icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,21 +14,71 @@ import {
   AlertDialogTrigger,
   Button,
 } from "@/components/ui";
+import { cn } from "@/lib/cn";
 
-export type ChatRoommateRequestMessageProps = {
+type RequestProps = {
+  type?: "request";
+  isProcessing?: boolean;
   onAccept?: () => void;
   onReject?: () => void;
-  isProcessing?: boolean;
   requesterName: string;
 };
 
-function ChatRoommateRequestMessage({
-  isProcessing = false,
-  onAccept,
-  onReject,
-  requesterName,
-}: ChatRoommateRequestMessageProps) {
+type CancelProps = {
+  type: "cancel";
+  variant: "received" | "sent";
+  partnerName: string;
+  isResending?: boolean;
+  onResend?: () => void;
+  onViewProfile?: () => void;
+};
+
+export type ChatRoommateRequestMessageProps = RequestProps | CancelProps;
+
+function ChatRoommateRequestMessage(props: ChatRoommateRequestMessageProps) {
   const [open, setOpen] = useState(false);
+
+  if (props.type === "cancel") {
+    const { variant, partnerName, isResending, onResend, onViewProfile } = props;
+    const isSent = variant === "sent";
+
+    return (
+      <div
+        className={cn(
+          "flex w-55 flex-col items-start gap-300 overflow-hidden rounded-tl-2xl rounded-tr-2xl border border-border-disabled bg-bg-secondary px-500 py-400",
+          isSent ? "rounded-bl-2xl" : "rounded-br-2xl",
+        )}
+      >
+        <div className="flex items-center gap-100 overflow-hidden">
+          <CircleErrorIcon className="size-3 shrink-0 text-neutral-400" />
+          <span className="typo-title4 text-neutral-400">요청 취소됨</span>
+        </div>
+
+        <div className="flex flex-col items-start gap-100 whitespace-normal">
+          <p className="wrap-break-word typo-button2 tracking-normal text-text-strong">
+            {isSent ? `${partnerName} 님께` : `${partnerName} 님이`}
+            <br />
+            보낸 요청을 취소했어요
+          </p>
+          <p className="typo-caption2 text-text-caption">
+            {isSent ? "언제든 다시 요청을 보낼 수 있어요" : "수락 또는 거절이 어려워요"}
+          </p>
+        </div>
+
+        <Button
+          className="h-9 w-full cursor-pointer rounded-medium"
+          disabled={isSent && isResending}
+          onClick={isSent ? onResend : onViewProfile}
+          size="sm"
+          variant="black"
+        >
+          {isSent ? "다시 요청 보내기" : "프로필 보기"}
+        </Button>
+      </div>
+    );
+  }
+
+  const { isProcessing = false, onAccept, onReject, requesterName } = props;
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -63,7 +113,7 @@ function ChatRoommateRequestMessage({
           <AlertDialogIcon />
           <AlertDialogTitle>룸메이트 요청을 수락할까요?</AlertDialogTitle>
           <AlertDialogDescription className="whitespace-normal break-keep text-center">
-            수락 시 룸메이트 매칭이 확정됩니다.
+            수락 시 룸메이트 매칭이 확정돼요
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="mt-500">

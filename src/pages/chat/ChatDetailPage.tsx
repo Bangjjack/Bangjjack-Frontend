@@ -34,7 +34,9 @@ export default function ChatDetailPage() {
     handleCancelInviteRequest,
     handleConfirmLeaveChatRoom,
     handleInputMenuAction,
+    isCancelingInviteRequest,
     handleRoommateRequestAccept,
+    handleResendInviteRequest,
     handleSendInviteRequest,
     handleSubmitMessage,
     inputMenuClosing,
@@ -101,7 +103,10 @@ export default function ChatDetailPage() {
         hasPreviousMessages={messageList.hasPreviousMessages}
         isLoadingPreviousMessages={messageList.isLoadingPreviousMessages}
         messages={messages}
+        isCancelingInviteRequest={isCancelingInviteRequest}
+        isSendingResendRequest={isSendingInviteRequest}
         onCancelInviteRequest={handleCancelInviteRequest}
+        onResendInviteRequest={handleResendInviteRequest}
         onLoadPreviousMessages={messageList.onLoadPreviousMessages}
         onProfileClick={navigation.onProfileClick}
         onRecruitClick={navigation.onRecruitClick}
