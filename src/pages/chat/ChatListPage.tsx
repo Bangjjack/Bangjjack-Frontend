@@ -66,7 +66,7 @@ function ChatTabContent({ tab }: { tab: ChatTab }) {
 
   if (isError) {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <p className="typo-body2 text-text-caption">채팅방 목록을 불러오지 못했어요.</p>
       </div>
     );
@@ -84,7 +84,7 @@ function ChatTabContent({ tab }: { tab: ChatTab }) {
 
   if (chatRooms.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         <p className="typo-body2 text-text-caption">아직 채팅방이 없어요.</p>
       </div>
     );
@@ -122,7 +122,7 @@ export default function ChatListPage() {
   useChatRoomListRealtime();
 
   return (
-    <div className={cn("flex min-h-full flex-col pt-100")}>
+    <div className={cn("flex h-full flex-col pt-100")}>
       <section className="flex min-h-0 flex-1 flex-col rounded-medium bg-bg-secondary px-300 pb-100">
         <div className="relative flex border-b border-border-normal">
           <div
@@ -172,7 +172,7 @@ export default function ChatListPage() {
                   aria-labelledby={`tab-${tab.key}`}
                   aria-hidden={!isActive}
                   inert={!isActive}
-                  className="flex h-full flex-col overflow-y-auto"
+                  className="flex flex-1 flex-col overflow-y-auto"
                   style={{ width: `${100 / CHAT_TABS.length}%` }}
                 >
                   <ChatTabContent tab={tab.key} />
