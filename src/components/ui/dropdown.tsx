@@ -106,6 +106,7 @@ function DropdownTrigger({
   placeholder = "",
   className,
   children,
+  disabled,
   onClick: onClickProp,
   onKeyDown: onKeyDownProp,
   ...props
@@ -121,6 +122,7 @@ function DropdownTrigger({
   }
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
+    if (disabled) return;
     onKeyDownProp?.(event);
     if (event.defaultPrevented) return;
 
@@ -159,6 +161,7 @@ function DropdownTrigger({
   }
 
   function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+    if (disabled) return;
     onClickProp?.(event);
     if (event.defaultPrevented) return;
     setOpen(!open);
@@ -175,6 +178,7 @@ function DropdownTrigger({
   return (
     <button
       {...props}
+      disabled={disabled}
       ref={triggerRef}
       data-slot="dropdown-trigger"
       type="button"
