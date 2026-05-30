@@ -9,6 +9,7 @@ import type {
   RecommendedPostItem,
   UpdatePostRequest,
 } from "@/features/board/types";
+import type { MyPost } from "@/features/mypage/types";
 import type { RoomSize } from "@/types";
 
 export const getPosts = async (params: GetPostsParams): Promise<PostListData> => {
@@ -49,5 +50,10 @@ export const getRecommendedPosts = async (params: {
   const { data } = await apiClient.get<ApiResponse<RecommendedPostItem[]>>("/posts/recommended", {
     params,
   });
+  return data.data;
+};
+
+export const getMyPosts = async (): Promise<MyPost[]> => {
+  const { data } = await apiClient.get<ApiResponse<MyPost[]>>("/posts/me");
   return data.data;
 };

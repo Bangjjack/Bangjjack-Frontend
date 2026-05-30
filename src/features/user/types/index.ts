@@ -19,6 +19,22 @@ type UserChecklistData = {
   smoking: string;
 };
 
+type UserProfileData = {
+  username: string;
+  email: string;
+  profileImage?: string | null;
+  birthYear: number;
+  gender: string;
+  campus: string;
+  departmentId: number;
+  departmentName: string;
+  grade: number;
+  semester: string;
+  dormitory: string;
+  checklist: UserChecklistData | null;
+  roommatePreferences: string[];
+};
+
 type UserLifestyleChecklist = {
   bedtime: { value: string; matched: boolean };
   wakeUpTime: { value: string; matched: boolean };
@@ -44,4 +60,22 @@ type UserProfile = {
   lifestyleChecklist: UserLifestyleChecklist;
 };
 
-export type { UserTagsData, UserChecklistData, UserLifestyleChecklist, UserProfile };
+type UpdateUserProfileRequest = {
+  birthYear: number;
+  campus: string;
+  departmentId: number;
+  dormitory: string;
+  gender: string;
+  grade: number;
+  preferences: string[];
+  semester: string;
+};
+
+export type {
+  UserTagsData,
+  UserChecklistData,
+  UserProfileData,
+  UserLifestyleChecklist,
+  UserProfile,
+  UpdateUserProfileRequest,
+};

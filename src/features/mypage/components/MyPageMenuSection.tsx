@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { ChevronRightIcon } from "@/assets/icons";
 import {
   AlertDialog,
@@ -10,9 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
   Surface,
-  toast,
 } from "@/components/ui";
 import { cn } from "@/lib/cn";
+import { useAuthStore } from "@/stores/authStore";
 
 interface MyPageMenuItem {
   danger?: boolean;
@@ -40,6 +41,16 @@ function MyPageMenuSection() {
 }
 
 function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem }) {
+  const navigate = useNavigate();
+  const clearAuth = useAuthStore((state) => state.clearAuth);
+
+  const handleConfirm = () => {
+    if (item.type === "logout") {
+      clearAuth();
+      navigate("/login");
+    }
+  };
+
   const button = (
     <button
       className="relative flex w-full cursor-pointer items-center justify-between p-400 text-left"
@@ -70,11 +81,7 @@ function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem
           <AlertDialogCancel className="cursor-pointer">취소</AlertDialogCancel>
           <AlertDialogAction
             className={cn("cursor-pointer", item.danger && "bg-state-error text-text-on-primary")}
-            onClick={() => {
-              if (item.type === "logout") {
-                toast.success("로그아웃되었습니다");
-              }
-            }}
+            onClick={handleConfirm}
           >
             {item.label}
           </AlertDialogAction>

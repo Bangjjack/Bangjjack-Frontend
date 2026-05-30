@@ -1,4 +1,4 @@
-import type { Control } from "react-hook-form";
+import type { Control, UseFormSetValue } from "react-hook-form";
 
 import type { MyProfileEditFormValues } from "@/features/mypage/schemas";
 import type { ChecklistEntry } from "@/features/roommate/types/checklist";
@@ -21,6 +21,7 @@ export interface ProfileAvatarSectionProps {
 
 export interface ProfileEditFieldsProps {
   control: Control<MyProfileEditFormValues>;
+  setValue: UseFormSetValue<MyProfileEditFormValues>;
 }
 
 export interface ImportanceEditSectionProps {

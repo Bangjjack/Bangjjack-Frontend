@@ -9,8 +9,11 @@ interface ActivityTabsProps {
 }
 
 function ActivityTabs({ activeTabId, onTabChange }: ActivityTabsProps) {
+  const activeIndex = MY_ACTIVITY_TABS.findIndex((tab) => tab.id === activeTabId);
+  const tabCount = MY_ACTIVITY_TABS.length;
+
   return (
-    <div className="grid grid-cols-3">
+    <div className="relative flex items-stretch border-b border-border-normal">
       {MY_ACTIVITY_TABS.map((tab) => {
         const isActive = tab.id === activeTabId;
 
@@ -18,10 +21,8 @@ function ActivityTabs({ activeTabId, onTabChange }: ActivityTabsProps) {
           <button
             key={tab.id}
             className={cn(
-              "typo-title3 min-w-0 cursor-pointer border-b py-2.5 text-center",
-              isActive
-                ? "border-b-2 border-brand-primary text-brand-primary"
-                : "border-border-normal text-text-placeholder",
+              "typo-title3 min-w-0 flex-1 cursor-pointer py-2.5 text-center transition-colors duration-200",
+              isActive ? "text-brand-primary" : "text-text-placeholder",
             )}
             onClick={() => onTabChange(tab.id)}
             type="button"
@@ -30,6 +31,14 @@ function ActivityTabs({ activeTabId, onTabChange }: ActivityTabsProps) {
           </button>
         );
       })}
+
+      <div
+        className="absolute bottom-0 h-0.5 bg-brand-primary transition-transform duration-200"
+        style={{
+          width: `${100 / tabCount}%`,
+          transform: `translateX(${activeIndex * 100}%)`,
+        }}
+      />
     </div>
   );
 }

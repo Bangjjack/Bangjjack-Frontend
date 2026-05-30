@@ -1,5 +1,16 @@
 import type { Dormitory, PostStatus, RoomSize } from "@/types";
 
+export interface MyPost {
+  postId: number;
+  title: string;
+  description: string;
+  dormitory: Dormitory;
+  roomSize: RoomSize;
+  totalMemberCount: number;
+  currentMemberCount: number;
+  isClosed: boolean;
+}
+
 export interface BookmarkedPost {
   postId: number;
   title: string;
@@ -23,7 +34,8 @@ export interface GetBookmarksParams {
 }
 
 export type MyChecklistSelectionType = "single" | "multi";
-export type MyActivityTabId = "posts" | "rooms" | "matches";
+export type MyActivityTabId = "posts" | "rooms";
+export type MyActivityRoomVariant = "leader" | "member";
 export type MyActivityRoomStatus = "joined";
 export type MyRecruitPostStatus = "open" | "closed";
 export type MyRecruitPostActionTone = "neutral" | "primary" | "dark";
@@ -37,6 +49,7 @@ export type {
   ProfileForm,
   ProfileViewContentProps,
 } from "@/features/mypage/types/myProfileEditContent.types";
+export type { MyProfileChecklistFieldMeta } from "@/features/mypage/types/myProfileEditData.types";
 
 export interface MyActivityMatchMock {
   actions: MyRecruitPostActionMock[];
@@ -58,13 +71,15 @@ type MyActivityRoomHostMemberMock = {
   isHost: true;
   isMe?: boolean;
   name: string;
+  profileImage?: string | null;
 };
 
 type MyActivityRoomRegularMemberMock = {
   id: number;
   isHost?: false;
-  isMe?: never;
+  isMe?: boolean;
   name: string;
+  profileImage?: string | null;
 };
 
 export type MyActivityRoomMemberMock =
@@ -82,10 +97,12 @@ export interface MyActivityRoomMock {
   dormitory: string;
   id: number;
   members?: MyActivityRoomMemberMock[];
+  postId: number;
   roomType: string;
   status: MyActivityRoomStatus;
   statusLabel: string;
   title: string;
+  variant: MyActivityRoomVariant;
 }
 
 export interface MyChecklistSectionMock {
@@ -97,26 +114,8 @@ export interface MyChecklistSectionMock {
   title: string;
 }
 
-export interface MyRecruitPostStatMock {
-  id: string;
-  label: string;
-  value: string;
-}
-
 export interface MyRecruitPostActionMock {
   id: string;
   label: string;
   tone: MyRecruitPostActionTone;
-}
-
-export interface MyRecruitPostMock {
-  actions: MyRecruitPostActionMock[];
-  description: string;
-  dormitory: string;
-  id: number;
-  roomType: string;
-  stats: MyRecruitPostStatMock[];
-  status: MyRecruitPostStatus;
-  statusLabel: string;
-  title: string;
 }
