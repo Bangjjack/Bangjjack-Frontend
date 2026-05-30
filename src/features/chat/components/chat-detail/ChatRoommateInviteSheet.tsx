@@ -12,12 +12,12 @@ import type { ChatUserProfile } from "@/features/chat/types";
 
 export type ChatRoommateInviteSheetProps = Pick<
   ChatUserProfile,
-  "age" | "department" | "nickname"
+  "age" | "department" | "nickname" | "profileImage"
 > & {
   avatarSeed?: number;
   className?: string;
   confirmDisabled?: boolean;
-  lifestyleTags: string[];
+  lifestyleTags?: string[];
   open: boolean;
   onCancel: () => void;
   onConfirm: () => void;
@@ -32,6 +32,7 @@ function ChatRoommateInviteSheet({
   lifestyleTags,
   nickname,
   open,
+  profileImage,
   onCancel,
   onConfirm,
 }: ChatRoommateInviteSheetProps) {
@@ -61,7 +62,7 @@ function ChatRoommateInviteSheet({
           </div>
 
           <div className="flex items-center gap-400 rounded-2xl border border-brand-primary bg-bg-secondary p-400">
-            <ProfileAvatar seed={avatarSeed ?? nickname.length} size={36} />
+            <ProfileAvatar imageUrl={profileImage} seed={avatarSeed ?? nickname.length} size={36} />
 
             <div className="min-w-0 flex-1">
               <p className="typo-title3 text-text-normal">{nickname}</p>
@@ -74,11 +75,13 @@ function ChatRoommateInviteSheet({
                 {department ? <span>{department}</span> : null}
               </div>
 
-              <div className="mt-100 flex flex-wrap gap-100">
-                {lifestyleTags.map((tag) => (
-                  <Tag key={tag}>{tag}</Tag>
-                ))}
-              </div>
+              {lifestyleTags && lifestyleTags.length > 0 && (
+                <div className="mt-100 flex flex-wrap gap-100">
+                  {lifestyleTags.map((tag) => (
+                    <Tag key={tag}>{tag}</Tag>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

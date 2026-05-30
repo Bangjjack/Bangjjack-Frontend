@@ -86,6 +86,7 @@ function ChatInputSection({
         department={chatDetail.department}
         lifestyleTags={chatDetail.lifestyleTags ?? chatDetail.profileSummary}
         nickname={chatDetail.nickname}
+        profileImage={chatDetail.profileImage}
         open={inviteSheet.open}
         confirmDisabled={inviteSheet.isSendingInviteRequest ?? false}
         onCancel={inviteSheet.onClose}
