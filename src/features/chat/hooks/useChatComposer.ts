@@ -326,6 +326,7 @@ function useChatComposer({
       },
       onSuccess: () => {
         setLocalMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+        void queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
         toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
       },
     });
