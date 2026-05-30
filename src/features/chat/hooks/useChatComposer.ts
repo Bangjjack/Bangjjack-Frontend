@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 import { toast } from "@/components/ui";
 import { useCancelRoommateApplication } from "@/features/chat/hooks/useCancelRoommateApplication";
 import { useSendRoommateApplication } from "@/features/chat/hooks/useSendRoommateApplication";
 import { useChatWebSocket } from "@/features/chat/hooks/useChatWebSocket";
 import { useInputMenuState } from "@/features/chat/hooks/useInputMenuState";
+import { chatQueryKeys } from "@/features/chat/queries";
 import type {
   ChatDetail,
   ChatErrorMessage,
@@ -46,6 +49,7 @@ function useChatComposer({
   onRoommateRequestAccept,
   roomId,
 }: UseChatComposerParams) {
+  const queryClient = useQueryClient();
   const pendingOutgoingMessagesRef = useRef<string[]>([]);
   const sendReadMessageRef = useRef<(messageId: number) => void>(() => {});
   const [draftMessage, setDraftMessage] = useState("");
@@ -65,19 +69,9 @@ function useChatComposer({
   const { isPending: isSendingInviteRequest, mutate: sendRoommateApplication } =
     useSendRoommateApplication();
   const baseMessages = initialMessages ?? chatDetail.messages;
-  const disabledInviteIds = new Set(
-    localMessages
-      .filter(
-        (m): m is ChatRoommateInviteMessageData => m.type === "roommate_invite" && !!m.disabled,
-      )
-      .map((m) => m.id),
-  );
   const messages = [
-    ...baseMessages.filter((baseMessage) => !disabledInviteIds.has(baseMessage.id)),
+    ...baseMessages,
     ...localMessages.filter((localMessage) => {
-      if (localMessage.type === "roommate_invite" && localMessage.disabled) {
-        return true;
-      }
       if (localMessage.type === "roommate_cancel") {
         if (baseMessages.some((bm) => bm.id === localMessage.id)) {
           return false;
@@ -98,10 +92,6 @@ function useChatComposer({
         !(
           localMessage.type === "roommate_invite" &&
           hasRoommateApplicationMessage(baseMessages, true)
-        ) &&
-        !(
-          localMessage.type === "roommate_request" &&
-          hasRoommateApplicationMessage(baseMessages, false)
         )
       );
     }),
@@ -118,6 +108,15 @@ function useChatComposer({
 
     sendReadMessageRef.current(receivedMessage.messageId);
 
+    const isOutgoingMessage =
+      currentUserId != null && receivedMessage.senderId != null
+        ? receivedMessage.senderId === currentUserId
+        : false;
+
+    if (receivedMessage.messageType === "APPLICATION_CANCELLED" && !isOutgoingMessage) {
+      void queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
+    }
+
     setLocalMessages((prev) => {
       if (
         baseMessages.some((message) => message.id === receivedMessage.messageId) ||
@@ -130,7 +129,7 @@ function useChatComposer({
         (message) => message === receivedMessage.content,
       );
       const isOutgoing =
-        currentUserId != null
+        currentUserId != null && receivedMessage.senderId != null
           ? receivedMessage.senderId === currentUserId
           : pendingMessageIndex >= 0;
 
@@ -141,6 +140,7 @@ function useChatComposer({
       const isApplicationMessage = receivedMessage.messageType === "APPLICATION_SENT";
       if (
         isApplicationMessage &&
+        isOutgoing &&
         hasRoommateApplicationMessage([...baseMessages, ...prev], isOutgoing)
       ) {
         return prev;
@@ -277,10 +277,7 @@ function useChatComposer({
       },
       onSuccess: (application) => {
         setLocalMessages((prev) => {
-          const cleared = prev.filter(
-            (msg) =>
-              !(msg.type === "roommate_invite" && msg.disabled) && msg.type !== "roommate_cancel",
-          );
+          const cleared = prev.filter((msg) => msg.type !== "roommate_cancel");
           const currentMessages = [...baseMessages, ...cleared];
 
           if (hasRoommateApplicationMessage(currentMessages, true)) {
@@ -328,24 +325,8 @@ function useChatComposer({
         toast.error(getApiErrorMessage(error, "룸메이트 요청 취소에 실패했어요."));
       },
       onSuccess: () => {
-        setLocalMessages((prev) => {
-          const now = new Date().toISOString();
-          const currentMessages = [...baseMessages, ...prev];
-          const withoutInvite = prev.filter((msg) => msg.id !== messageId);
-          const disabledInvite: ChatRoommateInviteMessageData = {
-            ...canceledInvite,
-            disabled: true,
-          };
-          const cancelMessage = createRoommateResultMessage({
-            applicationId: canceledInvite.applicationId,
-            createdAt: now,
-            id: getNextMessageId(currentMessages),
-            partnerName: canceledInvite.recipientName,
-            type: "roommate_cancel",
-            variant: "sent",
-          });
-          return [...withoutInvite, disabledInvite, cancelMessage];
-        });
+        setLocalMessages((prev) => prev.filter((msg) => msg.id !== messageId));
+        void queryClient.invalidateQueries({ queryKey: chatQueryKeys.messages() });
         toast.success(`${canceledInvite.recipientName}님께 보낸 룸메이트 요청을 취소했어요`);
       },
     });

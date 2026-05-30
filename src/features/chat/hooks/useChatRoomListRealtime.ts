@@ -32,7 +32,9 @@ function updateChatRoomsWithReceivedMessage(
         lastMessage: receivedMessage.content,
         lastMessageAt: receivedMessage.createdAt,
         unreadCount:
-          receivedMessage.senderId === currentUserId ? room.unreadCount : room.unreadCount + 1,
+          receivedMessage.senderId != null && receivedMessage.senderId === currentUserId
+            ? room.unreadCount
+            : room.unreadCount + 1,
       };
     }),
   }));

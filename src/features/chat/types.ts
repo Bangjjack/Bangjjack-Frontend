@@ -179,7 +179,7 @@ export type ChatReceivedMessage = {
   messageId: number;
   messageType?: ChatServerMessageType;
   roomId: number;
-  senderId: number;
+  senderId?: number | null;
   type: "CHAT_MESSAGE";
 };
 
