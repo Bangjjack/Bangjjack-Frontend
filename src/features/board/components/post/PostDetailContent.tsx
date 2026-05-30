@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { useGoBack } from "@/hooks";
 
 import { Header } from "@/components/ui";
 import {
@@ -26,6 +27,7 @@ function PostDetailContent() {
   const navigate = useNavigate();
   const { id } = useParams();
   const postId = Number(id);
+  const handleBackClick = useGoBack("/board");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const fadeInRef = useFadeInOnScroll<HTMLDivElement>();
 
@@ -73,7 +75,7 @@ function PostDetailContent() {
         showBack
         showMore={post.isOwner}
         title="방 찾기"
-        onBackClick={() => navigate("/board")}
+        onBackClick={handleBackClick}
         onMoreClick={() => setIsMenuOpen((prev) => !prev)}
       />
 
