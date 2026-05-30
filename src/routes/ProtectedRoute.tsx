@@ -15,7 +15,8 @@ export default function ProtectedRoute() {
       return <Navigate to={`/login/callback?code=${encodeURIComponent(code)}`} replace />;
     }
 
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    const isDefaultRoute = location.pathname === "/" || location.pathname === "/home";
+    return <Navigate to="/login" state={isDefaultRoute ? undefined : { from: location }} replace />;
   }
 
   return <Outlet />;
