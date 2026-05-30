@@ -5,6 +5,7 @@ import { Dropdown, DropdownContent, DropdownItem, DropdownTrigger } from "@/comp
 type SelectFieldProps = {
   ariaLabel?: string;
   className?: string;
+  disabled?: boolean;
   fieldClassName?: string;
   label?: string;
   onChange: (value: string) => void;
@@ -19,6 +20,7 @@ type SelectFieldProps = {
 function SelectField({
   ariaLabel,
   className,
+  disabled,
   fieldClassName,
   label,
   onChange,
@@ -37,8 +39,10 @@ function SelectField({
         <Dropdown className="min-w-0 flex-1" onChange={onChange} value={value}>
           <DropdownTrigger
             aria-label={ariaLabel ?? label}
+            disabled={disabled}
             className={cn(
               "flex min-w-0 w-full items-center gap-2.5 overflow-hidden",
+              disabled && "cursor-not-allowed opacity-50",
               triggerClassName,
             )}
             placeholder={placeholder}
@@ -63,8 +67,8 @@ function SelectField({
 
           <DropdownContent>
             {options.map((option) => (
-              <DropdownItem key={option} className="truncate" title={option} value={option}>
-                {option}
+              <DropdownItem key={option} title={option} value={option}>
+                <span className="block truncate">{option}</span>
               </DropdownItem>
             ))}
           </DropdownContent>
