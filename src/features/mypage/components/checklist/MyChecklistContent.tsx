@@ -24,42 +24,47 @@ function MyChecklistContent({
   } = useMyChecklistEditor(initialEditing);
 
   return (
-    <div className={cn("-mx-400 flex min-h-full flex-col bg-bg-primary", className)}>
-      <header className="flex h-18.5 items-center justify-between px-400 pb-400 pt-9">
+    <div className={cn("flex h-full flex-col bg-bg-primary", className)}>
+      <header className="flex shrink-0 items-center justify-between px-400 pb-400 pt-9">
         <button
           aria-label="뒤로가기"
-          className="flex cursor-pointer items-center gap-2.5 text-icon-strong"
+          className="flex cursor-pointer items-center text-icon-strong"
           onClick={onBack}
           type="button"
         >
-          <ChevronLeftIcon aria-hidden="true" className="size-5" />
-          <span className="typo-title1 text-neutral-black">내 체크리스트</span>
+          <ChevronLeftIcon aria-hidden="true" className="size-6" />
         </button>
+        <span className="typo-title1 text-text-strong">내 체크리스트</span>
+        <div className="size-6" />
+      </header>
 
+      <div className="scrollbar-none flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-500 p-400 pb-500">
+          {visibleSections.map((section) => (
+            <ChipQuestionSection
+              key={section.id}
+              editable={isEditing}
+              helperText={section.helperText}
+              onToggle={(option) => handleOptionToggle(section.id, option)}
+              options={section.options}
+              selectedValues={section.selectedOptions}
+              selectionType={section.selectionType}
+              title={section.title}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="shrink-0 px-400 pb-9 pt-300">
         <Button
-          className="h-11 cursor-pointer rounded-medium px-400 py-2.5 typo-button1"
+          className="w-full cursor-pointer"
           disabled={isSaveDisabled}
           onClick={handleEditButtonClick}
           type="button"
-          variant={isEditing ? "black" : "default"}
+          variant={isEditing ? "default" : "black"}
         >
           {isSaving ? "저장 중" : isEditing ? "저장하기" : "수정하기"}
         </Button>
-      </header>
-
-      <div className="flex flex-col gap-400 bg-bg-primary p-400 pb-500">
-        {visibleSections.map((section) => (
-          <ChipQuestionSection
-            key={section.id}
-            editable={isEditing}
-            helperText={section.helperText}
-            onToggle={(option) => handleOptionToggle(section.id, option)}
-            options={section.options}
-            selectedValues={section.selectedOptions}
-            selectionType={section.selectionType}
-            title={section.title}
-          />
-        ))}
       </div>
     </div>
   );

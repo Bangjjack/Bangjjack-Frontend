@@ -18,22 +18,18 @@ function MyActivityContent({ className }: MyActivityContentProps) {
   const activeIndex = MY_ACTIVITY_TABS.findIndex((tab) => tab.id === activeTabId);
 
   return (
-    <Surface
-      as="section"
-      variant="default"
-      className={cn("flex h-full flex-col overflow-hidden", className)}
-    >
+    <Surface as="section" variant="default" className={cn("flex flex-col", className)}>
       <ActivityTabs activeTabId={activeTabId} onTabChange={setActiveTabId} />
 
-      <div className="flex-1 overflow-x-hidden">
+      <div className="overflow-x-hidden">
         <div
-          className="flex h-full transition-transform duration-200"
+          className="flex transition-transform duration-200"
           style={{ transform: `translateX(-${activeIndex * 100}%)` }}
         >
-          <div className="scrollbar-none w-full shrink-0 overflow-y-auto pt-400">
+          <div className="w-full shrink-0 pt-400">
             <MyRecruitPostList />
           </div>
-          <div className="scrollbar-none w-full shrink-0 overflow-y-auto pt-400">
+          <div className="w-full shrink-0 pt-400">
             <MyActivityRoomList />
           </div>
         </div>

@@ -1,23 +1,16 @@
 import { CircleCheckIcon } from "@/assets/icons";
-import { Tag } from "@/components/ui";
-import type { GuideChecklistItem } from "@/features/chat/constants";
+import type { MatchRateFeature } from "@/features/board/types";
 
-type SharedLifeChecklistRowProps = GuideChecklistItem;
+type SharedLifeChecklistRowProps = Omit<MatchRateFeature, "key">;
 
-function SharedLifeChecklistRow({ category, label, required }: SharedLifeChecklistRowProps) {
+function SharedLifeChecklistRow({ description, label }: SharedLifeChecklistRowProps) {
   return (
-    <div className="flex items-center justify-between gap-300 rounded-medium bg-neutral-100 p-300">
-      <div className="flex min-w-0 items-start gap-200">
-        <CircleCheckIcon aria-hidden="true" className="mt-0.5 size-6 shrink-0" />
-        <div className="min-w-0">
-          <p className="typo-caption2 text-text-caption">{category}</p>
-          <p className="truncate typo-title3 text-text-strong">{label}</p>
-        </div>
+    <div className="flex items-start gap-200 rounded-medium bg-neutral-100 p-300">
+      <CircleCheckIcon aria-hidden="true" className="mt-0.5 size-6 shrink-0" />
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <p className="typo-title3 text-text-caption">{description}</p>
+        <p className="truncate typo-title3 text-text-strong">{label}</p>
       </div>
-
-      <Tag className="shrink-0" color={required ? "default" : "gray"}>
-        {required ? "필수" : "권장"}
-      </Tag>
     </div>
   );
 }

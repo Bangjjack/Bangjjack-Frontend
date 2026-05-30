@@ -14,6 +14,7 @@ import type { ProfileEditFieldsProps } from "@/features/mypage/types";
 import { mapMyProfileCampusToRequest } from "@/features/mypage/utils";
 import { useDepartments } from "@/features/onboarding/hooks";
 import { cn } from "@/lib/cn";
+import { parseDisplayName } from "@/lib/parseDisplayName";
 
 function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
   const selectedCampus = useWatch({ control, name: "campus" });
@@ -37,21 +38,33 @@ function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
         <h2 className="typo-title1 text-text-strong">기본 정보</h2>
       </div>
 
-      <ProfileField label="이름">
-        <Input
-          className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
-          disabled
-          placeholder={PROFILE_PLACEHOLDER.fixed}
-        />
-      </ProfileField>
+      <Controller
+        control={control}
+        name="name"
+        render={({ field }) => (
+          <ProfileField label="이름">
+            <Input
+              className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
+              disabled
+              value={parseDisplayName(field.value)}
+            />
+          </ProfileField>
+        )}
+      />
 
-      <ProfileField label="이메일">
-        <Input
-          className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
-          disabled
-          placeholder={PROFILE_PLACEHOLDER.fixed}
-        />
-      </ProfileField>
+      <Controller
+        control={control}
+        name="email"
+        render={({ field }) => (
+          <ProfileField label="이메일">
+            <Input
+              className="h-11 rounded-small border border-border-normal bg-bg-input px-300 typo-body1"
+              disabled
+              value={field.value}
+            />
+          </ProfileField>
+        )}
+      />
 
       <Controller
         control={control}

@@ -30,10 +30,13 @@ function isAllAnswered(state: ChecklistState): boolean {
 function PostChecklistContent() {
   const { data: checklistData, isLoading } = useUserChecklist();
   const { draft, postId } = usePostWriteDraftStore();
+  const [mountedWithDraft] = useState(() => draft !== null);
 
-  if (!draft) {
+  if (!draft && !mountedWithDraft) {
     return <Navigate to={postId ? `/board/${postId}/edit` : "/board/write"} replace />;
   }
+
+  if (!draft) return null;
 
   if (isLoading || !checklistData) {
     return (
@@ -86,9 +89,9 @@ function PostChecklistForm({ initialChecklistData }: { initialChecklistData: Use
     if (postId) {
       updatePost(postBody, {
         onSuccess: () => {
+          navigate(`/board/${postId}`, { state: { preventBack: true } });
           clearDraft();
           toast.success("게시글이 수정되었어요");
-          navigate(`/board/${postId}`);
         },
         onError: () => {
           toast.error("게시글 수정에 실패했어요");
@@ -97,9 +100,12 @@ function PostChecklistForm({ initialChecklistData }: { initialChecklistData: Use
     } else {
       createPost(postBody, {
         onSuccess: (data) => {
+          navigate(
+            data.postId ? `/board/${data.postId}` : "/board",
+            data.postId ? { state: { preventBack: true } } : undefined,
+          );
           clearDraft();
           toast.success("게시글이 등록되었어요");
-          navigate(data.postId ? `/board/${data.postId}` : "/board");
         },
         onError: (error) => {
           if (isAxiosError(error) && error.response?.status === 409) {

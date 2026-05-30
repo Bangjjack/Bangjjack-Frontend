@@ -9,7 +9,7 @@ import {
   Button,
   toast,
 } from "@/components/ui";
-import { usePostMatchRate } from "@/features/board/hooks";
+import { useMatchReport } from "@/features/board/hooks";
 import { ChecklistRequiredDialog } from "@/features/onboarding/components";
 import { MatchAlertDialog } from "@/features/board/components/roommate/MatchAlertDialog";
 import { useAuthStore } from "@/stores/authStore";
@@ -53,7 +53,7 @@ function MatchActionBar({
     matchHighlights: string[];
   } | null>(null);
 
-  const { refetch, isFetching } = usePostMatchRate(postId);
+  const { refetch, isFetching } = useMatchReport(targetUserId);
   const { mutate: createChatRoom, isPending: isCreatingChatRoom } = useCreateChatRoom();
 
   const currentMatchData = apiMatchData ?? { matchRate, matchHighlights };
