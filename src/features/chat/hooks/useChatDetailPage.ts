@@ -144,7 +144,6 @@ function useChatDetailPage() {
     ? { ...baseChatDetail, age, department, profileImage, lifestyleTags }
     : undefined;
 
-  console.log("[useChatDetailPage]", { age, department, profileImage, lifestyleTags });
   const recruitPostId =
     chatDetail?.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
   const { data: recruitPost } = usePostDetail(recruitPostId);
