@@ -16,14 +16,14 @@ import { cn } from "@/lib/cn";
 import { useAuthStore } from "@/stores/authStore";
 
 interface MyPageMenuItem {
-  danger?: boolean;
+  // danger?: boolean;
   label: string;
-  type: "logout" | "withdraw";
+  type: "logout"; // | "withdraw";
 }
 
 const MENU_ITEMS: MyPageMenuItem[] = [
   { label: "로그아웃", type: "logout" },
-  { danger: true, label: "회원 탈퇴", type: "withdraw" },
+  // { danger: true, label: "회원 탈퇴", type: "withdraw" },
 ];
 
 function MyPageMenuSection() {
@@ -56,7 +56,8 @@ function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem
       className="relative flex w-full cursor-pointer items-center justify-between p-400 text-left"
       type="button"
     >
-      <span className={cn("typo-button2", item.danger ? "text-state-error" : "text-text-normal")}>
+      <span className={cn("typo-button2", "text-text-normal")}>
+        {/* <span className={cn("typo-button2", item.danger ? "text-state-error" : "text-text-normal")}> */}
         {item.label}
       </span>
       <ChevronRightIcon aria-hidden="true" className="size-600 shrink-0 text-icon-alternative" />
@@ -74,13 +75,14 @@ function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem
       <AlertDialogTrigger asChild>{button}</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{getDialogTitle(item.type)}</AlertDialogTitle>
-          <AlertDialogDescription>{getDialogDescription(item.type)}</AlertDialogDescription>
+          <AlertDialogTitle>{getDialogTitle()}</AlertDialogTitle>
+          <AlertDialogDescription>{getDialogDescription()}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="cursor-pointer">취소</AlertDialogCancel>
           <AlertDialogAction
-            className={cn("cursor-pointer", item.danger && "bg-state-error text-text-on-primary")}
+            className={cn("cursor-pointer")}
+            // className={cn("cursor-pointer", item.danger && "bg-state-error text-text-on-primary")}
             onClick={handleConfirm}
           >
             {item.label}
@@ -91,12 +93,14 @@ function MyPageMenuButton({ index, item }: { index: number; item: MyPageMenuItem
   );
 }
 
-function getDialogTitle(type: MyPageMenuItem["type"]) {
-  return type === "logout" ? "방짝에서 로그아웃하시겠어요?" : "정말 탈퇴하시겠습니까?";
+function getDialogTitle() {
+  return "방짝에서 로그아웃하시겠어요?";
+  // return type === "logout" ? "방짝에서 로그아웃하시겠어요?" : "정말 탈퇴하시겠습니까?";
 }
 
-function getDialogDescription(type: MyPageMenuItem["type"]) {
-  return type === "logout" ? "다시 이용하려면 로그인이 필요해요." : "탈퇴 후에는 되돌릴 수 없어요.";
+function getDialogDescription() {
+  return "다시 이용하려면 로그인이 필요해요.";
+  // return type === "logout" ? "다시 이용하려면 로그인이 필요해요." : "탈퇴 후에는 되돌릴 수 없어요.";
 }
 
 export { MyPageMenuSection };
