@@ -29,9 +29,7 @@ function OnBoardingSchoolInfoStep({
 
   const departmentPlaceholder = isDepartmentsError
     ? "학과를 불러오지 못했어요"
-    : isDepartmentsLoading
-      ? "학과를 불러오는 중이에요"
-      : "학과를 선택해주세요";
+    : "학과를 선택해주세요";
 
   return (
     <div className="flex flex-1 flex-col gap-8.75">
@@ -58,6 +56,7 @@ function OnBoardingSchoolInfoStep({
         name="department"
         render={({ field }) => (
           <OnBoardingSelectField
+            disabled={!values.campus || isDepartmentsLoading}
             label="학과"
             value={field.value}
             onChange={(departmentName) => {
