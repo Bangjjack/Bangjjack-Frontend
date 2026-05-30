@@ -49,7 +49,7 @@ function OnBoardingLayout({
 }: OnBoardingLayoutProps) {
   return (
     <div className="min-h-dvh bg-bg-primary">
-      <div className="mx-auto flex min-h-dvh w-full max-w-93.75 flex-col">
+      <div className="flex min-h-dvh w-full flex-col">
         <div className="h-600 bg-neutral-50" />
 
         <header className="flex flex-col gap-600">
