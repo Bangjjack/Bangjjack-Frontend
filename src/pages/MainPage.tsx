@@ -37,16 +37,20 @@ const ROUTE_CONFIGS: RouteConfigEntry[] = [
     activeIcon: "mypage",
     header: { showBack: true, title: "나의 활동", variant: "title" },
     pattern: "/mypage/activity",
+    showBottomNav: false,
   },
   {
     activeIcon: "mypage",
-    header: { showBack: true, title: "마이페이지", variant: "title" },
+    header: { showBack: true, title: "내 북마크", variant: "title" },
     pattern: "/mypage/bookmarks",
+    showBottomNav: false,
   },
   {
     activeIcon: "mypage",
+    fullBleed: true,
     header: { variant: "none" },
     pattern: "/mypage/checklist",
+    showBottomNav: false,
   },
   {
     activeIcon: "mypage",

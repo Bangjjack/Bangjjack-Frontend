@@ -81,19 +81,9 @@ function ProfileChecklistCard({ items, nickname }: { items: ChecklistEntry[]; ni
 
         <div className="flex flex-col gap-1.5">
           {items.map((item) => (
-            <ChecklistItem
-              key={item.id}
-              isMatched={item.isMatched}
-              label={item.label}
-              value={item.value}
-            />
+            <ChecklistItem key={item.id} label={item.label} value={item.value} />
           ))}
         </div>
-      </div>
-
-      <div className="flex items-center justify-end gap-1.5 px-1.5 py-100">
-        <span className="size-1.5 rounded-full bg-state-error-2" aria-hidden="true" />
-        <span className="typo-title4 text-icon-alternative">불일치</span>
       </div>
     </section>
   );
