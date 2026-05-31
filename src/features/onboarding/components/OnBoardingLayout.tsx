@@ -48,8 +48,8 @@ function OnBoardingLayout({
   title,
 }: OnBoardingLayoutProps) {
   return (
-    <div className="min-h-dvh bg-bg-primary">
-      <div className="flex min-h-dvh w-full flex-col">
+    <div className="h-dvh overflow-hidden bg-bg-primary">
+      <div className="flex h-full w-full flex-col">
         <div className="h-600 bg-neutral-50" />
 
         <header className="flex flex-col gap-600">
@@ -85,7 +85,9 @@ function OnBoardingLayout({
           </div>
         </header>
 
-        <main className="flex flex-1 flex-col pb-800">{children}</main>
+        <main className="flex flex-1 flex-col overflow-y-auto scrollbar-none pb-800">
+          {children}
+        </main>
 
         <footer className="flex flex-col gap-400 px-400 pb-[calc(36px+env(safe-area-inset-bottom))] pt-300">
           {footerDescription ? (
