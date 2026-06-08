@@ -47,7 +47,7 @@ export const isChatReceivedMessage = (value: unknown): value is ChatReceivedMess
     message.type === "CHAT_MESSAGE" &&
     typeof message.messageId === "number" &&
     typeof message.roomId === "number" &&
-    typeof message.senderId === "number" &&
+    (typeof message.senderId === "number" || message.senderId == null) &&
     typeof message.content === "string" &&
     isChatServerMessageType(message.messageType) &&
     typeof message.createdAt === "string"

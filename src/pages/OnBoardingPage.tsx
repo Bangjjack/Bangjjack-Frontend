@@ -12,9 +12,15 @@ import { useAuthStore } from "@/stores/authStore";
 export default function OnBoardingPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const handleBack = useGoBack();
+  const goBack = useGoBack();
   const username = useAuthStore((state) => state.username);
+  const clearAuth = useAuthStore((state) => state.clearAuth);
   const setOnboardingCompleted = useAuthStore((state) => state.setOnboardingCompleted);
+
+  const handleBack = () => {
+    clearAuth();
+    goBack();
+  };
 
   const updateRegistrationStatusCache = (registrationStatus: {
     isChecklistRegistered?: boolean;

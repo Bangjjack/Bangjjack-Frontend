@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router";
 
 import { DORMITORY_LABEL, ROOM_SIZE_LABEL, SEMESTER_LABEL } from "@/constants";
 import { usePostDetail } from "@/features/board/hooks";
+import { BEDTIME_LABEL, CLEANING_CYCLE_LABEL, SMOKING_LABEL } from "@/features/board/utils";
 import { toast } from "@/components/ui";
 import { useChatMessages } from "@/features/chat/hooks/useChatMessages";
 import { useChatRooms } from "@/features/chat/hooks/useChatRooms";
@@ -11,9 +12,11 @@ import { useProcessRoommateApplication } from "@/features/chat/hooks/useProcessR
 import type { ChatDetail, ChatMessage, ChatRoom, ChatRoomListItem } from "@/features/chat/types";
 import { mapHistoryMessagesToChatMessages } from "@/features/chat/utils/chatHistoryMessages";
 import { getChatRoomImportanceTags } from "@/features/chat/utils/chatRoomList";
+import { useUserProfile } from "@/features/user/hooks";
 import { getApiErrorMessage } from "@/lib/api-error";
 import { parseDisplayName } from "@/lib/parseDisplayName";
 import { useAuthStore } from "@/stores/authStore";
+import { getAgeFromBirthYear, parseDepartmentName } from "@/utils";
 
 export type ChatDetailPageState = {
   chatDetail?: ChatDetail;
@@ -117,9 +120,30 @@ function useChatDetailPage() {
   const chatRoomFromList = chatRoomsData?.rooms.find(
     (chatRoom) => chatRoom.roomId === parsedChatId,
   );
-  const chatDetail =
+  const baseChatDetail =
     locationState?.chatDetail ??
     (chatRoomFromList ? mapChatRoomListItemToChatDetail(chatRoomFromList) : undefined);
+
+  const { data: partnerProfile } = useUserProfile(baseChatDetail?.id ?? 0);
+
+  const age = partnerProfile ? getAgeFromBirthYear(partnerProfile.birthYear) : baseChatDetail?.age;
+  const department = partnerProfile
+    ? parseDepartmentName(partnerProfile.departmentName)
+    : baseChatDetail?.department;
+  const profileImage = partnerProfile?.profileImage ?? baseChatDetail?.profileImage;
+  const lifestyleTags = partnerProfile
+    ? [
+        `${BEDTIME_LABEL[partnerProfile.lifestyleChecklist.bedtime.value] ?? partnerProfile.lifestyleChecklist.bedtime.value} 취침`,
+        `${CLEANING_CYCLE_LABEL[partnerProfile.lifestyleChecklist.cleaningCycle.value] ?? partnerProfile.lifestyleChecklist.cleaningCycle.value} 청소`,
+        SMOKING_LABEL[partnerProfile.lifestyleChecklist.smoking.value] ??
+          partnerProfile.lifestyleChecklist.smoking.value,
+      ]
+    : baseChatDetail?.lifestyleTags;
+
+  const chatDetail: ChatDetail | undefined = baseChatDetail
+    ? { ...baseChatDetail, age, department, profileImage, lifestyleTags }
+    : undefined;
+
   const recruitPostId =
     chatDetail?.startSource === "recruit_post" ? chatDetail.recruitPostId : undefined;
   const { data: recruitPost } = usePostDetail(recruitPostId);
@@ -136,18 +160,20 @@ function useChatDetailPage() {
     roomId: Number.isNaN(parsedChatId) ? undefined : parsedChatId,
   });
 
+  const hasChatDetail = !!chatDetail;
+
   useEffect(() => {
     if (Number.isNaN(parsedChatId)) {
       navigate("/chat", { replace: true });
       return;
     }
 
-    if (chatDetail || isChatRoomsPending) {
+    if (hasChatDetail || isChatRoomsPending) {
       return;
     }
 
     navigate("/chat", { replace: true });
-  }, [chatDetail, isChatRoomsPending, navigate, parsedChatId]);
+  }, [hasChatDetail, isChatRoomsPending, navigate, parsedChatId]);
 
   useEffect(() => {
     if (isChatRoomsError) {

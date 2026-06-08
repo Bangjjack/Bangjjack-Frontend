@@ -73,7 +73,7 @@ export default function LoginPage() {
           />
         </section>
 
-        <section className="mt-auto pb-[clamp(3rem,13vh,6.8125rem)]">
+        <section className="mt-auto pb-[clamp(3rem,13vh,6.8125rem)] mb-12">
           <Button
             type="button"
             variant="neutral"

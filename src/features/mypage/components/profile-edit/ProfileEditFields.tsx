@@ -27,9 +27,7 @@ function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
   const departmentOptions = departments.map((department) => department.name);
   const departmentPlaceholder = isDepartmentsError
     ? "학과를 불러오지 못했어요"
-    : isDepartmentsLoading
-      ? "학과를 불러오는 중이에요"
-      : PROFILE_PLACEHOLDER.department;
+    : PROFILE_PLACEHOLDER.department;
 
   return (
     <section className="flex flex-col gap-300 rounded-medium bg-bg-secondary px-300 py-500">
@@ -188,6 +186,7 @@ function ProfileEditFields({ control, setValue }: ProfileEditFieldsProps) {
               <SelectField
                 ariaLabel="학과"
                 className="min-w-0 flex-1"
+                disabled={!selectedCampus || isDepartmentsLoading}
                 fieldClassName="gap-0"
                 onChange={(name) => {
                   field.onChange(name);

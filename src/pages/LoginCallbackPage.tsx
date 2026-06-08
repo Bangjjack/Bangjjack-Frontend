@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router";
 
 import type { ApiResponse } from "@/api";
-import { ACCESS_TOKEN_KEY } from "@/constants";
+import { ACCESS_TOKEN_KEY, LOGIN_ERROR_MESSAGE_KEY } from "@/constants";
 import { authQueryKeys, type AuthRegistrationStatus, useExchangeAuthToken } from "@/features/auth";
 import { useAuthStore } from "@/stores/authStore";
 
@@ -41,6 +41,7 @@ export default function LoginCallbackPage() {
     onError: (error) => {
       const loginErrorMessage = getLoginErrorMessage(error);
 
+      sessionStorage.setItem(LOGIN_ERROR_MESSAGE_KEY, loginErrorMessage);
       navigate("/login", { replace: true, state: { loginErrorMessage } });
     },
   });
