@@ -9,5 +9,6 @@ export function useMatchReport(targetUserId: number, enabled = false) {
     queryFn: () => getMatchReport(targetUserId),
     enabled,
     staleTime: Infinity,
+    gcTime: Infinity,
   });
 }

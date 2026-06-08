@@ -10,5 +10,7 @@ export const usePostDetail = (postId?: number) => {
   return useQuery({
     queryKey: postQueryKeys.detail(validPostId ?? 0),
     queryFn: validPostId ? () => getPostById(validPostId) : skipToken,
+    staleTime: 0,
+    gcTime: 0,
   });
 };

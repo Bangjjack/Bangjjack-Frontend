@@ -9,5 +9,6 @@ export function usePostMatchRate(postId: number, enabled = false) {
     queryFn: () => getPostMatchRate(postId),
     enabled,
     staleTime: Infinity,
+    gcTime: Infinity,
   });
 }
